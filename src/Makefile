@@ -1,0 +1,26 @@
+SOURCES := $(wildcard *.cpp)
+OBJECTS := $(subst .cpp,.o,$(SOURCES))
+#LIBS 	:= -lirrlicht TODO
+
+#TODO LIST:
+#
+#	1.- FOLDER NAVIGATION
+#	2.- MAKE CLEAN COMMAND
+
+
+#CREATE AN EXECUTABLE NAMED CYBORGEDDON LINKING ALL .O AND LIBS
+#	CONOSOLE COMMAND: make
+cyborgeddon: $(OBJECTS)
+	g++ -o $@ $^ -I. #$(LIBS)
+
+#TAKE ALL .CPP AND DO ALL .O IF DON'T EXIST 
+#OR IF .CPP IS CHANGED
+#	CONOSOLE COMMAND: make <filename>.o
+%.o: %.cpp
+	g++ -o $@ -c $^ -I.
+
+#SHOW WHICH ELEMENTS ARE BEING INCLUDED IN THIS VARIABLES
+#	CONOSOLE COMMAND: make info
+info:
+	$(info $(SOURCES))
+	$(info $(OBJECTS))
