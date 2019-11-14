@@ -1,10 +1,11 @@
 #include <iostream>
-#include "ent/gilardo.h"
+#include "gilardo.h"
 
 int main()
 {
+	gilardo* gil = new gilardo();
 	std::cout << "FUNCIONO" << std::endl;
 	std::cout << "REPUTASO" << std::endl;
-	insulto();
+	gil->insulto();
 	return 0;
 }

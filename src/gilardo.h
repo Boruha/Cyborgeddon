@@ -6,7 +6,7 @@ class gilardo
 public:
 	gilardo();
 	~gilardo();
-	insulto();	
+	void insulto();	
 };
 
 #endif 

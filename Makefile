@@ -22,7 +22,6 @@ ALLCCPOBJS 	:= $(patsubst $(SRC)%,$(OBJ)%,$(patsubst %.cpp,%.o,$(ALLCCPS)))
 LIBS 		:= -lIrrlicht
 INCLUDE 	:= -I/usr/include/irrlicht/
 
-
 .PHONY: info clean 
 
 
@@ -30,7 +29,6 @@ INCLUDE 	:= -I/usr/include/irrlicht/
 #	DEFINED FUNCTIONS
 #
 define COMPILECFILE 
-$(1): $(2)
 	$(CC) -o $(2) -c $(1) $(CCFLAGS)
 endef
 
@@ -39,18 +37,18 @@ endef
 
 #CREATE AN EXECUTABLE NAMED CYBORGEDDON LINKING ALL .O AND LIBS
 #	CONOSOLE COMMAND: make
-$(APP) :  $(OBJSUBDIRS) $(ALLCCPOBJS)
+$(APP) : $(ALLCCPOBJS)
 	$(CC) -o $(APP) $(ALLCCPOBJS)
 
 #========================================================================
 #	COMPILER C++
 
 #TAKE ALL .CPP AND DO ALL .O IF DON'T EXIST OR IF .CPP IS CHANGED
-$(ALLCCPOBJS) : $(ALLCCPS)
-#$(foreach CCP_FILE, $(ALLCCPS), $(eval $(call COMPILECFILE, $(CCP_FILE), $(subst $(SRC),$(OBJ),$(subst .cpp,.o,$(CCP_FILE))))))
-	$(foreach CCP_FILE, $(ALLCCPS), $(eval $(call COMPILECFILE, $(CCP_FILE), $(patsubst $(SRC)%,$(OBJ)%,$(CCP_FILE:%.cpp=%.o)))))
+$(ALLCCPOBJS) : $(ALLCCPS) $(OBJSUBDIRS)
+	$(foreach CCP_FILE,$<,$(call COMPILECFILE,$(CCP_FILE), $(subst $(SRC),$(OBJ),$(subst .cpp,.o,$(CCP_FILE)))))
 
-
+dir : $(OBJSUBDIRS) $(ALLCCPS)
+	$(info $*)
 
 #========================================================================
 #	FOLDER STRUCTURE
@@ -68,6 +66,7 @@ info :
 	$(info $(OBJSUBDIRS))
 	$(info $(ALLCCPS))
 	$(info $(ALLCCPOBJS))
+	$(info $(foreach CCP_FILE,$(ALLCCPS),$(call COMPILECFILE,$(CCP_FILE),$(subst $(SRC),$(OBJ),$(subst .cpp,.o,$(CCP_FILE))))))
 
 #DELETE ALL COMPILED FILES
 #	CONOSOLE COMMAND: make clean
