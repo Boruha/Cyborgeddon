@@ -1,9 +1,12 @@
 #include <iostream>
 
+using namespace std;
+
 int main()
 {
-	std::cout << "FUNCIONO" << std::endl;
-	std::cout << "Mi primer commit and push" << std::endl;
+	cout << "FUNCIONO" << endl;
+	cout << "Mi primer commit and push" << endl;
+    cout << "Probando gitignore" << endl;
 
 	return 0;
 }

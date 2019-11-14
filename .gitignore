@@ -1,7 +1,5 @@
 obj/*
-
-cyborgeddon
-
 cmake-build-debug/*
 
-CMakeLists.txt
+./cyborgeddon
+./CMakeLists.txt
