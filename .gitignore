@@ -2,5 +2,7 @@ obj/*
 cmake-build-debug/*
 .idea/*
 
+*.xml
+
 cyborgeddon
 CMakeLists.txt
