@@ -37,7 +37,7 @@ CCFLAGS 	:= -Wall -pedantic
 #CREATE AN EXECUTABLE NAMED CYBORGEDDON LINKING ALL .O AND LIBS
 #	CONOSOLE COMMAND: make
 $(APP) : $(OBJSUBDIRS) $(ALLCCPOBJS)
-	$(CC) -o $(APP) $(patsubst $(SRC)%,$(OBJ)%,$(ALLCCPOBJS)) #$(LIBS)
+	$(CC) -o $(APP) $(patsubst $(SRC)%,$(OBJ)%,$(ALLCCPOBJS)) $(LIBS)
 
 #
 #	COMPILER C++
