@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // Irrlicht include different namespaces. We won't use them yet
 // These namespaces are irr, core, scene, video, io, gui
 #include <irrlicht/irrlicht.h>
@@ -124,16 +123,5 @@ int main()
         driver->endScene();
     }
 
-=======
-#include <iostream>
-#include "ent/gilardo.h"
-
-int main()
-{
-	gilardo* gil = new gilardo();
-	std::cout << "FUNCIONO" << std::endl;
-	std::cout << "REPUTASO" << std::endl;
-	gil->insulto();
->>>>>>> Makefile_2.1
 	return 0;
 }

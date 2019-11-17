@@ -39,11 +39,8 @@ endef
 #CREATE AN EXECUTABLE NAMED CYBORGEDDON LINKING ALL .O AND LIBS
 #	CONOSOLE COMMAND: make
 $(APP) : $(OBJSUBDIRS) $(ALLCCPOBJS)
-<<<<<<< HEAD
-	$(CC) -o $(APP) $(patsubst $(SRC)%,$(OBJ)%,$(ALLCCPOBJS)) $(LIBS)
-=======
+#$(CC) -o $(APP) $(patsubst $(SRC)%,$(OBJ)%,$(ALLCCPOBJS)) $(LIBS)
 	$(CC) -o $(APP) $(ALLCCPOBJS) $(LIBS)
->>>>>>> Makefile_2.1
 
 #========================================================================
 #	COMPILER C++
