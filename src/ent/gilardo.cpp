@@ -1,7 +1,12 @@
 #include <iostream>
 #include "gilardo.h"
 
-void insulto ()
+
+gilardo::gilardo(){}
+
+gilardo::~gilardo(){}
+
+void gilardo::insulto()
 {
 	std::cout << "SOS UN GILARDO BRO PERO ESTO FUNCIONA BUENARDO" << std::endl;
 }
