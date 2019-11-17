@@ -2,10 +2,9 @@
 #	MACROS
 #
 
-#FILES
-APP 		:= cyborgeddon
-ALLCCPS    	:= $(shell find src/ -type f -iname *.cpp)
-ALLCCPOBJS 	:= $(patsubst %.cpp,%.o,$(ALLCCPS))
+#COMPILER
+CC 			:= g++
+CCFLAGS 	:= -Wall -pedantic
 
 #FOLDERS
 MKDIR 		:= mkdir -p
@@ -14,46 +13,53 @@ OBJ 		:= obj
 SUBDIRS 	:= $(shell find $(SRC) -type d)
 OBJSUBDIRS 	:= $(patsubst $(SRC)%,$(OBJ)%,$(SUBDIRS))
 
+#FILES
+APP 		:= cyborgeddon
+ALLCCPS    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
+ALLCCPOBJS 	:= $(patsubst $(SRC)%,$(OBJ)%,$(patsubst %.cpp,%.o,$(ALLCCPS)))
+
 #HEADERS AND LIBRARIES
 LIBS 		:= -lIrrlicht
-INCLUDE 	:= -I/usr/include/irrlicht/
+INCLUDE 	:= -I/usr/include/irrlicht/ -I.
 
-#COMPILER
-CC 			:= g++
-CCFLAGS 	:= -Wall -pedantic
-
-
-.PHONY: info
-
-#TODO LIST:
-#
-#	1.-FOLDER NAVIGATION (mkdir -p and change wildcard to patsubst)
+.PHONY: info clean 
 
 
 #
+#	DEFINED FUNCTIONS
+#
+define COMPILECFILE 
+$(CC) -o $(2) -c $(1) $(INCLUDE) $(CCFLAGS)
+$(shell printf "\n")
+endef
+
+#========================================================================
 #	LINKER
-#
 
 #CREATE AN EXECUTABLE NAMED CYBORGEDDON LINKING ALL .O AND LIBS
 #	CONOSOLE COMMAND: make
 $(APP) : $(OBJSUBDIRS) $(ALLCCPOBJS)
+<<<<<<< HEAD
 	$(CC) -o $(APP) $(patsubst $(SRC)%,$(OBJ)%,$(ALLCCPOBJS)) $(LIBS)
+=======
+	$(CC) -o $(APP) $(ALLCCPOBJS) $(LIBS)
+>>>>>>> Makefile_2.1
 
-#
+#========================================================================
 #	COMPILER C++
-#
 
-#TAKE ALL .CPP AND DO ALL .O IF DON'T EXIST 
-#OR IF .CPP IS CHANGED
-#	CONOSOLE COMMAND: make <filename>.o
-%.o : %.cpp
-	$(CC) -o $(patsubst $(SRC)%,$(OBJ)%,$@) -c $^ #$(INCLUDE) $(CCFLAGS)
+#TAKE ALL .CPP AND DO ALL .O IF DON'T EXIST OR IF .CPP IS CHANGED
+$(ALLCCPOBJS) : $(ALLCCPS)	
+	$(foreach CCP_FILE,$^,$(call COMPILECFILE,$(CCP_FILE),$(subst $(SRC),$(OBJ),$(subst .cpp,.o,$(CCP_FILE)))))
 
-#
+#========================================================================
 #	FOLDER STRUCTURE
-#
+
 $(OBJSUBDIRS) : 
 	$(MKDIR) $(OBJSUBDIRS)
+
+#========================================================================
+#	OTHER COMMANDS
 
 #SHOW WHICH ELEMENTS ARE BEING INCLUDED IN THIS VARIABLES
 #	CONOSOLE COMMAND: make info
@@ -63,6 +69,8 @@ info :
 	$(info $(ALLCCPS))
 	$(info $(ALLCCPOBJS))
 
+#DELETE ALL COMPILED FILES
+#	CONOSOLE COMMAND: make clean
 clean : 
 	$(shell rm -r $(OBJ))
 	$(shell rm $(APP))
