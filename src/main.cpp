@@ -2,6 +2,73 @@
 // These namespaces are irr, core, scene, video, io, gui
 #include <irrlicht/irrlicht.h>
 
+#include <iostream>
+
+class MyEventReceiver : public irr::IEventReceiver
+{
+    public :
+
+    bool OnEvent(const irr::SEvent& event) override
+    {
+        if(event.EventType == irr::EET_KEY_INPUT_EVENT)
+        {
+            keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+        }
+
+        return false;
+    }
+
+    [[nodiscard]] virtual bool IsKeyDown(irr::EKEY_CODE keyCode) const
+    {
+        return keys[keyCode];
+    }
+
+    MyEventReceiver()
+    {
+        for (bool & key : keys)
+            key = false;
+    }
+
+    private :
+
+        bool keys[irr::KEY_KEY_CODES_COUNT]{};
+};
+
+void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode* cube, irr::core::vector3df& cubeVelocity)
+{
+    cubeVelocity.X = cubeVelocity.Z = 0;
+
+    if(eventReceiver.IsKeyDown(irr::KEY_KEY_W) && !eventReceiver.IsKeyDown(irr::KEY_KEY_S))
+        cubeVelocity.Z = 1;
+    else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_W) && eventReceiver.IsKeyDown(irr::KEY_KEY_S))
+        cubeVelocity.Z = -1;
+
+    if(eventReceiver.IsKeyDown(irr::KEY_KEY_D) && !eventReceiver.IsKeyDown(irr::KEY_KEY_A))
+        cubeVelocity.X = 1;
+    else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A))
+        cubeVelocity.X = -1;
+
+    if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && (*cube).getPosition().Y == 0)
+        cubeVelocity.Y = 4;
+}
+
+void update(irr::scene::ISceneNode*& cube, irr::core::vector3df& cubeVelocity)
+{
+    cube->setPosition(cube->getPosition()+cubeVelocity);
+
+    --cubeVelocity.Y;
+
+    if(cube->getPosition().Y <= 0)
+    {
+        irr::core::vector3df fixedCubePosition = cube->getPosition();
+        fixedCubePosition.Y = 0;
+
+        cube->setPosition(fixedCubePosition);
+
+        cubeVelocity.Y = 0;
+    }
+}
+
 int main()
 {
     /*
@@ -34,8 +101,12 @@ int main()
     // If we couldn't find a device, we stop the execution
     if (!device)
     {
+        std::cerr << "Device not found!" << std::endl;
         return 1;
     }
+
+    MyEventReceiver eventReceiver;
+    device->setEventReceiver(&eventReceiver);
 
     /*
      *   A caption for the window is needed using the function setWindowCaption(const wchar_t*)
@@ -99,6 +170,17 @@ int main()
 
     // TODO: MESH (CUBE/BOX), NODE, CAMERA
 
+    irr::scene::ISceneNode* cube = sceneManager->addCubeSceneNode(10.f);
+    irr::core::vector3df cubeVelocity;
+
+    cube->setPosition(irr::core::vector3df(0,0,5));
+    //cube->setScale(irr::core::vector3df(1,1,1));
+    //cube->setRotation(irr::core::vector3df(0,0,0));
+
+    irr::scene::ICameraSceneNode* camera = sceneManager->addCameraSceneNode();
+    camera->setPosition(irr::core::vector3df(0,20,-30));
+    camera->setTarget(cube->getPosition());
+
     /*
      *  We set up the scene. Run the device in a loop until device is closed
      *
@@ -115,6 +197,9 @@ int main()
 
     while(device->run())
     {
+        input(eventReceiver, cube, cubeVelocity);
+        update(cube, cubeVelocity);
+
         driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
 
         sceneManager->drawAll();
