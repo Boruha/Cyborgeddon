@@ -1,6 +1,8 @@
 # Carpetas y contenido
 obj/*
 cmake-build-debug/*
+_linux/*
+codestyles/*
 
 # Carpetas ocultas
 .idea/*
