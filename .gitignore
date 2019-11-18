@@ -1,6 +1,15 @@
+# Carpetas y contenido
 obj/*
 cmake-build-debug/*
+
+# Carpetas ocultas
 .idea/*
 
+# Extensiones
+*.xml
+
+# Ejecutables
 cyborgeddon
+
+# Archivos específicos
 CMakeLists.txt
