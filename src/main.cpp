@@ -34,7 +34,7 @@ class MyEventReceiver : public irr::IEventReceiver
         bool keys[irr::KEY_KEY_CODES_COUNT]{};
 };
 
-void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode* cube, irr::core::vector3df& cubeVelocity)
+void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode& cube, irr::core::vector3df& cubeVelocity)
 {
     cubeVelocity.X = cubeVelocity.Z = 0;
 
@@ -48,22 +48,22 @@ void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode* c
     else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A))
         cubeVelocity.X = -1;
 
-    if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && (*cube).getPosition().Y == 0)
+    if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && cube.getPosition().Y == 0)
         cubeVelocity.Y = 4;
 }
 
-void update(irr::scene::ISceneNode*& cube, irr::core::vector3df& cubeVelocity)
+void update(irr::scene::ISceneNode& cube, irr::core::vector3df& cubeVelocity)
 {
-    cube->setPosition(cube->getPosition()+cubeVelocity);
+    cube.setPosition(cube.getPosition()+cubeVelocity);
 
     --cubeVelocity.Y;
 
-    if(cube->getPosition().Y <= 0)
+    if(cube.getPosition().Y <= 0)
     {
-        irr::core::vector3df fixedCubePosition = cube->getPosition();
+        irr::core::vector3df fixedCubePosition = cube.getPosition();
         fixedCubePosition.Y = 0;
 
-        cube->setPosition(fixedCubePosition);
+        cube.setPosition(fixedCubePosition);
 
         cubeVelocity.Y = 0;
     }
@@ -197,8 +197,8 @@ int main()
 
     while(device->run())
     {
-        input(eventReceiver, cube, cubeVelocity);
-        update(cube, cubeVelocity);
+        input(eventReceiver, *cube, cubeVelocity);
+        update(*cube, cubeVelocity);
 
         driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
 
