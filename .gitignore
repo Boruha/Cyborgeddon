@@ -1,5 +1,7 @@
 # Carpetas y contenido
 obj/*
+Release/obj/*
+Debug/obj*
 cmake-build-debug/*
 _linux/*
 codestyles/*

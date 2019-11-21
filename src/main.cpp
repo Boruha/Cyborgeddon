@@ -168,18 +168,35 @@ int main()
             true
     );
 
-    // TODO: MESH (CUBE/BOX), NODE, CAMERA
-
     irr::scene::ISceneNode* cube = sceneManager->addCubeSceneNode(10.f);
     irr::core::vector3df cubeVelocity;
 
-    cube->setPosition(irr::core::vector3df(0,0,5));
-    //cube->setScale(irr::core::vector3df(1,1,1));
-    //cube->setRotation(irr::core::vector3df(0,0,0));
+    if(cube)
+    {
+        cube->setPosition(irr::core::vector3df(0,0,5));
+        //cube->setScale(irr::core::vector3df(1,1,1));
+        //cube->setRotation(irr::core::vector3df(0,0,0));
+        cube->setMaterialTexture(0, driver->getTexture("./img/textures/testing/testing_cube.png"));
+        cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+    }
+    else
+    {
+        std::cerr << "Cube could not be created" << std::endl;
+        return 1;
+    }
 
     irr::scene::ICameraSceneNode* camera = sceneManager->addCameraSceneNode();
-    camera->setPosition(irr::core::vector3df(0,20,-30));
-    camera->setTarget(cube->getPosition());
+
+    if(camera)
+    {
+        camera->setPosition(irr::core::vector3df(0,20,-30));
+        camera->setTarget(cube->getPosition());
+    }
+    else
+    {
+        std::cerr << "Camera could not be created" << std::endl;
+        return 1;
+    }
 
     /*
      *  We set up the scene. Run the device in a loop until device is closed
@@ -207,6 +224,8 @@ int main()
 
         driver->endScene();
     }
+
+    device->drop();
 
 	return 0;
 }
