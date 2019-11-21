@@ -26,7 +26,7 @@ endif
 MKDIR 		:= mkdir -p
 SRC 		:= src
 OBJ 		:= obj
-OBJDIR      := $(APPDIR)$(OBJ)
+OBJDIR		:= $(APPDIR)$(OBJ)
 SUBDIRS 	:= $(shell find $(SRC) -type d)
 OBJSUBDIRS 	:= $(patsubst $(SRC)%,$(OBJDIR)%,$(SUBDIRS))
 
