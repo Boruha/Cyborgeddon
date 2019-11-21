@@ -1,12 +1,11 @@
 # Carpetas y contenido
-Release/obj/*
-Debug/obj/*
-cmake-build-debug/*
-_linux/*
-codestyles/*
+obj/
+cmake-build-debug/
+_linux/
+codestyles/
 
 # Carpetas ocultas
-.idea/*
+.idea/
 
 # Extensiones
 *.xml
