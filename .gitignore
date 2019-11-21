@@ -1,5 +1,4 @@
 # Carpetas y contenido
-obj/*
 Release/obj/*
 Debug/obj/*
 cmake-build-debug/*
