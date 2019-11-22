@@ -69,6 +69,19 @@ void update(irr::scene::ISceneNode& cube, irr::core::vector3df& cubeVelocity)
     }
 }
 
+bool setTextureToNode(irr::video::IVideoDriver &driver, irr::scene::ISceneNode &node, const std::string& s_path)
+{
+    const std::string possiblePaths[] = {
+            s_path,
+            "../" + s_path
+    };
+
+    for (unsigned int i = 0; i < 2 && node.getMaterial(0).getTexture(0) == nullptr; ++i)
+        node.setMaterialTexture(0, driver.getTexture(irr::io::path(possiblePaths[i].c_str())));
+
+    return node.getMaterial(0).getTexture(0) != nullptr;
+}
+
 int main()
 {
     /*
@@ -171,12 +184,20 @@ int main()
     irr::scene::ISceneNode* cube = sceneManager->addCubeSceneNode(10.f);
     irr::core::vector3df cubeVelocity;
 
+    const char* cubeTexturePath = "./img/textures/testing/testing_cube.png";
+
     if(cube)
     {
         cube->setPosition(irr::core::vector3df(0,0,5));
         //cube->setScale(irr::core::vector3df(1,1,1));
         //cube->setRotation(irr::core::vector3df(0,0,0));
-        cube->setMaterialTexture(0, driver->getTexture("./img/textures/testing/testing_cube.png"));
+
+        if(!setTextureToNode(*driver, *cube, cubeTexturePath))
+        {
+            std::cerr << "No se pudo cargar la textura" << cubeTexturePath << std::endl;
+            return 1;
+        }
+
         cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     }
     else
