@@ -3,6 +3,7 @@ obj/
 cmake-build-debug/
 _linux/
 codestyles/
+include/
 
 # Carpetas ocultas
 .idea/
