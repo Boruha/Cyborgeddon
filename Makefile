@@ -32,42 +32,60 @@ OBJSUBDIRS 	:= $(patsubst $(SRC)%,$(OBJDIR)%,$(SUBDIRS))
 
 #FILES
 APP 		:= cyborgeddon
-ALLCCPS    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
-ALLCCPOBJS 	:= $(patsubst $(SRC)%,$(OBJDIR)%,$(patsubst %.cpp,%.o,$(ALLCCPS)))
+ALLCPP    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
+ALLOBJ 	    := $(patsubst $(SRC)%,$(OBJDIR)%,$(patsubst %.cpp,%.o,$(ALLCPP)))
 
 #HEADERS AND LIBRARIES
 LIBS 		:= -lIrrlicht
 INCLUDE 	:= -I/usr/include/irrlicht/ -I.
 
-.PHONY: info clean 
-
 #
 #	DEFINED FUNCTIONS
 #
-define COMPILECFILE 
+define COMPILECFILE
 $(CC) -o $(2) -c $(1) $(INCLUDE) $(CCFLAGS)
 endef
 
+#   $(1) = orden (ejemplo "rm -f -r obj/")
 define PRINT_SHELL
 @printf "$(1)\n"
 $(shell $(1))
 endef
+
+#   $(1) = compiler
+#   $(2) = xxxxx.o
+#   $(3) = xxxxx.cpp
+#   $(4) = xxxxx.hpp
+#   $(5) = flags
+define COMPILE_CPP
+$(2) : $(3) $(4)
+	$(1) -c -o $(2) $(3) $(5)
+endef
+
+#	$(1) = xxxxx.cpp
+define C2O
+$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(patsubst $(SRC)%,$(OBJDIR)%,$(1))))
+endef
+
+#	$(1) = xxxxx.cpp
+define C2H
+$(patsubst %.c,%.h,$(patsubst %.cpp,%.hpp,$(1)))
+endef
+
+.PHONY: info clean
 
 #========================================================================
 #	LINKER
 
 #CREATE AN EXECUTABLE NAMED CYBORGEDDON LINKING ALL .O AND LIBS
 #	CONOSOLE COMMAND: make
-$(APPDIR)$(APP) : $(OBJSUBDIRS) $(ALLCCPOBJS)
-#$(CC) -o $(APP) $(patsubst $(SRC)%,$(OBJ)%,$(ALLCCPOBJS)) $(LIBS)
-	$(CC) -o $(APPDIR)$(APP) $(ALLCCPOBJS) $(LIBS)
+$(APPDIR)$(APP) : $(OBJSUBDIRS) $(ALLOBJ)
+	$(CC) -o $(APPDIR)$(APP) $(ALLOBJ) $(LIBS)
 
 #========================================================================
 #	COMPILER C++
 
-#TAKE ALL .CPP AND DO ALL .O IF DON'T EXIST OR IF .CPP IS CHANGED
-$(ALLCCPOBJS) : $(ALLCCPS)	
-	$(foreach CCP_FILE,$^,$(call COMPILECFILE,$(CCP_FILE),$(subst $(SRC),$(OBJDIR),$(subst .cpp,.o,$(CCP_FILE)))))
+$(foreach F,$(ALLCPP),$(eval $(call COMPILE_CPP,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(CCFLAGS))))
 
 #========================================================================
 #	FOLDER STRUCTURE
@@ -83,8 +101,8 @@ $(OBJSUBDIRS) :
 info :
 	$(info $(SUBDIRS))
 	$(info $(OBJSUBDIRS))
-	$(info $(ALLCCPS))
-	$(info $(ALLCCPOBJS))
+	$(info $(ALLCPP))
+	$(info $(ALLOBJ))
 
 #DELETE ALL COMPILED FILES
 #	CONOSOLE COMMAND: make clean
