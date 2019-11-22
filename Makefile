@@ -30,9 +30,11 @@ endef
 
 # COMPILER
 CC          := g++
+C           := gcc
 
 # FLAGS
-CCFLAGS     := -Wall -pedantic
+CCFLAGS     := -Wall -pedantic -std=c++17
+CFLAGS      := $(CCFLAGS)
 RELEASEFLAG := -O3
 DEBUGFLAG   := -g
 
@@ -44,9 +46,11 @@ DEBUGDIR    := Debug/
 # DEBUG OR RELEASE
 ifeq (${debug}, true)
     CCFLAGS += $(DEBUGFLAG)
+    CFLAGS  += $(DEBUGFLAG)
     APPDIR  := $(DEBUGDIR)
 else
     CCFLAGS += $(RELEASEFLAG)
+    CFLAGS  += $(RELEASEFLAG)
     APPDIR  := $(RELEASEDIR)
 endif
 
@@ -57,15 +61,17 @@ OBJ 		:= obj
 OBJDIR		:= $(APPDIR)$(OBJ)
 SUBDIRS 	:= $(shell find $(SRC) -type d)
 OBJSUBDIRS 	:= $(patsubst $(SRC)%,$(OBJDIR)%,$(SUBDIRS))
+LIBDIR      := lib
 
 # FILES
 APP 		:= cyborgeddon
+ALLC        := $(shell find $(SRC)/ -type f -iname *.c)
 ALLCPP    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
-ALLOBJ 	    := $(patsubst $(SRC)%,$(OBJDIR)%,$(patsubst %.cpp,%.o,$(ALLCPP)))
+ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
-LIBS 		:= -lIrrlicht
 INCLUDE 	:= -I/usr/include/irrlicht/ -I.
+LIBS 		:= -lIrrlicht
 
 # CLEAN
 
@@ -73,8 +79,6 @@ RM  := rm -f
 
 DEL_RELEASE := $(RM) $(RELEASEDIR)$(APP) -r $(RELEASEDIR)$(OBJ)
 DEL_DEBUG   := $(RM) $(DEBUGDIR)$(APP) -r $(DEBUGDIR)$(OBJ)
-
-.PHONY: info clean
 
 #========================================================================
 #	LINKER
@@ -90,9 +94,10 @@ $(APPDIR)$(APP) : $(OBJSUBDIRS) $(ALLOBJ)
 #========================================================================
 #	COMPILER C++
 
-# COMPILES EVERY .CPP IF IT HAS NOT CHANGED SINCE THE LAST MAKE
+# COMPILES EVERY .CPP / .C IF IT HAS NOT CHANGED SINCE THE LAST MAKE
 
 $(foreach F,$(ALLCPP),$(eval $(call COMPILE_CPP,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(CCFLAGS))))
+$(foreach F,$(ALLC),$(eval $(call COMPILE_CPP,$(C),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(CFLAGS))))
 
 #========================================================================
 #	FOLDER STRUCTURE
@@ -103,8 +108,10 @@ $(OBJSUBDIRS) :
 #========================================================================
 #	OTHER COMMANDS
 
+.PHONY: info clean libs libs-clean
+
 # SHOW WHICH ELEMENTS ARE BEING INCLUDED IN THIS VARIABLES
-#	CONOSOLE COMMAND:
+#	CONSOLE COMMAND:
 #                       make info
 
 info :
@@ -114,9 +121,23 @@ info :
 	$(info $(ALLOBJ))
 
 # DELETE EXECUTABLE AND MAIN FOLDERS CONTENT
-#	CONOSOLE COMMAND:
+#	CONSOLE COMMAND:
 #                       make clean
 
 clean :
 	$(call PRINT_SHELL,$(DEL_RELEASE))
 	$(call PRINT_SHELL,$(DEL_DEBUG))
+
+# COMPILES EVERY LIBRARY INTO STATIC ONES
+#	CONSOLE COMMAND:
+#						make libs
+
+libs :
+	$(MAKE) -C $(LIBDIR)
+
+# CLEANS EVERY LIBRARY
+#	CONSOLE COMMAND:
+#						make libs-clean
+
+libs-clean :
+	$(MAKE) -C $(LIBDIR) clean
