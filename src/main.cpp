@@ -34,7 +34,7 @@ class MyEventReceiver : public irr::IEventReceiver
         bool keys[irr::KEY_KEY_CODES_COUNT]{};
 };
 
-void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode& cube, irr::core::vector3df& cubeVelocity)
+void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode* cube, irr::core::vector3df& cubeVelocity)
 {
     cubeVelocity.X = cubeVelocity.Z = 0;
 
@@ -48,38 +48,38 @@ void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode& c
     else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A))
         cubeVelocity.X = -1;
 
-    if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && cube.getPosition().Y == 0)
+    if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && cube->getPosition().Y == 0)
         cubeVelocity.Y = 4;
 }
 
-void update(irr::scene::ISceneNode& cube, irr::core::vector3df& cubeVelocity)
+void update(irr::scene::ISceneNode* cube, irr::core::vector3df& cubeVelocity)
 {
-    cube.setPosition(cube.getPosition()+cubeVelocity);
+    cube->setPosition(cube->getPosition()+cubeVelocity);
 
     --cubeVelocity.Y;
 
-    if(cube.getPosition().Y <= 0)
+    if(cube->getPosition().Y <= 0)
     {
-        irr::core::vector3df fixedCubePosition = cube.getPosition();
+        irr::core::vector3df fixedCubePosition = cube->getPosition();
         fixedCubePosition.Y = 0;
 
-        cube.setPosition(fixedCubePosition);
+        cube->setPosition(fixedCubePosition);
 
         cubeVelocity.Y = 0;
     }
 }
 
-bool setTextureToNode(irr::video::IVideoDriver &driver, irr::scene::ISceneNode &node, const std::string& s_path)
+bool setTextureToNode(irr::video::IVideoDriver* driver, irr::scene::ISceneNode* node, const std::string& s_path)
 {
     const std::string possiblePaths[] = {
             s_path,
             "../" + s_path
     };
 
-    for (unsigned int i = 0; i < 2 && node.getMaterial(0).getTexture(0) == nullptr; ++i)
-        node.setMaterialTexture(0, driver.getTexture(irr::io::path(possiblePaths[i].c_str())));
+    for (unsigned int i = 0; i < 2 && node->getMaterial(0).getTexture(0) == nullptr; ++i)
+        node->setMaterialTexture(0, driver->getTexture(irr::io::path(possiblePaths[i].c_str())));
 
-    return node.getMaterial(0).getTexture(0) != nullptr;
+    return node->getMaterial(0).getTexture(0) != nullptr;
 }
 
 int main()
@@ -192,7 +192,7 @@ int main()
         //cube->setScale(irr::core::vector3df(1,1,1));
         //cube->setRotation(irr::core::vector3df(0,0,0));
 
-        if(!setTextureToNode(*driver, *cube, cubeTexturePath))
+        if(!setTextureToNode(driver, cube, cubeTexturePath))
         {
             std::cerr << "No se pudo cargar la textura" << cubeTexturePath << std::endl;
             return 1;
@@ -235,8 +235,8 @@ int main()
 
     while(device->run())
     {
-        input(eventReceiver, *cube, cubeVelocity);
-        update(*cube, cubeVelocity);
+        input(eventReceiver, cube, cubeVelocity);
+        update(cube, cubeVelocity);
 
         driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
 
