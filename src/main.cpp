@@ -1,252 +1,237 @@
-// Irrlicht include different namespaces. We won't use them yet
-// These namespaces are irr, core, scene, video, io, gui
 #include <irrlicht/irrlicht.h>
-
 #include <iostream>
+#include <vector>
 
-class MyEventReceiver : public irr::IEventReceiver
+using namespace irr;
+
+using core::vector3df;
+using video::ITexture;
+using scene::ISceneNode;
+using video::IVideoDriver;
+using scene::ISceneManager;
+using video::SColor;
+using video::EDT_OPENGL;
+using core::dimension2d;
+using scene::ICameraSceneNode;
+
+using std::cerr;
+using std::endl;
+
+
+
+enum EntityID : u_int8_t { CUBE_ID, CAMERA_ID };
+
+
+
+class EventReceiver : public IEventReceiver
 {
-    public :
+private:
+	bool keys[KEY_KEY_CODES_COUNT]{};
 
-    bool OnEvent(const irr::SEvent& event) override
-    {
-        if(event.EventType == irr::EET_KEY_INPUT_EVENT)
-        {
-            keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
-        }
+public:
+	EventReceiver()
+	{
+		for (bool& key : keys)
+		{
+			key = false;
+		}
+	}
 
-        return false;
-    }
+	inline bool OnEvent(const SEvent& event) override
+	{
+		if(event.EventType == EET_KEY_INPUT_EVENT)
+		{
+			keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+		}
 
-    [[nodiscard]] virtual bool IsKeyDown(irr::EKEY_CODE keyCode) const
-    {
-        return keys[keyCode];
-    }
+		return false;
+	}
 
-    MyEventReceiver()
-    {
-        for (bool & key : keys)
-            key = false;
-    }
-
-    private :
-
-        bool keys[irr::KEY_KEY_CODES_COUNT]{};
+	[[nodiscard]] inline virtual bool IsKeyDown(EKEY_CODE keyCode) const
+	{
+		return keys[keyCode];
+	}
 };
 
-void input(const MyEventReceiver& eventReceiver, const irr::scene::ISceneNode* cube, irr::core::vector3df& cubeVelocity)
+
+
+struct Transformable
 {
-    cubeVelocity.X = cubeVelocity.Z = 0;
+/*	Vector3f	position;	*/
+/*	Vector3f	rotation;	*/
+/*	Vector3f	scale;		*/
 
-    if(eventReceiver.IsKeyDown(irr::KEY_KEY_W) && !eventReceiver.IsKeyDown(irr::KEY_KEY_S))
-        cubeVelocity.Z = 1;
-    else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_W) && eventReceiver.IsKeyDown(irr::KEY_KEY_S))
-        cubeVelocity.Z = -1;
+	vector3df	position;
+	vector3df	rotation;
+	vector3df	scale;
+};
 
-    if(eventReceiver.IsKeyDown(irr::KEY_KEY_D) && !eventReceiver.IsKeyDown(irr::KEY_KEY_A))
-        cubeVelocity.X = 1;
-    else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A))
-        cubeVelocity.X = -1;
-
-    if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && cube->getPosition().Y == 0)
-        cubeVelocity.Y = 4;
-}
-
-void update(irr::scene::ISceneNode* cube, irr::core::vector3df& cubeVelocity)
+struct Velocity
 {
-    cube->setPosition(cube->getPosition()+cubeVelocity);
+/*	Vector3f	velocity;	*/
 
-    --cubeVelocity.Y;
+	vector3df	velocity	= vector3df(0,0,0);
+};
 
-    if(cube->getPosition().Y <= 0)
-    {
-        irr::core::vector3df fixedCubePosition = cube->getPosition();
-        fixedCubePosition.Y = 0;
-
-        cube->setPosition(fixedCubePosition);
-
-        cubeVelocity.Y = 0;
-    }
-}
-
-bool setTextureToNode(irr::video::IVideoDriver* driver, irr::scene::ISceneNode* node, const std::string& s_path)
+struct Gravity
 {
-    const std::string possiblePaths[] = {
-            s_path,
-            "../" + s_path
-    };
+/*	Vector3f	gravity;	*/
 
-    for (unsigned int i = 0; i < 2 && node->getMaterial(0).getTexture(0) == nullptr; ++i)
-        node->setMaterialTexture(0, driver->getTexture(irr::io::path(possiblePaths[i].c_str())));
+	vector3df	gravity 	= vector3df(0,-1,0);
+};
 
-    return node->getMaterial(0).getTexture(0) != nullptr;
-}
+struct Renderable
+{
+	explicit Renderable(ISceneNode* node) : node(node){}
+
+	Transformable 	transformable;
+	ISceneNode*		node;
+};
+
+struct Camera
+{
+	explicit Camera(ICameraSceneNode* camera) : cameraNode(camera){}
+	ICameraSceneNode*	cameraNode;
+};
+
+
+
+struct Entity
+{
+	explicit Entity(EntityID ID) : ID(ID){}
+	[[nodiscard]] inline EntityID getID() const { return ID; }
+protected:
+	EntityID ID;
+};
+
+struct EntityCube : Entity
+{
+	explicit EntityCube(ISceneManager* sceneManager) : Entity(CUBE_ID), renderable(sceneManager->addCubeSceneNode(10.f))
+	{
+		renderable.node->setPosition(vector3df(0,0,5));
+	}
+
+	Renderable 	renderable;
+	Velocity 	velocity;
+	Gravity 	gravity;
+};
+
+struct EntityCamera : Entity
+{
+	explicit EntityCamera(ISceneManager* sceneManager) : Entity(CAMERA_ID), camera(sceneManager->addCameraSceneNode())
+	{
+		camera.cameraNode->setPosition(vector3df(0,20,-30));
+	}
+
+	Transformable 	transformable;
+	Camera			camera;
+};
+
+
+struct InputSystem
+{
+	inline static void input(const EventReceiver& eventReceiver, const Transformable& trans, Velocity& vel)
+	{
+		vel.velocity.X = vel.velocity.Z = 0;
+
+		if(eventReceiver.IsKeyDown(irr::KEY_KEY_W) && !eventReceiver.IsKeyDown(irr::KEY_KEY_S))
+			vel.velocity.Z = 1;
+		else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_W) && eventReceiver.IsKeyDown(irr::KEY_KEY_S))
+			vel.velocity.Z = -1;
+
+		if(eventReceiver.IsKeyDown(irr::KEY_KEY_D) && !eventReceiver.IsKeyDown(irr::KEY_KEY_A))
+			vel.velocity.X = 1;
+		else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A))
+			vel.velocity.X = -1;
+
+		if(eventReceiver.IsKeyDown(irr::KEY_SPACE) && trans.position.Y == 0)
+			vel.velocity.Y = 4;
+	}
+};
+
+struct MovementSystem
+{
+	inline static void update(Transformable& trans, const Velocity& vel) { trans.position += vel.velocity; }
+};
+
+struct GravitySystem
+{
+	inline static void update(Transformable& trans, Velocity& vel, const Gravity& gra)
+	{
+		vel.velocity += gra.gravity;
+
+		if(trans.position.Y <= 0)
+		{
+			trans.position.Y = vel.velocity.Y = 0;
+		}
+	}
+};
+
+struct RenderSystem
+{
+	inline static void draw(IVideoDriver* driver, ISceneManager* sceneManager)
+	{
+		driver->beginScene(true, true, SColor(255,255,255,255));
+		sceneManager->drawAll();
+		driver->endScene();
+	}
+};
+
+
 
 int main()
 {
-    /*
-     *  We need an IrrlichtDevice* first, so we use function irr::createDevice()
-     *
-     *
-     *  Parameters:
-     *
-     *  type                        ->      irr::video::[EDT_TYPE] (we use EDT_OPENGL)
-     *  window size                 ->      irr::core::dimension2d<irr::u32>(width, height)
-     *  bits of colour              ->      16 or 32
-     *  fullscreen                  ->      boolean
-     *  stencilbuffer (for shadows) ->      boolean
-     *  vsync                       ->      boolean (only useful if fullscreen is true)
-     *  event receiver              ->      irr::IEventReceiver* (trigger events)
-     */
+	IrrlichtDevice* device;
 
-    irr::IrrlichtDevice *device;
+	device = createDevice(EDT_OPENGL,dimension2d<u32>(640, 480));
 
-    device = irr::createDevice(
-            irr::video::EDT_OPENGL,
-            irr::core::dimension2d<irr::u32>(640, 480),
-            16,
-            false,
-            false,
-            false,
-            nullptr
-    );
+	if(!device)
+	{
+		cerr << "Device not found" << endl;
+		return 1;
+	}
 
-    // If we couldn't find a device, we stop the execution
-    if (!device)
-    {
-        std::cerr << "Device not found!" << std::endl;
-        return 1;
-    }
+	EventReceiver eventReceiver;
+	device->setEventReceiver(&eventReceiver);
 
-    MyEventReceiver eventReceiver;
-    device->setEventReceiver(&eventReceiver);
+	device->setWindowCaption(L"Window's name!");
 
-    /*
-     *   A caption for the window is needed using the function setWindowCaption(const wchar_t*)
-     *   We use a wide char string (wchar_t) by adding an 'L' before the string itself
-     *   "string" -> L"string"
-     *
-     *   Notice the following:
-     *
-     *   wchar_t is 'OS defined' bytes long
-     *   char is 1 byte long
-     *
-     *   suppose wchar_t is 2 bytes long
-     *   notice the difference between these two -> "AB" = [[41],[42]] -> L"AB" = [[00 41],[00 42]]
-     */
+	IVideoDriver* 	driver 			= device->getVideoDriver();
+	ISceneManager*	sceneManager	= device->getSceneManager();
 
-    device->setWindowCaption(L"Window's name!");
+	std::vector<EntityCube*> cubes;
+	std::vector<EntityCamera*> cameras;
 
-    /*
-     *  To avoid using device->xxxxxxx the whole time, we get these pointers:
-     *
-     *  irr::video::IVideoDriver*
-     *  irr::scene::ISceneManager*
-     *  irr::gui::IGUIEnvironment*
-     */
+	EntityCube cube(sceneManager);
+	cubes.push_back(&cube);
 
-    irr::video::IVideoDriver*   driver          =   device->getVideoDriver();
-    irr::scene::ISceneManager*  sceneManager    =   device->getSceneManager();
-    irr::gui::IGUIEnvironment*  gui             =   device->getGUIEnvironment();
+	EntityCamera camera(sceneManager);
+	camera.camera.cameraNode->setTarget(cube.renderable.node->getPosition());
+	cameras.push_back(&camera);
 
-    /*
-     *  We add a hello world label to the window using the gui environment (wchar_t)
-     *  Text is placed at rect (x1,y1,x2,y2) being (x1,y1) top-left and (x2,y2) bottom-right
-     *
-     *  We use addStaticText() function
-     *
-     *
-     *  Parameters:
-     *
-     *  string          ->  const wchar_t*
-     *  text rectangle  ->  irr::core::rect<irr::s32>(x1,y1,x2,y2)
-     *  border          ->  boolean
-     *  word wrap       ->  boolean (if true, each word is a whole element that needs to fit entirely into the label)
-     *                              (otherwise, it will not be shown)
-     *  parent item     ->  irr::gui::IGUIElement*
-     *  id              ->  irr::s32 (default = -1)
-     *  fill background ->  boolean
-     *
-     *
-     *  The font is non-editable
-     */
+	while(device->run())
+	{
+		for(EntityCube* c : cubes)
+		{
+			// No se como hacer que los tres vectores de Transformable "apunten" a los valores de node
+			c->renderable.transformable.position 	= c->renderable.node->getPosition();
+			c->renderable.transformable.rotation 	= c->renderable.node->getRotation();
+			c->renderable.transformable.scale 		= c->renderable.node->getScale();
 
-    gui->addStaticText(
-            L"Hey! The size of this damn font cannot be resized :)",
-            irr::core::rect<irr::s32>(10,10,191,22),
-            false,
-            true,
-            nullptr,
-            -1,
-            true
-    );
+			InputSystem::input(eventReceiver, c->renderable.transformable, c->velocity);
+			MovementSystem::update(c->renderable.transformable, c->velocity);
+			GravitySystem::update(c->renderable.transformable, c->velocity, c->gravity);
 
-    irr::scene::ISceneNode* cube = sceneManager->addCubeSceneNode(10.f);
-    irr::core::vector3df cubeVelocity;
+			// No se como hacer que los tres vectores de Transformable "apunten" a los valores de node
+			c->renderable.node->setPosition(c->renderable.transformable.position);
+			c->renderable.node->setRotation(c->renderable.transformable.rotation);
+			c->renderable.node->setScale(c->renderable.transformable.scale);
+		}
 
-    const char* cubeTexturePath = "./img/textures/testing/testing_cube.png";
+		RenderSystem::draw(driver, sceneManager);
+	}
 
-    if(cube)
-    {
-        cube->setPosition(irr::core::vector3df(0,0,5));
-        //cube->setScale(irr::core::vector3df(1,1,1));
-        //cube->setRotation(irr::core::vector3df(0,0,0));
-
-        if(!setTextureToNode(driver, cube, cubeTexturePath))
-        {
-            std::cerr << "No se pudo cargar la textura" << cubeTexturePath << std::endl;
-            return 1;
-        }
-
-        cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-    }
-    else
-    {
-        std::cerr << "Cube could not be created" << std::endl;
-        return 1;
-    }
-
-    irr::scene::ICameraSceneNode* camera = sceneManager->addCameraSceneNode();
-
-    if(camera)
-    {
-        camera->setPosition(irr::core::vector3df(0,20,-30));
-        camera->setTarget(cube->getPosition());
-    }
-    else
-    {
-        std::cerr << "Camera could not be created" << std::endl;
-        return 1;
-    }
-
-    /*
-     *  We set up the scene. Run the device in a loop until device is closed
-     *
-     *  beginScene(buffer,zbuffer,colour) clears the screen with the colour specified ->
-     *  -> (and the buffer if desired)
-     *
-     *  From now on we can draw everything we want in screen:
-     *
-     *      1. First our scene manager
-     *      2. Then our GUI environment
-     *
-     *  endScene() presents every draw on screen
-     */
-
-    while(device->run())
-    {
-        input(eventReceiver, cube, cubeVelocity);
-        update(cube, cubeVelocity);
-
-        driver->beginScene(true, true, irr::video::SColor(255,255,255,255));
-
-        sceneManager->drawAll();
-        gui->drawAll();
-
-        driver->endScene();
-    }
-
-    device->drop();
+	device->drop();
 
 	return 0;
 }
