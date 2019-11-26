@@ -99,7 +99,7 @@ struct Camera
 struct Entity
 {
 	explicit Entity(EntityID ID) : ID(ID){}
-	[[nodiscard]] inline EntityID getID() const { return ID; }
+	//[[nodiscard]] inline EntityID getID() const { return ID; }
 protected:
 	EntityID ID;
 };
@@ -123,7 +123,6 @@ struct EntityCamera : Entity
 		camera.cameraNode->setPosition(vector3df(0,20,-30));
 	}
 
-	Transformable 	transformable;
 	Camera			camera;
 };
 
