@@ -12,10 +12,11 @@ endef
 #   $(2) = xxxxx.o
 #   $(3) = xxxxx.cpp
 #   $(4) = xxxxx.hpp
-#   $(5) = flags
+#   $(5) = includes
+#	$(6) = flags
 define COMPILE_CPP
 $(2) : $(3) $(4)
-	$(1) -c -o $(2) $(3) $(5)
+	$(1) -c -o $(2) $(3) $(5) $(6)
 endef
 
 #	$(1) = xxxxx.cpp
@@ -70,7 +71,7 @@ ALLCPP    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
 ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
-INCLUDE 	:= -I/usr/include/irrlicht/ -I.
+INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I.
 LIBS 		:= -lIrrlicht
 
 # CLEAN
@@ -96,8 +97,8 @@ $(APPDIR)$(APP) : $(OBJSUBDIRS) $(ALLOBJ)
 
 # COMPILES EVERY .CPP / .C IF IT HAS NOT CHANGED SINCE THE LAST MAKE
 
-$(foreach F,$(ALLCPP),$(eval $(call COMPILE_CPP,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(CCFLAGS))))
-$(foreach F,$(ALLC),$(eval $(call COMPILE_CPP,$(C),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(CFLAGS))))
+$(foreach F,$(ALLCPP),$(eval $(call COMPILE_CPP,$(CC),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(INCLUDE),$(CCFLAGS))))
+$(foreach F,$(ALLC),$(eval $(call COMPILE_CPP,$(C),$(call C2O,$(F)),$(F),$(call C2H,$(F)),$(INCLUDE),$(CFLAGS))))
 
 #========================================================================
 #	FOLDER STRUCTURE
