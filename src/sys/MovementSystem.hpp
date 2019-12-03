@@ -6,5 +6,5 @@
 
 struct MovementSystem
 {
-	void update(EntityPlayer& entities);
+	void update(EntityPlayer&);
 };
