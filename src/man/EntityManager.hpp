@@ -5,12 +5,15 @@
 #include <vector>
 
 struct EntityManager {
-	explicit EntityManager(irr::IrrlichtDevice* device) : player(device), camera(device) {}
+	explicit EntityManager(irr::IrrlichtDevice* device) : device(device) {}
 	~EntityManager() { entities.clear(); }
 
 	int init();
 
-	EntityPlayer player;
-	EntityCamera camera;
+	irr::IrrlichtDevice* device = { nullptr };
+
+	EntityPlayer player {device};
+	EntityCamera camera {device};
+
 	std::vector<Entity*> entities;
 };
