@@ -15,6 +15,7 @@ struct GameManager {
 	RenderSystem render{};
 	InputSystem input{};
 	MovementSystem movement{};
+	CollisionSystem collision{};
 
 	EntityManager entityManager = EntityManager(render.device);
 };
