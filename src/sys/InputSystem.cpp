@@ -16,24 +16,14 @@ int InputSystem::init(irr::IrrlichtDevice *device) {
 	return 0;
 }
 
-void InputSystem::update(EntityPlayer& player) {
-	player.velocity.velocity.X = player.velocity.velocity.Z = 0;
+void InputSystem::update(EntityPlayer &player) {
+	player.velocity.velocity.x = player.velocity.velocity.z = 0;
+	auto* next = const_cast<TKey2func*>(mapping);
 
-	// Pulsamos W
-	if (eventReceiver.IsKeyDown(irr::KEY_KEY_W) && !eventReceiver.IsKeyDown(irr::KEY_KEY_S)) {
-		player.velocity.velocity.Z = 1;
-	}
-	// Pulsamos S
-	else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_W) && eventReceiver.IsKeyDown(irr::KEY_KEY_S)) {
-		player.velocity.velocity.Z = -1;
-	}
-
-	// Pulsamos D
-	if (eventReceiver.IsKeyDown(irr::KEY_KEY_D) && !eventReceiver.IsKeyDown(irr::KEY_KEY_A)) {
-		player.velocity.velocity.X = 1;
-	}
-	// Pulsamos A
-	else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A)) {
-		player.velocity.velocity.X = -1;
+	while(next->p_func)
+	{
+		if(eventReceiver.IsKeyDown(next->key))
+			next->p_func(player);
+		++next;
 	}
 }

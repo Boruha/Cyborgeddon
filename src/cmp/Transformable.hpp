@@ -1,13 +1,17 @@
 #pragma once
-#include <irrlicht/vector3d.h>
+
+#include <SunlightEngine/Vector3.hpp>
+
+using Sun::Vector3f;
 
 struct Transformable
 {
-/*	Vector3f	position;	*/
-/*	Vector3f	rotation;	*/
-/*	Vector3f	scale;		*/
+	Transformable() = default;
+	explicit Transformable(Vector3f& pos) : position(pos) {}
+	Transformable(float x, float y, float z) : position(x,y,z) {}
+	~Transformable() = default;
 
-	irr::core::vector3df	position;
-	irr::core::vector3df	rotation;
-	irr::core::vector3df	scale;
+	Vector3f	position {0,0,0};
+	Vector3f	rotation {0,0,0};
+	Vector3f	scale 	 {1,1,1};
 };

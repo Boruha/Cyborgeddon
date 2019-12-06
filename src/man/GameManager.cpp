@@ -27,7 +27,7 @@ int GameManager::init()
 	return 0;
 }
 
-void GameManager::update()
+void GameManager::loop()
 {
 	while(render.device->run())
 	{

@@ -8,13 +8,11 @@ struct GameManager {
 	GameManager() = default;
 
 	int init();
-	void update();
-	// void status();
-	// void pause();
+	void loop();
 
 	RenderSystem render{};
 	InputSystem input{};
 	MovementSystem movement{};
 
-	EntityManager entityManager = EntityManager(render.device);
+	EntityManager entityManager {render.device};
 };

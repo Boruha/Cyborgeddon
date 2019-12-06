@@ -14,7 +14,7 @@ int main()
 		return 1;
 	}
 
-	gameManager.update();
+	gameManager.loop();
 
 	return 0;
 }
