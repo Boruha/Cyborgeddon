@@ -17,23 +17,28 @@ int InputSystem::init(irr::IrrlichtDevice *device) {
 }
 
 void InputSystem::update(EntityPlayer& player) {
-	player.velocity.velocity.X = player.velocity.velocity.Z = 0;
+	player.vDirection.X = player.vDirection.Z = 0;
 
 	// Pulsamos W
 	if (eventReceiver.IsKeyDown(irr::KEY_KEY_W) && !eventReceiver.IsKeyDown(irr::KEY_KEY_S)) {
-		player.velocity.velocity.Z = 1;
+		player.vDirection.Z = 1;
 	}
 	// Pulsamos S
 	else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_W) && eventReceiver.IsKeyDown(irr::KEY_KEY_S)) {
-		player.velocity.velocity.Z = -1;
+		player.vDirection.Z = -1;
 	}
 
 	// Pulsamos D
 	if (eventReceiver.IsKeyDown(irr::KEY_KEY_D) && !eventReceiver.IsKeyDown(irr::KEY_KEY_A)) {
-		player.velocity.velocity.X = 1;
+		player.vDirection.X = 1;
 	}
 	// Pulsamos A
 	else if (!eventReceiver.IsKeyDown(irr::KEY_KEY_D) && eventReceiver.IsKeyDown(irr::KEY_KEY_A)) {
-		player.velocity.velocity.X = -1;
+		player.vDirection.X = -1;
 	}
+	
+	//std::cout << "vDirection pre nomalice: " << player.vDirection.X << std::endl;
+	player.vDirection.normalize();
+	//std::cout << "vDirection post nomalice: " << player.vDirection.X << std::endl;
+
 }

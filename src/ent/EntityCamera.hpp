@@ -11,7 +11,7 @@ struct EntityCamera : Entity
 {
 	explicit EntityCamera(irr::IrrlichtDevice* device) : Entity(CAMERA_ID), camera(device->getSceneManager()->addCameraSceneNode())
 	{
-		camera.cameraNode->setPosition(irr::core::vector3df(0,20,-30));
+		camera.cameraNode->setPosition(irr::core::vector3df(0,60,-40));
 	}
 
 	Camera camera;

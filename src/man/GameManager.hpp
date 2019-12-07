@@ -9,12 +9,11 @@ struct GameManager {
 
 	int init();
 	void update();
-	// void status();
-	// void pause();
 
 	RenderSystem render{};
 	InputSystem input{};
 	MovementSystem movement{};
+	AI_System ai{};
 
 	EntityManager entityManager = EntityManager(render.device);
 };

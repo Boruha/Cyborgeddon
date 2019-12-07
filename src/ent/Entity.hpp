@@ -2,7 +2,7 @@
 
 #include <zconf.h>
 
-enum EntityID : u_int8_t { PLAYER_ID, CAMERA_ID };
+enum EntityID : u_int8_t { PLAYER_ID, CAMERA_ID, ENEMY_ID };
 
 struct Entity
 {

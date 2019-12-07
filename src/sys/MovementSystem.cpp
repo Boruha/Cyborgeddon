@@ -1,9 +1,22 @@
 #include <sys/MovementSystem.hpp>
+#include <iostream>
 
 void MovementSystem::update(EntityPlayer& player)
 {
-	// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
-	player.transformable.position = player.node->getPosition();
-	player.transformable.position += player.velocity.velocity;
-	player.node->setPosition(player.transformable.position);
+	irr::core::vector3df new_pos = player.node->getPosition();
+
+	new_pos.X += (player.vDirection.X * player.maxVel);	
+	new_pos.Z += (player.vDirection.Z * player.maxVel);	
+
+	player.node->setPosition(new_pos);
+}
+
+void MovementSystem::update(EntityEnemy& enemy)
+{
+	irr::core::vector3df new_pos = enemy.node->getPosition();
+
+	new_pos.X += (enemy.vDirection.X * enemy.maxVel);
+	new_pos.Z += (enemy.vDirection.Z * enemy.maxVel);	
+
+	enemy.node->setPosition(new_pos);
 }

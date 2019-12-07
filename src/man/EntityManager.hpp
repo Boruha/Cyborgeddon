@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ent/Entities.hpp>
-
 #include <vector>
 
 struct EntityManager {
@@ -14,6 +13,7 @@ struct EntityManager {
 
 	EntityPlayer player {device};
 	EntityCamera camera {device};
+	EntityEnemy enemy {device};
 
 	std::vector<Entity*> entities;
 };
