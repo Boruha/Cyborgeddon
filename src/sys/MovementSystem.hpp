@@ -2,9 +2,9 @@
 
 #include <ent/Entities.hpp>
 
-#include <vector>
+#include <src/man/EntityManager.hpp>
 
 struct MovementSystem
 {
-	void update(EntityPlayer& player);
+	void update(const std::vector<std::unique_ptr<EntityPlayer>>&);
 };

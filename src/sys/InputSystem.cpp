@@ -1,6 +1,8 @@
 #include <sys/InputSystem.hpp>
 
 #include <iostream>
+#include <src/man/EntityManager.hpp>
+#include <algorithm>
 
 using std::cerr;
 using std::endl;
@@ -16,14 +18,17 @@ int InputSystem::init(irr::IrrlichtDevice *device) {
 	return 0;
 }
 
-void InputSystem::update(EntityPlayer &player) {
-	player.velocity.velocity.x = player.velocity.velocity.z = 0;
-	auto* next = const_cast<TKey2func*>(mapping);
+void InputSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players) {
 
-	while(next->p_func)
-	{
-		if(eventReceiver.IsKeyDown(next->key))
-			next->p_func(player);
-		++next;
+	for (auto &player : players) {
+		player->velocity.velocity.x = player->velocity.velocity.z = player->velocity.direccion.x = player->velocity.direccion.z = 0;
+
+		auto *next = const_cast<TKey2func *>(keyMapping);
+
+		while (next->p_func) {
+			if (eventReceiver.IsKeyDown(next->key))
+				next->p_func(*player);
+			++next;
+		}
 	}
 }

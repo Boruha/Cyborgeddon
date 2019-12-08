@@ -1,37 +1,39 @@
 #pragma once
 
-#include <irrlicht/irrlicht.h>
+#include <SunlightEngine/EventReceiver.hpp>
+#include <SunlightEngine/KeyCodes.hpp>
+
 #include <ent/Entities.hpp>
 
 #include <vector>
-#include <util/EventReceiver.hpp>
+#include <src/man/EntityManager.hpp>
 
 struct InputSystem
 {
 	InputSystem() = default;
 
 	int init(irr::IrrlichtDevice* device);
-	void update(EntityPlayer& player);
+	void update(const std::vector<std::unique_ptr<EntityPlayer>>& players);
 
 	private:
-		EventReceiver eventReceiver;
+		Sun::EventReceiver eventReceiver;
 
-		static void w_pressed(EntityPlayer& player) { ++player.velocity.velocity.z; }
-		static void a_pressed(EntityPlayer& player) { --player.velocity.velocity.x; }
-		static void s_pressed(EntityPlayer& player) { --player.velocity.velocity.z; }
-		static void d_pressed(EntityPlayer& player) { ++player.velocity.velocity.x; }
+		static void 	w_pressed(EntityPlayer& player) { ++player.velocity.direccion.z; }
+		static void 	a_pressed(EntityPlayer& player) { --player.velocity.direccion.x; }
+		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direccion.z; }
+		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direccion.x; }
 
 	struct TKey2func {
-		irr::EKEY_CODE key;
+		Sun::KEY_CODE key;
 		void (*p_func)(EntityPlayer&);
 	};
 
-	const TKey2func mapping[5]
+	const TKey2func keyMapping[5]
 	{
-		{irr::KEY_KEY_W,                 		w_pressed },
-		{irr::KEY_KEY_A,                 		a_pressed },
-		{irr::KEY_KEY_S,                 		s_pressed },
-		{irr::KEY_KEY_D,                 		d_pressed },
-		{static_cast<irr::EKEY_CODE>(0), nullptr }
+		{Sun::KEY_W,                 			w_pressed },
+		{Sun::KEY_A,                 			a_pressed },
+		{Sun::KEY_S,                 			s_pressed },
+		{Sun::KEY_D,                 			d_pressed },
+		{static_cast<Sun::KEY_CODE>(0), 		nullptr	  }
 	};
 };

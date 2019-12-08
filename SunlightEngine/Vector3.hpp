@@ -1,11 +1,11 @@
 #pragma once
 
+#include <cmath>
+
 namespace Sun {
 
 	template<typename T>
 	struct Vector3 {
-		T x{0}, y{0}, z{0};
-
 		Vector3() = default;
 
 		explicit Vector3(T xyz) : x(xyz), y(xyz), z(xyz) {}
@@ -26,30 +26,30 @@ namespace Sun {
 		Vector3<T> operator/(const T &div) const { return Vector3<T>(x / div, y / div, z / div); }
 
 
-		Vector3<T> &operator+=(const Vector3<T> &vec) {
+		Vector3<T>& operator+=(const Vector3<T> &vec) {
 			x += vec.x;
 			y += vec.y;
 			z += vec.z;
 			return *this;
 		}
 
-		Vector3<T> &operator-=(const Vector3<T> &vec) {
+		Vector3<T>& operator-=(const Vector3<T> &vec) {
 			x -= vec.x;
 			y -= vec.y;
 			z -= vec.z;
 			return *this;
 		}
 
-		Vector3<T> &operator*=(const T &mul) {
+		Vector3<T>& operator*=(const T &mul) {
 			x *= mul;
 			y *= mul;
 			z *= mul;
 			return *this;
 		}
 
-		Vector3<T> &operator/=(const T &div) {
-			x *= div;
-			y *= div;
+		Vector3<T>& operator/=(const T &div) {
+			x /= div;
+			y /= div;
 			z /= div;
 			return *this;
 		}
@@ -59,18 +59,21 @@ namespace Sun {
 
 		bool operator!=(const Vector3<T> &vec) { return x != vec.x || y != vec.y || z != vec.z; }
 
-		Vector3<T> &normalize() {
-			T sum = x * x + y * y + z * z;
+		Vector3<T>& normalize() {
+			T length = this->length();
 
-			if (sum == 0)
+			if (length == 0)
 				return *this;
 
-			x /= sqrt(sum);
-			y /= sqrt(sum);
-			z /= sqrt(sum);
-
-			return *this;
+			return (*this) /= length;
 		}
+
+		T length() const {
+			return static_cast<T>(sqrt(x*x + y*y + z*z));
+		}
+
+
+		T x{0}, y{0}, z{0};
 	};
 
 	//typedef Vector3<short> 				Vector3s;

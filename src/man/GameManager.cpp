@@ -31,8 +31,9 @@ void GameManager::loop()
 {
 	while(render.device->run())
 	{
-		input.update(entityManager.player);
-		movement.update(entityManager.player);
+		input.update(entityManager.getPlayers());
+		movement.update(entityManager.getPlayers());
+		entityManager.killPlayers();
 		render.update();
 	}
 }

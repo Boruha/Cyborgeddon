@@ -7,8 +7,8 @@ using Sun::Vector3f;
 struct Transformable
 {
 	Transformable() = default;
-	explicit Transformable(Vector3f& pos) : position(pos) {}
-	Transformable(float x, float y, float z) : position(x,y,z) {}
+	explicit Transformable(const Vector3f& pos) : position(pos) {}
+	Transformable(const float x, const float y, const float z) : position(x,y,z) {}
 	~Transformable() = default;
 
 	Vector3f	position {0,0,0};

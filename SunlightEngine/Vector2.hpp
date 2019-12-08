@@ -4,8 +4,6 @@ namespace Sun {
 
 	template<typename T>
 	struct Vector2 {
-		T x{0}, y{0};
-
 		Vector2() = default;
 
 		explicit Vector2(T xy) : x(xy), y(xy) {}
@@ -17,7 +15,7 @@ namespace Sun {
 
 		Vector2<T> operator+(const Vector2<T> &vec) const { return Vector2<T>(x + vec.x, y + vec.y); }
 
-		Vector2<T> operator-(const Vector2<T> &vec) const { return Vector2<T>(x + vec.x, y + vec.y); }
+		Vector2<T> operator-(const Vector2<T> &vec) const { return Vector2<T>(x - vec.x, y - vec.y); }
 
 		Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
 
@@ -45,8 +43,8 @@ namespace Sun {
 		}
 
 		Vector2<T> &operator/=(const T &div) {
-			x *= div;
-			y *= div;
+			x /= div;
+			y /= div;
 			return *this;
 		}
 
@@ -56,16 +54,21 @@ namespace Sun {
 		bool operator!=(const Vector2<T> &vec) { return x != vec.x || y != vec.y; }
 
 		Vector2<T> &normalize() {
-			T sum = x * x + y * y;
+			T length = this->length();
 
-			if (sum == 0)
+			if (length == 0)
 				return *this;
 
-			x /= sqrt(sum);
-			y /= sqrt(sum);
-
-			return *this;
+			return (*this) /= length;
 		}
+
+		T length() const {
+			return static_cast<T>(sqrt(x*x + y*y));
+		}
+
+
+
+		T x{0}, y{0};
 	};
 
 	//typedef Vector2<short> 				Vector2s;
