@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <utility>
-
 struct Renderable
 {
 	Renderable() = default;

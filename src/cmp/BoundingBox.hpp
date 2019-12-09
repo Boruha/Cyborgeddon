@@ -1,8 +1,6 @@
 #pragma once
 
 #include <SunlightEngine/Vector3.hpp>
-#include <iostream>
-#include <cmath>
 
 using Sun::Vector3f;
 
@@ -16,5 +14,5 @@ struct BoundingBox
 	~BoundingBox() = default;
 
 	const Vector3f dim {0,0,0};
-	Transformable transformable {0, 0, 0};
+	Transformable transformable {0,0,0};
 };

@@ -29,11 +29,11 @@ int GameManager::init()
 
 void GameManager::loop()
 {
-	while(render.device->run())
+	while(render.device->isActive())
 	{
+		entityManager.killPlayers();
 		input.update(entityManager.getPlayers());
 		movement.update(entityManager.getPlayers());
-		entityManager.killPlayers();
 		render.update();
 	}
 }

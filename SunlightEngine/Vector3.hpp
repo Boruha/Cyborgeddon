@@ -17,7 +17,7 @@ namespace Sun {
 
 		Vector3<T> operator+(const Vector3<T> &vec) const { return Vector3<T>(x + vec.x, y + vec.y, z + vec.z); }
 
-		Vector3<T> operator-(const Vector3<T> &vec) const { return Vector3<T>(x + vec.x, y + vec.y, z - vec.z); }
+		Vector3<T> operator-(const Vector3<T> &vec) const { return Vector3<T>(x - vec.x, y - vec.y, z - vec.z); }
 
 		Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
 

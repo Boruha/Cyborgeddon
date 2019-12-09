@@ -1,20 +1,13 @@
 #include <sys/InputSystem.hpp>
 
-#include <iostream>
 #include <src/man/EntityManager.hpp>
 #include <algorithm>
 
 using std::cerr;
 using std::endl;
 
-int InputSystem::init(irr::IrrlichtDevice *device) {
+int InputSystem::init(Sun::Device* device) {
 	device->setEventReceiver(&eventReceiver);
-
-	if (!device->getEventReceiver()) {
-		cerr << "Error en input system init, no se pudo establecer el receptor de eventos" << endl;
-		return 1;
-	}
-
 	return 0;
 }
 

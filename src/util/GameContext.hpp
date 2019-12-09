@@ -3,10 +3,10 @@
 #include <vector>
 #include <ent/Entity.hpp>
 
-struct GameContext
-{
+struct GameContext {
 	GameContext() = default;
+
 	virtual ~GameContext() = default;
 
-	[[nodiscard]] virtual const std::vector<Entity>& getEntities() const  = 0;
+	[[nodiscard]] virtual const std::vector<Entity>& getEntities() const = 0;
 };

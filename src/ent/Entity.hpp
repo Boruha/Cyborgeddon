@@ -9,7 +9,9 @@ struct Entity
 	Entity() = default;
 	explicit Entity(EntityID ID) : ID(ID){}
 	virtual ~Entity() = default;
+
 	[[nodiscard]] const EntityID& getID() const { return ID; }
-protected:
-	EntityID ID { NULL_ID };
+
+	protected:
+		EntityID ID { NULL_ID };
 };

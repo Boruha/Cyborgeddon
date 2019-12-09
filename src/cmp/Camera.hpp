@@ -1,24 +1,20 @@
 #pragma once
 
-#include <irrlicht/ICameraSceneNode.h>
 #include <SunlightEngine/Vector3.hpp>
-#include <iostream>
+#include <SunlightEngine/Device.hpp>
+#include <SunlightEngine/CameraNode.hpp>
 
 using Sun::Vector3f;
+using Sun::Device;
+using Sun::CameraNode;
 
 struct Camera
 {
-	explicit Camera(irr::scene::ICameraSceneNode* camera, const Vector3f& target, const Vector3f& pos) :
-		cameraNode(camera),
-		target(target)
-		{
-			cameraNode->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z));
-			cameraNode->setTarget(irr::core::vector3df(target.x, target.y, target.z));
-		}
+	explicit Camera(const Vector3f& target = Vector3f(), const float angle = 0, const float distance = 10)
+		: target(target), angle(angle), distance(distance) {  }
 	~Camera() = default;
 
-	irr::scene::ICameraSceneNode* cameraNode { nullptr };
+	const Vector3f target {0,0,0};
 	float angle {0};
 	float distance {10};
-	const Vector3f target {0,0,0};
 };
