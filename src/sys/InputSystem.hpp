@@ -10,12 +10,14 @@
 
 struct InputSystem
 {
-	InputSystem() = default;
+	InputSystem() = delete;
+	explicit InputSystem(const Device& device) : device(device) {  }
 
-	int init(const Sun::Device& device);
+	void init();
 	void update(const std::vector<std::unique_ptr<EntityPlayer>>& players);
 
 	private:
+		const Device& device;
 		Sun::EventReceiver eventReceiver;
 
 		static void 	w_pressed(EntityPlayer& player) { ++player.velocity.direccion.z; }
@@ -30,10 +32,10 @@ struct InputSystem
 
 	const TKey2func keyMapping[5]
 	{
-		{Sun::KEY_W,                 			w_pressed },
-		{Sun::KEY_A,                 			a_pressed },
-		{Sun::KEY_S,                 			s_pressed },
-		{Sun::KEY_D,                 			d_pressed },
-		{static_cast<Sun::KEY_CODE>(0), 		nullptr	  }
+		{Sun::KEY_W,                 			w_pressed 	},
+		{Sun::KEY_A,                 			a_pressed 	},
+		{Sun::KEY_S,                 			s_pressed 	},
+		{Sun::KEY_D,                 			d_pressed 	},
+		{static_cast<Sun::KEY_CODE>(0), nullptr  	}
 	};
 };

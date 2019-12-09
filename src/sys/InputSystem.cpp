@@ -6,13 +6,11 @@
 using std::cerr;
 using std::endl;
 
-int InputSystem::init(const Sun::Device& device) {
+void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);
-	return 0;
 }
 
 void InputSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players) {
-
 	for (auto &player : players) {
 		player->velocity.velocity.x = player->velocity.velocity.z = player->velocity.direccion.x = player->velocity.direccion.z = 0;
 

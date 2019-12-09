@@ -14,6 +14,7 @@ struct EntityManager : GameContext {
 
 	int init();
 	void killPlayers();
+	void newBala(int);
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityPlayer>>& getPlayers() const override { return players; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityCamera>>& getCameras() const override { return cameras; }
 
