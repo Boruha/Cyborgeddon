@@ -7,11 +7,11 @@
 struct RenderSystem {
 	RenderSystem() = default;
 
-	RenderSystem(const Sun::Vector2u& dim, const wchar_t* name) : device(new Sun::Device(dim, name)) {  }
-	~RenderSystem() { delete device; }
+	RenderSystem(const Sun::Vector2u& dim, const wchar_t* name) : device(Sun::Device(dim, name)) {  }
+	~RenderSystem() = default;
 
 	int init();
 	void update();
 
-	Sun::Device* device { new Sun::Device(Sun::Vector2u(640, 480), L"Cyborgeddon") };
+	Sun::Device device {Sun::Vector2u(640, 480), L"Cyborgeddon" };
 };

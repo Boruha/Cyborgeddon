@@ -28,7 +28,7 @@ namespace Sun {
 
 		void showDrawn() { device->getVideoDriver()->endScene(); }
 
-		void setEventReceiver(EventReceiver* receiver) { device->setEventReceiver(receiver); }
+		void setEventReceiver(EventReceiver* receiver) const { device->setEventReceiver(receiver); }
 
 		[[nodiscard]] bool isActive() { return device->run(); }
 

@@ -29,7 +29,7 @@ int GameManager::init()
 
 void GameManager::loop()
 {
-	while(render.device->isActive())
+	while(render.device.isActive())
 	{
 		entityManager.killPlayers();
 		input.update(entityManager.getPlayers());

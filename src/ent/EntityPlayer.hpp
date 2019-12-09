@@ -18,7 +18,7 @@ using Sun::Device;
 struct EntityPlayer : Entity
 {
 	EntityPlayer() = default;
-	explicit EntityPlayer(Device* device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(10), const float& speed = 1) :
+	explicit EntityPlayer(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(10), const float& speed = 1) :
 		Entity(PLAYER_ID), transformable(pos), collider(dim, transformable), velocity(speed), node(device, pos, dim) { node.setTexture(renderable.texture); }
 	~EntityPlayer() override = default;
 

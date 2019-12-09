@@ -6,8 +6,8 @@
 using std::cerr;
 using std::endl;
 
-int InputSystem::init(Sun::Device* device) {
-	device->setEventReceiver(&eventReceiver);
+int InputSystem::init(const Sun::Device& device) {
+	device.setEventReceiver(&eventReceiver);
 	return 0;
 }
 

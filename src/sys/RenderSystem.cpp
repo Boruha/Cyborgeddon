@@ -7,7 +7,7 @@ int RenderSystem::init()
 
 void RenderSystem::update()
 {
-	device->clear(Sun::Color(255,255,255));
-	device->draw();
-	device->showDrawn();
+	device.clear(Sun::Color(255,255,255));
+	device.draw();
+	device.showDrawn();
 }

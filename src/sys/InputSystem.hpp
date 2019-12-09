@@ -12,7 +12,7 @@ struct InputSystem
 {
 	InputSystem() = default;
 
-	int init(Sun::Device* device);
+	int init(const Sun::Device& device);
 	void update(const std::vector<std::unique_ptr<EntityPlayer>>& players);
 
 	private:

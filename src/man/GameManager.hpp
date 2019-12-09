@@ -15,5 +15,5 @@ struct GameManager {
 	InputSystem input {  };
 	MovementSystem movement {  };
 
-	EntityManager entityManager {render.device};
+	EntityManager entityManager { render.device };
 };
