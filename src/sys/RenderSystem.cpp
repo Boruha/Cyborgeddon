@@ -2,7 +2,7 @@
 
 void RenderSystem::update()
 {
-	device.clear(Sun::Color(255,255,255));
+	device.clear(&background);
 	device.draw();
 	device.showDrawn();
 }

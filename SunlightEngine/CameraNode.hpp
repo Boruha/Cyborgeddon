@@ -18,16 +18,6 @@ namespace Sun {
 
 		~CameraNode() override = default;
 
-		[[nodiscard]] Vector3f getPosition() const override {
-			return Vector3f(camera->getPosition().X, camera->getPosition().Y, camera->getPosition().Z);
-		}
-
-		void setPosition(const Vector3f &pos) const override { camera->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z)); }
-		void setTarget(const Vector3f &target) const { camera->setPosition(irr::core::vector3df(target.x, target.y, target.z)); }
-
-		void removeFromScene() const override { camera->getSceneManager()->addToDeletionQueue(camera); }
-
-	private:
-		irr::scene::ICameraSceneNode* camera { nullptr };
+		void setTarget(const Vector3f &target) const { dynamic_cast<irr::scene::ICameraSceneNode*>(node)->setTarget(irr::core::vector3df(target.x, target.y, target.z)); }
 	};
 }

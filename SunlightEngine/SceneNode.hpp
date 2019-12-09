@@ -22,12 +22,6 @@ namespace Sun {
 
 		~SceneNode() override = default;
 
-		void setPosition(const Vector3f &pos) const override { node->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z)); }
-
-		[[nodiscard]] Vector3f getPosition() const override {
-			return Vector3f(node->getPosition().X, node->getPosition().Y, node->getPosition().Z);
-		}
-
 		void setTexture(const char *texture = "") const {
 			node->setMaterialTexture(0,
 									 node->getSceneManager()->getVideoDriver()->getTexture(
@@ -35,8 +29,5 @@ namespace Sun {
 		}
 
 		void affectedByLight(const bool b) const { node->setMaterialFlag(irr::video::EMF_LIGHTING, b); }
-
-		void removeFromScene() const override { node->getSceneManager()->addToDeletionQueue(node); }
-
 	};
 }

@@ -12,16 +12,16 @@ struct EntityManager : GameContext {
 	explicit EntityManager(const Device& device) : device(device) {  }
 	~EntityManager() override { cleanVectors(); }
 
-	int init();
+	void init();
 	void killPlayers();
-	void newBala(int);
+
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityPlayer>>& getPlayers() const override { return players; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityCamera>>& getCameras() const override { return cameras; }
 
-	void cleanVectors();
-
 	private:
-		const Sun::Device& device;
+        void cleanVectors();
+
+	    const Sun::Device& device;
 
 		std::vector<Entity> entities;
 		std::vector<std::unique_ptr<EntityPlayer>> players;

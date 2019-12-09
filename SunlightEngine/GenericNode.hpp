@@ -7,13 +7,16 @@ namespace Sun {
 	struct GenericNode {
 		GenericNode() = default;
 		explicit GenericNode(irr::scene::ISceneNode* node) : node(node) {  }
-		virtual ~GenericNode() = default;
+		virtual ~GenericNode() { removeFromScene(); }
 
-		[[nodiscard]] virtual Vector3f getPosition() const = 0;
-		virtual void setPosition(const Vector3f&) const = 0;
-		virtual void removeFromScene() const = 0;
+		[[nodiscard]] Vector3f getPosition() const { return Vector3f(node->getPosition().X, node->getPosition().Y, node->getPosition().Z); }
+		void setPosition(const Vector3f& pos) const { node->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z)); }
 
-		protected:
+        protected:
 			irr::scene::ISceneNode* node { nullptr };
+
+	    private:
+		    void removeFromScene() const { node->getSceneManager()->addToDeletionQueue(node); }
+
 	};
 }

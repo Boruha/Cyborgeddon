@@ -13,4 +13,5 @@ struct RenderSystem {
 	void update();
 
 	Sun::Device device {Sun::Vector2u(640, 480), L"Cyborgeddon" };
+	Sun::Color background { Sun::COLOR::RED };
 };

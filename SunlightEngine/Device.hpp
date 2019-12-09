@@ -17,20 +17,20 @@ namespace Sun {
 		}
 		~Device() { if(device) device->drop(); }
 
-		void clear(const Color& color) { device->getVideoDriver()->beginScene(true, true,
-																	   irr::video::SColor(color.getColorData().a,
-																								color.getColorData().r,
-																								color.getColorData().g,
-																								color.getColorData().b));
+		void clear(Color* color) const { device->getVideoDriver()->beginScene(true, true,
+																	   irr::video::SColor(color->getColorData().a,
+																								color->getColorData().r,
+																								color->getColorData().g,
+																								color->getColorData().b));
 		}
 
-		void draw() { device->getSceneManager()->drawAll(); }
+		void draw() const { device->getSceneManager()->drawAll(); }
 
-		void showDrawn() { device->getVideoDriver()->endScene(); }
+		void showDrawn() const { device->getVideoDriver()->endScene(); }
 
 		void setEventReceiver(EventReceiver* receiver) const { device->setEventReceiver(receiver); }
 
-		[[nodiscard]] bool isActive() { return device->run(); }
+		[[nodiscard]] bool isActive() const { return device->run(); }
 
 		[[nodiscard]] irr::IrrlichtDevice* getInnerDevice() const { return device; }
 
