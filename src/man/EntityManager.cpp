@@ -4,6 +4,7 @@
 void EntityManager::init()
 {
     createPlayer();
+    createDoor();
     //createPlayer(Vector3f(10,0,0), Vector3f(5), 2.f);
 	//createPlayer(Vector3f(-10, 0, 0), Vector3f(5), 2.f);
     //createPlayer(Vector3f(20, 0, 0), Vector3f(5), 4.f);
@@ -24,6 +25,10 @@ void EntityManager::cleanVectors() {
 
 void EntityManager::createPlayer(const Vector3f& pos, const Vector3f& dim, const float& speed) {
     players.emplace_back(std::make_unique<EntityPlayer>(device, pos, dim, speed));
+}
+
+void EntityManager::createDoor(const Vector3f& pos, const Vector3f& dim) {
+    doors.emplace_back(std::make_unique<EntityDoor>(device, pos, dim));
 }
 
 void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {

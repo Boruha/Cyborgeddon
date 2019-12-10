@@ -12,7 +12,7 @@ void GameManager::update()
 {
 	entityManager.killPlayers();
 	input.update(entityManager.getPlayers());
-	//collision.update(PLAYER, DOOR, KEY);
+	collision.update(entityManager.getPlayers(), entityManager.getDoors());
 	movement.update(entityManager.getPlayers());
 }
 

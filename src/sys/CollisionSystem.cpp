@@ -24,11 +24,34 @@
  * en caso de que haya una. Ahorraria mogollon de comprobaciones tontas.
  */
 
-void CollisionSystem::update(EntityPlayer& player, EntityDoor& door, EntityKey& key )
-{
-    if(player.node.getTransformedBoundingBox().intersectsWithBox(door.node.getTransformedBoundingBox())){
-        std::cout<<"Llave dejada: "<< std::endl;
+/*
+void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players) {
+    for(auto & player : players)
+    {
+        // CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
+        player->transformable.position = player->node.getPosition();
+
+        player->velocity.velocity = player->velocity.direccion.normalize() * player->velocity.speed;
+        player->transformable.position += player->velocity.velocity;
+
+        player->node.setPosition(player->transformable.position);
     }
+}
+*/
+
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityDoor>>& doors)
+{
+    for(auto & player :players){
+        for(auto & door : doors){
+            if(player->node.getTransformedBoundingBox().intersectsWithBox(door->node.getTransformedBoundingBox())){
+                std::cout<<"COLISIONA" <<std::endl;
+            }
+            else{
+                std::cout<<"NO COLISIONA "<<std::endl;
+            }
+        }
+    }
+
 
     /*
     if(player.node->getTransformedBoundingBox().intersectsWithBox(door.node->getTransformedBoundingBox())){
