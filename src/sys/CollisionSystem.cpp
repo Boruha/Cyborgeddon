@@ -39,7 +39,7 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 }
 */
 
-void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityDoor>>& doors)
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys)
 {
     for(auto & player :players){
         for(auto & door : doors){
@@ -55,20 +55,8 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& p
     }
 
 
-    /*
-    if(player.node->getTransformedBoundingBox().intersectsWithBox(door.node->getTransformedBoundingBox())){
-        player.node->setPosition(NoCollision);
+    //collisionPlayerKey(player, key);
 
-        player.key = false;
-        std::cout<<"Llave dejada: "<< player.key << std::endl;
-    }
-    else{
-
-        //std::cout<<player.node->getPosition().X<<std::endl;
-    }
-
-    collisionPlayerKey(player, key);
-     */
 }
 
 /*
