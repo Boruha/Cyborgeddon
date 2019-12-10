@@ -2,7 +2,6 @@
 
 #include <SunlightEngine/Vector2.hpp>
 #include <SunlightEngine/Device.hpp>
-#include <memory>
 
 struct RenderSystem {
 	RenderSystem() = default;
