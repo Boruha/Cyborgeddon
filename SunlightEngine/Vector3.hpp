@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include <SunlightEngine/Math.hpp>
 
 namespace Sun {
 
@@ -72,6 +72,44 @@ namespace Sun {
 			return static_cast<T>(sqrt(x*x + y*y + z*z));
 		}
 
+		void rotateXZ(double deg, const Vector3<T>& origin = Vector3<T>())
+        {
+		    deg *= DEG2RAD;
+
+		    x -= origin.x;
+		    z -= origin.z;
+
+		    *this = Vector3<T>(x*cos(deg) - z*sin(deg), y, x*sin(deg) + z * cos(deg));
+
+		    x += origin.x;
+		    z += origin.z;
+        }
+
+        void rotateXY(double deg, const Vector3<T>& origin = Vector3<T>())
+        {
+            deg *= DEG2RAD;
+
+            x -= origin.x;
+            y -= origin.y;
+
+            *this = Vector3<T>(x*cos(deg) - y*sin(deg), x*sin(deg) + y*cos(deg), z);
+
+            x += origin.x;
+            y += origin.y;
+        }
+
+        void rotateYZ(double deg, const Vector3<T>& origin = Vector3<T>())
+        {
+            deg *= DEG2RAD;
+
+            y -= origin.y;
+            z -= origin.z;
+
+            *this = Vector3<T>(x, y*cos(deg) - z*sin(deg), y*sin(deg) + z*cos(deg));
+
+            y += origin.y;
+            z += origin.z;
+        }
 
 		T x{0}, y{0}, z{0};
 	};

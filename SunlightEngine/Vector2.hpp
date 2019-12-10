@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SunlightEngine/Math.hpp>
+
 namespace Sun {
 
 	template<typename T>
@@ -66,7 +68,18 @@ namespace Sun {
 			return static_cast<T>(sqrt(x*x + y*y));
 		}
 
+        void rotate(double deg, const Vector3<T>& origin = Vector3<T>())
+        {
+            deg *= DEG2RAD;
 
+            x -= origin.x;
+            y -= origin.y;
+
+            *this = Vector3<T>(x*cos(deg) - y*sin(deg), x*sin(deg) + y*cos(deg));
+
+            x += origin.x;
+            y += origin.y;
+        }
 
 		T x{0}, y{0};
 	};
