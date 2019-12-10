@@ -7,8 +7,8 @@
 namespace Sun {
 
 	struct ColorData {
-		ColorData(unsigned short r, unsigned short g, unsigned short b, unsigned short a) : r(r), g(g), b(b), a(a) {  }
-		unsigned short r, g, b, a;
+		ColorData(const u_int8_t&  r, const u_int8_t&  g, const u_int8_t&  b, const u_int8_t&  a) : r(r), g(g), b(b), a(a) {  }
+        const u_int8_t&  r, g, b, a;
 	};
 
 	struct Color {
@@ -16,41 +16,14 @@ namespace Sun {
 
 		Color(const u_int32_t& color) : r(color >> 24 & 0xFF), g(color >> 16 & 0xFF), b(color >> 8 & 0xFF), a(color & 0xFF) { }
 
-		Color(const unsigned short &r, const unsigned short &g, const unsigned short &b) : r(r), g(g), b(b) {}
+		Color(const u_int8_t& r, const u_int8_t& g, const uint8_t& b) : r(r), g(g), b(b) {  }
 
-		Color(const unsigned short &r, const unsigned short &g, const unsigned short &b, const unsigned short &a) : r(r), g(g), b(b), a(a) {}
-
-		void setRGB(unsigned short &vr, unsigned short &vg, unsigned short &vb) {
-			checkRange(vr);
-			checkRange(vg);
-			checkRange(vb);
-
-			r = vr;
-			g = vg;
-			b = vb;
-		}
-
-		void setRGBA(unsigned short &vr, unsigned short &vg, unsigned short &vb, unsigned short &va) {
-			checkRange(vr);
-			checkRange(vg);
-			checkRange(vb);
-			checkRange(va);
-
-			r = vr;
-			g = vg;
-			b = vb;
-			a = va;
-		}
-
-		static void checkRange(unsigned short &value) {
-			if (0 > value || value > 255)
-				throw OutOfRangeException("Color", 0, 255);
-		}
+		Color(const u_int8_t& r, const u_int8_t& g, const u_int8_t& b, const u_int8_t& a) : r(r), g(g), b(b), a(a) {}
 
 		[[nodiscard]] ColorData getColorData() const { return ColorData(r,g,b,a); }
 
 	private:
-		unsigned short r{0}, g{0}, b{0}, a{255};
+		uint8_t r{0x00}, g{0x00}, b{0x00}, a{0xFF};
 	};
 
 	enum COLOR {
