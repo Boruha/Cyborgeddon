@@ -32,7 +32,7 @@ void GameManager::update()
 	while(render.device->run())
 	{
 		input.update(entityManager.player);
-		collision.update(entityManager.player, entityManager.cube, entityManager.key);
+		collision.update(entityManager.player, entityManager.door, entityManager.key);
         movement.update(entityManager.player);
 		render.update();
 

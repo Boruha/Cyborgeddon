@@ -7,11 +7,11 @@
 
 #include <irrlicht/irrlicht.h>
 
-struct EntityKey : Entity
+struct EntityDoor : Entity
 {
-	explicit EntityKey(irr::IrrlichtDevice* device) : Entity(KEY_ID), node(device->getSceneManager()->addCubeSceneNode(2.f))
+	explicit EntityDoor(irr::IrrlichtDevice* device) : Entity(DOOR_ID), node(device->getSceneManager()->addCubeSceneNode(20.f))
 	{
-		node->setPosition(irr::core::vector3df(-20,0,20));
+		node->setPosition(irr::core::vector3df(20,0,20));
 	}
 
 	irr::scene::ISceneNode* 	node { nullptr };

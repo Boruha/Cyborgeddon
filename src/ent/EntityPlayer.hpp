@@ -18,7 +18,4 @@ struct EntityPlayer : Entity
 	Transformable 				transformable;
 	Velocity 					velocity;
 	bool                        key;
-
-	void setKey(bool b);
-	bool hasKey();
 };
