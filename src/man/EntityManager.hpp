@@ -15,6 +15,7 @@ struct EntityManager {
 	EntityPlayer player {device};
 	EntityCamera camera {device};
 	EntityPlayer cube {device};
+    EntityPlayer key {device};
 
 	std::vector<Entity*> entities;
 };
