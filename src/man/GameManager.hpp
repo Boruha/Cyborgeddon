@@ -20,7 +20,7 @@ struct GameManager {
 	// render first so we use its device for the other systems and/or managers
 	RenderSystem render { Sun::Vector2u(1280, 720), L"Cyborgeddon" };
 	InputSystem input { render.device };
+    CollisionSystem collision{  };
 	MovementSystem movement {  };
-
 	EntityManager entityManager { render.device };
 };

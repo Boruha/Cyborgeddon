@@ -26,6 +26,11 @@
 
 void CollisionSystem::update(EntityPlayer& player, EntityDoor& door, EntityKey& key )
 {
+    if(player.node.getTransformedBoundingBox().intersectsWithBox(door.node.getTransformedBoundingBox())){
+        std::cout<<"Llave dejada: "<< std::endl;
+    }
+
+    /*
     if(player.node->getTransformedBoundingBox().intersectsWithBox(door.node->getTransformedBoundingBox())){
         player.node->setPosition(NoCollision);
 
@@ -38,8 +43,10 @@ void CollisionSystem::update(EntityPlayer& player, EntityDoor& door, EntityKey& 
     }
 
     collisionPlayerKey(player, key);
+     */
 }
 
+/*
 void CollisionSystem::collisionPlayerKey(EntityPlayer& player, EntityKey& key){
     if(player.node->getTransformedBoundingBox().intersectsWithBox(key.node->getTransformedBoundingBox())){
         player.key = true;
@@ -48,4 +55,5 @@ void CollisionSystem::collisionPlayerKey(EntityPlayer& player, EntityKey& key){
     }
 }
 
+*/
 

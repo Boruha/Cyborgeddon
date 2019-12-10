@@ -11,4 +11,5 @@ struct CollisionSystem
     void collisionPlayerKey(EntityPlayer& player, EntityKey& key);
 
     irr::core::vector3df NoCollision;
+
 };
