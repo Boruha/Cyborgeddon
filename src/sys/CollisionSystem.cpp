@@ -24,7 +24,7 @@
  * en caso de que haya una. Ahorraria mogollon de comprobaciones tontas.
  */
 
-void CollisionSystem::update(EntityPlayer& player, EntityPlayer& cube )
+void CollisionSystem::update(EntityPlayer& player, EntityPlayer& cube, EntityKey& key )
 {
     if(player.node->getTransformedBoundingBox().intersectsWithBox(cube.node->getTransformedBoundingBox())){
 
@@ -36,7 +36,14 @@ void CollisionSystem::update(EntityPlayer& player, EntityPlayer& cube )
         //std::cout<<player.node->getPosition().X<<std::endl;
     }
 
+    collisionPlayerKey(player, key);
+}
 
+void CollisionSystem::collisionPlayerKey(EntityPlayer& player, EntityKey& key){
+    if(player.node->getTransformedBoundingBox().intersectsWithBox(key.node->getTransformedBoundingBox())){
+        std::cout<<"Llave cogida"<<std::endl;
+        //PLAYER HAS KEY
+    }
 }
 
 

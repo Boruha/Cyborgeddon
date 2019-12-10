@@ -7,18 +7,13 @@
 
 #include <irrlicht/irrlicht.h>
 
-struct EntityPlayer : Entity
+struct EntityKey : Entity
 {
-	explicit EntityPlayer(irr::IrrlichtDevice* device) : Entity(PLAYER_ID), node(device->getSceneManager()->addCubeSceneNode(10.f))
+	explicit EntityKey(irr::IrrlichtDevice* device) : Entity(KEY_ID), node(device->getSceneManager()->addCubeSceneNode(2.f))
 	{
 		node->setPosition(irr::core::vector3df(0,0,5));
 	}
 
 	irr::scene::ISceneNode* 	node { nullptr };
 	Transformable 				transformable;
-	Velocity 					velocity;
-	bool                        key;
-
-	void setKey(bool b);
-	bool hasKey();
 };
