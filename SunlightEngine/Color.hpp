@@ -14,7 +14,7 @@ namespace Sun {
 	struct Color {
 		Color() = default;
 
-		Color(const u_int32_t& color) : r(color >> 24u & 0xFF), g(color >> 16 & 0xFF), b(color >> 8 & 0xFF), a(color & 0xFF) { }
+		Color(const u_int32_t& color) : r(color >> 24 & 0xFF), g(color >> 16 & 0xFF), b(color >> 8 & 0xFF), a(color & 0xFF) { }
 
 		Color(const unsigned short &r, const unsigned short &g, const unsigned short &b) : r(r), g(g), b(b) {}
 

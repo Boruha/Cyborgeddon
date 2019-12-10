@@ -3,13 +3,13 @@
 
 void EntityManager::init()
 {
-	players.emplace_back(std::make_unique<EntityPlayer>(device));
-	players.emplace_back(std::make_unique<EntityPlayer>(device, Vector3f(20, 0, 0), Vector3f(10), 2.f));
-	players.emplace_back(std::make_unique<EntityPlayer>(device, Vector3f(-20, 0, 0), Vector3f(10), 2.f));
-	players.emplace_back(std::make_unique<EntityPlayer>(device, Vector3f(40, 0, 0), Vector3f(10), 4.f));
-	players.emplace_back(std::make_unique<EntityPlayer>(device, Vector3f(-40, 0, 0), Vector3f(10), 4.f));
+    createPlayer();
+    createPlayer(Vector3f(10,0,0), Vector3f(5), 2.f);
+	createPlayer(Vector3f(-10, 0, 0), Vector3f(5), 2.f);
+    createPlayer(Vector3f(20, 0, 0), Vector3f(5), 4.f);
+    createPlayer(Vector3f(-20, 0, 0), Vector3f(5), 4.f);
 
-	cameras.emplace_back(std::make_unique<EntityCamera>(device));
+    createCamera(Vector3f(0,20,-50));
 }
 
 void EntityManager::killPlayers() {
@@ -20,4 +20,12 @@ void EntityManager::cleanVectors() {
 	entities.erase(entities.begin(), entities.end());
 	players.erase(players.begin(), players.end());
 	cameras.erase(cameras.begin(), cameras.end());
+}
+
+void EntityManager::createPlayer(const Vector3f& pos, const Vector3f& dim, const float& speed) {
+    players.emplace_back(std::make_unique<EntityPlayer>(device, pos, dim, speed));
+}
+
+void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {
+    cameras.emplace_back(std::make_unique<EntityCamera>(device, pos, target));
 }
