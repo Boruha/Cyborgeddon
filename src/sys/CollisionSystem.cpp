@@ -42,15 +42,22 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys)
 {
     for(auto & player :players){
+        std::cout << "Entro a player\n";
+        std::cout << player->node.getPosition().x << std::endl;
+        player->velocity.direccion.normalize();
         for(auto & door : doors){
+            std::cout << "Entro a door\n";
+            std::cout << door->node.getPosition().x << std::endl;
+            player->node.setPosition(player->transformable.position + player->velocity.direccion * player->velocity.speed);
+
             if(player->node.getTransformedBoundingBox().intersectsWithBox(door->node.getTransformedBoundingBox())){
-                player->node.setPosition(NoCollision);
-                std::cout<<"COLISIONA" <<std::endl;
+                std::cout << "Colisiona\n";
+                std::cout << player->node.getPosition().x << std::endl;
+                player->velocity.direccion = Vector3f();
+                std::cout << player->node.getPosition().x << std::endl;
             }
-            else{
-                std::cout<<"NO COLISIONA "<<std::endl;
-                NoCollision = player->node.getPosition();
-            }
+            player->node.setPosition(player->transformable.position);
+            std::cout << player->node.getPosition().x << std::endl;
         }
     }
 

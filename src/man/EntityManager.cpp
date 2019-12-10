@@ -7,7 +7,7 @@ void EntityManager::init()
     createDoor(Vector3f(20,0,20), Vector3f(10));
     createDoor(Vector3f(-20,0,30), Vector3f(10));
     createDoor(Vector3f(-20,0,10), Vector3f(10));
-    createPlayer(Vector3f(10,0,0), Vector3f(5), 2.f);
+    //createPlayer(Vector3f(10,0,0), Vector3f(5), 2.f);
     createKey(Vector3f(0,0,10));
 	//createPlayer(Vector3f(-10, 0, 0), Vector3f(5), 2.f);
     //createPlayer(Vector3f(20, 0, 0), Vector3f(5), 4.f);
