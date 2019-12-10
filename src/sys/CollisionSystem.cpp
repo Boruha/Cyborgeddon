@@ -44,10 +44,12 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& p
     for(auto & player :players){
         for(auto & door : doors){
             if(player->node.getTransformedBoundingBox().intersectsWithBox(door->node.getTransformedBoundingBox())){
+                player->node.setPosition(NoCollision);
                 std::cout<<"COLISIONA" <<std::endl;
             }
             else{
                 std::cout<<"NO COLISIONA "<<std::endl;
+                NoCollision = player->node.getPosition();
             }
         }
     }
@@ -61,7 +63,7 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& p
         std::cout<<"Llave dejada: "<< player.key << std::endl;
     }
     else{
-        NoCollision =player.node->getPosition();
+
         //std::cout<<player.node->getPosition().X<<std::endl;
     }
 
