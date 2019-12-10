@@ -36,8 +36,8 @@ C           := gcc
 # FLAGS
 CCFLAGS     := -Wall -pedantic -std=c++17
 CFLAGS      := $(CCFLAGS)
-RELEASEFLAG := -O3
-DEBUGFLAG   := -g
+RELEASEFLAG := -O3 -Os
+DEBUGFLAG   := -Og
 
 # MAIN FOLDERS
 APPDIR      :=

@@ -1,17 +1,41 @@
 #pragma once
 
-#include <irrlicht/irrlicht.h>
-#include <cmp/EventReceiver.hpp>
-#include <ent/EntityPlayer.hpp>
+#include <SunlightEngine/EventReceiver.hpp>
+#include <SunlightEngine/KeyCodes.hpp>
+
+#include <ent/Entities.hpp>
 
 #include <vector>
+#include <src/man/EntityManager.hpp>
 
 struct InputSystem
 {
-	InputSystem() = default;
+	InputSystem() = delete;
+	explicit InputSystem(const Device& device) : device(device) {  }
 
-	int init(irr::IrrlichtDevice*);
-	void update(EntityPlayer&);
+	void init();
+	void update(const std::vector<std::unique_ptr<EntityPlayer>>& players);
 
-	EventReceiver eventReceiver;
+	private:
+		const Device& device;
+		Sun::EventReceiver eventReceiver;
+
+		static void 	w_pressed(EntityPlayer& player) { ++player.velocity.direccion.z; }
+		static void 	a_pressed(EntityPlayer& player) { --player.velocity.direccion.x; }
+		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direccion.z; }
+		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direccion.x; }
+
+	struct TKey2func {
+		Sun::KEY_CODE key;
+		void (*p_func)(EntityPlayer&);
+	};
+
+	const TKey2func keyMapping[5]
+	{
+		{Sun::KEY_W,                 			w_pressed 	},
+		{Sun::KEY_A,                 			a_pressed 	},
+		{Sun::KEY_S,                 			s_pressed 	},
+		{Sun::KEY_D,                 			d_pressed 	},
+		{static_cast<Sun::KEY_CODE>(0), nullptr  	}
+	};
 };

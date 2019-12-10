@@ -1,40 +1,42 @@
 #include <man/GameManager.hpp>
-#include <iostream>
 
-using std::cerr;
-using std::endl;
-
-int GameManager::init()
+void GameManager::init()
 {
-	if(render.init() == 1)
-	{
-		cerr << "Error en render init" << endl;
-		return 1;
-	}
+	input.init();
+	render.init();
 
-	if(input.init(render.device) == 1)
-	{
-		cerr << "Error en input init" << endl;
-		return 1;
-	}
-
-	if(entityManager.init() == 1)
-	{
-		cerr << "Error en entity manager init" << endl;
-		return 1;
-	}
-
-	return 0;
+	entityManager.init();
 }
 
 void GameManager::update()
 {
-	while(render.device->run())
-	{
-		input.update(entityManager.player);
-		collision.update(entityManager.player, entityManager.door, entityManager.key);
-        movement.update(entityManager.player);
-		render.update();
+	entityManager.killPlayers();
+	input.update(entityManager.getPlayers());
+	movement.update(entityManager.getPlayers());
+}
 
+void GameManager::loop()
+{/*
+	std::chrono::milliseconds lag (0);
+	std::chrono::milliseconds elapsed;
+
+	std::chrono::time_point<std::chrono::high_resolution_clock> last = std::chrono::high_resolution_clock::now();
+	std::chrono::time_point<std::chrono::high_resolution_clock> now;
+*/
+	while(render.device.isActive())
+	{/*
+		now = std::chrono::high_resolution_clock::now();
+		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - last);
+		last = now;
+		lag += elapsed;
+
+
+		while(lag > TICK_MS)
+		{*/
+			update();
+		/*	lag -= TICK_MS;
+		}*/
+
+		render.update();
 	}
 }

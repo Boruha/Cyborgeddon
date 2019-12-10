@@ -4,18 +4,23 @@
 
 #include <man/EntityManager.hpp>
 
+#include <chrono>
+
 struct GameManager {
 	GameManager() = default;
+	~GameManager() = default;
 
-	int init();
+	void init();
 	void update();
-	// void status();
-	// void pause();
+	void loop();
 
-	RenderSystem render{};
-	InputSystem input{};
-	MovementSystem movement{};
-	CollisionSystem collision{};
+	static constexpr unsigned int UPS = 30;
+	static constexpr std::chrono::milliseconds TICK_MS = std::chrono::milliseconds(1000 / UPS);
 
-	EntityManager entityManager = EntityManager(render.device);
+	// render first so we use its device for the other systems and/or managers
+	RenderSystem render { Sun::Vector2u(1280, 720), L"Cyborgeddon" };
+	InputSystem input { render.device };
+	MovementSystem movement {  };
+
+	EntityManager entityManager { render.device };
 };

@@ -1,19 +1,30 @@
 #pragma once
 
-#include <cmp/Velocity.hpp>
+#include <cmp/Renderable.hpp>
 #include <cmp/Transformable.hpp>
+#include <cmp/Velocity.hpp>
+#include <cmp/BoundingBox.hpp>
 
 #include <ent/Entity.hpp>
 
-#include <irrlicht/irrlicht.h>
+#include <SunlightEngine/Vector3.hpp>
+#include <SunlightEngine/SceneNode.hpp>
+#include <SunlightEngine/Device.hpp>
+
+using Sun::Vector3f;
+using Sun::SceneNode;
+using Sun::Device;
 
 struct EntityDoor : Entity
 {
-	explicit EntityDoor(irr::IrrlichtDevice* device) : Entity(DOOR_ID), node(device->getSceneManager()->addCubeSceneNode(20.f))
-	{
-		node->setPosition(irr::core::vector3df(20,0,20));
-	}
+    EntityDoor() = default;
+    explicit EntityDoor(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5), const float& speed = 1) :
+            Entity(DOOR_ID), transformable(pos), collider(dim, transformable), node(device, pos, dim) { node.setTexture(renderable.texture); }
+    ~EntityDoor() override = default;
 
-	irr::scene::ISceneNode* 	node { nullptr };
-	Transformable 				transformable;
+    Renderable					renderable {"", "./img/textures/testing/testing_cube.png"};
+    Transformable 				transformable;
+    BoundingBox					collider;
+
+    SceneNode 					node;
 };

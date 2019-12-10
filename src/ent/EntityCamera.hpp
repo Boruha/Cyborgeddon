@@ -4,15 +4,21 @@
 
 #include <ent/Entity.hpp>
 
-#include <irrlicht/vector3d.h>
-#include <irrlicht/ISceneManager.h>
+#include <SunlightEngine/Device.hpp>
+#include <SunlightEngine/Vector3.hpp>
+
+using Sun::Device;
+using Sun::Vector3f;
 
 struct EntityCamera : Entity
 {
-	explicit EntityCamera(irr::IrrlichtDevice* device) : Entity(CAMERA_ID), camera(device->getSceneManager()->addCameraSceneNode())
-	{
-		camera.cameraNode->setPosition(irr::core::vector3df(0,20,-30));
-	}
+	explicit EntityCamera(const Device& device, const Vector3f& pos = Vector3f(0, 20, -30), const Vector3f& target = Vector3f())
+		: Entity(CAMERA_ID), transformable(pos), camera(target), cameraNode(device, pos, target) {  }
+	~EntityCamera() override = default;
 
+	Transformable transformable;
+	Velocity velocity;
 	Camera camera;
+
+	CameraNode cameraNode;
 };

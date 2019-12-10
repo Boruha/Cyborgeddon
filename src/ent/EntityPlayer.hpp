@@ -1,21 +1,31 @@
 #pragma once
 
-#include <cmp/Velocity.hpp>
+#include <cmp/Renderable.hpp>
 #include <cmp/Transformable.hpp>
+#include <cmp/Velocity.hpp>
+#include <cmp/BoundingBox.hpp>
 
 #include <ent/Entity.hpp>
 
-#include <irrlicht/irrlicht.h>
+#include <SunlightEngine/Vector3.hpp>
+#include <SunlightEngine/SceneNode.hpp>
+#include <SunlightEngine/Device.hpp>
+
+using Sun::Vector3f;
+using Sun::SceneNode;
+using Sun::Device;
 
 struct EntityPlayer : Entity
 {
-	explicit EntityPlayer(irr::IrrlichtDevice* device) : Entity(PLAYER_ID), node(device->getSceneManager()->addCubeSceneNode(10.f))
-	{
-		node->setPosition(irr::core::vector3df(0,0,5));
-	}
+	EntityPlayer() = default;
+	explicit EntityPlayer(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5), const float& speed = 1) :
+		Entity(PLAYER_ID), transformable(pos), collider(dim, transformable), velocity(speed), node(device, pos, dim) { node.setTexture(renderable.texture); }
+	~EntityPlayer() override = default;
 
-	irr::scene::ISceneNode* 	node { nullptr };
+	Renderable					renderable {"", "./img/textures/testing/testing_cube.png"};
 	Transformable 				transformable;
+	BoundingBox					collider;
 	Velocity 					velocity;
-	bool                        key;
+
+	SceneNode 					node;
 };

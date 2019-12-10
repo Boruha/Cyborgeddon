@@ -1,14 +1,16 @@
 #pragma once
 
-#include <irrlicht/irrlicht.h>
+#include <SunlightEngine/Vector2.hpp>
+#include <SunlightEngine/Device.hpp>
 
-struct RenderSystem
-{
-	RenderSystem() : device(irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(640, 480))) {}
-	~RenderSystem() { device->drop(); }
+struct RenderSystem {
+	RenderSystem() = default;
+	RenderSystem(const Sun::Vector2u& dim, const wchar_t* name) : device(Sun::Device(dim, name)) {  }
+	~RenderSystem() = default;
 
-	int init();
+	void init() {  }
 	void update();
 
-	irr::IrrlichtDevice* device { nullptr };
+	Sun::Device device {Sun::Vector2u(640, 480), L"Cyborgeddon" };
+	Sun::Color background { Sun::COLOR::RED };
 };
