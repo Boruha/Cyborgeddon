@@ -15,6 +15,7 @@ struct EntityManager : GameContext {
 	void init();
 	void killPlayers();
     void takeKey();
+    void openDoor();
 
 	void createPlayer(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5) , const float& speed = 1.f);
     void createDoor(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));

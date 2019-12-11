@@ -29,6 +29,14 @@ void EntityManager::takeKey(){
     }
 }
 
+void EntityManager::openDoor(){
+    for(int i =0; i < doors.size(); i++){
+        if(doors.at(i)->open){
+            doors.erase(doors.begin() + i);
+        }
+    }
+}
+
 void EntityManager::cleanVectors() {
 	entities.erase(entities.begin(), entities.end());
 	players.erase(players.begin(), players.end());
