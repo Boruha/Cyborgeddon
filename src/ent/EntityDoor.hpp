@@ -18,7 +18,7 @@ using Sun::Device;
 struct EntityDoor : Entity
 {
     EntityDoor() = default;
-    explicit EntityDoor(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5), const float& speed = 1) :
+    explicit EntityDoor(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5)) :
             Entity(DOOR_ID), transformable(pos), collider(dim, transformable), node(device, pos, dim) { node.setTexture(renderable.texture); }
     ~EntityDoor() override = default;
 

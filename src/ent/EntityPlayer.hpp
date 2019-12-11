@@ -28,4 +28,6 @@ struct EntityPlayer : Entity
 	Velocity 					velocity;
 
 	SceneNode 					node;
+
+	bool                        key;
 };

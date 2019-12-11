@@ -55,18 +55,19 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& p
     }
 
 
-    //collisionPlayerKey(player, key);
+    PlayerKey(players, keys);
 
 }
 
-/*
-void CollisionSystem::collisionPlayerKey(EntityPlayer& player, EntityKey& key){
-    if(player.node->getTransformedBoundingBox().intersectsWithBox(key.node->getTransformedBoundingBox())){
-        player.key = true;
-        std::cout<<"Llave cogida: "<< player.key << std::endl;
 
+void CollisionSystem::PlayerKey(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityKey>>& keys){
+    for(auto & player :players){
+       for(auto & key : keys){
+           if(player->node.getTransformedBoundingBox().intersectsWithBox(key->node.getTransformedBoundingBox())){
+               player->key = true;
+               key->taken = true;
+               std::cout<<"Llave cogida: "<< player->key << std::endl;
+           }
+       }
     }
 }
-
-*/
-

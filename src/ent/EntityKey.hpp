@@ -18,7 +18,7 @@ using Sun::Device;
 struct EntityKey : Entity
 {
     EntityKey() = default;
-    explicit EntityKey(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5), const float& speed = 1) :
+    explicit EntityKey(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5), bool taken = false) :
             Entity(KEY_ID), transformable(pos), collider(dim, transformable), node(device, pos, dim) { node.setTexture(renderable.texture); }
     ~EntityKey() override = default;
 
@@ -27,4 +27,5 @@ struct EntityKey : Entity
     BoundingBox					collider;
 
     SceneNode 					node;
+    bool                        taken = false;
 };

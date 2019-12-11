@@ -20,6 +20,14 @@ void EntityManager::killPlayers() {
 	players.erase(std::remove_if(players.begin(),players.end(),[&](const std::unique_ptr<EntityPlayer>& pi) {return pi->transformable.position.x > 50;}),players.end());
 }
 
+void EntityManager::takeKey(){
+    for(int i =0; i < keys.size(); i++){
+        if(keys.at(i)->taken){
+            keys.erase(keys.begin() + i);
+        }
+    }
+}
+
 void EntityManager::cleanVectors() {
 	entities.erase(entities.begin(), entities.end());
 	players.erase(players.begin(), players.end());

@@ -11,6 +11,7 @@ void GameManager::init()
 void GameManager::update()
 {
 	entityManager.killPlayers();
+	entityManager.takeKey();
 	input.update(entityManager.getPlayers());
 	collision.update(entityManager.getPlayers(), entityManager.getDoors(), entityManager.getKeys());
 	movement.update(entityManager.getPlayers());
