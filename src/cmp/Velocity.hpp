@@ -6,9 +6,7 @@ using Sun::Vector3f;
 
 struct Velocity
 {
-	Velocity() = default;
 	explicit Velocity(const float speed) : speed(speed){ }
-	~Velocity() = default;
 
 	Vector3f	 velocity  {0,0,0};
 	Vector3f	 direccion {0,0,0};

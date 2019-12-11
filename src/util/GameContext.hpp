@@ -12,3 +12,5 @@ struct GameContext {
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityCamera>>& getCameras() const = 0;
 };
+
+// TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan

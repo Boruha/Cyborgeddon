@@ -10,6 +10,7 @@ void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);
 }
 
+// TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 void InputSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players) {
 	for (auto &player : players) {
 		player->velocity.velocity.x = player->velocity.velocity.z = player->velocity.direccion.x = player->velocity.direccion.z = 0;

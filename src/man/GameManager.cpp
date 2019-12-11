@@ -17,6 +17,7 @@ void GameManager::update()
 	movement.update(entityManager.getEnemies());
 }
 
+// TODO: bucle del juego
 void GameManager::loop()
 {/*
 	std::chrono::milliseconds lag (0);
@@ -40,5 +41,6 @@ void GameManager::loop()
 		}*/
 
 		render.update();
+		// TODO: interpolar movimiento en render
 	}
 }

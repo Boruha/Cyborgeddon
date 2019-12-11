@@ -8,7 +8,6 @@
 
 namespace Sun {
 	struct CameraNode : public GenericNode {
-		CameraNode() = default;
 
 		explicit CameraNode(const Device& device, const Vector3f &pos = Vector3f(), const Vector3f &target = Vector3f(0, 0, 100))
 				: GenericNode(device.getInnerDevice()->getSceneManager()->addCameraSceneNode(

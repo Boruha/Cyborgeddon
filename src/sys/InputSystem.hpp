@@ -10,7 +10,6 @@
 
 struct InputSystem
 {
-	InputSystem() = delete;
 	explicit InputSystem(const Device& device) : device(device) {  }
 
 	void init();

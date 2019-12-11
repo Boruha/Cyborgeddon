@@ -8,15 +8,10 @@
 
 namespace Sun {
 	struct SceneNode : public GenericNode {
-		SceneNode() = default;
-
 		explicit SceneNode(const Device& device, const Vector3f& pos = Vector3f(), const Vector3f &dim = Vector3f(10))
-			: GenericNode(device.getInnerDevice()->getSceneManager()->addCubeSceneNode(
-					dim.x,
-					nullptr,
-					-1,
-					irr::core::vector3df(pos.x, pos.y, pos.z)))
+			: GenericNode(device.getInnerDevice()->getSceneManager()->addCubeSceneNode(dim.x))
 		{
+			this->setPosition(Vector3f(pos.x, pos.y, pos.z));
 			affectedByLight(false);
 		}
 

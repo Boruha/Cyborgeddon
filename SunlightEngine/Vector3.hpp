@@ -111,6 +111,9 @@ namespace Sun {
             z += origin.z;
         }
 
+        // TODO: - get angle entre dos vectores
+        //  	 - rotate para IA (?)
+
 		T x{0}, y{0}, z{0};
 	};
 

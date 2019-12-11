@@ -5,7 +5,6 @@
 
 namespace Sun {
 	struct GenericNode {
-		GenericNode() = default;
 		explicit GenericNode(irr::scene::ISceneNode* node) : node(node) {  }
 		virtual ~GenericNode() { removeFromScene(); }
 

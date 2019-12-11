@@ -1,5 +1,4 @@
 #include <man/EntityManager.hpp>
-#include <algorithm>
 
 void EntityManager::init()
 {
@@ -8,10 +7,6 @@ void EntityManager::init()
     createEnemy(Vector3f(0, 0, 50));
 
     createCamera(Vector3f(0,20,-50));
-}
-
-void EntityManager::killPlayers() {
-	players.erase(std::remove_if(players.begin(),players.end(),[&](const std::unique_ptr<EntityPlayer>& pi) {return pi->transformable.position.x > 50;}),players.end());
 }
 
 void EntityManager::cleanVectors() {

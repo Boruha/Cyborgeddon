@@ -12,9 +12,7 @@ namespace Sun {
 	};
 
 	struct Color {
-		Color() = default;
-
-		Color(const u_int32_t& color) : r(color >> 24 & 0xFF), g(color >> 16 & 0xFF), b(color >> 8 & 0xFF), a(color & 0xFF) { }
+		explicit Color(const u_int32_t& color) : r(color >> 24 & 0xFF), g(color >> 16 & 0xFF), b(color >> 8 & 0xFF), a(color & 0xFF) { }
 
 		Color(const u_int8_t& r, const u_int8_t& g, const uint8_t& b) : r(r), g(g), b(b) {  }
 
@@ -37,4 +35,6 @@ namespace Sun {
 	    CYAN        = 0x00FFFFFF,
 	    WHITE       = 0xFFFFFFFF
 	};
+
+	// TODO: agregar colores a la lista segun se necesite
 }

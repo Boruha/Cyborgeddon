@@ -1,6 +1,7 @@
 #include <sys/AI_System.hpp>
 #include <cmath>
 
+// TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::vector<std::unique_ptr<EntityPlayer>> &players,
 					   const std::vector<std::unique_ptr<EntityEnemy>> &enemies) {
 
@@ -21,6 +22,10 @@ void AI_System::update(const std::vector<std::unique_ptr<EntityPlayer>> &players
 	}
 }
 
+// TODO: El enemigo solo rota cuando nos va a seguir.
+//  	 Debe rotar sin importar la distancia o rotar interpoladamente al salir de su rango
+// 		 Ahora nos sigue hasta que entramos en su rango, pero gira repentinamente cuando volvemos
+// 		 a entrar a esta funcion
 void AI_System::chasing(const std::unique_ptr<EntityEnemy> &enemy, const float &distance) {
 	enemy->velocity.direccion /= distance;
 
@@ -29,6 +34,7 @@ void AI_System::chasing(const std::unique_ptr<EntityEnemy> &enemy, const float &
 	enemy->node.setRotation(enemy->transformable.rotation);
 }
 
+// TODO: La clase vector debe encargarse de devolver este angulo
 float AI_System::getAngleAxisZ(const Vector3f &direccion) {
 	float modul_XZ = direccion.length();
 
