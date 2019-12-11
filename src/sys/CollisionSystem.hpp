@@ -11,6 +11,5 @@ struct CollisionSystem
     void update(const std::vector<std::unique_ptr<EntityPlayer>>&, const std::vector<std::unique_ptr<EntityDoor>>&, const std::vector<std::unique_ptr<EntityKey>>&);
  //   void collisionPlayerKey(EntityPlayer& player, EntityKey& key)
 
-    Sun::Vector3f NoCollision;
 
 };
