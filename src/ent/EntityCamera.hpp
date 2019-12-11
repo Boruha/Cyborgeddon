@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmp/Camera.hpp>
+#include <cmp/Transformable.hpp>
+#include <cmp/Velocity.hpp>
 
 #include <ent/Entity.hpp>
 
@@ -15,6 +17,7 @@ struct EntityCamera : Entity
 	explicit EntityCamera(const Device& device, const Vector3f& pos = Vector3f(0, 20, -30), const Vector3f& target = Vector3f())
 		: Entity(CAMERA_ID), transformable(pos), camera(target), cameraNode(device, pos, target) {  }
 	~EntityCamera() override = default;
+
 
 	Transformable transformable;
 	Velocity velocity;

@@ -3,6 +3,7 @@
 void GameManager::init()
 {
 	input.init();
+	ai.init();
 	render.init();
 
 	entityManager.init();
@@ -10,9 +11,10 @@ void GameManager::init()
 
 void GameManager::update()
 {
-	entityManager.killPlayers();
 	input.update(entityManager.getPlayers());
+	ai.update(entityManager.getPlayers(), entityManager.getEnemies());
 	movement.update(entityManager.getPlayers());
+	movement.update(entityManager.getEnemies());
 }
 
 void GameManager::loop()

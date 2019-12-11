@@ -21,6 +21,7 @@ struct GameManager {
 	RenderSystem render { Sun::Vector2u(1280, 720), L"Cyborgeddon" };
 	InputSystem input { render.device };
 	MovementSystem movement {  };
+	AI_System ai {  };
 
 	EntityManager entityManager { render.device };
 };

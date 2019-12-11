@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-enum EntityID : u_int8_t { NULL_ID, PLAYER_ID, CAMERA_ID };
+enum EntityID : uint8_t { NULL_ID, PLAYER_ID, CAMERA_ID, ENEMY_ID };
 
 struct Entity
 {
