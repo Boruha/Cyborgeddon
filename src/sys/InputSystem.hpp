@@ -19,10 +19,10 @@ struct InputSystem
 		const Device& device;
 		Sun::EventReceiver eventReceiver;
 
-		static void 	w_pressed(EntityPlayer& player) { ++player.velocity.direccion.z; }
-		static void 	a_pressed(EntityPlayer& player) { --player.velocity.direccion.x; }
-		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direccion.z; }
-		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direccion.x; }
+		static void 	w_pressed(EntityPlayer& player) { ++player.velocity.direction.z; }
+		static void 	a_pressed(EntityPlayer& player) { --player.velocity.direction.x; }
+		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direction.z; }
+		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direction.x; }
 
 	struct TKey2func {
 		Sun::KEY_CODE key;

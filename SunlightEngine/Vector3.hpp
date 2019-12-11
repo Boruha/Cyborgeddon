@@ -15,15 +15,15 @@ namespace Sun {
 		Vector3<T>(const Vector3<T> &vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
 
-		Vector3<T> operator+(const Vector3<T> &vec) const { return Vector3<T>(x + vec.x, y + vec.y, z + vec.z); }
+		[[nodiscard]] Vector3<T> operator+(const Vector3<T> &vec) const { return Vector3<T>(x + vec.x, y + vec.y, z + vec.z); }
 
-		Vector3<T> operator-(const Vector3<T> &vec) const { return Vector3<T>(x - vec.x, y - vec.y, z - vec.z); }
+		[[nodiscard]] Vector3<T> operator-(const Vector3<T> &vec) const { return Vector3<T>(x - vec.x, y - vec.y, z - vec.z); }
 
-		Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
+		[[nodiscard]] Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
 
-		Vector3<T> operator*(const T &mul) const { return Vector3<T>(x * mul, y * mul, z * mul); }
+		[[nodiscard]] Vector3<T> operator*(const T &mul) const { return Vector3<T>(x * mul, y * mul, z * mul); }
 
-		Vector3<T> operator/(const T &div) const { return Vector3<T>(x / div, y / div, z / div); }
+		[[nodiscard]] Vector3<T> operator/(const T &div) const { return Vector3<T>(x / div, y / div, z / div); }
 
 
 		Vector3<T>& operator+=(const Vector3<T> &vec) {
@@ -54,10 +54,18 @@ namespace Sun {
 			return *this;
 		}
 
+		Vector3<T>& operator=(const T& n) {
+			x = y = z = n;
+			return *this;
+		}
 
-		bool operator==(const Vector3<T> &vec) { return x == vec.x && y == vec.y && z == vec.z; }
+		[[nodiscard]] bool operator==(const Vector3<T> &vec) const { return x == vec.x && y == vec.y && z == vec.z; }
 
-		bool operator!=(const Vector3<T> &vec) { return x != vec.x || y != vec.y || z != vec.z; }
+		[[nodiscard]] bool operator!=(const Vector3<T> &vec) const { return x != vec.x || y != vec.y || z != vec.z; }
+
+		[[nodiscard]] T length() const {
+			return static_cast<T>(sqrt(x*x + y*y + z*z));
+		}
 
 		Vector3<T>& normalize() {
 			T length = this->length();
@@ -68,8 +76,14 @@ namespace Sun {
 			return (*this) /= length;
 		}
 
-		T length() const {
-			return static_cast<T>(sqrt(x*x + y*y + z*z));
+		[[nodiscard]] T getRotationY() const {
+			T cos = z / this->length();
+			double angle = std::acos(cos) * RAD2DEG;
+
+			if(x < 0)
+				angle = cos >= 0 ? -angle : 360 - angle;
+
+			return static_cast<T>(angle);
 		}
 
 		void rotateXZ(double deg, const Vector3<T>& origin = Vector3<T>())

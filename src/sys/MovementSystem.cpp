@@ -7,7 +7,7 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 		// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
 		player->transformable.position = player->node.getPosition();
 
-		player->velocity.velocity = player->velocity.direccion.normalize() * player->velocity.speed;
+		player->velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
 		player->transformable.position += player->velocity.velocity;
 
 		player->node.setPosition(player->transformable.position);
@@ -19,7 +19,7 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityEnemy>>& ene
 	for (auto & enemy : enemies) {
 		enemy->transformable.position = enemy->node.getPosition();
 
-		enemy->velocity.velocity = enemy->velocity.direccion.normalize() * enemy->velocity.speed;
+		enemy->velocity.velocity = enemy->velocity.direction.normalize() * enemy->velocity.speed;
 		enemy->transformable.position += enemy->velocity.velocity;
 
 		enemy->node.setPosition(enemy->transformable.position);
