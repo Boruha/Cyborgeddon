@@ -6,17 +6,16 @@ void EntityManager::init()
 
     createEnemy(Vector3f(0, 0, 50));
 
-    createCamera(Vector3f(0,20,-50));
+    createCamera(Vector3f(0,50,-50));
 }
 
 void EntityManager::cleanVectors() {
 	entities.erase(entities.begin(), entities.end());
-	players.erase(players.begin(), players.end());
-	cameras.erase(cameras.begin(), cameras.end());
 }
 
 void EntityManager::createPlayer(const Vector3f& pos, const Vector3f& dim, const float& speed) {
-    players.emplace_back(std::make_unique<EntityPlayer>(device, pos, dim, speed));
+    player.transformable.position = pos;
+	player.node.setPosition(player.transformable.position);
 }
 
 void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed) {
@@ -24,6 +23,9 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 }
 
 void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {
-    cameras.emplace_back(std::make_unique<EntityCamera>(device, pos, target));
+    camera.transformable.position = pos;
+    camera.cameraNode.setPosition(camera.transformable.position);
+    camera.camera.target = target;
+    camera.cameraNode.setTarget(camera.camera.target);
 }
 

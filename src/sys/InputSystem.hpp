@@ -13,7 +13,7 @@ struct InputSystem
 	explicit InputSystem(const Device& device) : device(device) {  }
 
 	void init();
-	void update(const std::vector<std::unique_ptr<EntityPlayer>>& players);
+	void update(EntityPlayer& player);
 
 	private:
 		const Device& device;

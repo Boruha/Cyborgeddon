@@ -17,9 +17,9 @@ struct EntityManager : GameContext {
 	void createEnemy  (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(8) , const float& speed = 0.1f);
 	void createCamera (const Vector3f& pos = Vector3f(), const Vector3f& target = Vector3f(0,0,100));
 
-	[[nodiscard]] const std::vector<std::unique_ptr<EntityPlayer>>& getPlayers() const override { return players; }
+	[[nodiscard]] EntityPlayer& getPlayer() override { return player; }
+	[[nodiscard]] const EntityCamera& getCamera() const override { return camera; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const override { return enemies; }
-	[[nodiscard]] const std::vector<std::unique_ptr<EntityCamera>>& getCameras() const override { return cameras; }
 
 	private:
         void cleanVectors();
@@ -27,9 +27,9 @@ struct EntityManager : GameContext {
 	    const Sun::Device& device;
 
 		std::vector<Entity> entities;
-		std::vector<std::unique_ptr<EntityPlayer>> players;
+		EntityPlayer player { device };
+		EntityCamera camera { device };
 		std::vector<std::unique_ptr<EntityEnemy>> enemies;
-		std::vector<std::unique_ptr<EntityCamera>> cameras;
 };
 
 // TODO: Player y camera solo uno de momento

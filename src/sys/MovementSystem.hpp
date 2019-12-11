@@ -10,6 +10,6 @@ struct MovementSystem
 	~MovementSystem() = default;
 
 	void init() {  }
-	void update(const std::vector<std::unique_ptr<EntityPlayer>>&);
+	void update(EntityPlayer&);
 	void update(const std::vector<std::unique_ptr<EntityEnemy>>&);
 };

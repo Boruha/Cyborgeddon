@@ -2,16 +2,14 @@
 #include <iostream>
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players) {
-	for (auto &player : players) {
-		// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
-		player->transformable.position = player->node.getPosition();
+void MovementSystem::update(EntityPlayer& player) {
+	// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
+	player.transformable.position = player.node.getPosition();
 
-		player->velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
-		player->transformable.position += player->velocity.velocity;
+	player.velocity.velocity = player.velocity.direction.normalize() * player.velocity.speed;
+	player.transformable.position += player.velocity.velocity;
 
-		player->node.setPosition(player->transformable.position);
-	}
+	player.node.setPosition(player.transformable.position);
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego

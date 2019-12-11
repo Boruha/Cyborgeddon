@@ -15,7 +15,7 @@ using Sun::Vector3f;
 struct EntityCamera : Entity
 {
 	explicit EntityCamera(const Device& device, const Vector3f& pos = Vector3f(0, 20, -30), const Vector3f& target = Vector3f(), const float speed = 1.f)
-		: Entity(CAMERA_ID), transformable(pos), camera(target), cameraNode(device, pos, target), velocity(speed) {  }
+		: Entity(CAMERA_ID), transformable(pos), velocity(speed), camera(target), cameraNode(device, pos, target) {  }
 
 
 	Transformable transformable;

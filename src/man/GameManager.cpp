@@ -11,9 +11,9 @@ void GameManager::init()
 
 void GameManager::update()
 {
-	input.update(entityManager.getPlayers());
-	ai.update(entityManager.getPlayers(), entityManager.getEnemies());
-	movement.update(entityManager.getPlayers());
+	input.update(entityManager.getPlayer());
+	ai.update(entityManager.getPlayer(), entityManager.getEnemies());
+	movement.update(entityManager.getPlayer());
 	movement.update(entityManager.getEnemies());
 }
 
