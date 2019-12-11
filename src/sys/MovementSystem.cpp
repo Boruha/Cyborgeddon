@@ -25,3 +25,30 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityEnemy>>& ene
 		enemy->node.setPosition(enemy->transformable.position);
 	}
 }
+
+// TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
+void MovementSystem::update(const std::vector<std::unique_ptr<EntityBullet>>& bullets) {
+	for (auto & bullet : bullets) {
+		bullet->transformable.position = bullet->node.getPosition();
+
+		bullet->velocity.velocity = bullet->velocity.direccion.normalize() * bullet->velocity.speed;
+		bullet->transformable.position += bullet->velocity.velocity;
+
+		bullet->node.setPosition(bullet->transformable.position);
+	}
+}
+
+void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>& bullets){
+	float actual_dist_x = 0.f;
+	float actual_dist_z = 0.f;
+	float actual_dist = 0.f;
+
+	for (auto & bullet : bullets) {
+		actual_dist_x = bullet->start_pos.x - bullet->transformable.position.x;
+		actual_dist_z = bullet->start_pos.z - bullet->transformable.position.z;
+		actual_dist =  sqrt(actual_dist_x * actual_dist_x + actual_dist_z * actual_dist_z);
+
+		if(actual_dist >= bullet->dead_dist)
+			bullet->dead = true;
+	}
+}

@@ -26,4 +26,8 @@ struct EntityPlayer : Entity
 	Velocity 					velocity;
 
 	SceneNode 					node;
+
+	//NEXT CMP SHOOTING(?);
+	bool 	shooting { false };
+	bool 	mode { false };		//true = angel, false = demon;
 };

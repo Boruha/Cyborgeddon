@@ -23,18 +23,20 @@ struct InputSystem
 		static void 	a_pressed(EntityPlayer& player) { --player.velocity.direccion.x; }
 		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direccion.z; }
 		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direccion.x; }
+		static void 	space_pressed(EntityPlayer& player) { player.shooting = true; }
 
 	struct TKey2func {
 		Sun::KEY_CODE key;
 		void (*p_func)(EntityPlayer&);
 	};
 
-	const TKey2func keyMapping[5]
+	const TKey2func keyMapping[6]
 	{
 		{Sun::KEY_W,                 			w_pressed 	},
 		{Sun::KEY_A,                 			a_pressed 	},
 		{Sun::KEY_S,                 			s_pressed 	},
 		{Sun::KEY_D,                 			d_pressed 	},
+		{Sun::KEY_SPACE,                 		space_pressed 	},
 		{static_cast<Sun::KEY_CODE>(0), nullptr  	}
 	};
 };

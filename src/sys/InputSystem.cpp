@@ -1,6 +1,6 @@
 #include <sys/InputSystem.hpp>
 
-#include <src/man/EntityManager.hpp>
+//#include <src/man/EntityManager.hpp>
 #include <algorithm>
 
 using std::cerr;

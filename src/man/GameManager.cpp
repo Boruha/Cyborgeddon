@@ -12,8 +12,11 @@ void GameManager::init()
 void GameManager::update()
 {
 	input.update(entityManager.getPlayers());
+	entityManager.update();
 	ai.update(entityManager.getPlayers(), entityManager.getEnemies());
 	movement.update(entityManager.getPlayers());
+	movement.update(entityManager.getBullets());
+	movement.checkMaxDist_Bullet(entityManager.getBullets());
 	movement.update(entityManager.getEnemies());
 }
 

@@ -12,4 +12,6 @@ struct MovementSystem
 	void init() {  }
 	void update(const std::vector<std::unique_ptr<EntityPlayer>>&);
 	void update(const std::vector<std::unique_ptr<EntityEnemy>>&);
+	void update(const std::vector<std::unique_ptr<EntityBullet>>&);
+	void checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>&);
 };
