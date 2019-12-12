@@ -1,0 +1,5 @@
+A partir de Shot.wav generado por CSound:
+	- compresión en el ataque
+	- reverb favoreciendo frecuencias altas
+	- distorsión leve
+	- normalización
