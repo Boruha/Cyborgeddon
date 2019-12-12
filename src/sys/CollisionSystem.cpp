@@ -60,24 +60,25 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
     bool colision = true;
 	for(auto & door : doors) {
 		if(player->node.intersects(door->node)) {
-		    std::cout << "Tipo de puerta: " << door->type << std::endl;
+		    std::cout << "Necesitas la llave: " << door->type << std::endl;
             if(player->owned_keys.size() > 0){         //TENGO LLAVES
                 //Compruebo si el player tiene en su array de llaves el tipo de llave que abre la puerta
                 for(int i = 0; i < (int)player->owned_keys.size(); i++){
                     if(door->type == player->owned_keys.at(i)){
-                        std::cout << "La llave encaja en la cerradura" << std::endl;
+                        std::cout << "La llave " << player->owned_keys.at(i) << " encaja en la cerradura: " << door->type << std::endl;
                         player->owned_keys.erase(player->owned_keys.begin() + i); // player ha usado la llave que tenia
-                        door->open = true;  // esto provoca la "muerte" de la puerta
+                        //door->open = true;  // esto provoca la "muerte" de la puerta
+                        door->type = -1;        //TODO: Variable de muerte
                         colision = false;
                         break;
                     }
                 }
                 if(colision){
-                    std::cout << "NO TIENES LA LLAVE CORRESPONDIENTE" << std::endl;
+                    player->velocity.direction = 0;
                 }
             }
             else{
-                std::cout << "NO TIENES LA LLAVE CORRESPONDIENTE" << std::endl;
+                player->velocity.direction = 0;
             }
 		}
 	}
@@ -86,9 +87,10 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityKey>>& keys) const {
 	for(auto & key : keys) {
 		if(player->node.intersects(key->node)) {
-            std::cout << "Tipo de llave: " << key->type << std::endl;
+            std::cout << "Obtenida la llave: " << key->type << std::endl;
 		    player->owned_keys.emplace_back(key->type); // Le ponemos la correspondiente llave a player en su inventario
-			key->taken = true; // esto provoca la "muerte" de la llave
+            key->type = -1;                                 //TODO: Variable de muerte
+			//key->taken = true; // esto provoca la "muerte" de la llave
 		}
 	}
 }
