@@ -19,9 +19,9 @@ void EntityManager::init()
     createPlayer(Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
 
-    createDoor(Vector3f(20,0,10));
-    createDoor(Vector3f(-25,0,5));
-    createDoor(Vector3f(-20,0,15));
+    createDoor(0, Vector3f(20,0,10));
+    createDoor(1, Vector3f(-25,0,5));
+    createDoor(2, Vector3f(-20,0,15));
 
     createKey(0, Vector3f(0,0,10));
     createKey(1, Vector3f(20,0,0));
@@ -78,8 +78,8 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	enemies.emplace_back(std::make_unique<EntityEnemy>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed));
 }
 
-void EntityManager::createDoor(const Vector3f& pos, const Vector3f& dim) {
-    doors.emplace_back(std::make_unique<EntityDoor>(device, pos + Vector3f(0, dim.y / 2, 0), dim));
+void EntityManager::createDoor(const int& type, const Vector3f& pos, const Vector3f& dim) {
+    doors.emplace_back(std::make_unique<EntityDoor>(device, pos + Vector3f(0, dim.y / 2, 0), dim, type));
 }
 void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector3f& dim) {
     keys.emplace_back(std::make_unique<EntityKey>(device, pos + Vector3f(0, dim.y / 2, 0), dim, type));
