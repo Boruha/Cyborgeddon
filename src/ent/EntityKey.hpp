@@ -17,8 +17,8 @@ using Sun::Device;
 
 struct EntityKey : Entity
 {
-    explicit EntityKey(const Device& device, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5)) :
-            Entity(KEY_ID), transformable(pos), collider(dim), node(device, pos, dim) { node.setTexture(renderable.texture); }
+    explicit EntityKey(const Device& device, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5), const int& type = 0) :
+            Entity(KEY_ID), transformable(pos), collider(dim), node(device, pos, dim), type(type) { node.setTexture(renderable.texture); }
 
     Renderable					renderable {"", "./img/textures/testing/testing_key.png"};
     Transformable 				transformable;

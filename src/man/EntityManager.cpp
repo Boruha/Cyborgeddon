@@ -23,9 +23,9 @@ void EntityManager::init()
     createDoor(Vector3f(-25,0,5));
     createDoor(Vector3f(-20,0,15));
 
-    createKey(Vector3f(0,0,10));
-    createKey(Vector3f(20,0,0));
-	createKey(Vector3f(30,0,0));
+    createKey(0, Vector3f(0,0,10));
+    createKey(1, Vector3f(20,0,0));
+	createKey(2, Vector3f(30,0,0));
 }
 
 void EntityManager::update(){
@@ -81,8 +81,8 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 void EntityManager::createDoor(const Vector3f& pos, const Vector3f& dim) {
     doors.emplace_back(std::make_unique<EntityDoor>(device, pos + Vector3f(0, dim.y / 2, 0), dim));
 }
-void EntityManager::createKey(const Vector3f& pos, const Vector3f& dim) {
-    keys.emplace_back(std::make_unique<EntityKey>(device, pos + Vector3f(0, dim.y / 2, 0), dim));
+void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector3f& dim) {
+    keys.emplace_back(std::make_unique<EntityKey>(device, pos + Vector3f(0, dim.y / 2, 0), dim, type));
 }
 
 // TODO: que la bala dependa de la orientacion del player y no de su direccion

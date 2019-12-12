@@ -81,7 +81,8 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityKey>>& keys) const {
 	for(auto & key : keys) {
 		if(player->node.intersects(key->node)) {
-		    player->owned_keys.emplace_back(1); // Le ponemos la correspondiente llave a player en su inventario
+            std::cout << "Tipo de llave: " << key->type << std::endl;
+		    player->owned_keys.emplace_back(key->type); // Le ponemos la correspondiente llave a player en su inventario
 			key->taken = true; // esto provoca la "muerte" de la llave
 		}
 	}
