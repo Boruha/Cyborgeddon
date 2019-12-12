@@ -8,6 +8,7 @@
 
 struct GameManager {
 	GameManager() = default;
+	~GameManager() = default;
 
 	void init();
 	void update();
@@ -20,6 +21,7 @@ struct GameManager {
 	// render first so we use its device for the other systems and/or managers
 	RenderSystem render { Sun::Vector2u(1280, 720), L"Cyborgeddon" };
 	InputSystem input { render.device };
+    CollisionSystem collision {  };
 	MovementSystem movement {  };
 	AI_System ai {  };
 

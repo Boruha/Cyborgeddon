@@ -4,6 +4,7 @@
 void AI_System::update(EntityPlayer& player, const std::vector<std::unique_ptr<EntityEnemy>>& enemies) {
 	for (auto &enemy : enemies) {
 		enemy->velocity.direction = player.transformable.position - enemy->transformable.position;
+		enemy->velocity.direction.y = 0; // anulo la y porque las alturas son distintas
 
 		enemy->transformable.rotation.y = (enemy->velocity.direction).getRotationY();
 		enemy->node.setRotation(enemy->transformable.rotation);

@@ -7,9 +7,9 @@
 struct MovementSystem
 {
 	MovementSystem() = default;
-	~MovementSystem() = default;
 
 	void init() {  }
+
 	void update(EntityPlayer&);
 	void update(const std::vector<std::unique_ptr<EntityEnemy>>&);
 };

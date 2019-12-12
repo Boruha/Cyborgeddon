@@ -1,5 +1,4 @@
 #include <sys/MovementSystem.hpp>
-#include <iostream>
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
 void MovementSystem::update(EntityPlayer& player) {

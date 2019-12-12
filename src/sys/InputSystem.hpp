@@ -5,7 +5,6 @@
 
 #include <ent/Entities.hpp>
 
-#include <vector>
 #include <src/man/EntityManager.hpp>
 
 struct InputSystem
@@ -24,17 +23,17 @@ struct InputSystem
 		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direction.z; }
 		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direction.x; }
 
-	struct TKey2func {
-		Sun::KEY_CODE key;
-		void (*p_func)(EntityPlayer&);
-	};
+		struct TKey2func {
+			Sun::KEY_CODE key;
+			void (*p_func)(EntityPlayer&);
+		};
 
-	const TKey2func keyMapping[5]
-	{
-		{Sun::KEY_W,                 			w_pressed 	},
-		{Sun::KEY_A,                 			a_pressed 	},
-		{Sun::KEY_S,                 			s_pressed 	},
-		{Sun::KEY_D,                 			d_pressed 	},
-		{static_cast<Sun::KEY_CODE>(0), nullptr  	}
-	};
+		const TKey2func keyMapping[5]
+		{
+			{Sun::KEY_W,                 			w_pressed 	},
+			{Sun::KEY_A,                 			a_pressed 	},
+			{Sun::KEY_S,                 			s_pressed 	},
+			{Sun::KEY_D,                 			d_pressed 	},
+			{static_cast<Sun::KEY_CODE>(0), nullptr  	}
+		};
 };

@@ -11,8 +11,15 @@ void GameManager::init()
 
 void GameManager::update()
 {
+	entityManager.takeKey();
+	entityManager.openDoor();
+
 	input.update(entityManager.getPlayer());
+
 	ai.update(entityManager.getPlayer(), entityManager.getEnemies());
+
+	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys());
+
 	movement.update(entityManager.getPlayer());
 	movement.update(entityManager.getEnemies());
 }

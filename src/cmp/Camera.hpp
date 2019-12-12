@@ -14,6 +14,7 @@ struct Camera
 		: target(target), angle(angle), distance(distance) {  }
 
 	Vector3f target {0,0,0};
+
 	float angle {0};
 	float distance {10};
 };
