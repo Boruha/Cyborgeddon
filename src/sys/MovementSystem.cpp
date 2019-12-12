@@ -10,9 +10,13 @@ void MovementSystem::update(std::unique_ptr<EntityPlayer>& player) {
 
 	player->node.setPosition(player->transformable.position);
 
+	// TODO: esto es una basura asi como esta hecho, arreglar en el futuro
 	// DASH
 	if(player->velocity.speed > 1)
-	    player->velocity.speed -= 1.2;
+	    player->velocity.speed -= 1.2f;
+	if(player->velocity.speed < 1)
+	    player->velocity.speed = 1;
+	// TODO: las entidades deben tener velocidad maxima const, minima const y actual variable
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
