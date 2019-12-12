@@ -8,6 +8,14 @@ struct GameContext {
 
 	virtual ~GameContext() = default;
 
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityPlayer>>& getPlayers() const = 0;
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityCamera>>& getCameras() const = 0;
+	[[nodiscard]] virtual std::unique_ptr<EntityPlayer>& getPlayer() = 0;
+	[[nodiscard]] virtual const EntityCamera& getCamera() const = 0;
+	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const = 0;
+
+	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const = 0;
+	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityKey>>& getKeys() const = 0;
+	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const = 0;
 };
+
+// TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan
+

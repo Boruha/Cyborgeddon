@@ -14,3 +14,5 @@ namespace Sun
 		KEY_CODE_COUNT 	= irr::KEY_KEY_CODES_COUNT
 	};
 }
+
+// TODO: agregar teclas en funcion de las necesidades

@@ -3,6 +3,7 @@
 void GameManager::init()
 {
 	input.init();
+	ai.init();
 	render.init();
 
 	entityManager.init();
@@ -10,15 +11,21 @@ void GameManager::init()
 
 void GameManager::update()
 {
-	entityManager.killPlayers();
-	entityManager.takeKey();
-	entityManager.openDoor();
+	entityManager.update();
 
-	input.update(entityManager.getPlayers());
-	collision.update(entityManager.getPlayers(), entityManager.getDoors(), entityManager.getKeys());
-	movement.update(entityManager.getPlayers());
+	input.update(entityManager.getPlayer());
+
+	ai.update(entityManager.getPlayer(), entityManager.getEnemies());
+
+	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys());
+
+	movement.update(entityManager.getPlayer());
+	movement.update(entityManager.getEnemies());
+	movement.update(entityManager.getBullets());
+	movement.checkMaxDist_Bullet(entityManager.getBullets());
 }
 
+// TODO: bucle del juego
 void GameManager::loop()
 {/*
 	std::chrono::milliseconds lag (0);
@@ -42,5 +49,6 @@ void GameManager::loop()
 		}*/
 
 		render.update();
+		// TODO: interpolar movimiento en render
 	}
 }

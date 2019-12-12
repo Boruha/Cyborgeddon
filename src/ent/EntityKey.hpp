@@ -17,15 +17,13 @@ using Sun::Device;
 
 struct EntityKey : Entity
 {
-    EntityKey() = default;
-    explicit EntityKey(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5), bool taken = false) :
-            Entity(KEY_ID), transformable(pos), collider(dim, transformable), node(device, pos, dim) { node.setTexture(renderable.texture); }
-    ~EntityKey() override = default;
+    explicit EntityKey(const Device& device, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5), bool taken = false) :
+            Entity(KEY_ID), transformable(pos), collider(dim), node(device, pos, dim), taken(taken) { node.setTexture(renderable.texture); }
 
-    Renderable					renderable {"", "./img/textures/testing/testing_cube.png"};
+    Renderable					renderable {"", "./img/textures/testing/testing_key.png"};
     Transformable 				transformable;
     BoundingBox					collider;
 
     SceneNode 					node;
-    bool                        taken = false;
+    bool                        taken;
 };

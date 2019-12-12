@@ -1,5 +1,4 @@
 #include <sys/CollisionSystem.hpp>
-#include <iostream>
 
 //Estrategias para implementar la colision
 
@@ -39,45 +38,43 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 }
 */
 
-void CollisionSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys)
+void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys)
 {
-    PlayerDoor(players, doors);   //Comprueba si el player choca con una puerta
-    PlayerKey(players, keys);     //Comprueba si el player choca con una llave
+	// La posicion del nodo es la que uso para saber si chocare eventualmente. La posicion que NO debo tocar aqui JAMAS
+	// es transformable.position. UNICAMENTE modificar velocity.direction o velocity.speed temporalmente si es necesario
+	player->node.setPosition(player->transformable.position + player->velocity.direction.normalize() * player->velocity.speed);
 
-}
+	// IMPORTANTE:  si puedo tocar dos llaves (o dos puertas) a la vez en una misma iteracion del bucle del juego,
+	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
+	// 				varias comprobaciones por bucle
 
-
-void CollisionSystem::PlayerDoor(const std::vector<std::unique_ptr<EntityPlayer>> & players , const std::vector<std::unique_ptr<EntityDoor>>& doors) {
-    for(auto & player :players){                                                                                                //Para cada player
-        player->velocity.direccion.normalize();
-        for(auto & door : doors){                                                                                               //Por cada puerta
-            player->node.setPosition(player->transformable.position + player->velocity.direccion * player->velocity.speed);        //Movemos nodo
-
-            if(player->node.getTransformedBoundingBox().intersectsWithBox(door->node.getTransformedBoundingBox())){             //Si el nodo colisiona
-                if(player->key){                                                                                                   //Player tiene llave
-                    std::cout << "Puerta abierta." << std::endl;
-                    player->key = false;                                                                                              //Se elimina la llave del player
-                    door->open  =  true;                                                                                              //Se elimina la puerta
-                }
-                else{                                                                                                              //Player no tiene llave
-                    std::cout << "Necesitas la llave para pasar." << std::endl;                                                       //Muevo al player a otra posicion
-                    player->velocity.direccion = Vector3f();
-                    player->transformable.position = (Vector3f(0,0,0));
-                }
-            }
-            player->node.setPosition(player->transformable.position);
-        }
+	if(!player->key) {				// De momento solo compruebo llaves si NO tengo
+		update(player, keys);   // Comprueba si el player choca con una puerta
+	} else {						// De momento solo compruebo puertas si TENGO llaves en mi poder
+		update(player, doors);  // Comprueba si el player choca con una llave
     }
+
+	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
+	// las posiciones tanto de la componente transformable como del nodo
+	player->node.setPosition(player->transformable.position);
 }
 
-void CollisionSystem::PlayerKey(const std::vector<std::unique_ptr<EntityPlayer>>& players, const std::vector<std::unique_ptr<EntityKey>>& keys){
-    for(auto & player :players){                                                                                                //Por cada player
-       for(auto & key : keys){                                                                                                      //Por cada llave
-           if(player->node.getTransformedBoundingBox().intersectsWithBox(key->node.getTransformedBoundingBox())){                      //Si colisiona
-               player->key = true;                                                                                                          //Player obtiene llave
-               key->taken = true;                                                                                                           //La llave se borra del mapa
-               std::cout<<"Llave cogida" << std::endl;
-           }
-       }
-    }
+void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors) const {
+	for(auto & door : doors) {
+		if(player->node.intersects(door->node)) {
+			player->key = false; // player ha usado la llave que tenia
+			door->open = true;  // esto provoca la "muerte" de la puerta
+		}
+	}
 }
+
+void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityKey>>& keys) const {
+	for(auto & key : keys) {
+		if(player->node.intersects(key->node)) {
+			player->key = true; // player ahora sabe que tiene una llave, de momento son genericas
+			key->taken = true; // esto provoca la "muerte" de la llave
+		}
+	}
+}
+
+// TODO: GENERALIZAR, SE REPITE CASI TODO (ideas: bool que "mata" entidades, herencias, )

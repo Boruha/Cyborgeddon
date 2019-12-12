@@ -8,9 +8,9 @@ struct Velocity
 {
 	Velocity() = default;
 	explicit Velocity(const float speed) : speed(speed){ }
-	~Velocity() = default;
+	explicit Velocity(const Vector3f& dir, const float speed) : direction(dir), speed(speed){ }
 
 	Vector3f	 velocity  {0,0,0};
-	Vector3f	 direccion {0,0,0};
-	const float  speed {0};
+	Vector3f	 direction {0, 0, 0};
+	float  speed {0};
 };

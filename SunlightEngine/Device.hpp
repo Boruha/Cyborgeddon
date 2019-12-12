@@ -32,6 +32,7 @@ namespace Sun {
 
 		[[nodiscard]] bool isActive() const { return device->run(); }
 
+		// TODO: eliminar esta funcion cuando todas las necesidades de irrlicht esten cubiertas
 		[[nodiscard]] irr::IrrlichtDevice* getInnerDevice() const { return device; }
 
 		private:
