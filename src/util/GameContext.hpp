@@ -8,7 +8,7 @@ struct GameContext {
 
 	virtual ~GameContext() = default;
 
-	[[nodiscard]] virtual EntityPlayer& getPlayer() = 0;
+	[[nodiscard]] virtual std::unique_ptr<EntityPlayer>& getPlayer() = 0;
 	[[nodiscard]] virtual const EntityCamera& getCamera() const = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const = 0;
 

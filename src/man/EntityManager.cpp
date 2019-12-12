@@ -27,15 +27,14 @@ void EntityManager::openDoor(){
 }
 
 void EntityManager::cleanVectors() {
-	entities.erase(entities.begin(), entities.end());
-	doors.erase(doors.begin(), doors.end());
 	keys.erase(keys.begin(), keys.end());
-	delete player; // TODO: eliminar esto cuanto antes
+	doors.erase(doors.begin(), doors.end());
+	enemies.erase(enemies.begin(), enemies.end());
+	entities.erase(entities.begin(), entities.end());
 }
 
 void EntityManager::createPlayer(const Vector3f& pos, const Vector3f& dim, const float& speed) {
-	player = new EntityPlayer(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed);
-	// TODO: eliminar esto cuanto antes
+	entities.emplace_back(std::make_unique<EntityPlayer>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed));
 }
 
 void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {

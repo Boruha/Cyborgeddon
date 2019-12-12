@@ -8,8 +8,8 @@ void InputSystem::init() {
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
-void InputSystem::update(EntityPlayer& player) {
-	player.velocity.direction = 0;
+void InputSystem::update(std::unique_ptr<EntityPlayer>& player) {
+	player->velocity.direction = 0;
 
 	auto *next = const_cast<TKey2func *>(keyMapping);
 

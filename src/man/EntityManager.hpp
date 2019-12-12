@@ -21,7 +21,7 @@ struct EntityManager : GameContext {
     void createDoor(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createKey(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(2));
 
-	[[nodiscard]] EntityPlayer& getPlayer() override { return *player; }
+	[[nodiscard]] std::unique_ptr<EntityPlayer>& getPlayer() override { return entities[0]; }
 	[[nodiscard]] const EntityCamera& getCamera() const override { return camera; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const override { return enemies; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const override { return doors; }
@@ -32,9 +32,8 @@ struct EntityManager : GameContext {
 
 	    const Sun::Device& device;
 
-		std::vector<Entity> entities;
+		std::vector<std::unique_ptr<EntityPlayer>> entities; // SOLO CONTIENE EL PLAYER POR AHORA
 
-		EntityPlayer* player { nullptr };
 		EntityCamera camera { device };
 
 		std::vector<std::unique_ptr<EntityEnemy>> enemies;

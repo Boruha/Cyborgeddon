@@ -12,20 +12,20 @@ struct InputSystem
 	explicit InputSystem(const Device& device) : device(device) {  }
 
 	void init();
-	void update(EntityPlayer& player);
+	void update(std::unique_ptr<EntityPlayer>& player);
 
 	private:
 		const Device& device;
 		Sun::EventReceiver eventReceiver;
 
-		static void 	w_pressed(EntityPlayer& player) { ++player.velocity.direction.z; }
-		static void 	a_pressed(EntityPlayer& player) { --player.velocity.direction.x; }
-		static void 	s_pressed(EntityPlayer& player) { --player.velocity.direction.z; }
-		static void 	d_pressed(EntityPlayer& player) { ++player.velocity.direction.x; }
+		static void 	w_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->velocity.direction.z; }
+		static void 	a_pressed(std::unique_ptr<EntityPlayer>& player) { --player->velocity.direction.x; }
+		static void 	s_pressed(std::unique_ptr<EntityPlayer>& player) { --player->velocity.direction.z; }
+		static void 	d_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->velocity.direction.x; }
 
 		struct TKey2func {
 			Sun::KEY_CODE key;
-			void (*p_func)(EntityPlayer&);
+			void (*p_func)(std::unique_ptr<EntityPlayer>&);
 		};
 
 		const TKey2func keyMapping[5]
