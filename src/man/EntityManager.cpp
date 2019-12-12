@@ -88,6 +88,6 @@ void EntityManager::createKey(const Vector3f& pos, const Vector3f& dim) {
 // TODO: que la bala dependa de la orientacion del player y no de su direccion
 void EntityManager::createBullet(const Vector3f& pos, Vector3f dir, const bool& type, const Vector3f& dim) {
 	if (dir == 0)
-		dir.z = 1; // para que la bala nunca se quede parada y por lo menos avance
+		dir.y = 1; // disparamos al aire por los loles (y para que la bala no se quede parada)
     bullets.emplace_back(std::make_unique<EntityBullet>(device, pos + Vector3f(0, dim.y / 2, 0), dim, dir, type));
 }
