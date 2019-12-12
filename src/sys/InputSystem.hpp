@@ -25,6 +25,14 @@ struct InputSystem
 
 		static void 	space_pressed(std::unique_ptr<EntityPlayer>& player) { player->shooting = true; }
 
+        // DASH
+
+        static void 	    f_pressed(std::unique_ptr<EntityPlayer>& player)
+        {
+		    if(player->velocity.speed <= 1)
+		        player->velocity.speed = 16;
+		}
+
 	struct TKey2func {
 		Sun::KEY_CODE key;
 		void (*p_func)(std::unique_ptr<EntityPlayer>& player);
@@ -37,6 +45,7 @@ struct InputSystem
 		{Sun::KEY_S,                 			s_pressed 	},
 		{Sun::KEY_D,                 			d_pressed 	},
 		{Sun::KEY_SPACE,                 	space_pressed 	},
+        {Sun::KEY_F,                 	        f_pressed 	},
 		{static_cast<Sun::KEY_CODE>(0),  nullptr  	}
 	};
 };
