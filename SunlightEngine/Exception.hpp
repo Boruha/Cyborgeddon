@@ -17,3 +17,5 @@ namespace Sun {
 		std::string message;
 	};
 }
+
+// TODO: valorar si las excepciones son necesarias

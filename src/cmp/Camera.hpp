@@ -10,11 +10,11 @@ using Sun::CameraNode;
 
 struct Camera
 {
-	explicit Camera(const Vector3f& target = Vector3f(), const float angle = 0, const float distance = 10)
+	explicit Camera(const Vector3f& target = Vector3f(), const float angle = 0.f, const float distance = 10.f)
 		: target(target), angle(angle), distance(distance) {  }
-	~Camera() = default;
 
-	const Vector3f target {0,0,0};
+	Vector3f target {0,0,0};
+
 	float angle {0};
 	float distance {10};
 };

@@ -1,32 +1,55 @@
 #pragma once
 
 #include <ent/Entities.hpp>
+
 #include <memory>
 #include <vector>
 #include <util/GameContext.hpp>
 #include <SunlightEngine/Device.hpp>
 
 struct EntityManager : GameContext {
-	EntityManager() = delete;
-	EntityManager(const EntityManager& em) = delete;
 	explicit EntityManager(const Device& device) : device(device) {  }
 	~EntityManager() override { cleanVectors(); }
 
 	void init();
-	void killPlayers();
 
-	void createPlayer(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5) , const float& speed = 1.f);
-	void createCamera(const Vector3f& pos = Vector3f(), const Vector3f& target = Vector3f(0,0,100));
 
-	[[nodiscard]] const std::vector<std::unique_ptr<EntityPlayer>>& getPlayers() const override { return players; }
-	[[nodiscard]] const std::vector<std::unique_ptr<EntityCamera>>& getCameras() const override { return cameras; }
+	void createPlayer (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15) , const float& speed = 1.f);
+	void createEnemy  (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(8) , const float& speed = 0.1f);
+	void createCamera (const Vector3f& pos = Vector3f(), const Vector3f& target = Vector3f(0,0,100));
+    void createDoor(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
+    void createKey(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(2));
+
+	void update();
+	void createBullet (const Vector3f& pos = Vector3f(), Vector3f dir = Vector3f(), const bool& type = false, const Vector3f& dim = Vector3f(3));
+
+	[[nodiscard]] std::unique_ptr<EntityPlayer>& getPlayer() override { return entities[0]; }
+	[[nodiscard]] const EntityCamera& getCamera() const override { return camera; }
+	[[nodiscard]] const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const override { return enemies; }
+
+	[[nodiscard]] const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const override { return doors; }
+	[[nodiscard]] const std::vector<std::unique_ptr<EntityKey>>& getKeys() const override { return keys; }
+	[[nodiscard]] const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const override { return bullets; }
 
 	private:
         void cleanVectors();
+		void takeKey();
+		void openDoor();
+		void checkShooting();
+		void deleteBullet();
 
 	    const Sun::Device& device;
 
-		std::vector<Entity> entities;
-		std::vector<std::unique_ptr<EntityPlayer>> players;
-		std::vector<std::unique_ptr<EntityCamera>> cameras;
+		std::vector<std::unique_ptr<EntityPlayer>> entities; // SOLO CONTIENE EL PLAYER POR AHORA
+
+		EntityCamera camera { device };
+
+		std::vector<std::unique_ptr<EntityEnemy>> enemies;
+
+		std::vector<std::unique_ptr<EntityDoor>> doors;
+		std::vector<std::unique_ptr<EntityKey>> keys;
+
+		std::vector<std::unique_ptr<EntityBullet>> bullets;
 };
+
+// TODO: Player y camera solo uno de momento

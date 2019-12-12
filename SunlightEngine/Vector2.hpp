@@ -15,47 +15,53 @@ namespace Sun {
 		Vector2<T>(const Vector2<T> &vec) : x(vec.x), y(vec.y) {}
 
 
-		Vector2<T> operator+(const Vector2<T> &vec) const { return Vector2<T>(x + vec.x, y + vec.y); }
+		[[nodiscard]] Vector2<T> operator+(const Vector2<T> &vec) 	const { return Vector2<T>(x + vec.x, y + vec.y); }
 
-		Vector2<T> operator-(const Vector2<T> &vec) const { return Vector2<T>(x - vec.x, y - vec.y); }
+		[[nodiscard]] Vector2<T> operator-(const Vector2<T> &vec) 	const { return Vector2<T>(x - vec.x, y - vec.y); }
 
-		Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
+		[[nodiscard]] Vector2<T> operator-() 						const { return Vector2<T>(-x, -y); }
 
-		Vector2<T> operator*(const T &mul) const { return Vector2<T>(x * mul, y * mul); }
+		[[nodiscard]] Vector2<T> operator*(const T &mul) 			const { return Vector2<T>(x * mul, y * mul); }
 
-		Vector2<T> operator/(const T &div) const { return Vector2<T>(x / div, y / div); }
+		[[nodiscard]] Vector2<T> operator/(const T &div) 			const { return Vector2<T>(x / div, y / div); }
 
 
-		Vector2<T> &operator+=(const Vector2<T> &vec) {
+		Vector2<T>& operator+=(const Vector2<T> &vec) {
 			x += vec.x;
 			y += vec.y;
 			return *this;
 		}
 
-		Vector2<T> &operator-=(const Vector2<T> &vec) {
+		Vector2<T>& operator-=(const Vector2<T> &vec) {
 			x -= vec.x;
 			y -= vec.y;
 			return *this;
 		}
 
-		Vector2<T> &operator*=(const T &mul) {
+		Vector2<T>& operator*=(const T &mul) {
 			x *= mul;
 			y *= mul;
 			return *this;
 		}
 
-		Vector2<T> &operator/=(const T &div) {
+		Vector2<T>& operator/=(const T &div) {
 			x /= div;
 			y /= div;
 			return *this;
 		}
 
+		Vector2<T>& operator=(const T& n) {
+			x = y = n;
+			return *this;
+		}
 
-		bool operator==(const Vector2<T> &vec) { return x == vec.x && y == vec.y; }
+		[[nodiscard]] bool operator==(const Vector2<T> &vec) const { return x == vec.x && y == vec.y; }
+		[[nodiscard]] bool operator==(const T n)			 const { return x == n && y == n; }
 
-		bool operator!=(const Vector2<T> &vec) { return x != vec.x || y != vec.y; }
+		[[nodiscard]] bool operator!=(const Vector2<T> &vec) const { return x != vec.x || y != vec.y; }
+		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n; }
 
-		Vector2<T> &normalize() {
+		Vector2<T>& normalize() {
 			T length = this->length();
 
 			if (length == 0)
@@ -64,22 +70,25 @@ namespace Sun {
 			return (*this) /= length;
 		}
 
-		T length() const {
+		[[nodiscard]] T length() const {
 			return static_cast<T>(sqrt(x*x + y*y));
 		}
 
-        void rotate(double deg, const Vector3<T>& origin = Vector3<T>())
+        void rotate(double deg, const Vector2<T>& origin = Vector2<T>())
         {
             deg *= DEG2RAD;
 
             x -= origin.x;
             y -= origin.y;
 
-            *this = Vector3<T>(x*cos(deg) - y*sin(deg), x*sin(deg) + y*cos(deg));
+            *this = Vector2<T>(x*cos(deg) - y*sin(deg), x*sin(deg) + y*cos(deg));
 
             x += origin.x;
             y += origin.y;
         }
+
+        // TODO: - get angle entre dos vectores
+        //  	 - rotate para IA (?)
 
 		T x{0}, y{0};
 	};
