@@ -4,7 +4,7 @@
 #include <cmp/Transformable.hpp>
 #include <cmp/BoundingBox.hpp>
 #include <cmp/Velocity.hpp>
-
+#include <vector>
 #include <ent/Entity.hpp>
 
 #include <SunlightEngine/Vector3.hpp>
@@ -28,8 +28,8 @@ struct EntityPlayer : Entity
 
 	SceneNode 					node;
 
-	bool                        key { false };
+    std::vector<int>            owned_keys;
 	//NEXT CMP SHOOTING(?);
-	bool 	shooting { false };
-	bool 	mode { false };		//true = angel, false = demon;
+	bool 	                    shooting { false };
+	bool 	                    mode { false };		//true = angel, false = demon;
 };

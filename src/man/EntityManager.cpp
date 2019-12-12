@@ -16,7 +16,7 @@ void EntityManager::init()
 {
     createCamera(Vector3f(0, 20, -50));
 
-    createPlayer(Vector3f(0,0,100));
+    createPlayer(Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
 
     createDoor(Vector3f(20,0,10));
@@ -25,7 +25,7 @@ void EntityManager::init()
 
     createKey(Vector3f(0,0,10));
     createKey(Vector3f(20,0,0));
-	createKey();
+	createKey(Vector3f(30,0,0));
 }
 
 void EntityManager::update(){

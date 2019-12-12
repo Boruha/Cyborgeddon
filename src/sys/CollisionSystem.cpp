@@ -48,11 +48,21 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle
 
-	if(!player->key) {				// De momento solo compruebo llaves si NO tengo
+
+	/*
+	if(!player->hasKey) {				// De momento solo compruebo llaves si NO tengo
 		update(player, keys);   // Comprueba si el player choca con una puerta
 	} else {						// De momento solo compruebo puertas si TENGO llaves en mi poder
 		update(player, doors);  // Comprueba si el player choca con una llave
     }
+    */
+
+	if(player->owned_keys.size() == 0){         //NO TENGO LLAVES
+        update(player, keys);   // Comprueba si el player choca con una puerta
+	}
+	else{
+        update(player, doors);  // Comprueba si el player choca con una llave
+	}
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
 	// las posiciones tanto de la componente transformable como del nodo
@@ -62,7 +72,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors) const {
 	for(auto & door : doors) {
 		if(player->node.intersects(door->node)) {
-			player->key = false; // player ha usado la llave que tenia
+			player->owned_keys.erase(player->owned_keys.begin()); // player ha usado la llave que tenia
 			door->open = true;  // esto provoca la "muerte" de la puerta
 		}
 	}
@@ -71,7 +81,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityKey>>& keys) const {
 	for(auto & key : keys) {
 		if(player->node.intersects(key->node)) {
-			player->key = true; // player ahora sabe que tiene una llave, de momento son genericas
+		    player->owned_keys.emplace_back(1); // Le ponemos la correspondiente llave a player en su inventario
 			key->taken = true; // esto provoca la "muerte" de la llave
 		}
 	}
