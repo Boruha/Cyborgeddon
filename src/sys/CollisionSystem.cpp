@@ -48,15 +48,6 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle
 
-
-	/*
-	if(!player->hasKey) {				// De momento solo compruebo llaves si NO tengo
-		update(player, keys);   // Comprueba si el player choca con una puerta
-	} else {						// De momento solo compruebo puertas si TENGO llaves en mi poder
-		update(player, doors);  // Comprueba si el player choca con una llave
-    }
-    */
-
     update(player, keys);   // Comprueba si el player choca con una llave
     update(player, doors);  // Comprueba si el player choca con una puerta
 
