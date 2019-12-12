@@ -16,16 +16,16 @@ void EntityManager::init()
 {
     createCamera(Vector3f(0, 20, -50));
 
-    createPlayer(Vector3f(0,0,100));
+    createPlayer(Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
 
-    createDoor(Vector3f(20,0,10));
-    createDoor(Vector3f(-25,0,5));
-    createDoor(Vector3f(-20,0,15));
+    createDoor(0, Vector3f(20,0,10));
+    createDoor(1, Vector3f(-25,0,5));
+    createDoor(2, Vector3f(-20,0,15));
 
-    createKey(Vector3f(0,0,10));
-    createKey(Vector3f(20,0,0));
-	createKey();
+    createKey(0, Vector3f(0,0,10));
+    createKey(1, Vector3f(20,0,0));
+	createKey(2, Vector3f(30,0,0));
 }
 
 void EntityManager::update(){
@@ -49,11 +49,13 @@ void EntityManager::checkShooting(){
 /*		DESTROY ENTITIES	*/
 
 void EntityManager::takeKey(){
-	keys.erase(std::remove_if(keys.begin(), keys.end(), [](auto const& key) { return key->taken; }), keys.end());
+    //CONDICION PARA QUE MUERA ----> TYPE < 0
+	keys.erase(std::remove_if(keys.begin(), keys.end(), [](auto const& key) { return key->type < 0; }), keys.end());
 }
 
 void EntityManager::openDoor() {
-	doors.erase(std::remove_if(doors.begin(), doors.end(), [](auto const& door) { return door->open; }), doors.end());
+    //CONDICION PARA QUE MUERA ----> TYPE < 0
+	doors.erase(std::remove_if(doors.begin(), doors.end(), [](auto const& door) { return door->type < 0; }), doors.end());
 }
 
 void EntityManager::deleteBullet(){
@@ -78,16 +80,17 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	enemies.emplace_back(std::make_unique<EntityEnemy>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed));
 }
 
-void EntityManager::createDoor(const Vector3f& pos, const Vector3f& dim) {
-    doors.emplace_back(std::make_unique<EntityDoor>(device, pos + Vector3f(0, dim.y / 2, 0), dim));
+void EntityManager::createDoor(const int& type, const Vector3f& pos, const Vector3f& dim) {
+    doors.emplace_back(std::make_unique<EntityDoor>(device, type, pos + Vector3f(0, dim.y / 2, 0), dim ));
 }
-void EntityManager::createKey(const Vector3f& pos, const Vector3f& dim) {
-    keys.emplace_back(std::make_unique<EntityKey>(device, pos + Vector3f(0, dim.y / 2, 0), dim));
+void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector3f& dim) {
+    keys.emplace_back(std::make_unique<EntityKey>(device, type, pos + Vector3f(0, dim.y / 2, 0), dim));
 }
 
 // TODO: que la bala dependa de la orientacion del player y no de su direccion
 void EntityManager::createBullet(const Vector3f& pos, Vector3f dir, const bool& type, const Vector3f& dim) {
 	if (dir == 0)
 		dir.y = 1; // disparamos al aire por los loles (y para que la bala no se quede parada)
+
     bullets.emplace_back(std::make_unique<EntityBullet>(device, pos + Vector3f(0, dim.y / 2, 0), dim, dir, type));
 }

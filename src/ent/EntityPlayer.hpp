@@ -11,6 +11,8 @@
 #include <SunlightEngine/SceneNode.hpp>
 #include <SunlightEngine/Device.hpp>
 
+#include <vector>
+
 using Sun::Vector3f;
 using Sun::SceneNode;
 using Sun::Device;
@@ -28,8 +30,8 @@ struct EntityPlayer : Entity
 
 	SceneNode 					node;
 
-	bool                        key { false };
+    std::vector<int>            owned_keys;
 	//NEXT CMP SHOOTING(?);
-	bool 	shooting { false };
-	bool 	mode { false };		//true = angel, false = demon;
+	bool 	                    shooting { false };
+	bool 	                    mode { false };		//true = angel, false = demon;
 };
