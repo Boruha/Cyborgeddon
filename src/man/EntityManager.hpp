@@ -12,8 +12,7 @@ struct EntityManager : GameContext {
 	~EntityManager() override { cleanVectors(); }
 
 	void init();
-	void takeKey();
-	void openDoor();
+
 
 	void createPlayer (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15) , const float& speed = 1.f);
 	void createEnemy  (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(8) , const float& speed = 0.1f);
@@ -21,14 +20,23 @@ struct EntityManager : GameContext {
     void createDoor(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createKey(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(2));
 
+	void update();
+	void createBullet (const Vector3f& pos = Vector3f(), Vector3f dir = Vector3f(), const bool& type = false, const Vector3f& dim = Vector3f(3));
+
 	[[nodiscard]] std::unique_ptr<EntityPlayer>& getPlayer() override { return entities[0]; }
 	[[nodiscard]] const EntityCamera& getCamera() const override { return camera; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const override { return enemies; }
+
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const override { return doors; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityKey>>& getKeys() const override { return keys; }
+	[[nodiscard]] const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const override { return bullets; }
 
 	private:
         void cleanVectors();
+		void takeKey();
+		void openDoor();
+		void checkShooting();
+		void deleteBullet();
 
 	    const Sun::Device& device;
 
@@ -37,8 +45,11 @@ struct EntityManager : GameContext {
 		EntityCamera camera { device };
 
 		std::vector<std::unique_ptr<EntityEnemy>> enemies;
+
 		std::vector<std::unique_ptr<EntityDoor>> doors;
 		std::vector<std::unique_ptr<EntityKey>> keys;
+
+		std::vector<std::unique_ptr<EntityBullet>> bullets;
 };
 
 // TODO: Player y camera solo uno de momento

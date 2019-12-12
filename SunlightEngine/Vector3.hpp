@@ -15,15 +15,15 @@ namespace Sun {
 		Vector3<T>(const Vector3<T> &vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
 
-		[[nodiscard]] Vector3<T> operator+(const Vector3<T> &vec) const { return Vector3<T>(x + vec.x, y + vec.y, z + vec.z); }
+		[[nodiscard]] Vector3<T> operator+(const Vector3<T> &vec) 	const { return Vector3<T>(x + vec.x, y + vec.y, z + vec.z); }
 
-		[[nodiscard]] Vector3<T> operator-(const Vector3<T> &vec) const { return Vector3<T>(x - vec.x, y - vec.y, z - vec.z); }
+		[[nodiscard]] Vector3<T> operator-(const Vector3<T> &vec) 	const { return Vector3<T>(x - vec.x, y - vec.y, z - vec.z); }
 
-		[[nodiscard]] Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
+		[[nodiscard]] Vector3<T> operator-() 						const { return Vector3<T>(-x, -y, -z); }
 
-		[[nodiscard]] Vector3<T> operator*(const T &mul) const { return Vector3<T>(x * mul, y * mul, z * mul); }
+		[[nodiscard]] Vector3<T> operator*(const T &mul) 			const { return Vector3<T>(x * mul, y * mul, z * mul); }
 
-		[[nodiscard]] Vector3<T> operator/(const T &div) const { return Vector3<T>(x / div, y / div, z / div); }
+		[[nodiscard]] Vector3<T> operator/(const T &div) 			const { return Vector3<T>(x / div, y / div, z / div); }
 
 
 		Vector3<T>& operator+=(const Vector3<T> &vec) {
@@ -60,8 +60,10 @@ namespace Sun {
 		}
 
 		[[nodiscard]] bool operator==(const Vector3<T> &vec) const { return x == vec.x && y == vec.y && z == vec.z; }
+		[[nodiscard]] bool operator==(const T n) 			 const { return x == n && y == n && z == n; }
 
 		[[nodiscard]] bool operator!=(const Vector3<T> &vec) const { return x != vec.x || y != vec.y || z != vec.z; }
+		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n || z != n; }
 
 		[[nodiscard]] T length() const {
 			return static_cast<T>(sqrt(x*x + y*y + z*z));

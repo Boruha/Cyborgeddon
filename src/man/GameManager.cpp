@@ -11,8 +11,7 @@ void GameManager::init()
 
 void GameManager::update()
 {
-	entityManager.takeKey();
-	entityManager.openDoor();
+	entityManager.update();
 
 	input.update(entityManager.getPlayer());
 
@@ -22,6 +21,8 @@ void GameManager::update()
 
 	movement.update(entityManager.getPlayer());
 	movement.update(entityManager.getEnemies());
+	movement.update(entityManager.getBullets());
+	movement.checkMaxDist_Bullet(entityManager.getBullets());
 }
 
 // TODO: bucle del juego

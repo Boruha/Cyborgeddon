@@ -29,4 +29,7 @@ struct EntityPlayer : Entity
 	SceneNode 					node;
 
 	bool                        key { false };
+	//NEXT CMP SHOOTING(?);
+	bool 	shooting { false };
+	bool 	mode { false };		//true = angel, false = demon;
 };

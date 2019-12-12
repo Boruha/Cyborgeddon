@@ -15,15 +15,15 @@ namespace Sun {
 		Vector2<T>(const Vector2<T> &vec) : x(vec.x), y(vec.y) {}
 
 
-		[[nodiscard]] Vector2<T> operator+(const Vector2<T> &vec) const { return Vector2<T>(x + vec.x, y + vec.y); }
+		[[nodiscard]] Vector2<T> operator+(const Vector2<T> &vec) 	const { return Vector2<T>(x + vec.x, y + vec.y); }
 
-		[[nodiscard]] Vector2<T> operator-(const Vector2<T> &vec) const { return Vector2<T>(x - vec.x, y - vec.y); }
+		[[nodiscard]] Vector2<T> operator-(const Vector2<T> &vec) 	const { return Vector2<T>(x - vec.x, y - vec.y); }
 
-		[[nodiscard]] Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
+		[[nodiscard]] Vector2<T> operator-() 						const { return Vector2<T>(-x, -y); }
 
-		[[nodiscard]] Vector2<T> operator*(const T &mul) const { return Vector2<T>(x * mul, y * mul); }
+		[[nodiscard]] Vector2<T> operator*(const T &mul) 			const { return Vector2<T>(x * mul, y * mul); }
 
-		[[nodiscard]] Vector2<T> operator/(const T &div) const { return Vector2<T>(x / div, y / div); }
+		[[nodiscard]] Vector2<T> operator/(const T &div) 			const { return Vector2<T>(x / div, y / div); }
 
 
 		Vector2<T>& operator+=(const Vector2<T> &vec) {
@@ -55,9 +55,11 @@ namespace Sun {
 			return *this;
 		}
 
-		bool operator==(const Vector2<T> &vec) const { return x == vec.x && y == vec.y; }
+		[[nodiscard]] bool operator==(const Vector2<T> &vec) const { return x == vec.x && y == vec.y; }
+		[[nodiscard]] bool operator==(const T n)			 const { return x == n && y == n; }
 
-		bool operator!=(const Vector2<T> &vec) const { return x != vec.x || y != vec.y; }
+		[[nodiscard]] bool operator!=(const Vector2<T> &vec) const { return x != vec.x || y != vec.y; }
+		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n; }
 
 		Vector2<T>& normalize() {
 			T length = this->length();

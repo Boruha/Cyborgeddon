@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ent/EntityBullet.hpp>
 #include <ent/EntityCamera.hpp>
 #include <ent/EntityDoor.hpp>
 #include <ent/EntityEnemy.hpp>
