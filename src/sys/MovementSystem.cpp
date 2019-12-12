@@ -9,6 +9,10 @@ void MovementSystem::update(std::unique_ptr<EntityPlayer>& player) {
 	player->transformable.position += player->velocity.velocity;
 
 	player->node.setPosition(player->transformable.position);
+
+	// DASH
+	if(player->velocity.speed > 1)
+	    player->velocity.speed -= 1.2;
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego

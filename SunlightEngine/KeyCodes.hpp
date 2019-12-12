@@ -11,6 +11,7 @@ namespace Sun
 		KEY_D 			= irr::KEY_KEY_D,
 		KEY_S 			= irr::KEY_KEY_S,
 		KEY_W 			= irr::KEY_KEY_W,
+        KEY_F 			= irr::KEY_KEY_F,
 		KEY_CODE_COUNT 	= irr::KEY_KEY_CODES_COUNT
 	};
 }
