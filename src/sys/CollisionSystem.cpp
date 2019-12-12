@@ -57,12 +57,8 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
     }
     */
 
-	if(player->owned_keys.size() == 0){         //NO TENGO LLAVES
-        update(player, keys);   // Comprueba si el player choca con una puerta
-	}
-	else{
-        update(player, doors);  // Comprueba si el player choca con una llave
-	}
+    update(player, keys);   // Comprueba si el player choca con una llave
+    update(player, doors);  // Comprueba si el player choca con una puerta
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
 	// las posiciones tanto de la componente transformable como del nodo
@@ -70,10 +66,28 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 }
 
 void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors) const {
+    bool colision = true;
 	for(auto & door : doors) {
 		if(player->node.intersects(door->node)) {
-			player->owned_keys.erase(player->owned_keys.begin()); // player ha usado la llave que tenia
-			door->open = true;  // esto provoca la "muerte" de la puerta
+		    std::cout << "Tipo de puerta: " << door->type << std::endl;
+            if(player->owned_keys.size() > 0){         //TENGO LLAVES
+                //Compruebo si el player tiene en su array de llaves el tipo de llave que abre la puerta
+                for(int i = 0; i < (int)player->owned_keys.size(); i++){
+                    if(door->type == player->owned_keys.at(i)){
+                        std::cout << "La llave encaja en la cerradura" << std::endl;
+                        player->owned_keys.erase(player->owned_keys.begin() + i); // player ha usado la llave que tenia
+                        door->open = true;  // esto provoca la "muerte" de la puerta
+                        colision = false;
+                        break;
+                    }
+                }
+                if(colision){
+                    std::cout << "NO TIENES LA LLAVE CORRESPONDIENTE" << std::endl;
+                }
+            }
+            else{
+                std::cout << "NO TIENES LA LLAVE CORRESPONDIENTE" << std::endl;
+            }
 		}
 	}
 }
