@@ -5,6 +5,7 @@ void GameManager::init()
 	input.init();
 	ai.init();
 	render.init();
+	modeSys.init();
 
 	entityManager.init();
 }
@@ -12,12 +13,14 @@ void GameManager::init()
 void GameManager::update()
 {
 	entityManager.update();
-
+	
 	input.update(entityManager.getPlayer());
 
 	ai.update(entityManager.getPlayer(), entityManager.getEnemies());
 
 	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys());
+
+	modeSys.update(entityManager.getPlayer());
 
 	movement.update(entityManager.getPlayer());
 	movement.update_rotation(entityManager.getPlayer());

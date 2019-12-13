@@ -31,6 +31,8 @@ struct InputSystem
 		static void 		down_pressed(std::unique_ptr<EntityPlayer>& player) { --player->transformable.rotation.z; }
 		static void 		left_pressed(std::unique_ptr<EntityPlayer>& player) { --player->transformable.rotation.x; }
 		static void 		right_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->transformable.rotation.x; }
+		//Switch Mode
+		static void 		m_pressed(std::unique_ptr<EntityPlayer>& player) { player->mode = !player->mode; }
 
 	struct TKey2func {
 		Sun::KEY_CODE key;
@@ -49,6 +51,7 @@ struct InputSystem
 		{Sun::KEY_DOWN,                 	 down_pressed 	},
 		{Sun::KEY_LEFT,                 	 left_pressed 	},
 		{Sun::KEY_RIGHT,                 	right_pressed 	},
+		{Sun::KEY_M,                 			m_pressed 	},
 		{static_cast<Sun::KEY_CODE>(0),  		  nullptr  	}
 	};
 };

@@ -20,9 +20,14 @@ struct EntityBullet : Entity
 	explicit EntityBullet(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(3),
 			const Vector3f& dir = Vector3f(0,0,1), const bool type = false, const float& speed = 5) :
 		Entity(BULLET_ID), transformable(pos), collider(dim), velocity(dir, speed), node(device, pos, dim), start_pos(pos), dmgType(type)
-		{ node.setTexture(renderable.texture); }
+		{ 
+			if(dmgType)
+        		node.setTexture("./img/textures/testing/testing_angel.jpg");
+   			else
+       			node.setTexture("./img/textures/testing/testing_demon.jpg"); 
+		}
 
-	Renderable					renderable {"", "./img/textures/testing/testing_bullet.png"};
+	Renderable					renderable {"", ""};
 	Transformable 				transformable;
 	BoundingBox					collider;
 	Velocity 					velocity;	// TODO: la bala no cambia su vector velocity desde que se crea

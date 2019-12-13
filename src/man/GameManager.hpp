@@ -24,6 +24,7 @@ struct GameManager {
     CollisionSystem collision {  };
 	MovementSystem movement {  };
 	AI_System ai {  };
+	ModeSystem modeSys {  };
 
 	EntityManager entityManager { render.device };
 };
