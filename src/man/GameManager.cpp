@@ -20,6 +20,7 @@ void GameManager::update()
 	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys());
 
 	movement.update(entityManager.getPlayer());
+	movement.update_rotation(entityManager.getPlayer());
 	movement.update(entityManager.getEnemies());
 	movement.update(entityManager.getBullets());
 	movement.checkMaxDist_Bullet(entityManager.getBullets());
