@@ -20,8 +20,8 @@ using Sun::Device;
 struct EntityPlayer : Entity
 {
 	EntityPlayer() : Entity(PLAYER_ID) {  }
-	explicit EntityPlayer(const Device& device, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15), const float speed = 1.f) :
-		Entity(PLAYER_ID), transformable(pos), collider(dim), velocity(speed), node(device, pos, dim) { node.setTexture(renderable.texture); }
+	explicit EntityPlayer(const Device& device,const int hp, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15), const float speed = 1.f) :
+		Entity(PLAYER_ID), transformable(pos), collider(dim), velocity(speed), node(device, pos, dim), health(hp) { node.setTexture(renderable.texture); }
 
 	Renderable					renderable {"", "./img/textures/testing/testing_demon.jpg"};
 	Transformable 				transformable;
@@ -34,4 +34,5 @@ struct EntityPlayer : Entity
 	//NEXT CMP SHOOTING(?);
 	bool 	                    shooting { false };
 	bool 	                    mode { false };		//true = angel, false = demon;
+	int                         health;
 };

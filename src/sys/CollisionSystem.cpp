@@ -38,8 +38,9 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 }
 */
 
-void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys)
-{
+void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys,
+                                const std::vector<std::unique_ptr<EntityEnemy>>& enemies, const std::vector<std::unique_ptr<EntityBullet>>& bullets){
+
 	// La posicion del nodo es la que uso para saber si chocare eventualmente. La posicion que NO debo tocar aqui JAMAS
 	// es transformable.position. UNICAMENTE modificar velocity.direction o velocity.speed temporalmente si es necesario
 	player->node.setPosition(player->transformable.position + player->velocity.direction.normalize() * player->velocity.speed);
@@ -50,6 +51,8 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 
     update(player, keys);   // Comprueba si el player choca con una llave
     update(player, doors);  // Comprueba si el player choca con una puerta
+    update(enemies, bullets);  // Comprueba si le damos al enemy con la bala
+    update(player, enemies); //Comprueba si el player choca con enemy y pierde vida
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
 	// las posiciones tanto de la componente transformable como del nodo
@@ -67,7 +70,6 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
                     if(door->type == player->owned_keys.at(i)){
                         std::cout << "La llave " << player->owned_keys.at(i) << " encaja en la cerradura: " << door->type << std::endl;
                         player->owned_keys.erase(player->owned_keys.begin() + i); // player ha usado la llave que tenia
-                        //door->open = true;  // esto provoca la "muerte" de la puerta
                         door->type = -1;        //TODO: Variable de muerte
                         colision = false;
                         break;
@@ -90,9 +92,33 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
             std::cout << "Obtenida la llave: " << key->type << std::endl;
 		    player->owned_keys.emplace_back(key->type); // Le ponemos la correspondiente llave a player en su inventario
             key->type = -1;                                 //TODO: Variable de muerte
-			//key->taken = true; // esto provoca la "muerte" de la llave
 		}
 	}
 }
+
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> & enemies, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
+    for(auto & enemy : enemies){
+        for(auto & bullet : bullets){
+            if(enemy->node.intersects(bullet->node)) {
+                std::cout << "Enemigo alcanzado" << std::endl;
+                enemy->ai_state = -1;                   //TODO: Variable de muerte
+            }
+        }
+    }
+}
+
+void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::vector<std::unique_ptr<EntityEnemy>> & enemies) const {
+    for(auto & enemy : enemies) {
+        if(player->node.intersects(enemy->node)) {
+            player->health--;
+            std::cout << "Vidas restantes:" << player->health << std::endl;
+            if(player->health <= 0){
+                std::cout << "Has amochao" << std::endl;
+            }
+        }
+    }
+}
+
+
 
 // TODO: GENERALIZAR, SE REPITE CASI TODO (ideas: bool que "mata" entidades, herencias, )

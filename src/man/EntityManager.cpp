@@ -16,8 +16,11 @@ void EntityManager::init()
 {
     createCamera(Vector3f(0, 20, -50));
 
-    createPlayer(Vector3f(0,0,0), Vector3f(7.f));
+    createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
+    createEnemy(Vector3f(80, 0, 80));
+    createEnemy(Vector3f(-40, 0, 40));
+    createEnemy(Vector3f(-80, 0, 80));
 
     createDoor(0, Vector3f(20,0,10));
     createDoor(1, Vector3f(-25,0,5));
@@ -33,6 +36,8 @@ void EntityManager::update(){
 	openDoor();
 	takeKey();
     deleteBullet();
+    killEnemy();
+    //killPlayer();             //De momento comentada porque si se elimina el unico player que hay sigue haciendo comprobaciones con player y saca segmentation fault
 }
 
 // TODO: en los managers no debe haber logica. Revisar sistema de input
@@ -64,13 +69,24 @@ void EntityManager::deleteBullet(){
     bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](auto const& bullet) { return bullet->dead; }), bullets.end());
 }
 
+void EntityManager::killEnemy(){
+    //CONDICION PARA QUE MUERA ----> State < 0
+    enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](auto const& enemy) { return enemy->ai_state < 0; }), enemies.end());
+}
+
+
+void EntityManager::killPlayer(){
+    //CONDICION PARA QUE MUERA ----> HP < 0
+    entities.erase(std::remove_if(entities.begin(), entities.end(), [](auto const& player) { return player->health == 0; }), entities.end());
+}
+
 
 
 
 /*		CREATE ENTITIES		*/
 
-void EntityManager::createPlayer(const Vector3f& pos, const Vector3f& dim, const float& speed) {
-	entities.emplace_back(std::make_unique<EntityPlayer>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed));
+void EntityManager::createPlayer(int health, const Vector3f& pos, const Vector3f& dim, const float& speed) {
+	entities.emplace_back(std::make_unique<EntityPlayer>(device,health,  pos + Vector3f(0, dim.y / 2, 0), dim, speed));
 }
 
 void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {
