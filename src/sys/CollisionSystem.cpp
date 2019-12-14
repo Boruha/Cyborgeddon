@@ -67,7 +67,6 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
                     if(door->type == player->owned_keys.at(i)){
                         std::cout << "La llave " << player->owned_keys.at(i) << " encaja en la cerradura: " << door->type << std::endl;
                         player->owned_keys.erase(player->owned_keys.begin() + i); // player ha usado la llave que tenia
-                        //door->open = true;  // esto provoca la "muerte" de la puerta
                         door->type = -1;        //TODO: Variable de muerte
                         colision = false;
                         break;
@@ -90,7 +89,6 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
             std::cout << "Obtenida la llave: " << key->type << std::endl;
 		    player->owned_keys.emplace_back(key->type); // Le ponemos la correspondiente llave a player en su inventario
             key->type = -1;                                 //TODO: Variable de muerte
-			//key->taken = true; // esto provoca la "muerte" de la llave
 		}
 	}
 }
