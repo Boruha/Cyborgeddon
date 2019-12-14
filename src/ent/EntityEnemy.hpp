@@ -15,7 +15,7 @@ struct EntityEnemy : Entity
 
 	SceneNode node;
 
-	//0 stopped, 1 chasing.
+	//0 stopped, 1 chasing, -1 dead.
 	int 	ai_state { 0 }; 
 };
 

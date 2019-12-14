@@ -38,8 +38,9 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 }
 */
 
-void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys)
-{
+void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys,
+                                const std::vector<std::unique_ptr<EntityEnemy>>& enemies, const std::vector<std::unique_ptr<EntityBullet>>& bullets){
+
 	// La posicion del nodo es la que uso para saber si chocare eventualmente. La posicion que NO debo tocar aqui JAMAS
 	// es transformable.position. UNICAMENTE modificar velocity.direction o velocity.speed temporalmente si es necesario
 	player->node.setPosition(player->transformable.position + player->velocity.direction.normalize() * player->velocity.speed);
@@ -50,6 +51,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 
     update(player, keys);   // Comprueba si el player choca con una llave
     update(player, doors);  // Comprueba si el player choca con una puerta
+    update(enemies, bullets);  // Comprueba si le damos al enemy con la bala
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
 	// las posiciones tanto de la componente transformable como del nodo
@@ -92,5 +94,26 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 		}
 	}
 }
+
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> & enemies, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
+    for(auto & enemy : enemies){
+        for(auto & bullet : bullets){
+            if(enemy->node.intersects(bullet->node)) {
+                std::cout << "Enemigo alcanzado" << std::endl;
+                enemy->ai_state = -1;                   //TODO: Variable de muerte
+            }
+        }
+    }
+}
+
+void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::vector<std::unique_ptr<EntityEnemy>> & enemies) const {
+    for(auto & enemy : enemies) {
+        if(player->node.intersects(enemy->node)) {
+
+        }
+    }
+}
+
+
 
 // TODO: GENERALIZAR, SE REPITE CASI TODO (ideas: bool que "mata" entidades, herencias, )
