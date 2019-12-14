@@ -52,6 +52,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
     update(player, keys);   // Comprueba si el player choca con una llave
     update(player, doors);  // Comprueba si el player choca con una puerta
     update(enemies, bullets);  // Comprueba si le damos al enemy con la bala
+    update(player, enemies); //Comprueba si el player choca con enemy y pierde vida
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
 	// las posiciones tanto de la componente transformable como del nodo
@@ -109,7 +110,11 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> & e
 void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::vector<std::unique_ptr<EntityEnemy>> & enemies) const {
     for(auto & enemy : enemies) {
         if(player->node.intersects(enemy->node)) {
-
+            player->health--;
+            std::cout << "Vidas restantes:" << player->health << std::endl;
+            if(player->health <= 0){
+                std::cout << "Has amochao" << std::endl;
+            }
         }
     }
 }

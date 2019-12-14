@@ -16,7 +16,7 @@ void EntityManager::init()
 {
     createCamera(Vector3f(0, 20, -50));
 
-    createPlayer(1, Vector3f(0,0,0), Vector3f(7.f));
+    createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
     createEnemy(Vector3f(80, 0, 80));
     createEnemy(Vector3f(-40, 0, 40));
@@ -37,7 +37,7 @@ void EntityManager::update(){
 	takeKey();
     deleteBullet();
     killEnemy();
-    killPlayer();
+    //killPlayer();             //De momento comentada porque si se elimina el unico player que hay sigue haciendo comprobaciones con player y saca segmentation fault
 }
 
 // TODO: en los managers no debe haber logica. Revisar sistema de input
@@ -77,7 +77,7 @@ void EntityManager::killEnemy(){
 
 void EntityManager::killPlayer(){
     //CONDICION PARA QUE MUERA ----> HP < 0
-    enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](auto const& enemy) { return enemy->ai_state < 0; }), enemies.end());
+    entities.erase(std::remove_if(entities.begin(), entities.end(), [](auto const& player) { return player->health == 0; }), entities.end());
 }
 
 
