@@ -24,7 +24,7 @@ struct EntityKey : Entity
     Transformable 				transformable;
     BoundingBox					collider;
 
-
     SceneNode 					node;
+
     int                         type;
 };

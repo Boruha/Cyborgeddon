@@ -36,9 +36,11 @@ void EntityManager::update(){
 }
 
 // TODO: en los managers no debe haber logica. Revisar sistema de input
+// BORU: No se puede acceder al createBullet() desde input (al menos ahora). Lo ideal sería crear desde ahí obv.
+// 		 si se consigue, la var. 'Shooting' se podrá elilminar.
 void EntityManager::checkShooting(){
 	if(entities[0]->shooting){
-		createBullet(entities[0]->node.getPosition(), entities[0]->velocity.direction, entities[0]->mode);
+		createBullet(entities[0]->node.getPosition(), entities[0]->transformable.rotation, entities[0]->mode);
 		entities[0]->shooting = false;
 	}
 }
@@ -89,7 +91,8 @@ void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector
 
 // TODO: que la bala dependa de la orientacion del player y no de su direccion
 void EntityManager::createBullet(const Vector3f& pos, Vector3f dir, const bool& type, const Vector3f& dim) {
-	if (dir == 0)
-		dir.z = 1; // para que la bala nunca se quede parada y por lo menos avance
-    bullets.emplace_back(std::make_unique<EntityBullet>(device, pos + Vector3f(0, dim.y / 2, 0), dim, dir, type));
+	//if (dir == 0)
+		//dir.y = 1; // disparamos al aire por los loles (y para que la bala no se quede parada)
+
+    bullets.emplace_back(std::make_unique<EntityBullet>(device, pos, dim, dir, type));
 }

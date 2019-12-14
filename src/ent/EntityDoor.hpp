@@ -25,6 +25,6 @@ struct EntityDoor : Entity{
     BoundingBox					collider;
 
     SceneNode 					node;
-    bool                        open { false };
-    int                   type;
+
+    int                         type;
 };

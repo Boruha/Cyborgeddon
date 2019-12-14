@@ -61,7 +61,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 	for(auto & door : doors) {
 		if(player->node.intersects(door->node)) {
 		    std::cout << "Necesitas la llave: " << door->type << std::endl;
-            if(player->owned_keys.size() > 0){         //TENGO LLAVES
+            if(!player->owned_keys.empty()){         //TENGO LLAVES
                 //Compruebo si el player tiene en su array de llaves el tipo de llave que abre la puerta
                 for(int i = 0; i < (int)player->owned_keys.size(); i++){
                     if(door->type == player->owned_keys.at(i)){

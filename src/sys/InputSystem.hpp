@@ -17,13 +17,22 @@ struct InputSystem
 	private:
 		const Device& device;
 		Sun::EventReceiver eventReceiver;
-
+		//Movement
 		static void 		w_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->velocity.direction.z; }
 		static void 		a_pressed(std::unique_ptr<EntityPlayer>& player) { --player->velocity.direction.x; }
 		static void 		s_pressed(std::unique_ptr<EntityPlayer>& player) { --player->velocity.direction.z; }
 		static void 		d_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->velocity.direction.x; }
-
+		//Dash
+        static void 	    f_pressed(std::unique_ptr<EntityPlayer>& player) { if(player->velocity.speed <= 1) player->velocity.speed = 16; }
+		//Shoot
 		static void 	space_pressed(std::unique_ptr<EntityPlayer>& player) { player->shooting = true; }
+		//Aim
+		static void 		up_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->transformable.rotation.z; }
+		static void 		down_pressed(std::unique_ptr<EntityPlayer>& player) { --player->transformable.rotation.z; }
+		static void 		left_pressed(std::unique_ptr<EntityPlayer>& player) { --player->transformable.rotation.x; }
+		static void 		right_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->transformable.rotation.x; }
+		//Switch Mode
+		static void 		m_pressed(std::unique_ptr<EntityPlayer>& player) { player->mode = !player->mode; }
 
 	struct TKey2func {
 		Sun::KEY_CODE key;
@@ -36,7 +45,13 @@ struct InputSystem
 		{Sun::KEY_A,                 			a_pressed 	},
 		{Sun::KEY_S,                 			s_pressed 	},
 		{Sun::KEY_D,                 			d_pressed 	},
+        {Sun::KEY_F,                 	        f_pressed 	},
 		{Sun::KEY_SPACE,                 	space_pressed 	},
-		{static_cast<Sun::KEY_CODE>(0),  nullptr  	}
+		{Sun::KEY_UP,                 		   up_pressed 	},
+		{Sun::KEY_DOWN,                 	 down_pressed 	},
+		{Sun::KEY_LEFT,                 	 left_pressed 	},
+		{Sun::KEY_RIGHT,                 	right_pressed 	},
+		{Sun::KEY_M,                 			m_pressed 	},
+		{static_cast<Sun::KEY_CODE>(0),  		  nullptr  	}
 	};
 };
