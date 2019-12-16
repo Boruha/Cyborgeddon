@@ -57,7 +57,7 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityBullet>>& bu
 // BORU: Una consideración buenarda.
 void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>& bullets){
 	for (auto & bullet : bullets) {
-		float distance = Vector2f(bullet->start_pos.x - bullet->transformable.position.x, bullet->start_pos.z - bullet->transformable.position.z).length();
+		auto distance = Vector2f(bullet->start_pos.x - bullet->transformable.position.x, bullet->start_pos.z - bullet->transformable.position.z).length();
 		if(distance >= bullet->dead_dist)
 			bullet->dead = true;
 	}
@@ -67,7 +67,7 @@ void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<Entit
 void MovementSystem::update_rotation(std::unique_ptr<EntityPlayer>& player){
 	Vector3f vec_rot = player->transformable.rotation.normalize();
 	if(vec_rot.length() != 0){
-		Vector3f angular_rot = Vector3f(0.f);
+		auto angular_rot = Vector3f(0.f);
 		angular_rot.y = vec_rot.getRotationY();
 		player->node.setRotation(angular_rot);
 	}

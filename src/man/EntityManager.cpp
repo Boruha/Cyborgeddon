@@ -77,7 +77,7 @@ void EntityManager::killEnemy(){
 
 void EntityManager::killPlayer(){
     //CONDICION PARA QUE MUERA ----> HP < 0
-    entities.erase(std::remove_if(entities.begin(), entities.end(), [](auto const& player) { return player->health == 0; }), entities.end());
+    entities.erase(std::remove_if(entities.begin(), entities.end(), [](auto const& player) { return player->health <= 0; }), entities.end());
 }
 
 

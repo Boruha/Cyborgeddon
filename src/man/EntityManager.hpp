@@ -12,6 +12,7 @@ struct EntityManager : GameContext {
 	~EntityManager() override { cleanVectors(); }
 
 	void init();
+	void update();
 
 
 	void createPlayer (int health, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15) , const float& speed = 1.f);
@@ -19,9 +20,8 @@ struct EntityManager : GameContext {
 	void createCamera (const Vector3f& pos = Vector3f(), const Vector3f& target = Vector3f(0,0,100));
     void createDoor(const int& type, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createKey(const int& type, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(2));
-
-	void update();
 	void createBullet (const Vector3f& pos = Vector3f(), Vector3f dir = Vector3f(), const bool& type = false, const Vector3f& dim = Vector3f(3));
+
 
 	[[nodiscard]] std::unique_ptr<EntityPlayer>& getPlayer() override { return entities[0]; }
 	[[nodiscard]] const EntityCamera& getCamera() const override { return camera; }
