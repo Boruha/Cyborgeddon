@@ -1,12 +1,16 @@
 #pragma once
 
 #include <vector>
-#include <ent/Entity.hpp>
+#include <ent/Entities.hpp>
+#include <memory>
 
 struct GameContext {
 	GameContext() = default;
 
 	virtual ~GameContext() = default;
+
+	virtual void init() = 0;
+	virtual void update() = 0;
 
 	[[nodiscard]] virtual std::unique_ptr<EntityPlayer>& getPlayer() = 0;
 	[[nodiscard]] virtual const EntityCamera& getCamera() const = 0;

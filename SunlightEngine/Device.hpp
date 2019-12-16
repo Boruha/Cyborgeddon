@@ -17,7 +17,7 @@ namespace Sun {
 		}
 		~Device() { if(device) device->drop(); }
 
-		void clear(Color* color) const { device->getVideoDriver()->beginScene(true, true,
+		void clear(const Color* color) const { device->getVideoDriver()->beginScene(true, true,
 																	   irr::video::SColor(color->getColorData().a,
 																								color->getColorData().r,
 																								color->getColorData().g,

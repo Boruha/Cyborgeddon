@@ -11,8 +11,8 @@ struct EntityManager : GameContext {
 	explicit EntityManager(const Device& device) : device(device) {  }
 	~EntityManager() override { cleanVectors(); }
 
-	void init();
-	void update();
+	void init() override;
+	void update() override;
 
 
 	void createPlayer (int health, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15) , const float& speed = 1.f);
