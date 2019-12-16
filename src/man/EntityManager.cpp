@@ -17,7 +17,11 @@ void EntityManager::init()
 {
     createCamera(Vector3f(0, 200, -50));
 
-    createWall(Vector3f(20,0,0), Vector3f(10,10,100));
+    createWall(Vector3f(40,0,100), Vector3f(10,10,300));
+    createWall(Vector3f(-40,0,100), Vector3f(10,10,300));
+    createWall(Vector3f(0,0,-45), Vector3f(70,10,10));
+    createWall(Vector3f(-80,0,245), Vector3f(70,10,10));
+    createWall(Vector3f(80,0,245), Vector3f(70,10,10));
 
     createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
