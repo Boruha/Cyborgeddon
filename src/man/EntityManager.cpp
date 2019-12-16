@@ -15,7 +15,7 @@ void EntityManager::cleanVectors() {
 /*		Init - Update	*/
 void EntityManager::init()
 {
-    createCamera(Vector3f(0, 200, -50));
+	createCamera(Vector3f(10, 90, -30));
 
     createWall(Vector3f(40,0,100), Vector3f(10,10,300));
     createWall(Vector3f(-40,0,100), Vector3f(10,10,300));

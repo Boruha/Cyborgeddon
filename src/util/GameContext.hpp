@@ -13,7 +13,7 @@ struct GameContext {
 	virtual void update() = 0;
 
 	[[nodiscard]] virtual std::unique_ptr<EntityPlayer>& getPlayer() = 0;
-	[[nodiscard]] virtual const EntityCamera& getCamera() const = 0;
+	[[nodiscard]] virtual EntityCamera& getCamera() = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const = 0;
 
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const = 0;
