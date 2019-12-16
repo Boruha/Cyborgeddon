@@ -53,6 +53,8 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
     update(context->getPlayer(), context->getDoors());  // Comprueba si el player choca con una puerta
     update(context->getPlayer(), context->getWalls());
     update(context->getEnemies(), context->getBullets());  // Comprueba si le damos al enemy con la bala
+    update(context->getDoors(), context->getBullets());  // Comprueba si le damos al enemy con la bala
+    update(context->getWalls(), context->getBullets());  // Comprueba si le damos al enemy con la bala
     update(context->getPlayer(), context->getEnemies()); //Comprueba si el player choca con enemy y pierde vida
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
@@ -127,6 +129,28 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::
     for(auto & wall : walls){
         if(player->node.intersects(wall->node)) {
             player->velocity.direction = 0;
+        }
+    }
+}
+
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityDoor>> & doors, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
+    for(auto & door : doors) {
+        for(auto & bullet : bullets) {
+            if(door->node.intersects(bullet->node)){
+                bullet->velocity.direction = 0;
+                bullet->dead = true;
+            }
+        }
+    }
+}
+
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityWall>> & walls, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
+    for(auto & wall : walls) {
+        for(auto & bullet : bullets) {
+            if(wall->node.intersects(bullet->node)){
+                bullet->velocity.direction = 0;
+                bullet->dead = true;
+            }
         }
     }
 }
