@@ -8,22 +8,30 @@
 //			2.2. Renombrar los sistemas por la componente que trabajan o por el ambito: transformableSystem / velocitySystem, etc... (estudiable)
 
 void MovementSystem::update(const std::unique_ptr<GameContext>& context) const {
-	updatePlayer(context->getPlayer());
+	updatePlayerAndCamera(context->getPlayer(), context->getCamera());
 	updateEnemies(context->getEnemies());
 	updateBullets(context->getBullets());
 	checkMaxDist_Bullet(context->getBullets());
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::updatePlayer(std::unique_ptr<EntityPlayer>& player) const {
+void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player, EntityCamera& camera) const {
 	// Movimiento
 	// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
 	player->transformable.position = player->node.getPosition();
+    camera.transformable.position = camera.cameraNode.getPosition();
 
 	player->velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
-	player->transformable.position += player->velocity.velocity;
+    player->transformable.position += player->velocity.velocity;
+
+    camera.velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
+    camera.transformable.position += camera.velocity.velocity;
+
+    camera.camera.target = player->transformable.position;
+    camera.cameraNode.setTarget(camera.camera.target);
 
 	player->node.setPosition(player->transformable.position);
+    camera.cameraNode.setPosition(camera.transformable.position);
 
 	// Rotacion
 	Vector3f vec_rot = player->transformable.rotation.normalize();

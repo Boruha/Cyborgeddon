@@ -14,7 +14,7 @@ void EntityManager::cleanVectors() {
 /*		Init - Update	*/
 void EntityManager::init()
 {
-    createCamera(Vector3f(0, 20, -50));
+    createCamera(Vector3f(10, 90, -30));
 
     createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
