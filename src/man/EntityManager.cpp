@@ -8,13 +8,16 @@ void EntityManager::cleanVectors() {
 	doors.erase(doors.begin(), doors.end());
 	enemies.erase(enemies.begin(), enemies.end());
 	entities.erase(entities.begin(), entities.end());
+    walls.erase(walls.begin(), walls.end());
 }
 
 
 /*		Init - Update	*/
 void EntityManager::init()
 {
-    createCamera(Vector3f(0, 20, -50));
+    createCamera(Vector3f(0, 200, -50));
+
+    createWall(Vector3f(20,0,0), Vector3f(10,10,100));
 
     createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
@@ -22,9 +25,8 @@ void EntityManager::init()
     createEnemy(Vector3f(-40, 0, 40));
     createEnemy(Vector3f(-80, 0, 80));
 
-    createDoor(0, Vector3f(20,0,100), Vector3f(10,10,100));
-
-    createDoor(1, Vector3f(-25,0,5));
+    createDoor(0, Vector3f(20,0,0));
+    createDoor(1, Vector3f(-20,0,0));
     createDoor(2, Vector3f(-20,0,15));
 
     createKey(0, Vector3f(0,0,10));
@@ -88,6 +90,10 @@ void EntityManager::killPlayer(){
 
 void EntityManager::createPlayer(int health, const Vector3f& pos, const Vector3f& dim, const float& speed) {
 	entities.emplace_back(std::make_unique<EntityPlayer>(device,health,  pos + Vector3f(0, dim.y / 2, 0), dim, speed));
+}
+
+void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
+    walls.emplace_back(std::make_unique<EntityWall>(device,  pos + Vector3f(0, dim.y / 2, 0), dim));
 }
 
 void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {

@@ -18,6 +18,7 @@ struct EntityManager : GameContext {
 	void createEnemy  (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(8) , const float& speed = 0.1f);
 	void createCamera (const Vector3f& pos = Vector3f(), const Vector3f& target = Vector3f(0,0,100));
     void createDoor(const int& type, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
+    void createWall(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createKey(const int& type, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(2));
 
 	void update();
@@ -28,6 +29,7 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const override { return enemies; }
 
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const override { return doors; }
+    [[nodiscard]] const std::vector<std::unique_ptr<EntityWall>>& getWalls() const override{ return walls; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityKey>>& getKeys() const override { return keys; }
 	[[nodiscard]] const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const override { return bullets; }
 
@@ -49,6 +51,7 @@ struct EntityManager : GameContext {
 		std::vector<std::unique_ptr<EntityEnemy>> enemies;
 
 		std::vector<std::unique_ptr<EntityDoor>> doors;
+        std::vector<std::unique_ptr<EntityWall>> walls;
 		std::vector<std::unique_ptr<EntityKey>> keys;
 
 		std::vector<std::unique_ptr<EntityBullet>> bullets;

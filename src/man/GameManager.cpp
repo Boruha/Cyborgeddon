@@ -18,7 +18,7 @@ void GameManager::update()
 
 	ai.update(entityManager.getPlayer(), entityManager.getEnemies());
 
-	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys(), entityManager.getEnemies(), entityManager.getBullets());
+	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys(), entityManager.getEnemies(), entityManager.getBullets(), entityManager.getWalls());
 
 	modeSys.update(entityManager.getPlayer());
 

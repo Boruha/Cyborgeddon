@@ -39,7 +39,7 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 */
 
 void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys,
-                                const std::vector<std::unique_ptr<EntityEnemy>>& enemies, const std::vector<std::unique_ptr<EntityBullet>>& bullets){
+                                const std::vector<std::unique_ptr<EntityEnemy>>& enemies, const std::vector<std::unique_ptr<EntityBullet>>& bullets, const std::vector<std::unique_ptr<EntityWall>>& walls){
 
 	// La posicion del nodo es la que uso para saber si chocare eventualmente. La posicion que NO debo tocar aqui JAMAS
 	// es transformable.position. UNICAMENTE modificar velocity.direction o velocity.speed temporalmente si es necesario
@@ -51,6 +51,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 
     update(player, keys);   // Comprueba si el player choca con una llave
     update(player, doors);  // Comprueba si el player choca con una puerta
+    update(player, walls);  // Comprueba si el player choca con un muro
     update(enemies, bullets);  // Comprueba si le damos al enemy con la bala
     update(player, enemies); //Comprueba si el player choca con enemy y pierde vida
 
@@ -115,6 +116,14 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::
             if(player->health <= 0){
                 std::cout << "Has amochao" << std::endl;
             }
+        }
+    }
+}
+
+void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::vector<std::unique_ptr<EntityWall>> & walls) const {
+    for(auto & wall : walls){
+        if(player->node.intersects(wall->node)) {
+            player->velocity.direction = 0;
         }
     }
 }
