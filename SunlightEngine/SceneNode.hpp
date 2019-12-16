@@ -10,10 +10,11 @@ namespace Sun {
 	struct SceneNode : public GenericNode {
 		SceneNode() = default;
 		explicit SceneNode(const Device& device, const Vector3f& pos = Vector3f(), const Vector3f &dim = Vector3f(10))
-			: GenericNode(nullptr), meshNode(device.getInnerDevice()->getSceneManager()->addCubeSceneNode(dim.x)), dim(dim)
+			: GenericNode(nullptr), meshNode(device.getInnerDevice()->getSceneManager()->addCubeSceneNode(1)), dim(dim)
 		{
 			this->node = meshNode; 									// aqui se inicializa el generic node
 			this->setPosition(Vector3f(pos.x, pos.y, pos.z));
+			this->setScale(dim);
 			affectedByLight(false);
 		}
 

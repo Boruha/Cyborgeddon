@@ -51,6 +51,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 
     update(context->getPlayer(), context->getKeys());   // Comprueba si el player choca con una llave
     update(context->getPlayer(), context->getDoors());  // Comprueba si el player choca con una puerta
+    update(context->getPlayer(), context->getWalls());
     update(context->getEnemies(), context->getBullets());  // Comprueba si le damos al enemy con la bala
     update(context->getPlayer(), context->getEnemies()); //Comprueba si el player choca con enemy y pierde vida
 
@@ -119,6 +120,13 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::
             if(player->health <= 0){
                 std::cout << "Has amochao" << std::endl;
             }
+        }
+    }
+}
+void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::vector<std::unique_ptr<EntityWall>> & walls) const {
+    for(auto & wall : walls){
+        if(player->node.intersects(wall->node)) {
+            player->velocity.direction = 0;
         }
     }
 }

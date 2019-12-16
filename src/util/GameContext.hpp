@@ -17,6 +17,7 @@ struct GameContext {
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const = 0;
 
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const = 0;
+    [[nodiscard]] virtual const std::vector<std::unique_ptr<EntityWall>>& getWalls() const = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityKey>>& getKeys() const = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const = 0;
 };
