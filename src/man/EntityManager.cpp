@@ -22,7 +22,8 @@ void EntityManager::init()
     createEnemy(Vector3f(-40, 0, 40));
     createEnemy(Vector3f(-80, 0, 80));
 
-    createDoor(0, Vector3f(20,0,10));
+    createDoor(0, Vector3f(20,0,100), Vector3f(10,10,100));
+
     createDoor(1, Vector3f(-25,0,5));
     createDoor(2, Vector3f(-20,0,15));
 
