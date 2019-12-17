@@ -8,16 +8,20 @@ void EntityManager::cleanVectors() {
 	doors.erase(doors.begin(), doors.end());
 	enemies.erase(enemies.begin(), enemies.end());
 	entities.erase(entities.begin(), entities.end());
-
+    walls.erase(walls.begin(), walls.end());
 }
 
 
 /*		Init - Update	*/
 void EntityManager::init()
 {
-    createCamera(Vector3f(0, 20, -50));
+	createCamera(Vector3f(10, 90, -30));
 
-    //createMap();
+    createWall(Vector3f(40,0,100), Vector3f(10,10,300));
+    createWall(Vector3f(-40,0,100), Vector3f(10,10,300));
+    createWall(Vector3f(0,0,-45), Vector3f(70,10,10));
+    createWall(Vector3f(-80,0,245), Vector3f(70,10,10));
+    createWall(Vector3f(80,0,245), Vector3f(70,10,10));
 
     createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
@@ -25,9 +29,8 @@ void EntityManager::init()
     createEnemy(Vector3f(-40, 0, 40));
     createEnemy(Vector3f(-80, 0, 80));
 
-
-    createDoor(0, Vector3f(20,0,10));
-    createDoor(1, Vector3f(-25,0,5));
+    createDoor(0, Vector3f(20,0,0));
+    createDoor(1, Vector3f(-20,0,0));
     createDoor(2, Vector3f(-20,0,15));
 
     createKey(0, Vector3f(0,0,10));
@@ -55,6 +58,8 @@ void EntityManager::checkShooting(){
 }
 
 
+
+
 /*		DESTROY ENTITIES	*/
 
 void EntityManager::takeKey(){
@@ -79,7 +84,7 @@ void EntityManager::killEnemy(){
 
 void EntityManager::killPlayer(){
     //CONDICION PARA QUE MUERA ----> HP < 0
-    entities.erase(std::remove_if(entities.begin(), entities.end(), [](auto const& player) { return player->health == 0; }), entities.end());
+    entities.erase(std::remove_if(entities.begin(), entities.end(), [](auto const& player) { return player->health <= 0; }), entities.end());
 }
 
 
@@ -89,6 +94,10 @@ void EntityManager::killPlayer(){
 
 void EntityManager::createPlayer(int health, const Vector3f& pos, const Vector3f& dim, const float& speed) {
 	entities.emplace_back(std::make_unique<EntityPlayer>(device,health,  pos + Vector3f(0, dim.y / 2, 0), dim, speed));
+}
+
+void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
+    walls.emplace_back(std::make_unique<EntityWall>(device,  pos + Vector3f(0, dim.y / 2, 0), dim));
 }
 
 void EntityManager::createCamera(const Vector3f& pos, const Vector3f& target) {
@@ -105,10 +114,6 @@ void EntityManager::createDoor(const int& type, const Vector3f& pos, const Vecto
 }
 void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector3f& dim) {
     keys.emplace_back(std::make_unique<EntityKey>(device, type, pos + Vector3f(0, dim.y / 2, 0), dim));
-}
-
-void EntityManager::createMap(const Vector3f& pos, const Vector3f& dim) {
-    maps.emplace_back(std::make_unique<EntityMap>(device, pos + Vector3f(0, dim.y / 2, 0), dim));
 }
 
 // TODO: que la bala dependa de la orientacion del player y no de su direccion

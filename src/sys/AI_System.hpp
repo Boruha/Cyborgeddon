@@ -1,10 +1,11 @@
 #pragma once
 
+#include <sys/System.hpp>
 #include <ent/Entities.hpp>
-#include <sys/Systems.hpp>
+#include <util/GameContext.hpp>
 
-struct AI_System
+struct AI_System : System
 {
-	void init() {  }
-    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityEnemy>>&);
+	void init() override {  }
+    void update(const std::unique_ptr<GameContext>& context) const override;
 };

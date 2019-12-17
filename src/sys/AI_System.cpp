@@ -1,9 +1,9 @@
 #include <sys/AI_System.hpp>
 
 // TODO: considerar los estados de la IA como punteros a funcion
-void AI_System::update(const std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityEnemy>>& enemies) {
-	for (auto &enemy : enemies) {
-		enemy->velocity.direction = player->transformable.position - enemy->transformable.position;
+void AI_System::update(const std::unique_ptr<GameContext>& context) const {
+	for (auto &enemy : context->getEnemies()) {
+		enemy->velocity.direction = context->getPlayer()->transformable.position - enemy->transformable.position;
 		enemy->velocity.direction.y = 0; // anulo la y porque las alturas son distintas
 
 		enemy->transformable.rotation.y = (enemy->velocity.direction).getRotationY();

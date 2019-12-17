@@ -7,16 +7,39 @@
 //			2.1. Antes sería imperativo unificar todas entidades que hagan X acciones o tengan X cmp.
 //			2.2. Renombrar los sistemas por la componente que trabajan o por el ambito: transformableSystem / velocitySystem, etc... (estudiable)
 
+void MovementSystem::update(const std::unique_ptr<GameContext>& context) const {
+	updatePlayerAndCamera(context->getPlayer(), context->getCamera());
+	updateEnemies(context->getEnemies());
+	updateBullets(context->getBullets());
+	checkMaxDist_Bullet(context->getBullets());
+}
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::update(std::unique_ptr<EntityPlayer>& player) {
+void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player, EntityCamera& camera) const {
+	// Movimiento
 	// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
 	player->transformable.position = player->node.getPosition();
+    camera.transformable.position = camera.cameraNode.getPosition();
 
 	player->velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
-	player->transformable.position += player->velocity.velocity;
+    player->transformable.position += player->velocity.velocity;
+
+    camera.velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
+    camera.transformable.position += camera.velocity.velocity;
+
+    camera.camera.target = player->transformable.position;
+    camera.cameraNode.setTarget(camera.camera.target);
 
 	player->node.setPosition(player->transformable.position);
+    camera.cameraNode.setPosition(camera.transformable.position);
+
+	// Rotacion
+	Vector3f vec_rot = player->transformable.rotation.normalize();
+	if(vec_rot != 0){
+		auto angular_rot = Vector3f(0.f);
+		angular_rot.y = vec_rot.getRotationY();
+		player->node.setRotation(angular_rot);
+	}
 
 	// TODO: esto es una basura asi como esta hecho, arreglar en el futuro
 	// DASH
@@ -28,7 +51,7 @@ void MovementSystem::update(std::unique_ptr<EntityPlayer>& player) {
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::update(const std::vector<std::unique_ptr<EntityEnemy>>& enemies) {
+void MovementSystem::updateEnemies(const std::vector<std::unique_ptr<EntityEnemy>>& enemies) const {
 	for (auto & enemy : enemies) {
 		enemy->transformable.position = enemy->node.getPosition();
 
@@ -40,7 +63,7 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityEnemy>>& ene
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::update(const std::vector<std::unique_ptr<EntityBullet>>& bullets) {
+void MovementSystem::updateBullets(const std::vector<std::unique_ptr<EntityBullet>>& bullets) const {
 	for (auto & bullet : bullets) {
 		bullet->transformable.position = bullet->node.getPosition();
 
@@ -55,20 +78,10 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityBullet>>& bu
 //  	 llamada "distancia recorrida" que fuese sumando speed en cada iteracion y que la condicion de muerte sea
 //  	 que esa distancia sea mayor a la distancia maxima de vida de la bala
 // BORU: Una consideración buenarda.
-void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>& bullets){
+void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>& bullets) const {
 	for (auto & bullet : bullets) {
-		float distance = Vector2f(bullet->start_pos.x - bullet->transformable.position.x, bullet->start_pos.z - bullet->transformable.position.z).length();
+		auto distance = Vector2f(bullet->start_pos.x - bullet->transformable.position.x, bullet->start_pos.z - bullet->transformable.position.z).length();
 		if(distance >= bullet->dead_dist)
 			bullet->dead = true;
-	}
-}
-
-
-void MovementSystem::update_rotation(std::unique_ptr<EntityPlayer>& player){
-	Vector3f vec_rot = player->transformable.rotation.normalize();
-	if(vec_rot.length() != 0){
-		Vector3f angular_rot = Vector3f(0.f);
-		angular_rot.y = vec_rot.getRotationY();
-		player->node.setRotation(angular_rot);
 	}
 }

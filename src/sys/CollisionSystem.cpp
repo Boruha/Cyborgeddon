@@ -38,21 +38,24 @@ void MovementSystem::update(const std::vector<std::unique_ptr<EntityPlayer>>& pl
 }
 */
 
-void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::vector<std::unique_ptr<EntityDoor>>& doors, const std::vector<std::unique_ptr<EntityKey>>& keys,
-                                const std::vector<std::unique_ptr<EntityEnemy>>& enemies, const std::vector<std::unique_ptr<EntityBullet>>& bullets){
+void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const {
 
 	// La posicion del nodo es la que uso para saber si chocare eventualmente. La posicion que NO debo tocar aqui JAMAS
 	// es transformable.position. UNICAMENTE modificar velocity.direction o velocity.speed temporalmente si es necesario
+	auto player = context->getPlayer().get();
 	player->node.setPosition(player->transformable.position + player->velocity.direction.normalize() * player->velocity.speed);
 
 	// IMPORTANTE:  si puedo tocar dos llaves (o dos puertas) a la vez en una misma iteracion del bucle del juego,
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle
 
-    update(player, keys);   // Comprueba si el player choca con una llave
-    update(player, doors);  // Comprueba si el player choca con una puerta
-    update(enemies, bullets);  // Comprueba si le damos al enemy con la bala
-    update(player, enemies); //Comprueba si el player choca con enemy y pierde vida
+    update(context->getPlayer(), context->getKeys());   // Comprueba si el player choca con una llave
+    update(context->getPlayer(), context->getDoors());  // Comprueba si el player choca con una puerta
+    update(context->getPlayer(), context->getWalls());
+    update(context->getEnemies(), context->getBullets());  // Comprueba si le damos al enemy con la bala
+    update(context->getDoors(), context->getBullets());  // Comprueba si le damos al enemy con la bala
+    update(context->getWalls(), context->getBullets());  // Comprueba si le damos al enemy con la bala
+    update(context->getPlayer(), context->getEnemies()); //Comprueba si el player choca con enemy y pierde vida
 
 	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
 	// las posiciones tanto de la componente transformable como del nodo
@@ -96,12 +99,16 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 	}
 }
 
+// TODO: considerar matar al enemigo mas cercano a la bala y no el primero en el vector de enemigos
 void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> & enemies, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
-    for(auto & enemy : enemies){
-        for(auto & bullet : bullets){
+    for(auto & enemy : enemies) {
+        for(auto & bullet : bullets) {
+        	if(bullet->dead)
+        		continue;
             if(enemy->node.intersects(bullet->node)) {
                 std::cout << "Enemigo alcanzado" << std::endl;
                 enemy->ai_state = -1;                   //TODO: Variable de muerte
+                bullet->dead = true;
             }
         }
     }
@@ -118,7 +125,34 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::
         }
     }
 }
+void CollisionSystem::update(std::unique_ptr<EntityPlayer> & player, const std::vector<std::unique_ptr<EntityWall>> & walls) const {
+    for(auto & wall : walls){
+        if(player->node.intersects(wall->node)) {
+            player->velocity.direction = 0;
+        }
+    }
+}
 
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityDoor>> & doors, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
+    for(auto & door : doors) {
+        for(auto & bullet : bullets) {
+            if(door->node.intersects(bullet->node)){
+                bullet->velocity.direction = 0;
+                bullet->dead = true;
+            }
+        }
+    }
+}
 
+void CollisionSystem::update(const std::vector<std::unique_ptr<EntityWall>> & walls, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
+    for(auto & wall : walls) {
+        for(auto & bullet : bullets) {
+            if(wall->node.intersects(bullet->node)){
+                bullet->velocity.direction = 0;
+                bullet->dead = true;
+            }
+        }
+    }
+}
 
 // TODO: GENERALIZAR, SE REPITE CASI TODO (ideas: bool que "mata" entidades, herencias, )

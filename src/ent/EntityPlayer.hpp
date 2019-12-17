@@ -34,5 +34,5 @@ struct EntityPlayer : Entity
 	//NEXT CMP SHOOTING(?);
 	bool 	                    shooting { false };
 	bool 	                    mode { false };		//true = angel, false = demon;
-	int                         health;
+	int                         health { 0 };
 };

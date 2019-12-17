@@ -2,31 +2,27 @@
 
 void GameManager::init()
 {
-	input.init();
-	ai.init();
-	render.init();
-	modeSys.init();
+	systems.emplace_back(std::make_unique<InputSystem>(InputSystem(render.device)));
+	systems.emplace_back(std::make_unique<AI_System>(AI_System()));
+	systems.emplace_back(std::make_unique<CollisionSystem>(CollisionSystem()));
+	systems.emplace_back(std::make_unique<MovementSystem>(MovementSystem()));
 
-	entityManager.init();
+	for(auto& sys : systems) {
+		sys->init();
+	}
+
+	render.init();
+
+	entityManager->init();
 }
 
 void GameManager::update()
 {
-	entityManager.update();
-	
-	input.update(entityManager.getPlayer());
+	entityManager->update();
 
-	ai.update(entityManager.getPlayer(), entityManager.getEnemies());
-
-	collision.update(entityManager.getPlayer(), entityManager.getDoors(), entityManager.getKeys(), entityManager.getEnemies(), entityManager.getBullets());
-
-	modeSys.update(entityManager.getPlayer());
-
-	movement.update(entityManager.getPlayer());
-	movement.update_rotation(entityManager.getPlayer());
-	movement.update(entityManager.getEnemies());
-	movement.update(entityManager.getBullets());
-	movement.checkMaxDist_Bullet(entityManager.getBullets());
+	for(auto& sys : systems) {
+		sys->update(entityManager);
+	}
 }
 
 // TODO: bucle del juego
@@ -52,7 +48,7 @@ void GameManager::loop()
 		/*	lag -= TICK_MS;
 		}*/
 
-		render.update();
+		render.update(entityManager);
 		// TODO: interpolar movimiento en render
 	}
 }

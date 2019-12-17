@@ -3,24 +3,20 @@
 #include <ent/Entities.hpp>
 
 #include <src/man/EntityManager.hpp>
+#include <sys/System.hpp>
 
-struct MovementSystem
+struct MovementSystem : System
 {
-	MovementSystem() = default;
+	void init() override {  }
 
-	void init() {  }
+	void update(const std::unique_ptr<GameContext>& context) const override;
 
+private:
 	//updating position
-	void update(std::unique_ptr<EntityPlayer>&);
-	void update(const std::vector<std::unique_ptr<EntityEnemy>>&);
-	void update(const std::vector<std::unique_ptr<EntityBullet>>&);
-	
-	//updating rotation
-	void update_rotation(std::unique_ptr<EntityPlayer>&);
-	
+	void updatePlayerAndCamera(std::unique_ptr<EntityPlayer>&, EntityCamera&) const;
+	void updateEnemies(const std::vector<std::unique_ptr<EntityEnemy>>&) const;
+	void updateBullets(const std::vector<std::unique_ptr<EntityBullet>>&) const;
 	
 	//others
-	void checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>&);
-
-
+	void checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>&) const;
 };
