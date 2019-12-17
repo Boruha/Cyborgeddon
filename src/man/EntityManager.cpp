@@ -17,11 +17,29 @@ void EntityManager::init()
 {
 	createCamera(Vector3f(10, 90, -30));
 
-    createWall(Vector3f(40,0,100), Vector3f(10,10,300));
-    createWall(Vector3f(-40,0,100), Vector3f(10,10,300));
-    createWall(Vector3f(0,0,-45), Vector3f(70,10,10));
-    createWall(Vector3f(-80,0,245), Vector3f(70,10,10));
-    createWall(Vector3f(80,0,245), Vector3f(70,10,10));
+	//Creacion del escenario para las Christmas
+
+	//Pasillo inicial
+    createWall(Vector3f(40,0,100), Vector3f(10,10,300));    //Derecha
+    createWall(Vector3f(-40,0,100), Vector3f(10,10,300));   //Izquierda
+    createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
+
+    //Pasillo llave
+    createWall(Vector3f(-115,0,245), Vector3f(140,10,10));    //Inferior izda
+    createWall(Vector3f(115,0,245), Vector3f(140,10,10));     //Inderior dcha
+    createWall(Vector3f(-27.5,0,300), Vector3f(315,10,10));   //Superior
+    createWall(Vector3f(180,0,277.5), Vector3f(10,10,55));  //Derecha
+
+    createKey(0, Vector3f(80,0,275));
+    createDoor(0, Vector3f(-180,0,272.5), Vector3f(10,10,45));  //Puerta patrulla
+    createDoor(1, Vector3f(152.5,0,300), Vector3f(45,10,10));       //Puerta puertas
+
+
+    //Zona patrulla
+
+
+
+    //---------------------------------------------
 
     createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
 	createEnemy(Vector3f(40, 0, 40));
@@ -29,11 +47,9 @@ void EntityManager::init()
     createEnemy(Vector3f(-40, 0, 40));
     createEnemy(Vector3f(-80, 0, 80));
 
-    createDoor(0, Vector3f(20,0,0));
-    createDoor(1, Vector3f(-20,0,0));
     createDoor(2, Vector3f(-20,0,15));
 
-    createKey(0, Vector3f(0,0,10));
+
     createKey(1, Vector3f(20,0,0));
 	createKey(2, Vector3f(30,0,0));
 }
