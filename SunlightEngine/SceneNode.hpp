@@ -30,7 +30,7 @@ namespace Sun {
 
 		[[nodiscard]] bool intersects(const SceneNode& other) const {
 			return (std::abs(other.getPosition().x - this->getPosition().x) < (other.dim.x + this->dim.x) / 2 &&
-					std::abs(other.getPosition().y - this->getPosition().y) < (other.dim.y + this->dim.y) / 2 &&
+					//std::abs(other.getPosition().y - this->getPosition().y) < (other.dim.y + this->dim.y) / 2 &&   //Seguramente nunca neceitemos comprobar la Y
 					std::abs(other.getPosition().z - this->getPosition().z) < (other.dim.z + this->dim.z) / 2);
 		}
 

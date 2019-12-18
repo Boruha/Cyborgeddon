@@ -21,4 +21,5 @@ private:
     void update(const std::vector<std::unique_ptr<EntityDoor>>&, const std::vector<std::unique_ptr<EntityBullet>>&)  const;
     void update(const std::vector<std::unique_ptr<EntityWall>>&, const std::vector<std::unique_ptr<EntityBullet>>&)  const;
     void update(std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityEnemy>>&)  const;
+
 };
