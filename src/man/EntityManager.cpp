@@ -17,41 +17,99 @@ void EntityManager::init()
 {
 	createCamera(Vector3f(10, 90, -30));
 
-	//Creacion del escenario para las Christmas
+	//------------ Creacion del escenario para las Christmas ------------------------------------------
 
 	//Pasillo inicial
-    createWall(Vector3f(40,0,100), Vector3f(10,10,300));    //Derecha
-    createWall(Vector3f(-40,0,100), Vector3f(10,10,300));   //Izquierda
-    createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
 
-    //Pasillo llave
+	    //Derecha
+        createWall(Vector3f(40,0,-27.5), Vector3f(10,10,45));
+        createWall(Vector3f(40,0,45), Vector3f(10,10,80));
+        createWall(Vector3f(40,0,140), Vector3f(10,10,90));
+        createWall(Vector3f(40,0,222.5), Vector3f(10,10,55));
+
+        //Izquierda
+        createWall(Vector3f(-40,0,-27.5), Vector3f(10,10,45));
+        createWall(Vector3f(-40,0,45), Vector3f(10,10,80));
+        createWall(Vector3f(-40,0,140), Vector3f(10,10,90));
+        createWall(Vector3f(-40,0,222.5), Vector3f(10,10,55));
+
+        createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
+        createKey(0, Vector3f(0,0,-30));
+
+        //Salas del pasillo
+
+        //Sala 1
+        createWall(Vector3f(70,0,-30), Vector3f(60,10,10));    //Abajo
+        createWall(Vector3f(70,0,30), Vector3f(60,10,10));    //Arriba
+        createWall(Vector3f(95,0,0), Vector3f(10,10,50));    //Cierre
+        createDoor(1, Vector3f(37,0,0), Vector3f(2,20,10));
+        createKey(2, Vector3f(70,0,0));
+
+        //Sala 2
+        createWall(Vector3f(-70,0,-30), Vector3f(60,10,10));    //Abajo
+        createWall(Vector3f(-70,0,30), Vector3f(60,10,10));    //Arriba
+        createWall(Vector3f(-95,0,-0), Vector3f(10,10,50));    //Cierre
+        createDoor(2, Vector3f(-37,0,0), Vector3f(2,20,10));
+        createKey(3, Vector3f(-70,0,0));
+
+        //Sala 3
+        createWall(Vector3f(70,0,60), Vector3f(60,10,10));    //Abajo
+        createWall(Vector3f(70,0,120), Vector3f(60,10,10));    //Arriba
+        createWall(Vector3f(95,0,90), Vector3f(10,10,50));    //Cierre
+        createDoor(5, Vector3f(37,0,90), Vector3f(2,20,10));
+        createKey(6, Vector3f(70,0,90));
+
+        //Sala 4
+        createWall(Vector3f(-70,0,60), Vector3f(60,10,10));    //Abajo
+        createWall(Vector3f(-70,0,120), Vector3f(60,10,10));    //Arriba
+        createWall(Vector3f(-95,0,90), Vector3f(10,10,50));    //Cierre
+        createDoor(0, Vector3f(-37,0,90), Vector3f(2,20,10));
+        createKey(1, Vector3f(-70,0,90));
+
+        //Sala 5
+        createWall(Vector3f(-70,0,160), Vector3f(60,10,10));    //Abajo
+        createWall(Vector3f(-70,0,220), Vector3f(60,10,10));    //Arriba
+        createWall(Vector3f(-95,0,190), Vector3f(10,10,50));    //Cierre
+        createDoor(3, Vector3f(37,0,190), Vector3f(2,20,10));
+        createKey(4, Vector3f(70,0,190));
+
+        //Sala 6
+        createWall(Vector3f(70,0,160), Vector3f(60,10,10));    //Abajo
+        createWall(Vector3f(70,0,220), Vector3f(60,10,10));    //Arriba
+        createWall(Vector3f(95,0,190), Vector3f(10,10,50));    //Cierre
+        createDoor(4, Vector3f(-37,0,190), Vector3f(2,20,10));
+        createKey(5, Vector3f(-70,0,190));
+
+    //Pasillo Horizontal
     createWall(Vector3f(-115,0,245), Vector3f(140,10,10));    //Inferior izda
     createWall(Vector3f(115,0,245), Vector3f(140,10,10));     //Inderior dcha
     createWall(Vector3f(-27.5,0,300), Vector3f(315,10,10));   //Superior
     createWall(Vector3f(180,0,277.5), Vector3f(10,10,55));  //Derecha
+    createDoor(7, Vector3f(-180,0,272.5), Vector3f(10,10,45));  //Puerta patrulla
 
-    createKey(0, Vector3f(80,0,275));
-    createDoor(0, Vector3f(-180,0,272.5), Vector3f(10,10,45));  //Puerta patrulla
-    createDoor(1, Vector3f(152.5,0,300), Vector3f(45,10,10));       //Puerta puertas
-
+    //Sala llave principal
+    createDoor(6, Vector3f(152.5,0,300), Vector3f(45,10,10));       //Puerta llave principal
+    createKey(7, Vector3f(158,0,320));
+    createWall(Vector3f(200,0,300), Vector3f(30,10,10));
+    createWall(Vector3f(210,0,345), Vector3f(10,10,80));
+    createWall(Vector3f(100,0,345), Vector3f(10,10,80));
+    createWall(Vector3f(157.5,0,380), Vector3f(105,10,10));
 
     //Zona patrulla
+    createWall(Vector3f(-180,0,227.5), Vector3f(10,10,45)); //Inf der
+    createWall(Vector3f(-180,0,327.5), Vector3f(10,10,45)); //Sup der
+    createWall(Vector3f(-262.5,0,345), Vector3f(160,10,10)); //Sup
+    createWall(Vector3f(-262.5,0,210), Vector3f(160,10,10)); //Inf
+    createWall(Vector3f(-347.5,0,277.5), Vector3f(10,10,145)); //Izq
+    createWall(Vector3f(-265,0,277.5), Vector3f(60,20,55)); //Pilar
+    //------------------------------------  END MAPA  ---------------------------------------------------------------
 
-
-
-    //---------------------------------------------
-
-    createPlayer(10, Vector3f(0,0,0), Vector3f(7.f));
+    createPlayer(10, Vector3f(0,0,0), Vector3f(6.f));
 	createEnemy(Vector3f(40, 0, 40));
     createEnemy(Vector3f(80, 0, 80));
     createEnemy(Vector3f(-40, 0, 40));
     createEnemy(Vector3f(-80, 0, 80));
 
-    createDoor(2, Vector3f(-20,0,15));
-
-
-    createKey(1, Vector3f(20,0,0));
-	createKey(2, Vector3f(30,0,0));
 }
 
 void EntityManager::update(){
