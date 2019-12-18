@@ -21,7 +21,8 @@ struct EntityWall : Entity{
             Entity(DOOR_ID), transformable(pos), collider(dim), node(device, pos, dim) { node.setTexture(renderable.texture);  }
 
 
-    Renderable					renderable {"", "./img/textures/testing/testing_door.png"};
+
+    Renderable					renderable {"", "./img/textures/testing/testing_wall.jpg"};
     Transformable 				transformable;
     BoundingBox					collider;
 
