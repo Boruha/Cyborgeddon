@@ -38,47 +38,47 @@ void EntityManager::init()
 
         //Salas del pasillo
 
-        //Sala 1
-        createWall(Vector3f(75,0,-30), Vector3f(60,10,10));    //Abajo
-        createWall(Vector3f(75,0,30), Vector3f(60,10,10));    //Arriba
-        createWall(Vector3f(100,0,0), Vector3f(10,10,50));    //Cierre
-        createDoor(1, Vector3f(37,0,0), Vector3f(2,20,10));
-        createKey(2, Vector3f(70,0,0));
+            //Sala 1
+            createWall(Vector3f(75,0,-30), Vector3f(60,10,10));    //Abajo
+            createWall(Vector3f(75,0,30), Vector3f(60,10,10));    //Arriba
+            createWall(Vector3f(100,0,0), Vector3f(10,10,50));    //Cierre
+            createDoor(1, Vector3f(37,0,0), Vector3f(2,20,10));
+            createKey(2, Vector3f(70,0,0));
 
-        //Sala 2
-        createWall(Vector3f(-75,0,-30), Vector3f(60,10,10));    //Abajo
-        createWall(Vector3f(-75,0,30), Vector3f(60,10,10));    //Arriba
-        createWall(Vector3f(-100,0,0), Vector3f(10,10,50));    //Cierre
-        createDoor(2, Vector3f(-37,0,0), Vector3f(2,20,10));
-        createKey(3, Vector3f(-70,0,0));
+            //Sala 2
+            createWall(Vector3f(-75,0,-30), Vector3f(60,10,10));    //Abajo
+            createWall(Vector3f(-75,0,30), Vector3f(60,10,10));    //Arriba
+            createWall(Vector3f(-100,0,0), Vector3f(10,10,50));    //Cierre
+            createDoor(2, Vector3f(-37,0,0), Vector3f(2,20,10));
+            createKey(3, Vector3f(-70,0,0));
 
-        //Sala 3
-        createWall(Vector3f(75,0,60), Vector3f(60,10,10));    //Abajo
-        createWall(Vector3f(75,0,120), Vector3f(60,10,10));    //Arriba
-        createWall(Vector3f(100,0,90), Vector3f(10,10,50));    //Cierre
-        createDoor(5, Vector3f(37,0,90), Vector3f(2,20,10));
-        createKey(6, Vector3f(70,0,90));
+            //Sala 3
+            createWall(Vector3f(75,0,60), Vector3f(60,10,10));    //Abajo
+            createWall(Vector3f(75,0,120), Vector3f(60,10,10));    //Arriba
+            createWall(Vector3f(100,0,90), Vector3f(10,10,50));    //Cierre
+            createDoor(5, Vector3f(37,0,90), Vector3f(2,20,10));
+            createKey(6, Vector3f(70,0,90));
 
-        //Sala 4
-        createWall(Vector3f(-75,0,60), Vector3f(60,10,10));    //Abajo
-        createWall(Vector3f(-75,0,120), Vector3f(60,10,10));    //Arriba
-        createWall(Vector3f(-100,0,90), Vector3f(10,10,50));    //Cierre
-        createDoor(0, Vector3f(-37,0,90), Vector3f(2,20,10));
-        createKey(1, Vector3f(-70,0,90));
+            //Sala 4
+            createWall(Vector3f(-75,0,60), Vector3f(60,10,10));    //Abajo
+            createWall(Vector3f(-75,0,120), Vector3f(60,10,10));    //Arriba
+            createWall(Vector3f(-100,0,90), Vector3f(10,10,50));    //Cierre
+            createDoor(0, Vector3f(-37,0,90), Vector3f(2,20,10));
+            createKey(1, Vector3f(-70,0,90));
 
-        //Sala 5
-        createWall(Vector3f(-75,0,160), Vector3f(60,10,10));    //Abajo
-        createWall(Vector3f(-75,0,220), Vector3f(60,10,10));    //Arriba
-        createWall(Vector3f(-100,0,190), Vector3f(10,10,50));    //Cierre
-        createDoor(3, Vector3f(37,0,190), Vector3f(2,20,10));
-        createKey(4, Vector3f(70,0,190));
+            //Sala 5
+            createWall(Vector3f(-75,0,160), Vector3f(60,10,10));    //Abajo
+            createWall(Vector3f(-75,0,220), Vector3f(60,10,10));    //Arriba
+            createWall(Vector3f(-100,0,190), Vector3f(10,10,50));    //Cierre
+            createDoor(3, Vector3f(37,0,190), Vector3f(2,20,10));
+            createKey(4, Vector3f(70,0,190));
 
-        //Sala 6
-        createWall(Vector3f(75,0,160), Vector3f(60,10,10));    //Abajo
-        createWall(Vector3f(75,0,220), Vector3f(60,10,10));    //Arriba
-        createWall(Vector3f(100,0,190), Vector3f(10,10,50));    //Cierre
-        createDoor(4, Vector3f(-37,0,190), Vector3f(2,20,10));
-        createKey(5, Vector3f(-70,0,190));
+            //Sala 6
+            createWall(Vector3f(75,0,160), Vector3f(60,10,10));    //Abajo
+            createWall(Vector3f(75,0,220), Vector3f(60,10,10));    //Arriba
+            createWall(Vector3f(100,0,190), Vector3f(10,10,50));    //Cierre
+            createDoor(4, Vector3f(-37,0,190), Vector3f(2,20,10));
+            createKey(5, Vector3f(-70,0,190));
 
     //Pasillo Horizontal
     createWall(Vector3f(-115,0,245), Vector3f(140,10,10));    //Inferior izda
