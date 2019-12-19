@@ -34,7 +34,7 @@ CC          := g++
 C           := gcc
 
 # FLAGS
-CCFLAGS     := -Wall -pedantic -std=c++17
+CCFLAGS     := -pthread -Wall -pedantic -std=c++17
 CFLAGS      := $(CCFLAGS)
 RELEASEFLAG := -O3 -Os
 DEBUGFLAG   := -Og
@@ -72,7 +72,7 @@ ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
 INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I.
-LIBS 		:= -lIrrlicht
+LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL
 
 # CLEAN
 

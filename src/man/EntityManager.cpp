@@ -167,7 +167,7 @@ void EntityManager::killPlayer(){
 
 /*		CREATE ENTITIES		*/
 
-void EntityManager::createPlayer(int health, const Vector3f& pos, const Vector3f& dim, const float& speed) {
+void EntityManager::createPlayer(const int& health, const Vector3f& pos, const Vector3f& dim, const float& speed) {
 	entities.emplace_back(std::make_unique<EntityPlayer>(device,health,  pos + Vector3f(0, dim.y / 2, 0), dim, speed));
 }
 
@@ -191,10 +191,6 @@ void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector
     keys.emplace_back(std::make_unique<EntityKey>(device, type, pos + Vector3f(0, dim.y / 2, 0), dim));
 }
 
-// TODO: que la bala dependa de la orientacion del player y no de su direccion
-void EntityManager::createBullet(const Vector3f& pos, Vector3f dir, const bool& type, const Vector3f& dim) {
-	//if (dir == 0)
-		//dir.y = 1; // disparamos al aire por los loles (y para que la bala no se quede parada)
-
+void EntityManager::createBullet(const Vector3f& pos, const Vector3f& dir, const bool& type, const Vector3f& dim) {
     bullets.emplace_back(std::make_unique<EntityBullet>(device, pos, dim, dir, type));
 }

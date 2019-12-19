@@ -36,6 +36,6 @@ namespace Sun {
 		[[nodiscard]] irr::IrrlichtDevice* getInnerDevice() const { return device; }
 
 		private:
-			irr::IrrlichtDevice *device{nullptr};
+			irr::IrrlichtDevice* device { nullptr };
 	};
 }

@@ -87,9 +87,6 @@ namespace Sun {
             y += origin.y;
         }
 
-        // TODO: - get angle entre dos vectores
-        //  	 - rotate para IA (?)
-
 		T x{0}, y{0};
 	};
 

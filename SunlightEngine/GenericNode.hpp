@@ -17,7 +17,6 @@ namespace Sun {
 
         [[nodiscard]] Vector3f getRotation() const { return Vector3f(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
 		void setRotation(const Vector3f& rot) const { node->setRotation(irr::core::vector3df(rot.x, rot.y, rot.z)); }
-		// TODO: hacer metodo intersects entre nodes
 
         protected:
 			irr::scene::ISceneNode* node { nullptr };

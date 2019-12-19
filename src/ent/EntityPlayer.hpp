@@ -33,6 +33,6 @@ struct EntityPlayer : Entity
     std::vector<int>            owned_keys;
 	//NEXT CMP SHOOTING(?);
 	bool 	                    shooting { false };
-	bool 	                    mode { false };		//true = angel, false = demon;
+	bool 	                    mode { false };		// true(1) = angel, false(0) = demon;
 	int                         health { 0 };
 };
