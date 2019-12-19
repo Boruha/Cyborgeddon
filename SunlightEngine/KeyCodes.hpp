@@ -9,7 +9,7 @@ namespace Sun
 		KEY_SPACE 		= irr::KEY_SPACE,
 		KEY_A 			= irr::KEY_KEY_A,
 		KEY_D 			= irr::KEY_KEY_D,
-        KEY_F 			= irr::KEY_KEY_F,
+        KEY_LSHIFT 		= irr::KEY_SHIFT,
 		KEY_M			= irr::KEY_KEY_M,
 		KEY_S 			= irr::KEY_KEY_S,
 		KEY_W 			= irr::KEY_KEY_W,

@@ -5,7 +5,8 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<InputSystem>(InputSystem(render.device)));
 	systems.emplace_back(std::make_unique<AI_System>(AI_System()));
 	systems.emplace_back(std::make_unique<CollisionSystem>(CollisionSystem()));
-	systems.emplace_back(std::make_unique<MovementSystem>(MovementSystem()));
+    systems.emplace_back(std::make_unique<MovementSystem>(MovementSystem()));
+    systems.emplace_back(std::make_unique<CooldownSystem>(CooldownSystem()));
 
 	for(auto& sys : systems) {
 		sys->init();
