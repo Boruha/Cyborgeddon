@@ -13,12 +13,12 @@ void EntityManager::cleanVectors() {
 
 
 /*		Init - Update	*/
-void EntityManager::init()
-{
+void EntityManager::init(){
 	createCamera(Vector3f(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
-
+	createFloor("./img/textures/testing/testing_controls.jpg",Vector3f(0,0,5), Vector3f(60,0,35)); //Controls
+    createFloor("./img/textures/testing/testing_tips.jpg",Vector3f(-2,0,-27), Vector3f(45,0,15)); //Tips
 	//Pasillo inicial
 
 	    //Derecha
@@ -34,7 +34,7 @@ void EntityManager::init()
         createWall(Vector3f(-40,0,222.5), Vector3f(10,10,55));
 
         createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
-        createKey(0, Vector3f(0,0,-30));
+        createKey(0, Vector3f(0,0,60));
 
         //Salas del pasillo
 
@@ -191,6 +191,11 @@ void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector
     keys.emplace_back(std::make_unique<EntityKey>(device, type, pos + Vector3f(0, dim.y / 2, 0), dim));
 }
 
+void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vector3f& dim) {
+    floor.emplace_back(std::make_unique<EntityFloor>(device, tex, pos + Vector3f(0, dim.y / 2, 0), dim ));
+}
+
 void EntityManager::createBullet(const Vector3f& pos, const Vector3f& dir, const bool& type, const Vector3f& dim) {
+
     bullets.emplace_back(std::make_unique<EntityBullet>(device, pos, dim, dir, type));
 }
