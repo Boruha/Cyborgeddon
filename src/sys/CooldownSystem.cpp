@@ -2,13 +2,34 @@
 
 bool CooldownSystem::shootReady() {
 
-    //TODO:: NO TENER QUE ESPERAR 1S ENTRE INTENTOS DE DISPARAR JAJAJA
+    generalClock = clock();
 
-    std::cout << ((float)bulletClock/100000) << std::endl;
-    bulletClock = clock() - startTime;
-    startTime = clock();
-    if(bulletClock > 100000) {
+    // CADENCIA DE LA BALA (en microsegundos)
+    // 100000 = Enfriamiento de 1 segundo; 30000 ~= 3 balas/segundo
+    if(bulletClock - lastBullet > 30000) {
+        lastBullet = bulletClock;
+        bulletClock = 0;
         return true;
     }
-    return false;
+    else {
+        bulletClock = generalClock;
+        return false;
+    }
+}
+
+bool CooldownSystem::dashReady() {
+
+    generalClock = clock();
+
+    // ENFRIAMIENTO DEL DASH (en microsegundos)
+    // 100000 = Enfriamiento de 1 segundo; 1000000 = Dash cada 10 segundos
+    if(dashClock - lastDash > 1000000) {
+        lastDash = dashClock;
+        dashClock = 0;
+        return true;
+    }
+    else {
+        dashClock = generalClock;
+        return false;
+    }
 }

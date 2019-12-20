@@ -32,7 +32,7 @@ private:
 
     //Dash
     static void shift_pressed(std::unique_ptr<EntityPlayer> &player) {
-        if (player->velocity.speed <= 1)
+        if (player->velocity.speed <= 1 && CooldownSystem::dashReady())
             player->velocity.speed = 16;
     }
 
