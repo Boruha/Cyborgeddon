@@ -103,7 +103,7 @@ void CollisionSystem::update(std::unique_ptr<EntityPlayer>& player, const std::v
 void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> & enemies, const std::vector<std::unique_ptr<EntityBullet>> & bullets) const {
     for(auto & enemy : enemies) {
         for(auto & bullet : bullets) {
-        	if(bullet->dead)
+        	if(bullet->dead || enemy->ai_state < 0)
         		continue;
             if(enemy->node.intersects(bullet->node)) {
                 std::cout << "Enemigo alcanzado" << std::endl;
