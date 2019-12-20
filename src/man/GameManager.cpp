@@ -6,6 +6,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<AI_System>(AI_System()));
 	systems.emplace_back(std::make_unique<CollisionSystem>(CollisionSystem()));
 	systems.emplace_back(std::make_unique<MovementSystem>(MovementSystem()));
+    systems.emplace_back(std::make_unique<CooldownSystem>(CooldownSystem()));
 	systems.emplace_back(std::make_unique<SoundSystem>(SoundSystem()));
 
 	for(auto& sys : systems) {

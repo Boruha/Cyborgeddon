@@ -9,6 +9,8 @@
 
 #include <src/man/EntityManager.hpp>
 
+#include <sys/CooldownSystem.hpp>
+
 struct InputSystem : System
 {
 	explicit InputSystem(const Device& device) : device(device) {  }
@@ -25,9 +27,9 @@ struct InputSystem : System
 		static void 		s_pressed(std::unique_ptr<EntityPlayer>& player) 	 { --player->velocity.direction.z; }
 		static void 		d_pressed(std::unique_ptr<EntityPlayer>& player) 	 { ++player->velocity.direction.x; }
 		//Dash
-        static void 	    shift_pressed(std::unique_ptr<EntityPlayer>& player) 	 { if(player->velocity.speed <= 1) player->velocity.speed = 16; }
+        static void 	    shift_pressed(std::unique_ptr<EntityPlayer>& player) { if(player->velocity.speed <= 1 && CooldownSystem::dashReady()) player->velocity.speed = 16; }
 		//Shoot
-		static void 		space_pressed(std::unique_ptr<EntityPlayer>& player) { player->shooting = true; }
+		static void 		space_pressed(std::unique_ptr<EntityPlayer>& player) { if(CooldownSystem::shootReady()) player->shooting = true; }
 		//Aim
 		static void 		up_pressed(std::unique_ptr<EntityPlayer>& player) 	 { ++player->transformable.rotation.z; }
 		static void 		down_pressed(std::unique_ptr<EntityPlayer>& player)  { --player->transformable.rotation.z; }
@@ -47,7 +49,7 @@ struct InputSystem : System
 		{Sun::KEY_A,                 			a_pressed },
 		{Sun::KEY_S,                 			s_pressed },
 		{Sun::KEY_D,                 			d_pressed },
-        {Sun::KEY_SHIFT,                 	shift_pressed },
+        {Sun::KEY_LSHIFT,                 	shift_pressed },
 		{Sun::KEY_SPACE,                 	space_pressed },
 		{Sun::KEY_UP,                 		   up_pressed },
 		{Sun::KEY_DOWN,                 	 down_pressed },
