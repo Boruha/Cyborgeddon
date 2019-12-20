@@ -14,6 +14,7 @@ struct SoundSystem : public System {
 	void update(const std::unique_ptr<GameContext>& context) const override;
 
 private:
+    FMOD::System* core { nullptr };
 	FMOD::Studio::System* system { nullptr };
 	FMOD::Studio::Bank* master { nullptr };
 	FMOD::Studio::Bank* strings { nullptr };
