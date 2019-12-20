@@ -17,11 +17,9 @@ using Sun::Device;
 
 struct EntityFloor : Entity{
 
-    explicit EntityFloor(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5)) :
-            Entity(DOOR_ID), transformable(pos), node(device, pos, dim) { node.setTexture(renderable.texture);  }
+    explicit EntityFloor(const Device& device, const char* tex, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5)) :
+            Entity(DOOR_ID), transformable(pos), node(device, pos, dim) { node.setTexture(tex);  }
 
-
-    Renderable					renderable {"", "./img/textures/testing/testing_controls.jpg"};
     Transformable 				transformable;
 
     SceneNode 					node;
