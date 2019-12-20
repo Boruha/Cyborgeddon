@@ -6,7 +6,7 @@ bool CooldownSystem::shootReady() {
 
     // CADENCIA DE LA BALA (en microsegundos)
     // 100000 = Enfriamiento de 1 segundo; 30000 ~= 3 balas/segundo
-    if(bulletClock - lastBullet > 30000) {
+    if(bulletClock - lastBullet > 100000) {
         lastBullet = bulletClock;
         bulletClock = 0;
         return true;
