@@ -18,7 +18,7 @@ void EntityManager::init()
 	createCamera(Vector3f(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
-
+	createFloor(Vector3f(0,0,-0), Vector3f(60,0,35));
 	//Pasillo inicial
 
 	    //Derecha
@@ -188,6 +188,10 @@ void EntityManager::createDoor(const int& type, const Vector3f& pos, const Vecto
 }
 void EntityManager::createKey(const int& type, const Vector3f& pos, const Vector3f& dim) {
     keys.emplace_back(std::make_unique<EntityKey>(device, type, pos + Vector3f(0, dim.y / 2, 0), dim));
+}
+
+void EntityManager::createFloor(const Vector3f& pos, const Vector3f& dim) {
+    floor.emplace_back(std::make_unique<EntityFloor>(device, pos + Vector3f(0, dim.y / 2, 0), dim ));
 }
 
 // TODO: que la bala dependa de la orientacion del player y no de su direccion

@@ -20,6 +20,7 @@ struct EntityManager : GameContext {
 	void createCamera (const Vector3f& pos = Vector3f(), const Vector3f& target = Vector3f(0,0,10));
     void createDoor(const int& type, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createWall(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
+    void createFloor(const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createKey(const int& type, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(3));
 	void createBullet (const Vector3f& pos = Vector3f(), Vector3f dir = Vector3f(), const bool& type = false, const Vector3f& dim = Vector3f(3));
 
@@ -45,7 +46,7 @@ struct EntityManager : GameContext {
 	    const Sun::Device& device;
 
 		std::vector<std::unique_ptr<EntityPlayer>> entities; // SOLO CONTIENE EL PLAYER POR AHORA
-
+        std::vector<std::unique_ptr<EntityFloor>> floor;
 		EntityCamera camera { device };
 
 		std::vector<std::unique_ptr<EntityEnemy>> enemies;

@@ -7,3 +7,4 @@
 #include <ent/EntityKey.hpp>
 #include <ent/EntityPlayer.hpp>
 #include <ent/EntityWall.hpp>
+#include <ent/EntityFloor.hpp>
