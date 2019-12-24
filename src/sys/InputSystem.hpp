@@ -31,10 +31,14 @@ struct InputSystem : System
 		//Shoot
 		static void 		space_pressed(std::unique_ptr<EntityPlayer>& player) { if(CooldownSystem::shootReady()) player->shooting = true; }
 		//Aim
-		static void 		up_pressed(std::unique_ptr<EntityPlayer>& player) 	 { ++player->transformable.rotation.z; }
-		static void 		down_pressed(std::unique_ptr<EntityPlayer>& player)  { --player->transformable.rotation.z; }
-		static void 		left_pressed(std::unique_ptr<EntityPlayer>& player)  { --player->transformable.rotation.x; }
-		static void 		right_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->transformable.rotation.x; }
+		/*
+			static void 		up_pressed(std::unique_ptr<EntityPlayer>& player) 	 { ++player->transformable.rotation.z; }
+			static void 		down_pressed(std::unique_ptr<EntityPlayer>& player)  { --player->transformable.rotation.z; }
+			static void 		left_pressed(std::unique_ptr<EntityPlayer>& player)  { --player->transformable.rotation.x; }
+			static void 		right_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->transformable.rotation.x; }
+		*/
+		static void 		left_pressed  (std::unique_ptr<EntityPlayer>& player) { --player->transformable.rotation.y; }
+		static void 		right_pressed (std::unique_ptr<EntityPlayer>& player) { ++player->transformable.rotation.y; }
 		//Switch Mode
 		static void 		m_pressed(std::unique_ptr<EntityPlayer>& player) 	 { player->mode = !player->mode; player->mode ? player->renderable.texture = "./img/textures/testing/testing_angel.jpg" : player->renderable.texture = "./img/textures/testing/testing_demon.jpg"; player->node.setTexture(player->renderable.texture); }
 
@@ -50,9 +54,9 @@ struct InputSystem : System
 		{Sun::KEY_S,                 			s_pressed },
 		{Sun::KEY_D,                 			d_pressed },
         {Sun::KEY_LSHIFT,                 	shift_pressed },
-		{Sun::KEY_SPACE,                 	space_pressed },
+		{Sun::KEY_SPACE,                 	space_pressed },/*
 		{Sun::KEY_UP,                 		   up_pressed },
-		{Sun::KEY_DOWN,                 	 down_pressed },
+		{Sun::KEY_DOWN,                 	 down_pressed },*/
 		{Sun::KEY_LEFT,                 	 left_pressed },
 		{Sun::KEY_RIGHT,                 	right_pressed },
 		{Sun::KEY_M,                 			m_pressed },

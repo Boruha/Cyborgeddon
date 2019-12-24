@@ -19,12 +19,14 @@ struct EntityBullet : Entity
 {
 	explicit EntityBullet(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(3),
 			const Vector3f& dir = Vector3f(0,0,1), const bool type = false, const float& speed = 5) :
-		Entity(BULLET_ID), transformable(pos), collider(dim), velocity(dir, speed), node(device, pos, dim), start_pos(pos), dmgType(type)
+		Entity(BULLET_ID), transformable(pos), collider(dim, pos), velocity(dir, speed), node(device, pos, dim), start_pos(pos), dmgType(type)
 		{ 
 			if(dmgType)
         		node.setTexture("./img/textures/testing/testing_angel.jpg");
    			else
-       			node.setTexture("./img/textures/testing/testing_demon.jpg"); 
+       			node.setTexture("./img/textures/testing/testing_demon.jpg");
+
+   			velocity.velocity = velocity.direction.normalize() * velocity.speed;
 		}
 
 	Renderable					renderable {"", ""};

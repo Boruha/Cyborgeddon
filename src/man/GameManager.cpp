@@ -20,11 +20,11 @@ void GameManager::init()
 
 void GameManager::update()
 {
-	entityManager->update();
-
 	for(auto& sys : systems) {
 		sys->update(entityManager);
 	}
+
+	entityManager->update();
 }
 
 // TODO: bucle del juego

@@ -14,12 +14,12 @@ struct CollisionSystem : System
     void update(const std::unique_ptr<GameContext>& context) const override;
 
 private:
-    void update(std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityDoor>>&) const;
-    void update(std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityWall>>&) const;
-    void update(std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityKey>>&)  const;
+    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityDoor>>&) const;
+    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityWall>>&) const;
+    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityKey>>&)  const;
     void update(const std::vector<std::unique_ptr<EntityEnemy>>&, const std::vector<std::unique_ptr<EntityBullet>>&)  const;
     void update(const std::vector<std::unique_ptr<EntityDoor>>&, const std::vector<std::unique_ptr<EntityBullet>>&)  const;
     void update(const std::vector<std::unique_ptr<EntityWall>>&, const std::vector<std::unique_ptr<EntityBullet>>&)  const;
-    void update(std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityEnemy>>&)  const;
+    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<std::unique_ptr<EntityEnemy>>&)  const;
 
 };

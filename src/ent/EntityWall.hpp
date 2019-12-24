@@ -15,17 +15,14 @@ using Sun::Vector3f;
 using Sun::SceneNode;
 using Sun::Device;
 
-struct EntityWall : Entity{
-
+struct EntityWall : Entity
+{
     explicit EntityWall(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5)) :
-            Entity(DOOR_ID), transformable(pos), collider(dim), node(device, pos, dim) { node.setTexture(renderable.texture);  }
-
-
+            Entity(DOOR_ID), transformable(pos), collider(dim, pos), node(device, pos, dim) { node.setTexture(renderable.texture);  }
 
     Renderable					renderable {"", "./img/textures/testing/testing_wall.jpg"};
     Transformable 				transformable;
     BoundingBox					collider;
 
     SceneNode 					node;
-
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SunlightEngine/Math.hpp>
+#include <iostream>
 
 namespace Sun {
 
@@ -65,6 +66,21 @@ namespace Sun {
 		[[nodiscard]] bool operator!=(const Vector3<T> &vec) const { return x != vec.x || y != vec.y || z != vec.z; }
 		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n || z != n; }
 
+		[[nodiscard]] T& operator[](const int& index)
+		{
+			switch(index) {
+				case 0  : return x;
+				case 1  : return y;
+				case 2  : return z;
+				default : std::cerr << "Out of bound Vector3<T>\n"; exit(-1);
+			}
+		}
+
+		friend std::ostream& operator<<(std::ostream& os, const Vector3& v)
+		{
+			return os << "(\t" << v.x << "\t,\t" << v.y << "\t,\t" << v.z << "\t)";
+		}
+
 		[[nodiscard]] T length() const {
 			return static_cast<T>(sqrt(x*x + y*y + z*z));
 		}
@@ -78,14 +94,23 @@ namespace Sun {
 			return (*this) /= length;
 		}
 
-		[[nodiscard]] T getRotationY() const {
-			T cos = z / this->length();
-			double angle = std::acos(cos) * RAD2DEG;
+		[[nodiscard]] T getRotationYfromXZ() const {
+			return static_cast<T>(std::atan2(x, z) * RAD2DEG);
+		}
 
-			if(x < 0)
-				angle = cos >= 0 ? -angle : 360 - angle;
+		[[nodiscard]] Vector3<T>& getXZfromRotationY(double deg) {
+			deg *= DEG2RAD;
 
-			return static_cast<T>(angle);
+			x = sin(deg);
+			z = cos(deg);
+
+			return *this;
+		}
+
+		void abs() {
+			x = std::abs(x);
+			y = std::abs(y);
+			z = std::abs(z);
 		}
 
 		void rotateXZ(double deg, const Vector3<T>& origin = Vector3<T>())

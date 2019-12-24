@@ -127,7 +127,8 @@ void EntityManager::update(){
 // 		 si se consigue, la var. 'Shooting' se podrá elilminar.
 void EntityManager::checkShooting(){
 	if(entities[0]->shooting){
-		createBullet(entities[0]->node.getPosition(), entities[0]->transformable.rotation, entities[0]->mode);
+		createBullet(entities[0]->node.getPosition(),
+					 Vector3f().getXZfromRotationY(entities[0]->transformable.rotation.y), entities[0]->mode);
 		entities[0]->shooting = false;
 	}
 }
@@ -196,6 +197,5 @@ void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vect
 }
 
 void EntityManager::createBullet(const Vector3f& pos, const Vector3f& dir, const bool& type, const Vector3f& dim) {
-
     bullets.emplace_back(std::make_unique<EntityBullet>(device, pos, dim, dir, type));
 }

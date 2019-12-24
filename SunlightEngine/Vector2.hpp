@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SunlightEngine/Math.hpp>
+#include <iostream>
 
 namespace Sun {
 
@@ -60,6 +61,15 @@ namespace Sun {
 
 		[[nodiscard]] bool operator!=(const Vector2<T> &vec) const { return x != vec.x || y != vec.y; }
 		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n; }
+
+		[[nodiscard]] T& operator[](const int& index)
+		{
+			switch(index) {
+				case 0  : return x;
+				case 1  : return y;
+				default : std::cerr << "Out of bound Vector2<T>\n"; exit(-1);
+			}
+		}
 
 		Vector2<T>& normalize() {
 			T length = this->length();

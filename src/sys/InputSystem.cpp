@@ -14,4 +14,5 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context) const {
 			next->p_func(context->getPlayer());
 		++next;
 	}
+	context->getPlayer()->velocity.velocity = context->getPlayer()->velocity.direction * context->getPlayer()->velocity.speed;
 }

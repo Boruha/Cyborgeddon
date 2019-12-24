@@ -21,11 +21,11 @@ void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player
 	player->transformable.position = player->node.getPosition();
     camera.transformable.position = camera.cameraNode.getPosition();
 
-	player->velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
-    player->transformable.position += player->velocity.velocity;
 
-    camera.velocity.velocity = player->velocity.direction.normalize() * player->velocity.speed;
-    camera.transformable.position += camera.velocity.velocity;
+    player->transformable.position += player->velocity.velocity;
+    player->collider.setPosition(player->transformable.position);
+
+    camera.transformable.position += player->velocity.velocity;
 
     camera.camera.target = player->transformable.position;
     camera.cameraNode.setTarget(camera.camera.target);
@@ -33,13 +33,18 @@ void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player
 	player->node.setPosition(player->transformable.position);
     camera.cameraNode.setPosition(camera.transformable.position);
 
-	// Rotacion
-	Vector3f vec_rot = player->transformable.rotation.normalize();
-	if(vec_rot != 0){
-		auto angular_rot = Vector3f(0.f);
-		angular_rot.y = vec_rot.getRotationY();
-		player->node.setRotation(angular_rot);
-	}
+	/*
+	 * Para evitar que se gire eternamente sobrepasando el limite representable (cosa improbable pero posible),
+	 * siempre oscilamos entre (-360, 360] haciendo 1 comprobacion y 1 operacion.
+	 * Otra opcion es corregir el valor si nos pasamos de 360 o si nos quedamos por debajo de 0,
+	 * pero esto ejecuta siempre 2 comprobaciones y si es necesario, 1 operacion.
+	*/
+	if (player->transformable.rotation.y > 0)
+		player->transformable.rotation.y -= 360;
+	else
+		player->transformable.rotation.y += 360;
+
+	player->node.setRotation(player->transformable.rotation);
 
 	// TODO: esto es una basura asi como esta hecho, arreglar en el futuro
 	// DASH
@@ -55,8 +60,8 @@ void MovementSystem::updateEnemies(const std::vector<std::unique_ptr<EntityEnemy
 	for (auto & enemy : enemies) {
 		enemy->transformable.position = enemy->node.getPosition();
 
-		enemy->velocity.velocity = enemy->velocity.direction.normalize() * enemy->velocity.speed;
 		enemy->transformable.position += enemy->velocity.velocity;
+		enemy->collider.setPosition(enemy->transformable.position);
 
 		enemy->node.setPosition(enemy->transformable.position);
 	}
@@ -67,8 +72,8 @@ void MovementSystem::updateBullets(const std::vector<std::unique_ptr<EntityBulle
 	for (auto & bullet : bullets) {
 		bullet->transformable.position = bullet->node.getPosition();
 
-		bullet->velocity.velocity = bullet->velocity.direction.normalize() * bullet->velocity.speed;
 		bullet->transformable.position += bullet->velocity.velocity;
+		bullet->collider.setPosition(bullet->transformable.position);
 
 		bullet->node.setPosition(bullet->transformable.position);
 	}
