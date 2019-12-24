@@ -40,52 +40,62 @@ void MovementSystem::move(const std::vector<std::unique_ptr<EntityPlayer>>& play
 */
 
 void CollisionSystem::update(const std::unique_ptr<GameContext> &context) const {
-
-	// La posicion del nodo es la que uso para saber si chocare eventualmente. La posicion que NO debo tocar aqui JAMAS
-	// es transformable.position. UNICAMENTE modificar velocity.direction o velocity.speed temporalmente si es necesario
-	const auto player = context->getPlayer().get();
-	player->node.setPosition(player->transformable.position + player->velocity.velocity);
-
 	// IMPORTANTE:  si puedo tocar dos llaves (o dos puertas) a la vez en una misma iteracion del bucle del juego,
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle
 
     update(context->getPlayer(),  context->getKeys());   // Comprueba si el player choca con una llave
-    update(context->getPlayer(),  context->getDoors());  // Comprueba si el player choca con una puerta
-	update(context->getPlayer(),  context->getWalls());
+    update(context->getPlayer(),  context->getDoors());  // Comprueba si el player choca con una puerta (colision estatica)
+	update(context->getPlayer(),  context->getWalls());  // Comprueba si el player choca con una pared (colision estatica)
 	update(context->getEnemies(), context->getBullets());  // Comprueba si le damos al enemy con la bala
 	update(context->getDoors(), context->getBullets());  // Comprueba si le damos al enemy con la bala
 	update(context->getWalls(), context->getBullets());  // Comprueba si le damos al enemy con la bala
     update(context->getPlayer(), context->getEnemies()); //Comprueba si el player choca con enemy y pierde vida
-
-	// Tras comprobar la colision devolvemos el nodo a su sitio. Ya se encargara el sistema de movimiento de modificar
-	// las posiciones tanto de la componente transformable como del nodo
-	player->collider.setPosition(player->transformable.position);
-	player->node.setPosition(player->transformable.position);
 }
 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityDoor>> &doors) const {
-	bool colision = true;
-	for (const auto& door : doors) {
-		if (player->node.intersects(door->node)) {
-			if (!player->owned_keys.empty()) {         //TENGO LLAVES
-				//Compruebo si el player tiene en su array de llaves el tipo de llave que abre la puerta
-				for (int i = 0; i < (int) player->owned_keys.size(); i++) {
-					if (door->type == player->owned_keys.at(i)) {
-						player->owned_keys.erase(player->owned_keys.begin() + i); // player ha usado la llave que tenia
-						door->type = -1;        //TODO: Variable de muerte
-						colision = false;
-						break;
+	for (int i = 0; i < 3; ++i) {
+		if (player->velocity.velocity[i] != 0) {
+			player->collider.pos[i] += player->velocity.velocity[i];
+			player->collider.box.min[i] += player->velocity.velocity[i];
+			player->collider.box.max[i] += player->velocity.velocity[i];
+
+			float offset {0};
+
+			for (const auto& door : doors) {
+				if (player->collider.intersects(door->collider)) {
+					bool colision = true;
+					if (!player->owned_keys.empty()) {         //TENGO LLAVES
+						//Compruebo si el player tiene en su array de llaves el tipo de llave que abre la puerta
+						for (int j = 0; j < (int) player->owned_keys.size(); ++j) {
+							if (door->type == player->owned_keys.at(j)) {
+								player->owned_keys.erase(player->owned_keys.begin() + j); // player ha usado la llave que tenia
+								door->type = -1;        //TODO: Variable de muerte
+								colision = false;
+								break;
+							}
+						}
+						if (colision) {
+							if (player->velocity.velocity[i] > 0)
+								offset = door->collider.box.min[i] - player->collider.box.max[i];
+							else
+								offset = door->collider.box.max[i] - player->collider.box.min[i];
+						}
+					} else {
+						if (player->velocity.velocity[i] > 0)
+							offset = door->collider.box.min[i] - player->collider.box.max[i];
+						else
+							offset = door->collider.box.max[i] - player->collider.box.min[i];
 					}
+					player->velocity.velocity[i] += offset;
+					player->collider.pos[i] += offset;
+					player->collider.box.min[i] += offset;
+					player->collider.box.max[i] += offset;
 				}
-				if (colision) {
-					player->velocity.velocity = 0;
-				}
-			} else {
-				player->velocity.velocity = 0;
 			}
 		}
 	}
+	player->collider.setPosition(player->transformable.position);
 }
 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityKey>> &keys) const {
@@ -143,6 +153,7 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 			}
 		}
 	}
+	player->collider.setPosition(player->transformable.position);
 }
 
 
