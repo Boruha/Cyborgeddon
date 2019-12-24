@@ -39,18 +39,20 @@ void MovementSystem::move(const std::vector<std::unique_ptr<EntityPlayer>>& play
 }
 */
 
+// TODO: separar colisiones estaticas (donde se corrige posicion) de las simples (solo comprobamos si colisiona)
+
 void CollisionSystem::update(const std::unique_ptr<GameContext> &context) const {
 	// IMPORTANTE:  si puedo tocar dos llaves (o dos puertas) a la vez en una misma iteracion del bucle del juego,
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle
 
-    update(context->getPlayer(),  context->getKeys());   // Comprueba si el player choca con una llave
-    update(context->getPlayer(),  context->getDoors());  // Comprueba si el player choca con una puerta (colision estatica)
-	update(context->getPlayer(),  context->getWalls());  // Comprueba si el player choca con una pared (colision estatica)
-	update(context->getEnemies(), context->getBullets());  // Comprueba si le damos al enemy con la bala
-	update(context->getDoors(), context->getBullets());  // Comprueba si le damos al enemy con la bala
-	update(context->getWalls(), context->getBullets());  // Comprueba si le damos al enemy con la bala
-    update(context->getPlayer(), context->getEnemies()); //Comprueba si el player choca con enemy y pierde vida
+    update(context->getPlayer(),  context->getKeys());   	// Comprueba si el player choca con una llave
+    update(context->getPlayer(),  context->getDoors());  	// Comprueba si el player choca con una puerta (colision estatica)
+	update(context->getPlayer(),  context->getWalls());  	// Comprueba si el player choca con una pared (colision estatica)
+	update(context->getEnemies(), context->getBullets());  	// Comprueba si le damos al enemy con la bala
+	update(context->getDoors(),   context->getBullets());  	// Comprueba si le damos a una puerta con la bala
+	update(context->getWalls(),   context->getBullets());  	// Comprueba si le damos a una pared con la bala
+    update(context->getPlayer(),  context->getEnemies()); 	// Comprueba si el player choca con enemy y pierde vida
 }
 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityDoor>> &doors) const {
