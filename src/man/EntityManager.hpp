@@ -16,7 +16,7 @@ struct EntityManager : GameContext {
 
 
 	void createPlayer (const int& health, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15) , const float& speed = 1.f);
-	void createEnemy  (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(8) , const float& speed = 0.1f);
+	void createEnemy  (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(8), const float& speed = 0.1f, const std::vector<Vector3f>& patrol = std::vector<Vector3f>());
 	void createCamera (const Vector3f& pos = Vector3f());
     void createDoor   (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));
     void createWall   (const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(5));

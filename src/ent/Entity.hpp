@@ -1,8 +1,8 @@
 #pragma once
 
-#include <cstdint>
+#include <cstdlib>
 
-enum EntityID : uint8_t { NULL_ID, PLAYER_ID, CAMERA_ID, ENEMY_ID, KEY_ID, DOOR_ID, BULLET_ID, FLOOR_ID, WALL_ID };
+enum EntityID : std::size_t { NULL_ID, PLAYER_ID, CAMERA_ID, ENEMY_ID, KEY_ID, DOOR_ID, BULLET_ID, FLOOR_ID, WALL_ID };
 
 struct Entity
 {

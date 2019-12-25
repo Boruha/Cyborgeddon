@@ -3,12 +3,12 @@
 
 /*		Destructor		*/
 void EntityManager::cleanVectors() {
-	floor.erase(floor.begin(), floor.end());
-	bullets.erase(bullets.begin(), bullets.end());
-	keys.erase(keys.begin(), keys.end());
-	doors.erase(doors.begin(), doors.end());
-	enemies.erase(enemies.begin(), enemies.end());
-    walls.erase(walls.begin(), walls.end());
+	floor.clear();
+	bullets.clear();
+	keys.clear();
+	doors.clear();
+	enemies.clear();
+	walls.clear();
 }
 
 /*		Init - Update	*/
@@ -116,11 +116,12 @@ void EntityManager::init(){
     //------------------------------------  END MAPA  ---------------------------------------------------------------
 
 
-	createEnemy(Vector3f(40, 0, 40));
-    createEnemy(Vector3f(80, 0, 80));
-    createEnemy(Vector3f(-40, 0, 40));
-    createEnemy(Vector3f(-80, 0, 80));
+    std::vector<Vector3f> patrol = { Vector3f(0), Vector3f(-50,0,100), Vector3f(0,0,200), Vector3f(50, 0, 100) };
 
+	createEnemy(Vector3f(40,0,40), Vector3f(8), 0.6f, patrol);
+	createEnemy(Vector3f(80,0,80), Vector3f(8), 0.5f, patrol);
+	createEnemy(Vector3f(-40,0,40), Vector3f(8), 0.4f, patrol);
+	createEnemy(Vector3f(-80,0,80), Vector3f(8), 0.3f, patrol);
 }
 
 void EntityManager::update(){
@@ -183,8 +184,8 @@ void EntityManager::createCamera(const Vector3f& pos) {
     camera = std::make_unique<EntityCamera>(device, pos, player->transformable.position);
 }
 
-void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed) {
-	enemies.emplace_back(std::make_unique<EntityEnemy>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed));
+void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) {
+	enemies.emplace_back(std::make_unique<EntityEnemy>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed, patrol));
 }
 
 void EntityManager::createDoor(const Vector3f& pos, const Vector3f& dim) {

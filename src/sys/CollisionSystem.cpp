@@ -58,9 +58,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context) const 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityDoor>> &doors) const {
 	for (int i = 0; i < 3; ++i) {
 		if (player->velocity.velocity[i] != 0) {
-			player->collider.pos[i] += player->velocity.velocity[i];
-			player->collider.box.min[i] += player->velocity.velocity[i];
-			player->collider.box.max[i] += player->velocity.velocity[i];
+			player->collider.moveCoord(player->velocity.velocity[i], i);
 
 			float offset {0};
 
@@ -77,9 +75,7 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 							offset = door->collider.box.max[i] - player->collider.box.min[i];
 
 						player->velocity.velocity[i] += offset;
-						player->collider.pos[i] += offset;
-						player->collider.box.min[i] += offset;
-						player->collider.box.max[i] += offset;
+						player->collider.moveCoord(offset, i);
 					}
 				}
 			}
@@ -122,9 +118,7 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityWall>> &walls) const {
 	for (int i = 0; i < 3; ++i) {
 		if (player->velocity.velocity[i] != 0) {
-			player->collider.pos[i] += player->velocity.velocity[i];
-			player->collider.box.min[i] += player->velocity.velocity[i];
-			player->collider.box.max[i] += player->velocity.velocity[i];
+			player->collider.moveCoord(player->velocity.velocity[i], i);
 
 			float offset {0};
 
@@ -136,9 +130,7 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 						offset = wall->collider.box.max[i] - player->collider.box.min[i];
 
 					player->velocity.velocity[i] += offset;
-					player->collider.pos[i] += offset;
-					player->collider.box.min[i] += offset;
-					player->collider.box.max[i] += offset;
+					player->collider.moveCoord(offset, i);
 				}
 			}
 		}

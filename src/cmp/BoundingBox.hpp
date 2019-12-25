@@ -22,7 +22,7 @@ struct BoundingBox
 
 	void setPosition(const Vector3f& position);
 
-	void move(const Vector3f& mov);
+	void moveCoord(const float& mov, const int& coord);
 
 	[[nodiscard]] bool intersects(const BoundingBox& other) const;
 

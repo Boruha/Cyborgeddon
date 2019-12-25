@@ -42,9 +42,10 @@ void BoundingBox::setPosition(const Vector3f& position) {
 	box.setBox(dim, pos);
 }
 
-void BoundingBox::move(const Vector3f& mov) {
-	pos += mov;
-	box.move(mov);
+void BoundingBox::moveCoord(const float& mov, const int& coord) {
+	pos[coord] += mov;
+	box.min[coord] += mov;
+	box.max[coord] += mov;
 }
 
 bool BoundingBox::intersects(const BoundingBox& other) const {
