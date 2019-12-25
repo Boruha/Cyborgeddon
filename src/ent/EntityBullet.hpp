@@ -17,17 +17,20 @@ using Sun::Device;
 
 struct EntityBullet : Entity
 {
-	explicit EntityBullet(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(3),
-			const Vector3f& dir = Vector3f(0,0,1), const bool type = false, const float& speed = 5) :
-		Entity(BULLET_ID), transformable(pos), collider(dim, pos), velocity(dir, speed), node(device, pos, dim), start_pos(pos), dmgType(type)
-		{ 
-			if(dmgType)
-        		node.setTexture("./img/textures/testing/testing_angel.jpg");
-   			else
-       			node.setTexture("./img/textures/testing/testing_demon.jpg");
+	explicit EntityBullet(const Device& device, const Vector3f& pos, const Vector3f& dim, const Vector3f& dir,
+			const bool type, const float& speed = 5) :
+			Entity(BULLET_ID), transformable(pos), collider(dim, pos), velocity(dir, speed), node(device, pos, dim),
+			start_pos(pos), dmgType(type)
+	{
+		if(dmgType)
+			renderable.texture = "./img/textures/testing/testing_angel.jpg";
+		else
+			renderable.texture = "./img/textures/testing/testing_demon.jpg";
 
-   			velocity.velocity = velocity.direction.normalize() * velocity.speed;
-		}
+		node.setTexture(renderable.texture);
+
+		velocity.velocity = velocity.direction.normalize() * velocity.speed;
+	}
 
 	Renderable					renderable {"", ""};
 	Transformable 				transformable;
@@ -37,8 +40,8 @@ struct EntityBullet : Entity
 	SceneNode 					node;
 
     //TODO: CREAR CMP DEAD OR SMTH.
-	bool dead { false };
-    const Vector3f start_pos { Vector3f() };
+	bool alive { true };
+    const Vector3f start_pos;
     const float dead_dist { 150 };
 	const bool dmgType;
 };

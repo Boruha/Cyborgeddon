@@ -19,8 +19,12 @@ using Sun::Device;
 
 struct EntityPlayer : Entity
 {
-	explicit EntityPlayer(const Device& device,const int hp, const Vector3f& pos = Vector3f(), const Vector3f& dim = Vector3f(15), const float speed = 1.f) :
-		Entity(PLAYER_ID), transformable(pos), collider(dim, pos), velocity(speed), node(device, pos, dim), health(hp) { node.setTexture(renderable.texture); }
+	explicit EntityPlayer(const Device& device, const int hp, const Vector3f& pos, const Vector3f& dim,
+			const float speed = 1.f) : Entity(PLAYER_ID), transformable(pos), collider(dim, pos), velocity(speed),
+			node(device, pos, dim), health(hp)
+	{
+		node.setTexture(renderable.texture);
+	}
 
 	Renderable					renderable {"", "./img/textures/testing/testing_demon.jpg"};
 	Transformable 				transformable;
@@ -29,7 +33,7 @@ struct EntityPlayer : Entity
 
 	SceneNode 					node;
 
-    std::vector<int>            owned_keys;
+    std::vector<bool>           my_keys;
 	//NEXT CMP SHOOTING(?);
 	bool 	                    shooting { false };
 	bool 	                    mode { false };		// true(1) = angel, false(0) = demon;

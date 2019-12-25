@@ -13,7 +13,7 @@ struct MovementSystem : System
 
 private:
 	//updating position
-	void updatePlayerAndCamera(std::unique_ptr<EntityPlayer>&, EntityCamera&) const;
+	void updatePlayerAndCamera(std::unique_ptr<EntityPlayer>&, std::unique_ptr<EntityCamera>&) const;
 	void updateEnemies(const std::vector<std::unique_ptr<EntityEnemy>>&) const;
 	void updateBullets(const std::vector<std::unique_ptr<EntityBullet>>&) const;
 	

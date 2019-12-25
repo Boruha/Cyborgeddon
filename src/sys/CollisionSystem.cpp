@@ -66,33 +66,21 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 
 			for (const auto& door : doors) {
 				if (player->collider.intersects(door->collider)) {
-					bool colision = true;
-					if (!player->owned_keys.empty()) {         //TENGO LLAVES
-						//Compruebo si el player tiene en su array de llaves el tipo de llave que abre la puerta
-						for (int j = 0; j < (int) player->owned_keys.size(); ++j) {
-							if (door->type == player->owned_keys.at(j)) {
-								player->owned_keys.erase(player->owned_keys.begin() + j); // player ha usado la llave que tenia
-								door->type = -1;        //TODO: Variable de muerte
-								colision = false;
-								break;
-							}
-						}
-						if (colision) {
-							if (player->velocity.velocity[i] > 0)
-								offset = door->collider.box.min[i] - player->collider.box.max[i];
-							else
-								offset = door->collider.box.max[i] - player->collider.box.min[i];
-						}
+					if (player->my_keys.at(door->lock.ID)) {
+						player->my_keys.at(door->lock.ID) = false;
+						door->alive = false;
+						break;					// no necesitamos seguir comprobando puertas
 					} else {
 						if (player->velocity.velocity[i] > 0)
 							offset = door->collider.box.min[i] - player->collider.box.max[i];
 						else
 							offset = door->collider.box.max[i] - player->collider.box.min[i];
+
+						player->velocity.velocity[i] += offset;
+						player->collider.pos[i] += offset;
+						player->collider.box.min[i] += offset;
+						player->collider.box.max[i] += offset;
 					}
-					player->velocity.velocity[i] += offset;
-					player->collider.pos[i] += offset;
-					player->collider.box.min[i] += offset;
-					player->collider.box.max[i] += offset;
 				}
 			}
 		}
@@ -103,8 +91,9 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityKey>> &keys) const {
 	for (const auto& key : keys) {
 		if (player->collider.intersects(key->collider)) {
-			player->owned_keys.emplace_back(key->type); // Le ponemos la correspondiente llave a player en su inventario
-			key->type = -1;                             //TODO: Variable de muerte
+			player->my_keys.at(key->lock->ID) = true; // Le ponemos la correspondiente llave a player en su inventario
+			key->alive = false;                             //TODO: Variable de muerte
+			break;											// no necesitamos seguir comprobando llaves
 		}
 	}
 }
@@ -114,8 +103,8 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> &en
 	for (const auto& bullet : bullets) {
 		for (const auto& enemy : enemies) {
 			if (enemy->collider.intersects(bullet->collider)) {
-				enemy->ai_state = -1;                   //TODO: Variable de muerte
-				bullet->dead = true;
+				enemy->alive = false;                   //TODO: Variable de muerte
+				bullet->alive = false;
 				break;									// la bala muere, no seguimos comprobando con esa bala
 			}
 		}
@@ -125,7 +114,6 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> &en
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityEnemy>> &enemies) const {
 	for (const auto& enemy : enemies) {
 		if (player->collider.intersects(enemy->collider)) {
-			std::cout << enemy->collider.pos << std::endl;
 			player->health--;
 		}
 	}
@@ -164,7 +152,7 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityDoor>> &doo
 		for (const auto& door : doors) {
 			if (door->collider.intersects(bullet->collider)) {
 				bullet->velocity.velocity = 0;
-				bullet->dead = true;
+				bullet->alive = false;
 				break;					// la bala muere, no seguimos comprobando con otras puertas
 			}
 		}
@@ -176,7 +164,7 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityWall>> &wal
 		for (const auto& wall : walls) {
 			if (wall->collider.intersects(bullet->collider)) {
 				bullet->velocity.velocity = 0;
-				bullet->dead = true;
+				bullet->alive = false;
 				break;					// la bala muere, no seguimos comprobando con otras paredes
 			}
 		}

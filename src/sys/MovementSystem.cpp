@@ -15,23 +15,21 @@ void MovementSystem::update(const std::unique_ptr<GameContext>& context) const {
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player, EntityCamera& camera) const {
+void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player, std::unique_ptr<EntityCamera>& camera) const {
 	// Movimiento
 	// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
 	player->transformable.position = player->node.getPosition();
-    camera.transformable.position = camera.cameraNode.getPosition();
+    camera->transformable.position = camera->cameraNode.getPosition();
 
 
     player->transformable.position += player->velocity.velocity;
     player->collider.setPosition(player->transformable.position);
 
-    camera.transformable.position += player->velocity.velocity;
-
-    camera.camera.target = player->transformable.position;
-    camera.cameraNode.setTarget(camera.camera.target);
+    camera->transformable.position += player->velocity.velocity;
+    camera->cameraNode.updateTarget();
 
 	player->node.setPosition(player->transformable.position);
-    camera.cameraNode.setPosition(camera.transformable.position);
+    camera->cameraNode.setPosition(camera->transformable.position);
 
 	/*
 	 * Para evitar que se gire eternamente sobrepasando el limite representable (cosa improbable pero posible),
@@ -85,8 +83,7 @@ void MovementSystem::updateBullets(const std::vector<std::unique_ptr<EntityBulle
 // BORU: Una consideración buenarda.
 void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<EntityBullet>>& bullets) const {
 	for (auto & bullet : bullets) {
-		auto distance = Vector2f(bullet->start_pos.x - bullet->transformable.position.x, bullet->start_pos.z - bullet->transformable.position.z).length();
-		if(distance >= bullet->dead_dist)
-			bullet->dead = true;
+		if((bullet->start_pos - bullet->transformable.position).length() >= bullet->dead_dist)
+			bullet->alive = false;
 	}
 }

@@ -17,8 +17,11 @@ using Sun::Device;
 
 struct EntityWall : Entity
 {
-    explicit EntityWall(const Device& device, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5)) :
-            Entity(DOOR_ID), transformable(pos), collider(dim, pos), node(device, pos, dim) { node.setTexture(renderable.texture);  }
+    explicit EntityWall(const Device& device, const Vector3f& pos, const Vector3f& dim) : Entity(WALL_ID),
+    	transformable(pos), collider(dim, pos), node(device, pos, dim)
+	{
+    	node.setTexture(renderable.texture);
+	}
 
     Renderable					renderable {"", "./img/textures/testing/testing_wall.jpg"};
     Transformable 				transformable;

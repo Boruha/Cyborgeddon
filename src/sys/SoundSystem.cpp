@@ -10,6 +10,10 @@ void ERRCHECK_fn(FMOD_RESULT res, const char* file, int line) {
 	}
 }
 
+SoundSystem::~SoundSystem() {
+	if(system) system->release();
+}
+
 void SoundSystem::init() {
 	ERRCHECK ( FMOD::Studio::System::create(&system) );
 

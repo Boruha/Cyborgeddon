@@ -2,8 +2,6 @@
 
 #include <cmp/Renderable.hpp>
 #include <cmp/Transformable.hpp>
-#include <cmp/Velocity.hpp>
-#include <cmp/BoundingBox.hpp>
 
 #include <ent/Entity.hpp>
 
@@ -17,11 +15,15 @@ using Sun::Device;
 
 struct EntityFloor : Entity {
 
-    explicit EntityFloor(const Device& device, const char* tex, const Vector3f& pos = Vector3f(0,0,0), const Vector3f& dim = Vector3f(5)) :
-            Entity(DOOR_ID), transformable(pos), node(device, pos, dim) { node.setTexture(tex);  }
+    explicit EntityFloor(const Device& device, const char* tex, const Vector3f& pos, const Vector3f& dim) :
+    	Entity(FLOOR_ID), transformable(pos), node(device, pos, dim)
+	{
+    	renderable.texture = tex;
+    	node.setTexture(renderable.texture);
+	}
 
     Transformable 				transformable;
+	Renderable 					renderable {"", ""};
 
     SceneNode 					node;
-
 };

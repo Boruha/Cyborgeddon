@@ -8,7 +8,7 @@
 struct SoundSystem : public System {
 
 	SoundSystem() = default;
-	~SoundSystem() { if(system) system->release(); }
+	~SoundSystem();
 
 	void init() override;
 	void update(const std::unique_ptr<GameContext>& context) const override;
