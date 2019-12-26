@@ -116,12 +116,18 @@ void EntityManager::init(){
     //------------------------------------  END MAPA  ---------------------------------------------------------------
 
 
-    std::vector<Vector3f> patrol = { Vector3f(0), Vector3f(-50,0,100), Vector3f(0,0,200), Vector3f(50, 0, 100) };
+    std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270) };
+    std::vector<Vector3f> patrol_2 = { Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200) };
+    std::vector<Vector3f> patrol_3 = { Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100) };
+    std::vector<Vector3f> patrol_4 = { Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270) };
+    std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
-	createEnemy(Vector3f(40,0,40), Vector3f(8), 0.6f, patrol);
-	createEnemy(Vector3f(80,0,80), Vector3f(8), 0.5f, patrol);
-	createEnemy(Vector3f(-40,0,40), Vector3f(8), 0.4f, patrol);
-	createEnemy(Vector3f(-80,0,80), Vector3f(8), 0.3f, patrol);
+
+	createEnemy(patrol_1[0], Vector3f(8), 0.6f, patrol_1);
+	createEnemy(patrol_2[0], Vector3f(8), 0.5f, patrol_2);
+	createEnemy(patrol_3[0], Vector3f(8), 0.4f, patrol_3);
+	createEnemy(patrol_4[0], Vector3f(8), 0.3f, patrol_4);
+	createEnemy(patrol_5[0], Vector3f(8), 0.3f, patrol_5);
 }
 
 void EntityManager::update(){
