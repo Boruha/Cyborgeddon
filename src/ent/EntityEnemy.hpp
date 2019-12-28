@@ -1,8 +1,15 @@
 #pragma once
 
+#include <cmp/Transformable.hpp>
+#include <cmp/Velocity.hpp>
+#include <cmp/BoundingBox.hpp>
 #include <cmp/AI.hpp>
+
 #include <ent/Entity.hpp>
-#include <SunlightEngine/Device.hpp>
+
+#include <SunlightEngine/Vector3.hpp>
+
+using Sun::Vector3f;
 
 struct EntityEnemy : Entity
 {

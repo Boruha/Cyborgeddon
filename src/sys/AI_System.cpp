@@ -60,7 +60,7 @@ void AI_System::seekBehaviour(const std::unique_ptr<EntityEnemy> &enemy) {
 	enemy->velocity->direction = enemy->ai->target_position - enemy->transformable->position;
 	enemy->velocity->direction.y = 0;
 
-	if (enemy->ai->state == AI_State::ATTACK_STATE)
+	if (enemy->ai->state == AI_State::ATTACK_STATE || enemy->velocity->direction.length() < 1.f)
 		enemy->velocity->velocity = 0;
 	else
 		enemy->velocity->velocity = enemy->velocity->direction.normalize() * enemy->velocity->speed;

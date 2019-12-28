@@ -5,12 +5,9 @@
 
 #include <ent/Entity.hpp>
 
-#include <SunlightEngine/Device.hpp>
-#include <SunlightEngine/GenericNode.hpp>
 #include <SunlightEngine/Vector3.hpp>
 #include <SunlightEngine/CameraNode.hpp>
 
-using Sun::Device;
 using Sun::Vector3f;
 using Sun::CameraNode;
 
