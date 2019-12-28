@@ -213,7 +213,7 @@ void EntityManager::createBullet(const Vector3f& dim) {
 	Velocity& velocity = componentStorage.createVelocity(Vector3f().getXZfromRotationY(player->transformable->rotation.y), 10.f);
 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, nullptr);
 
-	player->mode ? node.setTexture("/img/textures/testing/testing_angel.jpg") : node.setTexture("/img/textures/testing/testing_demon.jpg");
+	player->mode ? node.setTexture("./img/textures/testing/testing_angel.jpg") : node.setTexture("./img/textures/testing/testing_demon.jpg");
 
 	bullets.emplace_back(std::make_unique<EntityBullet>(transformable, velocity, dim, player->mode, node));
 }
