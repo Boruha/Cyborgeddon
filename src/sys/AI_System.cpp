@@ -19,7 +19,7 @@ void AI_System::updateState(const std::unique_ptr<EntityPlayer>& player, const s
 
 		float distance = v_distance.length();
 
-		if (distance > 70) {
+		if (distance > 50) {
 			enemy->ai->state = AI_State::PATROL_STATE;
 		} else if (distance > 25) {
 			enemy->ai->state = AI_State::PURSUE_STATE;
