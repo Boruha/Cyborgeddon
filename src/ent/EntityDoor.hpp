@@ -18,18 +18,21 @@ using Sun::Device;
 
 struct EntityDoor : Entity {
 
-    explicit EntityDoor(const Device& device, const Vector3f& pos, const Vector3f& dim) : Entity(DOOR_ID),
-    	transformable(pos), collider(dim, pos), node(device, pos, dim)
+    explicit EntityDoor(const Transformable& transformable, const Vector3f& dim, const Lock& lock, SceneNode& node) : Entity(DOOR_ID),
+    	transformable(&transformable), collider(dim, transformable.position), lock(&lock), node(&node)
 	{
-    	node.setTexture(renderable.texture);
+
 	}
 
-    Renderable					renderable {"", "./img/textures/testing/testing_door.png"};
-    Transformable 				transformable;
-    BoundingBox					collider;
+	~EntityDoor() {
+    	std::cout << "Muere una puerta" << std::endl;
+    	node->removeFromScene();
+    }
 
-    SceneNode 					node;
+    const Transformable*	transformable { nullptr };
+    BoundingBox	collider;
+    const Lock*						 lock { nullptr };
+    SceneNode*						 node { nullptr };
 
-    const Lock                  lock;
-    bool 						alive { true };
+    Alive 						alive;
 };

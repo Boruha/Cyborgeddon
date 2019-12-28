@@ -1,14 +1,14 @@
 #pragma once
 
-#include <cmp/Camera.hpp>
 #include <cmp/Transformable.hpp>
 #include <cmp/Velocity.hpp>
 
 #include <ent/Entity.hpp>
 
 #include <SunlightEngine/Device.hpp>
-#include <SunlightEngine/CameraNode.hpp>
+#include <SunlightEngine/GenericNode.hpp>
 #include <SunlightEngine/Vector3.hpp>
+#include <SunlightEngine/CameraNode.hpp>
 
 using Sun::Device;
 using Sun::Vector3f;
@@ -16,15 +16,13 @@ using Sun::CameraNode;
 
 struct EntityCamera : Entity
 {
-	explicit EntityCamera(const Device& device, const Vector3f& pos, const Vector3f& target, const float speed = 1.f)
-		: Entity(CAMERA_ID), transformable(pos), camera(target), velocity(speed), cameraNode(device, target, pos)
+	explicit EntityCamera(Transformable& transformable, const Velocity& velocity, CameraNode& node)
+		: Entity(CAMERA_ID), transformable(&transformable), velocity(&velocity), node(&node)
 	{
 
 	}
 
-	Transformable transformable;
-	Camera camera;
-	Velocity velocity;
-
-	CameraNode cameraNode;
+	Transformable* 		transformable { nullptr };
+	const Velocity*			 velocity { nullptr };
+	CameraNode* 				 node { nullptr };
 };

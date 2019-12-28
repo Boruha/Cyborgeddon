@@ -4,6 +4,7 @@
 #include <cmp/Transformable.hpp>
 #include <cmp/BoundingBox.hpp>
 #include <cmp/Velocity.hpp>
+#include <cmp/Alive.hpp>
 
 #include <ent/Entity.hpp>
 
@@ -19,23 +20,24 @@ using Sun::Device;
 
 struct EntityPlayer : Entity
 {
-	explicit EntityPlayer(const Device& device, const int hp, const Vector3f& pos, const Vector3f& dim,
-			const float speed = 1.f) : Entity(PLAYER_ID), transformable(pos), collider(dim, pos), velocity(speed),
-			node(device, pos, dim), health(hp)
+	explicit EntityPlayer(Transformable& transformable, Velocity& velocity, const Vector3f& dim, SceneNode& node) :
+		Entity(PLAYER_ID), transformable(&transformable), velocity(&velocity), collider(dim, transformable.position),
+			node(&node)
 	{
-		node.setTexture(renderable.texture);
+
 	}
 
-	Renderable					renderable {"", "./img/textures/testing/testing_demon.jpg"};
-	Transformable 				transformable;
-	BoundingBox					collider;
-	Velocity 					velocity;
+	Transformable* 	transformable { nullptr };
+	BoundingBox	collider;
+	Velocity* 			 velocity { nullptr };
+	SceneNode* 				 node { nullptr };
 
-	SceneNode 					node;
+	Alive						alive;
+
 
     std::vector<bool>           my_keys;
 	//NEXT CMP SHOOTING(?);
-	bool 	                    shooting { false };
-	bool 	                    mode { false };		// true(1) = angel, false(0) = demon;
-	int                         health { 0 };
+	bool shooting { false };
+	bool mode 	  { false };		// true(1) = angel, false(0) = demon;
+	int  health   {  100  };
 };

@@ -8,7 +8,7 @@ struct AABB {
 	AABB (const Vector3f& dimension, const Vector3f& position);
 
 	void setBox(const Vector3f& dimension, const Vector3f& position);
-	void move(const Vector3f& mov);
+	void moveCoord(const float& mov, const int& coord);
 
 	[[nodiscard]] bool intersects(const AABB& box) const;
 
@@ -18,15 +18,15 @@ struct AABB {
 struct BoundingBox
 {
 	explicit BoundingBox(const Vector3f& dim, const Vector3f& pos)
-		: dim(dim), pos(pos), box(dim, pos) { /* TODO : BOUNDINGBOX A TRAVÉS DE UNA MALLA DE PUNTOS */ }
+		: dim(dim), pos(&pos), box(dim, pos) { /* TODO : BOUNDINGBOX A TRAVÉS DE UNA MALLA DE PUNTOS */ }
 
-	void setPosition(const Vector3f& position);
+	void fixBox();
 
 	void moveCoord(const float& mov, const int& coord);
 
 	[[nodiscard]] bool intersects(const BoundingBox& other) const;
 
 	Vector3f dim;
-	Vector3f pos;
+	const Vector3f* pos { nullptr };
 	AABB box;
 };

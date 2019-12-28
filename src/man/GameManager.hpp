@@ -21,6 +21,7 @@ struct GameManager {
 
 	// render first so we use its device for the other systems and/or managers
 	RenderSystem render { Sun::Vector2u(1280, 720), L"Cyborgeddon" };
+	SynchronizeNodeSystem sync {  };
 
 	std::vector<std::unique_ptr<System>> systems;
 

@@ -20,6 +20,10 @@ struct GameContext {
     [[nodiscard]] virtual const std::vector<std::unique_ptr<EntityWall>>& getWalls() const = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityKey>>& getKeys() const = 0;
 	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const = 0;
+	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityFloor>>& getFloor() const = 0;
+
+	[[nodiscard]] virtual std::vector<Sun::SceneNode>& getSceneNodeComponents() = 0;
+	[[nodiscard]] virtual std::vector<Sun::CameraNode>& getCameraNodeComponents() = 0;
 };
 
 // TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan

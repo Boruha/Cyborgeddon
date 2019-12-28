@@ -19,5 +19,5 @@ struct AI {
 
 	Vector3f target_position {0};
 
-	static const size_t MAX_PATROL_POSITIONS = 8;
+	constexpr static size_t MAX_PATROL_POSITIONS = 8;
 };

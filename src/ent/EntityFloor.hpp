@@ -15,15 +15,12 @@ using Sun::Device;
 
 struct EntityFloor : Entity {
 
-    explicit EntityFloor(const Device& device, const char* tex, const Vector3f& pos, const Vector3f& dim) :
-    	Entity(FLOOR_ID), transformable(pos), node(device, pos, dim)
+    explicit EntityFloor(const char* tex, const Transformable& transformable, const SceneNode& node) :
+    	Entity(FLOOR_ID), transformable(&transformable), node(&node)
 	{
-    	renderable.texture = tex;
-    	node.setTexture(renderable.texture);
+
 	}
 
-    Transformable 				transformable;
-	Renderable 					renderable {"", ""};
-
-    SceneNode 					node;
+    const Transformable* 		transformable { nullptr };
+	const SceneNode*					 node { nullptr };
 };

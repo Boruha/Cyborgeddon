@@ -46,9 +46,27 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context) const 
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle
 
-    update(context->getPlayer(),  context->getKeys());   	// Comprueba si el player choca con una llave
+	// Antes de comoprobar cualquier tipo de colision con un collider que NO sea estatico, hay que asegurarse de que
+	// la caja de colision se encuentra en su sitio haciendo collider.fixBox()
+	// Después de cualquier metodo que pueda modificar la caja de colisiones (comprobando con otros colliders estaticos)
+	// hay que volver a hacef collider.fixBox()
+
+	// Ejemplo: player -> fix, tras comprobar colision player-pared es posible que la caja de colisiones haya sufrido
+	// 			alguna modificación. CUALQUIER metodo estatico al final debe SÍ O SÍ hacer un fix de todos los colliders
+	// 			que haya tocado. Para ahorrar calculos, calcular las colisiones estaticas primero
+
+	context->getPlayer()->collider.fixBox();
+
+	for(const auto& enemy : context->getEnemies()) {
+		enemy->collider.fixBox();
+	}
+	for(const auto& bullet : context->getBullets()) {
+		bullet->collider.fixBox();
+	}
+
     update(context->getPlayer(),  context->getDoors());  	// Comprueba si el player choca con una puerta (colision estatica)
-	update(context->getPlayer(),  context->getWalls());  	// Comprueba si el player choca con una pared (colision estatica)
+    update(context->getPlayer(),  context->getWalls());  	// Comprueba si el player choca con una pared (colision estatica)
+    update(context->getPlayer(),  context->getKeys());   	// Comprueba si el player choca con una llave
 	update(context->getEnemies(), context->getBullets());  	// Comprueba si le damos al enemy con la bala
 	update(context->getDoors(),   context->getBullets());  	// Comprueba si le damos a una puerta con la bala
 	update(context->getWalls(),   context->getBullets());  	// Comprueba si le damos a una pared con la bala
@@ -56,39 +74,41 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context) const 
 }
 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityDoor>> &doors) const {
-	for (int i = 0; i < 3; ++i) {
-		if (player->velocity.velocity[i] != 0) {
-			player->collider.moveCoord(player->velocity.velocity[i], i);
+	for (const auto& door : doors) {
+		for (int i = 0; i < 3; ++i) {
+			if (player->velocity->velocity[i] != 0) {
+				player->collider.moveCoord(player->velocity->velocity[i], i);
 
-			float offset {0};
+				float offset {0};
 
-			for (const auto& door : doors) {
-				if (player->collider.intersects(door->collider)) {
-					if (player->my_keys.at(door->lock.ID)) {
-						player->my_keys.at(door->lock.ID) = false;
-						door->alive = false;
-						break;					// no necesitamos seguir comprobando puertas
-					} else {
-						if (player->velocity.velocity[i] > 0)
-							offset = door->collider.box.min[i] - player->collider.box.max[i];
-						else
-							offset = door->collider.box.max[i] - player->collider.box.min[i];
+					if (player->collider.intersects(door->collider)) {
+						if (player->my_keys.at(door->lock->ID)) {
+							player->my_keys.at(door->lock->ID) = false;
+							door->alive.alive = false;
+							break;
+						} else {
+							if (player->velocity->velocity[i] > 0)
+								offset = door->collider.box.min[i] - player->collider.box.max[i];
+							else
+								offset = door->collider.box.max[i] - player->collider.box.min[i];
 
-						player->velocity.velocity[i] += offset;
-						player->collider.moveCoord(offset, i);
+							player->velocity->velocity[i] += offset;
+							player->collider.moveCoord(offset, i);
+						}
 					}
-				}
+
 			}
 		}
+		// tras comprobar la colision con la puerta que puede ser estatica, corregimos collider
+		player->collider.fixBox();
 	}
-	player->collider.setPosition(player->transformable.position);
 }
 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityKey>> &keys) const {
 	for (const auto& key : keys) {
 		if (player->collider.intersects(key->collider)) {
 			player->my_keys.at(key->lock->ID) = true; // Le ponemos la correspondiente llave a player en su inventario
-			key->alive = false;                             //TODO: Variable de muerte
+			key->alive.alive = false;                             //TODO: Variable de muerte
 			break;											// no necesitamos seguir comprobando llaves
 		}
 	}
@@ -99,8 +119,8 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityEnemy>> &en
 	for (const auto& bullet : bullets) {
 		for (const auto& enemy : enemies) {
 			if (enemy->collider.intersects(bullet->collider)) {
-				enemy->alive = false;                   //TODO: Variable de muerte
-				bullet->alive = false;
+				enemy->alive.alive = false;                   //TODO: Variable de muerte
+				bullet->alive.alive = false;
 				break;									// la bala muere, no seguimos comprobando con esa bala
 			}
 		}
@@ -116,35 +136,35 @@ void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const 
 }
 
 void CollisionSystem::update(const std::unique_ptr<EntityPlayer> &player, const std::vector<std::unique_ptr<EntityWall>> &walls) const {
-	for (int i = 0; i < 3; ++i) {
-		if (player->velocity.velocity[i] != 0) {
-			player->collider.moveCoord(player->velocity.velocity[i], i);
+	for (const auto& wall : walls) {
+		for(int i = 0; i < 3; ++i) {
+			if (player->velocity->velocity[i] != 0) {
+				player->collider.moveCoord(player->velocity->velocity[i], i);
 
-			float offset {0};
+				float offset {0};
 
-			for (const auto& wall : walls) {
 				if (player->collider.intersects(wall->collider)) {
-					if (player->velocity.velocity[i] > 0)
+					if (player->velocity->velocity[i] > 0)
 						offset = wall->collider.box.min[i] - player->collider.box.max[i];
 					else
 						offset = wall->collider.box.max[i] - player->collider.box.min[i];
 
-					player->velocity.velocity[i] += offset;
+					player->velocity->velocity[i] += offset;
 					player->collider.moveCoord(offset, i);
 				}
 			}
 		}
+		// tras la colision con la pared que es estatica, corregimos collider
+		player->collider.fixBox();
 	}
-	player->collider.setPosition(player->transformable.position);
 }
-
 
 void CollisionSystem::update(const std::vector<std::unique_ptr<EntityDoor>> &doors, const std::vector<std::unique_ptr<EntityBullet>> &bullets) const {
 	for (const auto& bullet : bullets) {
 		for (const auto& door : doors) {
 			if (door->collider.intersects(bullet->collider)) {
-				bullet->velocity.velocity = 0;
-				bullet->alive = false;
+				bullet->velocity->velocity = 0;
+				bullet->alive.alive = false;
 				break;					// la bala muere, no seguimos comprobando con otras puertas
 			}
 		}
@@ -155,8 +175,8 @@ void CollisionSystem::update(const std::vector<std::unique_ptr<EntityWall>> &wal
 	for (const auto& bullet : bullets) {
 		for (const auto& wall : walls) {
 			if (wall->collider.intersects(bullet->collider)) {
-				bullet->velocity.velocity = 0;
-				bullet->alive = false;
+				bullet->velocity->velocity = 0;
+				bullet->alive.alive = false;
 				break;					// la bala muere, no seguimos comprobando con otras paredes
 			}
 		}

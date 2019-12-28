@@ -6,4 +6,5 @@
 #include <sys/CollisionSystem.hpp>
 #include <sys/CooldownSystem.hpp>
 #include <sys/SoundSystem.hpp>
+#include <sys/SynchronizeNodeSystem.hpp>
 #include <sys/RenderSystem.hpp>

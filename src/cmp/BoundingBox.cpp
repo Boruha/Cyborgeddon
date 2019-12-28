@@ -15,15 +15,9 @@ void AABB::setBox(const Vector3f& dimension, const Vector3f& position) {
 	min.z = position.z - dimension.z / 2;
 }
 
-void AABB::move(const Vector3f& mov) {
-	max.x += mov.x;
-	min.x += mov.x;
-
-	max.y += mov.y;
-	min.y += mov.y;
-
-	max.z += mov.z;
-	min.z += mov.z;
+void AABB::moveCoord(const float& mov, const int& coord) {
+	min[coord] += mov;
+	max[coord] += mov;
 }
 
 bool AABB::intersects(const AABB& box) const {
@@ -37,15 +31,12 @@ bool AABB::intersects(const AABB& box) const {
 		&& min.z < box.max.z;
 }
 
-void BoundingBox::setPosition(const Vector3f& position) {
-	pos = position;
-	box.setBox(dim, pos);
+void BoundingBox::fixBox() {
+	box.setBox(dim, *pos);
 }
 
 void BoundingBox::moveCoord(const float& mov, const int& coord) {
-	pos[coord] += mov;
-	box.min[coord] += mov;
-	box.max[coord] += mov;
+	box.moveCoord(mov, coord);
 }
 
 bool BoundingBox::intersects(const BoundingBox& other) const {

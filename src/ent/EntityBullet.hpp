@@ -10,6 +10,7 @@
 #include <SunlightEngine/Vector3.hpp>
 #include <SunlightEngine/SceneNode.hpp>
 #include <SunlightEngine/Device.hpp>
+#include <src/cmp/Alive.hpp>
 
 using Sun::Vector3f;
 using Sun::SceneNode;
@@ -17,31 +18,27 @@ using Sun::Device;
 
 struct EntityBullet : Entity
 {
-	explicit EntityBullet(const Device& device, const Vector3f& pos, const Vector3f& dim, const Vector3f& dir,
-			const bool type, const float& speed = 5) :
-			Entity(BULLET_ID), transformable(pos), collider(dim, pos), velocity(dir, speed), node(device, pos, dim),
-			start_pos(pos), dmgType(type)
+	explicit EntityBullet(Transformable& transformable, Velocity& velocity, const Vector3f& dim, const bool type, SceneNode& node) :
+			Entity(BULLET_ID), transformable(&transformable), velocity(&velocity), collider(dim, transformable.position), node(&node),
+			dmgType(type)
 	{
-		if(dmgType)
-			renderable.texture = "./img/textures/testing/testing_angel.jpg";
-		else
-			renderable.texture = "./img/textures/testing/testing_demon.jpg";
 
-		node.setTexture(renderable.texture);
-
-		velocity.velocity = velocity.direction.normalize() * velocity.speed;
 	}
 
-	Renderable					renderable {"", ""};
-	Transformable 				transformable;
-	BoundingBox					collider;
-	Velocity 					velocity;	// TODO: la bala no cambia su vector velocity desde que se crea
+	~EntityBullet() {
+		std::cout << "Muere una bala" << std::endl;
+		node->removeFromScene();
+	}
 
-	SceneNode 					node;
+	Transformable*	transformable { nullptr };
+	Velocity*			 velocity { nullptr };
+	BoundingBox			 collider;
+	SceneNode*				 node { nullptr };
+
 
     //TODO: CREAR CMP DEAD OR SMTH.
-	bool alive { true };
-    const Vector3f start_pos;
-    const float dead_dist { 150 };
+	Alive alive;
+
+    float distance_left { 150 };
 	const bool dmgType;
 };

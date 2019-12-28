@@ -6,22 +6,25 @@
 
 struct EntityEnemy : Entity
 {
-	explicit EntityEnemy(const Device& device, const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) :
-		Entity(ENEMY_ID), transformable(pos), collider(dim, pos), velocity(speed), ai(patrol), node(device, pos, dim)
+	explicit EntityEnemy(Transformable& transformable, Velocity& velocity, const Vector3f& dim, AI& aiComponent, SceneNode& node) :
+		Entity(ENEMY_ID), transformable(&transformable), velocity(&velocity), collider(dim, transformable.position), ai(&aiComponent), node(&node)
 	{
-		node.setTexture(renderable.texture);
+
 	}
 
-	Renderable					renderable {"", "./img/textures/testing/testing_enemy.png"};
-	Transformable 				transformable;
-	BoundingBox					collider;
-	Velocity 					velocity;
-	AI 							ai;
+	~EntityEnemy() {
+		std::cout << "Muere un enemigo" << std::endl;
+		node->removeFromScene();
+	};
 
-	SceneNode 					node;
+	Transformable*	transformable { nullptr };
+	Velocity*			 velocity { nullptr };
+	BoundingBox	collider;
+	AI* 					   ai { nullptr };
+	SceneNode*				 node { nullptr };
 
 	// 0 stopped, 1 chasing, -1 dead.
-	bool 	alive = { true };
+	Alive 						alive;
 };
 
 // TODO: Crear componente de IA con su enum de estados

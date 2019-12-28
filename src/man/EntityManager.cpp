@@ -13,8 +13,7 @@ void EntityManager::cleanVectors() {
 
 /*		Init - Update	*/
 void EntityManager::init(){
-    createPlayer(10, Vector3f(0,0,0), Vector3f(6.f));
-	createCamera(Vector3f(10, 90, -30));
+    createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	createFloor("./img/textures/testing/testing_controls.jpg",Vector3f(0,0,5), Vector3f(60,0,35)); //Controls
@@ -22,29 +21,15 @@ void EntityManager::init(){
 
     // Doors and keys
 
-    createDoor(Vector3f(-37,0,90), Vector3f(2,20,10));
-    createKey(doors.at(doors.size() - 1)->lock, Vector3f(0,0,60));
+    createPairKeyDoor(Vector3f(0,0,60), Vector3f(3),Vector3f(-37,0,90), Vector3f(2,20,10));
+    createPairKeyDoor(Vector3f(-70,0,90), Vector3f(3), Vector3f(37,0,0), Vector3f(2,20,10));
+    createPairKeyDoor(Vector3f(70,0,0), Vector3f(3), Vector3f(-37,0,0), Vector3f(2,20,10));
+    createPairKeyDoor(Vector3f(-70,0,0), Vector3f(3), Vector3f(37,0,190), Vector3f(2,20,10));
+    createPairKeyDoor(Vector3f(70,0,190), Vector3f(3), Vector3f(-37,0,190), Vector3f(2,20,10));
+    createPairKeyDoor(Vector3f(-70,0,190), Vector3f(3), Vector3f(37,0,90), Vector3f(2,20,10));
+    createPairKeyDoor(Vector3f(70,0,90), Vector3f(3), Vector3f(152.5,0,300), Vector3f(45,10,10));
+    createPairKeyDoor(Vector3f(158,0,320), Vector3f(3), Vector3f(-180,0,272.5), Vector3f(10,10,45));
 
-    createDoor(Vector3f(37,0,0), Vector3f(2,20,10));
-	createKey(doors.at(doors.size() - 1)->lock, Vector3f(-70,0,90));
-
-	createDoor(Vector3f(-37,0,0), Vector3f(2,20,10));
-	createKey(doors.at(doors.size() - 1)->lock, Vector3f(70,0,0));
-
-	createDoor(Vector3f(37,0,190), Vector3f(2,20,10));
-	createKey(doors.at(doors.size() - 1)->lock, Vector3f(-70,0,0));
-
-	createDoor(Vector3f(-37,0,190), Vector3f(2,20,10));
-	createKey(doors.at(doors.size() - 1)->lock, Vector3f(70,0,190));
-
-	createDoor(Vector3f(37,0,90), Vector3f(2,20,10));
-	createKey(doors.at(doors.size() - 1)->lock, Vector3f(-70,0,190));
-
-	createDoor(Vector3f(152.5,0,300), Vector3f(45,10,10));       //Puerta llave principal
-	createKey(doors.at(doors.size() - 1)->lock, Vector3f(70,0,90));
-
-	createDoor(Vector3f(-180,0,272.5), Vector3f(10,10,45));  //Puerta patrulla
-    createKey(doors.at(doors.size() - 1)->lock, Vector3f(158,0,320));
 
     //Pasillo inicial
 
@@ -138,68 +123,100 @@ void EntityManager::update(){
 // 		 si se consigue, la var. 'Shooting' se podrá elilminar.
 void EntityManager::checkShooting(){
 	if(player->shooting){
-		createBullet(player->node.getPosition(), Vector3f().getXZfromRotationY(player->transformable.rotation.y), player->mode);
+		createBullet(Vector3f(3));
 		player->shooting = false;
 	}
 }
 
+
 /*		DESTROY ENTITIES	*/
 
-void EntityManager::takeKey(){
-    //CONDICION PARA QUE MUERA ----> TYPE < 0
-	keys.erase(std::remove_if(keys.begin(), keys.end(), [](auto const& key) { return !key->alive; }), keys.end());
+void EntityManager::takeKey() {
+	keys.erase(std::remove_if(keys.begin(), keys.end(), [](auto const& key) { return !key->alive.alive; }), keys.end());
 }
 
 void EntityManager::openDoor() {
-    //CONDICION PARA QUE MUERA ----> TYPE < 0
-	doors.erase(std::remove_if(doors.begin(), doors.end(), [](auto const& door) { return !door->alive; }), doors.end());
+	doors.erase(std::remove_if(doors.begin(), doors.end(), [](auto const& door) { return !door->alive.alive; }), doors.end());
 }
 
-void EntityManager::deleteBullet(){
-    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](auto const& bullet) { return !bullet->alive; }), bullets.end());
+void EntityManager::deleteBullet() {
+    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](auto const& bullet) { return !bullet->alive.alive; }), bullets.end());
 }
 
-void EntityManager::killEnemy(){
-    //CONDICION PARA QUE MUERA ----> State < 0
-    enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](auto const& enemy) { return !enemy->alive; }), enemies.end());
+void EntityManager::killEnemy() {
+    enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](auto const& enemy) { return !enemy->alive.alive; }), enemies.end());
 }
 
-
-void EntityManager::killPlayer(){
-    //CONDICION PARA QUE MUERA ----> HP < 0
+void EntityManager::killPlayer() {
 }
 
 
 /*		CREATE ENTITIES		*/
 
-void EntityManager::createPlayer(const int& health, const Vector3f& pos, const Vector3f& dim, const float& speed) {
-	player = std::make_unique<EntityPlayer>(device,health,  pos + Vector3f(0, dim.y / 2, 0), dim, speed);
+void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& pos, const Vector3f& dim, const float& speed, const Vector3f& posCamera) {
+	Transformable& transformablePlayer = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+	Transformable& transformableCamera = componentStorage.createTransformable(posCamera);
+
+	Velocity& velocity = componentStorage.createVelocity(1.f);
+
+	SceneNode& playerNode = componentStorage.createSceneNode(device, transformablePlayer.position, transformablePlayer.rotation, dim, nullptr, "./img/textures/testing/testing_demon.jpg");
+	CameraNode& cameraNode = componentStorage.createCameraNode(device, transformableCamera.position, transformablePlayer.position);
+
+	player = std::make_unique<EntityPlayer>(transformablePlayer, velocity, dim, playerNode);
+	camera = std::make_unique<EntityCamera>(transformableCamera, velocity, cameraNode);
 }
 
 void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
-    walls.emplace_back(std::make_unique<EntityWall>(device,  pos + Vector3f(0, dim.y / 2, 0), dim));
-}
+	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_wall.jpg");
 
-void EntityManager::createCamera(const Vector3f& pos) {
-    camera = std::make_unique<EntityCamera>(device, pos, player->transformable.position);
+	walls.emplace_back(std::make_unique<EntityWall>(transformable, dim,node));
 }
 
 void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) {
-	enemies.emplace_back(std::make_unique<EntityEnemy>(device, pos + Vector3f(0, dim.y / 2, 0), dim, speed, patrol));
+	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+	Velocity& velocity = componentStorage.createVelocity(speed);
+	AI& ai = componentStorage.createAI(patrol);
+	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_enemy.png");
+
+	enemies.emplace_back(std::make_unique<EntityEnemy>(transformable, velocity, dim, ai, node));
 }
 
-void EntityManager::createDoor(const Vector3f& pos, const Vector3f& dim) {
-    doors.emplace_back(std::make_unique<EntityDoor>(device, pos + Vector3f(0, dim.y / 2, 0), dim ));
+void EntityManager::createDoor(const Lock& lock, const Vector3f& pos, const Vector3f& dim) {
+    Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+    SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_door.png");
+
+    doors.emplace_back(std::make_unique<EntityDoor>(transformable, dim, lock, node));
 }
 void EntityManager::createKey(const Lock& lock, const Vector3f& pos, const Vector3f& dim) {
-    keys.emplace_back(std::make_unique<EntityKey>(device, lock, pos + Vector3f(0, dim.y / 2, 0), dim));
-	player->my_keys.push_back(false);
+	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_key.png");
+
+	keys.emplace_back(std::make_unique<EntityKey>(transformable, dim, lock, node));
 }
 
 void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vector3f& dim) {
-    floor.emplace_back(std::make_unique<EntityFloor>(device, tex, pos + Vector3f(0, dim.y / 2, 0), dim ));
+	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+ 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, tex);
+
+ 	floor.emplace_back(std::make_unique<EntityFloor>(tex, transformable, node));
 }
 
-void EntityManager::createBullet(const Vector3f& pos, const Vector3f& dir, const bool& type, const Vector3f& dim) {
-    bullets.emplace_back(std::make_unique<EntityBullet>(device, pos, dim, dir, type));
+void EntityManager::createBullet(const Vector3f& dim) {
+	Transformable& transformable = componentStorage.createTransformable(player->transformable->position);
+	Velocity& velocity = componentStorage.createVelocity(Vector3f().getXZfromRotationY(player->transformable->rotation.y), 10.f);
+	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, nullptr);
+
+	player->mode ? node.setTexture("/img/textures/testing/testing_angel.jpg") : node.setTexture("/img/textures/testing/testing_demon.jpg");
+
+	bullets.emplace_back(std::make_unique<EntityBullet>(transformable, velocity, dim, player->mode, node));
+}
+
+void EntityManager::createPairKeyDoor(const Vector3f &keyPos, const Vector3f &keyDim, const Vector3f &doorPos, const Vector3f &doorDim) {
+	const Lock& lock = componentStorage.createLock();
+
+	createKey(lock, keyPos, keyDim);
+	createDoor(lock, doorPos, doorDim);
+
+	player->my_keys.emplace_back(false);
 }
