@@ -165,57 +165,76 @@ void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& po
 
 	Velocity& velocity = componentStorage.createVelocity(1.f);
 
+	BoundingBox& box = componentStorage.createBoundingBox(dim, transformablePlayer.position);
+
 	SceneNode& playerNode = componentStorage.createSceneNode(device, transformablePlayer.position, transformablePlayer.rotation, dim, nullptr, "./img/textures/testing/testing_demon.jpg");
 	CameraNode& cameraNode = componentStorage.createCameraNode(device, transformableCamera.position, transformablePlayer.position);
 
-	player = std::make_unique<EntityPlayer>(transformablePlayer, velocity, dim, playerNode);
+	player = std::make_unique<EntityPlayer>(transformablePlayer, velocity, box, playerNode);
 	camera = std::make_unique<EntityCamera>(transformableCamera, velocity, cameraNode);
 }
 
 void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
-	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
-	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_wall.jpg");
+	const Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
 
-	walls.emplace_back(std::make_unique<EntityWall>(transformable, dim,node));
+	const BoundingBox& box = componentStorage.createBoundingBox(dim, transformable.position);
+
+	const SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_wall.jpg");
+
+	walls.emplace_back(std::make_unique<EntityWall>(transformable, box, node));
 }
 
 void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) {
 	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
 	Velocity& velocity = componentStorage.createVelocity(speed);
+
+	BoundingBox& box = componentStorage.createBoundingBox(dim, transformable.position);
+
 	AI& ai = componentStorage.createAI(patrol);
+
 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_enemy.png");
 
-	enemies.emplace_back(std::make_unique<EntityEnemy>(transformable, velocity, dim, ai, node));
+	enemies.emplace_back(std::make_unique<EntityEnemy>(transformable, velocity, box, ai, node));
 }
 
 void EntityManager::createDoor(const Lock& lock, const Vector3f& pos, const Vector3f& dim) {
-    Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+    const Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+
+    BoundingBox& box = componentStorage.createBoundingBox(dim, transformable.position);
+
     SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_door.png");
 
-    doors.emplace_back(std::make_unique<EntityDoor>(transformable, dim, lock, node));
+    doors.emplace_back(std::make_unique<EntityDoor>(transformable, box, lock, node));
 }
 void EntityManager::createKey(const Lock& lock, const Vector3f& pos, const Vector3f& dim) {
-	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+	const Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
+
+	BoundingBox& box = componentStorage.createBoundingBox(dim, transformable.position);
+
 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, "./img/textures/testing/testing_key.png");
 
-	keys.emplace_back(std::make_unique<EntityKey>(transformable, dim, lock, node));
+	keys.emplace_back(std::make_unique<EntityKey>(transformable, box, lock, node));
 }
 
 void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vector3f& dim) {
-	Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
- 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, tex);
+	const Transformable& transformable = componentStorage.createTransformable(pos + Vector3f(0, dim.y / 2, 0));
 
- 	floor.emplace_back(std::make_unique<EntityFloor>(tex, transformable, node));
+ 	const SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, tex);
+
+ 	floor.emplace_back(std::make_unique<EntityFloor>(transformable, node));
 }
 
 void EntityManager::createBullet(const Vector3f& dim) {
 	Transformable& transformable = componentStorage.createTransformable(player->transformable->position);
 	Velocity& velocity = componentStorage.createVelocity(Vector3f().getXZfromRotationY(player->transformable->rotation.y), 10.f);
+
+	BoundingBox& box = componentStorage.createBoundingBox(dim, transformable.position);
+
 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, nullptr);
 
 	player->mode ? node.setTexture("./img/textures/testing/testing_angel.jpg") : node.setTexture("./img/textures/testing/testing_demon.jpg");
 
-	bullets.emplace_back(std::make_unique<EntityBullet>(transformable, velocity, dim, player->mode, node));
+	bullets.emplace_back(std::make_unique<EntityBullet>(transformable, velocity, box, player->mode, node));
 }
 
 void EntityManager::createPairKeyDoor(const Vector3f &keyPos, const Vector3f &keyDim, const Vector3f &doorPos, const Vector3f &doorDim) {

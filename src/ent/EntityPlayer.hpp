@@ -17,8 +17,8 @@ using Sun::SceneNode;
 
 struct EntityPlayer : Entity
 {
-	explicit EntityPlayer(Transformable& transformable, Velocity& velocity, const Vector3f& dim, SceneNode& node) :
-		Entity(PLAYER_ID), transformable(&transformable), velocity(&velocity), collider(dim, transformable.position),
+	explicit EntityPlayer(Transformable& transformable, Velocity& velocity, BoundingBox& box, const SceneNode& node) :
+		Entity(PLAYER_ID), transformable(&transformable), velocity(&velocity), collider(&box),
 			node(&node)
 	{
 
@@ -26,11 +26,10 @@ struct EntityPlayer : Entity
 
 	Transformable* 	transformable { nullptr };
 	Velocity* 			 velocity { nullptr };
-	BoundingBox	collider;
-	SceneNode* 				 node { nullptr };
+	BoundingBox*		 collider { nullptr };
+	const SceneNode* 		 node { nullptr };
 
 	Alive						alive;
-
 
     std::vector<bool>           my_keys;
 	//NEXT CMP SHOOTING(?);

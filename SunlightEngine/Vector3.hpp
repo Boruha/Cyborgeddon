@@ -76,6 +76,16 @@ namespace Sun {
 			}
 		}
 
+		[[nodiscard]] T operator[](const int& index) const
+		{
+			switch(index) {
+				case 0  : return x;
+				case 1  : return y;
+				case 2  : return z;
+				default : std::cerr << "Out of bound Vector3<T>\n"; exit(-1);
+			}
+		}
+
 		friend std::ostream& operator<<(std::ostream& os, const Vector3& v)
 		{
 			return os << "(\t" << v.x << "\t,\t" << v.y << "\t,\t" << v.z << "\t)";

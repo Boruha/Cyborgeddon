@@ -15,8 +15,8 @@ using Sun::SceneNode;
 
 struct EntityDoor : Entity {
 
-    explicit EntityDoor(const Transformable& transformable, const Vector3f& dim, const Lock& lock, SceneNode& node) : Entity(DOOR_ID),
-    	transformable(&transformable), collider(dim, transformable.position), lock(&lock), node(&node)
+    explicit EntityDoor(const Transformable& transformable, const BoundingBox& box, const Lock& lock, SceneNode& node) : Entity(DOOR_ID),
+    	transformable(&transformable), collider(&box), lock(&lock), node(&node)
 	{
 
 	}
@@ -27,7 +27,7 @@ struct EntityDoor : Entity {
     }
 
     const Transformable*	transformable { nullptr };
-    BoundingBox	collider;
+    const BoundingBox*			 collider { nullptr };
     const Lock*						 lock { nullptr };
     SceneNode*						 node { nullptr };
 

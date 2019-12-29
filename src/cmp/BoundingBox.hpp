@@ -26,7 +26,7 @@ struct BoundingBox
 
 	[[nodiscard]] bool intersects(const BoundingBox& other) const;
 
-	Vector3f dim;
+	const Vector3f dim;
 	const Vector3f* pos { nullptr };
 	AABB box;
 };

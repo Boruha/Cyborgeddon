@@ -12,7 +12,7 @@ using Sun::SceneNode;
 
 struct EntityFloor : Entity {
 
-    explicit EntityFloor(const char* tex, const Transformable& transformable, const SceneNode& node) :
+    explicit EntityFloor(const Transformable& transformable, const SceneNode& node) :
     	Entity(FLOOR_ID), transformable(&transformable), node(&node)
 	{
 

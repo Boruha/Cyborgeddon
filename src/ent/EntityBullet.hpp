@@ -15,8 +15,8 @@ using Sun::SceneNode;
 
 struct EntityBullet : Entity
 {
-	explicit EntityBullet(Transformable& transformable, Velocity& velocity, const Vector3f& dim, const bool type, SceneNode& node) :
-			Entity(BULLET_ID), transformable(&transformable), velocity(&velocity), collider(dim, transformable.position), node(&node),
+	explicit EntityBullet(Transformable& transformable, Velocity& velocity, BoundingBox& box, const bool type, SceneNode& node) :
+			Entity(BULLET_ID), transformable(&transformable), velocity(&velocity), collider(&box), node(&node),
 			dmgType(type)
 	{
 
@@ -29,7 +29,7 @@ struct EntityBullet : Entity
 
 	Transformable*	transformable { nullptr };
 	Velocity*			 velocity { nullptr };
-	BoundingBox			 collider;
+	BoundingBox*		 collider { nullptr };
 	SceneNode*				 node { nullptr };
 
 

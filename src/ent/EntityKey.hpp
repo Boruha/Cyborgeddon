@@ -14,8 +14,8 @@ using Sun::SceneNode;
 
 struct EntityKey : Entity
 {
-    explicit EntityKey(const Transformable& transformable, const Vector3f& dim, const Lock& lock, SceneNode& node) :
-    	Entity(KEY_ID), transformable(&transformable), collider(dim, transformable.position), lock(&lock), node(&node)
+    explicit EntityKey(const Transformable& transformable, BoundingBox& box, const Lock& lock, SceneNode& node) :
+    	Entity(KEY_ID), transformable(&transformable), collider(&box), lock(&lock), node(&node)
 	{
 
 	}
@@ -26,7 +26,7 @@ struct EntityKey : Entity
     }
 
     const Transformable* 	transformable { nullptr };
-    BoundingBox	collider;
+    BoundingBox*				 collider { nullptr };
     const Lock*						 lock { nullptr };
     SceneNode* 					  	 node { nullptr };
 

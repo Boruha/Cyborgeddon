@@ -13,8 +13,8 @@ using Sun::Vector3f;
 
 struct EntityEnemy : Entity
 {
-	explicit EntityEnemy(Transformable& transformable, Velocity& velocity, const Vector3f& dim, AI& aiComponent, SceneNode& node) :
-		Entity(ENEMY_ID), transformable(&transformable), velocity(&velocity), collider(dim, transformable.position), ai(&aiComponent), node(&node)
+	explicit EntityEnemy(Transformable& transformable, Velocity& velocity, BoundingBox& box, AI& aiComponent, SceneNode& node) :
+		Entity(ENEMY_ID), transformable(&transformable), velocity(&velocity), collider(&box), ai(&aiComponent), node(&node)
 	{
 
 	}
@@ -26,7 +26,7 @@ struct EntityEnemy : Entity
 
 	Transformable*	transformable { nullptr };
 	Velocity*			 velocity { nullptr };
-	BoundingBox	collider;
+	BoundingBox*		 collider { nullptr };
 	AI* 					   ai { nullptr };
 	SceneNode*				 node { nullptr };
 

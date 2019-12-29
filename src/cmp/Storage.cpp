@@ -12,9 +12,11 @@ Storage::Storage(std::size_t initialSize) {
 	cameraNodeComponents.reserve(initialSize);
 	transformableComponents.reserve(initialSize);
 	velocityComponents.reserve(initialSize);
+	boundingComponents.reserve(initialSize);
 }
 
 Storage::~Storage() {
+	boundingComponents.clear();
 	velocityComponents.clear();
 	transformableComponents.clear();
 	cameraNodeComponents.clear();
@@ -49,4 +51,8 @@ Velocity& Storage::createVelocity(const Vector3f& dir, const float& speed) {
 
 Velocity& Storage::createVelocity(const float& speed) {
 	return velocityComponents.emplace_back(Velocity(speed));
+}
+
+BoundingBox& Storage::createBoundingBox(const Vector3f& dim, const Vector3f& pos) {
+	return boundingComponents.emplace_back(BoundingBox(dim, pos));
 }

@@ -34,6 +34,8 @@ struct Storage {
 	Velocity& createVelocity(const Vector3f& dir, const float& speed);
 	Velocity& createVelocity(const float& speed);
 
+	BoundingBox& createBoundingBox(const Vector3f& dim, const Vector3f& pos);
+
 	[[nodiscard]] const vector<Lock>& getLockComponents() const { return lockComponents; }
 	[[nodiscard]] 		vector<Lock>& getLockComponents() 	   	{ return lockComponents; }
 
@@ -52,6 +54,9 @@ struct Storage {
 	[[nodiscard]] const vector<Velocity>&   getVelocityComponents() const { return   velocityComponents; }
 	[[nodiscard]] 		vector<Velocity>&   getVelocityComponents()	   	  { return   velocityComponents; }
 
+	[[nodiscard]] const vector<BoundingBox>&   getBoundingComponents() const { return   boundingComponents; }
+	[[nodiscard]] 		vector<BoundingBox>&   getBoundingComponents()	   	 { return   boundingComponents; }
+
 private:
 	vector<Lock> 			   	    	 lockComponents;
 	vector<AI> 		  			     	   AIComponents;
@@ -59,4 +64,5 @@ private:
 	vector<CameraNode>	 		   cameraNodeComponents;
 	vector<Transformable> 		transformableComponents;
 	vector<Velocity>				 velocityComponents;
+	vector<BoundingBox>				 boundingComponents;
 };

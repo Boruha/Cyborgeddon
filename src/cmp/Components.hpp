@@ -6,5 +6,6 @@
 #include <cmp/Lock.hpp>
 #include <cmp/AI.hpp>
 #include <cmp/Renderable.hpp>
+#include <cmp/Alive.hpp>
 
 // TODO: comprobar const-correctness de todos los componentes y hacer los cambios pertinentes

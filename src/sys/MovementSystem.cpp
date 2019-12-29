@@ -16,10 +16,6 @@ void MovementSystem::update(const std::unique_ptr<GameContext>& context) const {
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
 void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player, std::unique_ptr<EntityCamera>& camera) const {
-	// Movimiento
-	// CUIDADO -> lo que vemos en la escena es el NODO, si no modificamos player.nodo, no se va a mover nada
-//	player->transformable.position = player->node.getPosition();
-//    camera->transformable.position = camera->cameraNode.getPosition();
 
     player->transformable->position += player->velocity->velocity;
     camera->transformable->position += camera->velocity->velocity;
@@ -46,16 +42,14 @@ void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
 void MovementSystem::updateEnemies(const std::vector<std::unique_ptr<EntityEnemy>>& enemies) const {
-	for (auto & enemy : enemies) {
+	for (auto & enemy : enemies)
 		enemy->transformable->position += enemy->velocity->velocity;
-	}
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
 void MovementSystem::updateBullets(const std::vector<std::unique_ptr<EntityBullet>>& bullets) const {
-	for (auto & bullet : bullets) {
+	for (auto & bullet : bullets)
 		bullet->transformable->position += bullet->velocity->velocity;
-	}
 }
 
 // TODO: reconsiderar logica -> las balas nunca se frenan. Para evitar calculos se podria tener una variable
