@@ -24,17 +24,19 @@ struct Storage {
 	Storage& operator=(const Storage& ) = delete;
 	Storage& operator=(		 Storage&&) = delete;
 
-	Lock& 	createLock();
-	AI&		createAI(const vector<Vector3f>& patrol);
+	Lock& 	createLock(const EntityType& e_type, const std::size_t& e_ID);
+	AI&		createAI(const EntityType& e_type, const std::size_t& e_ID, const vector<Vector3f>& patrol);
 
 	SceneNode& createSceneNode  (const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh = nullptr, const char* texture = nullptr);
 	CameraNode& createCameraNode(const Device& device, const Vector3f& position, const Vector3f& target);
 
-	Transformable& createTransformable(const Vector3f& pos = Vector3f());
-	Velocity& createVelocity(const Vector3f& dir, const float& speed);
-	Velocity& createVelocity(const float& speed);
+	Transformable& createTransformable(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& pos = Vector3f(), const Vector3f& rot = Vector3f());
 
-	BoundingBox& createBoundingBox(const Vector3f& dim, const Vector3f& pos);
+	Velocity& createVelocity(const EntityType& e_type, const std::size_t& e_ID, const float& speed);
+
+	BoundingBox& createBoundingBox(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& dim, const Vector3f& pos, bool is_static = false);
+
+	Physics& createPhysics(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& pos = Vector3f(), const Vector3f& vel = Vector3f(), const Vector3f& rot = Vector3f());
 
 	[[nodiscard]] const vector<Lock>& getLockComponents() const { return lockComponents; }
 	[[nodiscard]] 		vector<Lock>& getLockComponents() 	   	{ return lockComponents; }
@@ -57,6 +59,9 @@ struct Storage {
 	[[nodiscard]] const vector<BoundingBox>&   getBoundingComponents() const { return   boundingComponents; }
 	[[nodiscard]] 		vector<BoundingBox>&   getBoundingComponents()	   	 { return   boundingComponents; }
 
+	[[nodiscard]] const vector<Physics>&   getPhysicsComponents() const { return   physicsComponents; }
+	[[nodiscard]] 		vector<Physics>&   getPhysicsComponents()	   	{ return   physicsComponents; }
+
 private:
 	vector<Lock> 			   	    	 lockComponents;
 	vector<AI> 		  			     	   AIComponents;
@@ -64,5 +69,6 @@ private:
 	vector<CameraNode>	 		   cameraNodeComponents;
 	vector<Transformable> 		transformableComponents;
 	vector<Velocity>				 velocityComponents;
-	vector<BoundingBox>				 boundingComponents;
+	vector<BoundingBox>		  		 boundingComponents;
+	vector<Physics>					  physicsComponents;
 };

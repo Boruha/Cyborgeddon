@@ -13,25 +13,24 @@ using Sun::Vector3f;
 
 struct EntityEnemy : Entity
 {
-	explicit EntityEnemy(Transformable& transformable, Velocity& velocity, BoundingBox& box, AI& aiComponent, SceneNode& node) :
-		Entity(ENEMY_ID), transformable(&transformable), velocity(&velocity), collider(&box), ai(&aiComponent), node(&node)
+	explicit EntityEnemy() : Entity(ENEMY) {  }
+
+	explicit EntityEnemy(Physics& physics, Velocity& velocity, BoundingBox& box, AI& aiComponent, SceneNode& node) :
+			Entity(ENEMY), physics(&physics), velocity(&velocity), collider(&box), ai(&aiComponent), node(&node)
 	{
 
 	}
 
-	~EntityEnemy() {
+	~EntityEnemy() override {
 		std::cout << "Muere un enemigo" << std::endl;
 		node->removeFromScene();
 	};
 
-	Transformable*	transformable { nullptr };
+	Physics*			  physics { nullptr };
 	Velocity*			 velocity { nullptr };
 	BoundingBox*		 collider { nullptr };
 	AI* 					   ai { nullptr };
 	SceneNode*				 node { nullptr };
-
-	// 0 stopped, 1 chasing, -1 dead.
-	Alive 						alive;
 };
 
 // TODO: Crear componente de IA con su enum de estados

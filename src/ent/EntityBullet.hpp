@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmp/Transformable.hpp>
+#include <cmp/Physics.hpp>
 #include <cmp/Velocity.hpp>
 #include <cmp/BoundingBox.hpp>
 #include <cmp/Alive.hpp>
@@ -15,27 +16,24 @@ using Sun::SceneNode;
 
 struct EntityBullet : Entity
 {
-	explicit EntityBullet(Transformable& transformable, Velocity& velocity, BoundingBox& box, const bool type, SceneNode& node) :
-			Entity(BULLET_ID), transformable(&transformable), velocity(&velocity), collider(&box), node(&node),
+	explicit EntityBullet() : Entity(BULLET) {  }
+
+	explicit EntityBullet(Physics& physics, BoundingBox& box, const bool type, SceneNode& node) :
+			Entity(BULLET), physics(&physics), collider(&box), node(&node),
 			dmgType(type)
 	{
 
 	}
 
-	~EntityBullet() {
+	~EntityBullet() override {
 		std::cout << "Muere una bala" << std::endl;
 		node->removeFromScene();
 	}
 
-	Transformable*	transformable { nullptr };
-	Velocity*			 velocity { nullptr };
+	Physics*			  physics { nullptr };
 	BoundingBox*		 collider { nullptr };
 	SceneNode*				 node { nullptr };
 
-
-    //TODO: CREAR CMP DEAD OR SMTH.
-	Alive alive;
-
     float distance_left { 150 };
-	const bool dmgType;
+	bool dmgType { false };
 };

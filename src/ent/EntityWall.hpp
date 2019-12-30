@@ -13,13 +13,15 @@ using Sun::SceneNode;
 
 struct EntityWall : Entity
 {
-    explicit EntityWall(const Transformable& transformable, const BoundingBox& box, const SceneNode& node) : Entity(WALL_ID),
+	explicit EntityWall() : Entity(WALL) {  }
+
+    explicit EntityWall(Transformable& transformable, BoundingBox& box, SceneNode& node) : Entity(WALL),
     	transformable(&transformable), collider(&box), node(&node)
 	{
 
 	}
 
-    const Transformable* 	transformable { nullptr };
-    const BoundingBox*			 collider { nullptr };
-    const SceneNode* 				 node { nullptr };
+    Transformable* transformable { nullptr };
+    BoundingBox*		collider { nullptr };
+    SceneNode* 				node { nullptr };
 };

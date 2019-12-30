@@ -13,13 +13,14 @@ using Sun::CameraNode;
 
 struct EntityCamera : Entity
 {
-	explicit EntityCamera(Transformable& transformable, const Velocity& velocity, CameraNode& node)
-		: Entity(CAMERA_ID), transformable(&transformable), velocity(&velocity), node(&node)
+	explicit EntityCamera() : Entity(CAMERA) {  };
+
+	explicit EntityCamera(Physics& physics, CameraNode& node)
+		: Entity(CAMERA), physics(&physics), node(&node)
 	{
 
 	}
 
-	Transformable* 		transformable { nullptr };
-	const Velocity*			 velocity { nullptr };
-	CameraNode* 				 node { nullptr };
+	Physics* physics { nullptr };
+	CameraNode* node { nullptr };
 };

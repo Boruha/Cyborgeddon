@@ -15,21 +15,21 @@ using Sun::SceneNode;
 
 struct EntityDoor : Entity {
 
-    explicit EntityDoor(const Transformable& transformable, const BoundingBox& box, const Lock& lock, SceneNode& node) : Entity(DOOR_ID),
+	explicit EntityDoor() : Entity(DOOR) {  }
+
+    explicit EntityDoor(Transformable& transformable, BoundingBox& box, Lock& lock, SceneNode& node) : Entity(DOOR),
     	transformable(&transformable), collider(&box), lock(&lock), node(&node)
 	{
 
 	}
 
-	~EntityDoor() {
+	~EntityDoor() override {
     	std::cout << "Muere una puerta" << std::endl;
     	node->removeFromScene();
     }
 
-    const Transformable*	transformable { nullptr };
-    const BoundingBox*			 collider { nullptr };
-    const Lock*						 lock { nullptr };
-    SceneNode*						 node { nullptr };
-
-    Alive 						alive;
+    Transformable*		transformable { nullptr };
+    BoundingBox*			 collider { nullptr };
+    Lock*						 lock { nullptr };
+    SceneNode*					 node { nullptr };
 };

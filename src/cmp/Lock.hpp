@@ -1,10 +1,11 @@
 #pragma once
 
-struct Lock {
-	Lock() = default;
+struct Lock : public Component {
+	explicit Lock(const EntityType& e_type, const std::size_t& e_ID) : Component(e_type, e_ID) {  }
 
-	const int ID { nextID++ };
+	[[nodiscard]] int getLockID() const { return ID; }
 
 	private:
-		static int nextID;
+		const int ID { nextID++ };
+		inline static int nextID { 0 };
 };

@@ -2,6 +2,7 @@
 
 #include <SunlightEngine/Math.hpp>
 #include <iostream>
+#include <utility>
 
 namespace Sun {
 
@@ -63,6 +64,11 @@ namespace Sun {
 		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n; }
 
 		[[nodiscard]] T& operator[](const int& index)
+		{
+			return const_cast<T&>(std::as_const(*this).operator[](index));
+		}
+
+		[[nodiscard]] const T& operator[](const int& index) const
 		{
 			switch(index) {
 				case 0  : return x;

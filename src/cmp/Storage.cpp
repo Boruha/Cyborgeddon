@@ -13,9 +13,11 @@ Storage::Storage(std::size_t initialSize) {
 	transformableComponents.reserve(initialSize);
 	velocityComponents.reserve(initialSize);
 	boundingComponents.reserve(initialSize);
+	physicsComponents.reserve(initialSize);
 }
 
 Storage::~Storage() {
+	physicsComponents.clear();
 	boundingComponents.clear();
 	velocityComponents.clear();
 	transformableComponents.clear();
@@ -25,12 +27,12 @@ Storage::~Storage() {
 	lockComponents.clear();
 }
 
-Lock& Storage::createLock() {
-	return lockComponents.emplace_back();
+Lock& Storage::createLock(const EntityType& e_type, const std::size_t& e_ID) {
+	return lockComponents.emplace_back(e_type, e_ID); // lock no depende de una entidad
 }
 
-AI& Storage::createAI(const vector<Vector3f>& patrol) {
-	return AIComponents.emplace_back(patrol);
+AI& Storage::createAI(const EntityType& e_type, const std::size_t& e_ID, const vector<Vector3f>& patrol) {
+	return AIComponents.emplace_back(e_type, e_ID, patrol);
 }
 
 SceneNode& Storage::createSceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh, const char* texture) {
@@ -41,18 +43,18 @@ CameraNode& Storage::createCameraNode(const Device& device, const Vector3f& posi
 	return cameraNodeComponents.emplace_back(CameraNode(device, target, position));
 }
 
-Transformable& Storage::createTransformable(const Vector3f& pos) {
-	return transformableComponents.emplace_back(Transformable(pos));
+Transformable& Storage::createTransformable(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& pos, const Vector3f& rot) {
+	return transformableComponents.emplace_back(Transformable(e_type, e_ID, pos, rot));
 }
 
-Velocity& Storage::createVelocity(const Vector3f& dir, const float& speed) {
-	return velocityComponents.emplace_back(Velocity(dir, speed));
+Velocity& Storage::createVelocity(const EntityType& e_type, const std::size_t& e_ID, const float& speed) {
+	return velocityComponents.emplace_back(Velocity(e_type, e_ID, speed));
 }
 
-Velocity& Storage::createVelocity(const float& speed) {
-	return velocityComponents.emplace_back(Velocity(speed));
+BoundingBox& Storage::createBoundingBox(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& dim, const Vector3f& pos, const bool is_static) {
+	return boundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, is_static));
 }
 
-BoundingBox& Storage::createBoundingBox(const Vector3f& dim, const Vector3f& pos) {
-	return boundingComponents.emplace_back(BoundingBox(dim, pos));
+Physics& Storage::createPhysics(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& pos, const Vector3f& vel, const Vector3f& rot) {
+	return physicsComponents.emplace_back(Physics(e_type, e_ID, pos, vel, rot));
 }

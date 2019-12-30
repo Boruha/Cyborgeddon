@@ -12,18 +12,21 @@ struct GameContext {
 	virtual void init() = 0;
 	virtual void update() = 0;
 
-	[[nodiscard]] virtual std::unique_ptr<EntityPlayer>& getPlayer() = 0;
-	[[nodiscard]] virtual std::unique_ptr<EntityCamera>& getCamera() = 0;
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityEnemy>>&  getEnemies() const = 0;
+	[[nodiscard]] virtual const std::unique_ptr<EntityPlayer>& getPlayer() const = 0;
+	[[nodiscard]] virtual 		std::unique_ptr<EntityPlayer>& getPlayer() 		 = 0;
 
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityDoor>>& getDoors() const = 0;
-    [[nodiscard]] virtual const std::vector<std::unique_ptr<EntityWall>>& getWalls() const = 0;
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityKey>>& getKeys() const = 0;
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityBullet>>& getBullets() const = 0;
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<EntityFloor>>& getFloor() const = 0;
+	[[nodiscard]] virtual const std::unique_ptr<EntityCamera>& getCamera() const = 0;
+	[[nodiscard]] virtual 		std::unique_ptr<EntityCamera>& getCamera() 		 = 0;
+
+	[[nodiscard]] virtual const std::vector<std::unique_ptr<Entity>>& getEntities() const = 0;
+	[[nodiscard]] virtual 		std::vector<std::unique_ptr<Entity>>& getEntities() 	  = 0;
 
 	[[nodiscard]] virtual std::vector<Sun::SceneNode>& getSceneNodeComponents() = 0;
 	[[nodiscard]] virtual std::vector<Sun::CameraNode>& getCameraNodeComponents() = 0;
+
+	[[nodiscard]] virtual std::vector<BoundingBox>& getBoundingComponents() = 0;
+
+	[[nodiscard]] virtual std::vector<Physics>& getPhysicsComponents() = 0;
 };
 
 // TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan

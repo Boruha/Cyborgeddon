@@ -2,6 +2,7 @@
 
 #include <SunlightEngine/Math.hpp>
 #include <iostream>
+#include <utility>
 
 namespace Sun {
 
@@ -68,15 +69,10 @@ namespace Sun {
 
 		[[nodiscard]] T& operator[](const int& index)
 		{
-			switch(index) {
-				case 0  : return x;
-				case 1  : return y;
-				case 2  : return z;
-				default : std::cerr << "Out of bound Vector3<T>\n"; exit(-1);
-			}
+			return const_cast<T&>(std::as_const(*this).operator[](index));
 		}
 
-		[[nodiscard]] T operator[](const int& index) const
+		[[nodiscard]] const T& operator[](const int& index) const
 		{
 			switch(index) {
 				case 0  : return x;

@@ -1,18 +1,26 @@
 #pragma once
 
 #include <cstdlib>
-
-enum EntityID : std::size_t { NULL_ID, PLAYER_ID, CAMERA_ID, ENEMY_ID, KEY_ID, DOOR_ID, BULLET_ID, FLOOR_ID, WALL_ID };
+#include <cmp/Alive.hpp>
+#include <util/Alias.hpp>
 
 struct Entity
 {
 	Entity() = default;
-	explicit Entity(EntityID ID) : ID(ID) {  }
+	explicit Entity(EntityType type) : type(type) {  }
+	virtual ~Entity() = default;
 
-	[[nodiscard]] const EntityID& getID() const { return ID; }
+	[[nodiscard]] const EntityType& getType() const { return type; }
+	[[nodiscard]] const std::size_t& getID() const { return ID; }
+
+	Alive alive { type, ID };
 
 	protected:
-		EntityID ID { NULL_ID };
+		const EntityType type { UNDEFINED };
+		const std::size_t ID { nextID++ };
+
+	private:
+		inline static std::size_t nextID { 0 };
 };
 
 // TODO: generalizar entidades

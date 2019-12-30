@@ -15,6 +15,7 @@ void GameManager::init()
 
 	entityManager->init();
 
+
 	sync.init();
 	render.init();
 }

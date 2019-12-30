@@ -14,21 +14,21 @@ using Sun::SceneNode;
 
 struct EntityKey : Entity
 {
-    explicit EntityKey(const Transformable& transformable, BoundingBox& box, const Lock& lock, SceneNode& node) :
-    	Entity(KEY_ID), transformable(&transformable), collider(&box), lock(&lock), node(&node)
+	explicit EntityKey() : Entity(KEY) {  };
+
+    explicit EntityKey(Transformable& transformable, BoundingBox& box, Lock& lock, SceneNode& node) :
+			Entity(KEY), transformable(&transformable), collider(&box), lock(&lock), node(&node)
 	{
 
 	}
 
-	~EntityKey() {
+	~EntityKey() override {
     	std::cout << "Muere una llave" << std::endl;
     	node->removeFromScene();
     }
 
-    const Transformable* 	transformable { nullptr };
-    BoundingBox*				 collider { nullptr };
-    const Lock*						 lock { nullptr };
-    SceneNode* 					  	 node { nullptr };
-
-    Alive						alive;
+    Transformable* 	transformable { nullptr };
+    BoundingBox*		 collider { nullptr };
+    Lock*					 lock { nullptr };
+    SceneNode* 			  	 node { nullptr };
 };

@@ -19,7 +19,7 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context) const {
 		++next;
 	}
 
-	context->getPlayer()->velocity->velocity = context->getPlayer()->velocity->direction * context->getPlayer()->velocity->speed;
+	context->getPlayer()->physics->velocity = context->getPlayer()->velocity->direction * context->getPlayer()->velocity->speed;
 }
 
 void InputSystem::w_pressed(std::unique_ptr<EntityPlayer>& player) { ++player->velocity->direction.z; }
@@ -36,8 +36,8 @@ void InputSystem::space_pressed(std::unique_ptr<EntityPlayer>& player) {
 	if(CooldownSystem::shootReady()) player->shooting = true;
 }
 // Aim
-void InputSystem::left_pressed  (std::unique_ptr<EntityPlayer>& player) { --player->transformable->rotation.y; }
-void InputSystem::right_pressed (std::unique_ptr<EntityPlayer>& player) { ++player->transformable->rotation.y; }
+void InputSystem::left_pressed  (std::unique_ptr<EntityPlayer>& player) { --player->physics->rotation.y; }
+void InputSystem::right_pressed (std::unique_ptr<EntityPlayer>& player) { ++player->physics->rotation.y; }
 // Switch Mode
 void InputSystem::m_pressed(std::unique_ptr<EntityPlayer>& player) {
 	player->mode = !player->mode;
