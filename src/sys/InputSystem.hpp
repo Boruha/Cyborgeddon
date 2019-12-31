@@ -16,7 +16,7 @@ struct InputSystem : System
 	explicit InputSystem(const Device& device) : device(device) {  }
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext>& context) const;
+	void update(const std::unique_ptr<GameContext>& context) const override;
 
 	private:
 		const Device& device;

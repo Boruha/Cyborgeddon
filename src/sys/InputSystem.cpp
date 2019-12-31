@@ -28,7 +28,7 @@ void InputSystem::s_pressed(EntityPlayer& player) { --player.velocity->direction
 void InputSystem::d_pressed(EntityPlayer& player) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(EntityPlayer& player) {
-	if(player.velocity->speed <= 1 && player.velocity->direction != 0 && CooldownSystem::dashReady())
+	if(player.velocity->speed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady())
 		player.velocity->speed = 16;
 }
 // Shoot

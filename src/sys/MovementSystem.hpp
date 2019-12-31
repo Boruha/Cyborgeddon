@@ -8,10 +8,5 @@
 struct MovementSystem : System
 {
 	void init() override {  }
-
 	void update(const std::unique_ptr<GameContext>& context) const override;
-
-private:
-	//updating position
-	void updatePlayerAndCamera(EntityPlayer&, EntityCamera&) const;
 };

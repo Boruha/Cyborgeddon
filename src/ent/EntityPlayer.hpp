@@ -3,16 +3,11 @@
 #include <cmp/Physics.hpp>
 #include <cmp/Velocity.hpp>
 #include <cmp/BoundingBox.hpp>
-#include <cmp/Alive.hpp>
 
 #include <ent/Entity.hpp>
 
-#include <SunlightEngine/Vector3.hpp>
 #include <SunlightEngine/SceneNode.hpp>
 
-#include <vector>
-
-using Sun::Vector3f;
 using Sun::SceneNode;
 
 struct EntityPlayer : Entity

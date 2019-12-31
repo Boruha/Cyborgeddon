@@ -5,10 +5,8 @@
 
 #include <ent/Entity.hpp>
 
-#include <SunlightEngine/Vector3.hpp>
 #include <SunlightEngine/SceneNode.hpp>
 
-using Sun::Vector3f;
 using Sun::SceneNode;
 
 struct EntityWall : Entity

@@ -1,14 +1,11 @@
 #pragma once
 
-#include <cmp/Transformable.hpp>
-#include <cmp/Velocity.hpp>
+#include <cmp/Physics.hpp>
 
 #include <ent/Entity.hpp>
 
-#include <SunlightEngine/Vector3.hpp>
 #include <SunlightEngine/CameraNode.hpp>
 
-using Sun::Vector3f;
 using Sun::CameraNode;
 
 struct EntityCamera : Entity

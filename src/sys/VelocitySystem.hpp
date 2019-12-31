@@ -7,6 +7,6 @@ struct VelocitySystem : System {
 	void update(const std::unique_ptr<GameContext>& context) const override;
 
 private:
-	inline void accelerate(Velocity& vel) const;
-	inline void decelerate(Velocity& vel) const;
+	void accelerate(Velocity& vel) const;
+	void decelerate(Velocity& vel) const;
 };

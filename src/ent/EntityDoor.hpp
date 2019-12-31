@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cmp/Transformable.hpp>
-#include <cmp/Velocity.hpp>
 #include <cmp/BoundingBox.hpp>
 #include <cmp/Lock.hpp>
 

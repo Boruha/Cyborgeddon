@@ -1,10 +1,7 @@
 #pragma once
 
-#include <cmp/Transformable.hpp>
 #include <cmp/Physics.hpp>
-#include <cmp/Velocity.hpp>
 #include <cmp/BoundingBox.hpp>
-#include <cmp/Alive.hpp>
 #include <cmp/BulletData.hpp>
 
 #include <ent/Entity.hpp>

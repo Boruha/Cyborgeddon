@@ -1,5 +1,4 @@
 #include <sys/CollisionSystem.hpp>
-#include <algorithm>
 #include <SunlightEngine/Vector3.hpp>
 
 //Estrategias para implementar la colision
@@ -68,103 +67,6 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 			typeFunctions[collider.type].p_func(playerBox, playerPhysics, collider, context);
 }
 
-// TODO: considerar matar al enemigo mas cercano a la bala y no el primero en el vector de enemigos
-void CollisionSystem::update(std::vector<EntityEnemy>& enemies, std::vector<EntityBullet>& bullets) const {
-	for (auto& bullet : bullets) {
-		for (auto& enemy : enemies) {
-			if (intersects(*enemy.collider, *bullet.collider)) {
-				enemy.physics->velocity = 0;
-				bullet.physics->velocity = 0;
-				break;									// la bala muere, no seguimos comprobando con esa bala
-			}
-		}
-	}
-}
-
-void CollisionSystem::update(EntityPlayer& player, const std::vector<EntityEnemy>& enemies) const {
-	for (const auto& enemy : enemies) {
-		if (intersects(*player.collider, *enemy.collider)) {
-			player.health--;
-		}
-	}
-}
-
-void CollisionSystem::update(const EntityPlayer& player, const std::vector<EntityWall>& walls) const {
-	for (const auto& wall : walls) {
-		for(int i = 0; i < 3; ++i) {
-			if (player.physics->velocity[i] != 0) {
-				moveCoord(*player.collider, player.physics->velocity[i], i);
-
-				float offset {0};
-
-				if (intersects(*player.collider, *wall.collider)) {
-					if (player.physics->velocity[i] > 0)
-						offset = wall.collider->min[i] - player.collider->max[i];
-					else
-						offset = wall.collider->max[i] - player.collider->min[i];
-
-					player.physics->velocity[i] += offset;
-					moveCoord(*player.collider, offset, i);
-				}
-			}
-		}
-		// tras la colision con la pared que es estatica, corregimos collider
-		fixBox(*player.collider);
-	}
-}
-
-void CollisionSystem::update(const std::vector<EntityDoor>& doors, std::vector<EntityBullet>& bullets) const {
-	for (auto& bullet : bullets) {
-		for (const auto& door : doors) {
-			if (intersects(*door.collider,*bullet.collider)) {
-				bullet.physics->velocity = 0;
-				break;					// la bala muere, no seguimos comprobando con otras puertas
-			}
-		}
-	}
-}
-
-void CollisionSystem::update(const std::vector<EntityWall>& walls, std::vector<EntityBullet>& bullets) const {
-	for (auto& bullet : bullets) {
-		for (const auto& wall : walls) {
-			if (intersects(*wall.collider,*bullet.collider)) {
-				bullet.physics->velocity = 0;
-				break;					// la bala muere, no seguimos comprobando con otras paredes
-			}
-		}
-	}
-}
-
-// TODO: GENERALIZAR, SE REPITE CASI TODO (ideas: bool que "mata" entidades, herencias, )
-
-void CollisionSystem::fixCoord(BoundingBox& bounding, const int coord) {
-	const Vector3f& pos = *bounding.pos;
-
-	bounding.min[coord] = pos[coord] - (bounding.dim[coord] / 2);
-	bounding.max[coord] = pos[coord] + (bounding.dim[coord] / 2);
-}
-
-void CollisionSystem::fixBox(BoundingBox& bounding) {
-	const Vector3f& pos = *bounding.pos;
-
-	for(int i = 0; i < 3; ++i) {
-		bounding.min[i] = pos[i] - (bounding.dim[i] / 2);
-		bounding.max[i] = pos[i] + (bounding.dim[i] / 2);
-	}
-}
-
-void CollisionSystem::moveCoord(BoundingBox& bounding, const float mov, const int coord) {
-	for (int i = 0; i < 2; ++i)
-		bounding[i][coord] += mov;
-}
-
-bool CollisionSystem::intersects(const BoundingBox& bounding, const BoundingBox& other) {
-	for (int i = 0; i < 3; ++i)
-		if(bounding.max[i] <= other.min[i] || bounding.min[i] >= other.max[i])
-			return false;
-
-	return true;
-}
 
 void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Physics& physics, const BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) {
 	if (intersects(playerBox, otherBox)) {
@@ -200,4 +102,34 @@ void CollisionSystem::staticCollision(BoundingBox& box, Physics& physics, const 
 
 void CollisionSystem::rayCollision(BoundingBox& box, Physics& physics, const BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) {
 
+}
+
+
+void CollisionSystem::fixCoord(BoundingBox& bounding, const int coord) {
+	const Vector3f& pos = *bounding.pos;
+
+	bounding.min[coord] = pos[coord] - (bounding.dim[coord] / 2);
+	bounding.max[coord] = pos[coord] + (bounding.dim[coord] / 2);
+}
+
+void CollisionSystem::fixBox(BoundingBox& bounding) {
+	const Vector3f& pos = *bounding.pos;
+
+	for(int i = 0; i < 3; ++i) {
+		bounding.min[i] = pos[i] - (bounding.dim[i] / 2);
+		bounding.max[i] = pos[i] + (bounding.dim[i] / 2);
+	}
+}
+
+void CollisionSystem::moveCoord(BoundingBox& bounding, const float mov, const int coord) {
+	for (int i = 0; i < 2; ++i)
+		bounding[i][coord] += mov;
+}
+
+bool CollisionSystem::intersects(const BoundingBox& bounding, const BoundingBox& other) {
+	for (int i = 0; i < 3; ++i)
+		if(bounding.max[i] <= other.min[i] || bounding.min[i] >= other.max[i])
+			return false;
+
+	return true;
 }

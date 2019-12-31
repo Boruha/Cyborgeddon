@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SunlightEngine/Vector3.hpp>
-#include <cmp/Transformable.hpp>
 #include <cmp/Component.hpp>
 
 using Sun::Vector3f;

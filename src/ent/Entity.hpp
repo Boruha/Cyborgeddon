@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdlib>
-#include <cmp/Alive.hpp>
 #include <util/Alias.hpp>
 
 struct Entity
