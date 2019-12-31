@@ -13,17 +13,19 @@ struct CollisionSystem : System
 
 private:
 
-	static void dynamicCollision(BoundingBox& box, Physics& physics, const BoundingBox& otherBox, const std::unique_ptr<GameContext>& context);
-	static void staticCollision(BoundingBox& box, Physics& physics, const BoundingBox& other, const std::unique_ptr<GameContext>& context);
-	static void rayCollision(BoundingBox& box, Physics& physics, const BoundingBox& other, const std::unique_ptr<GameContext>& context);
+	static void dynamicCollision(BoundingBox& box, Physics& physics, BoundingBox& otherBox, int coord, const std::unique_ptr<GameContext>& context);
+	static void staticCollision(BoundingBox& box, Physics& physics, BoundingBox& other, int coord, const std::unique_ptr<GameContext>& context);
+	static void rayCollision(BoundingBox& box, Physics& physics, BoundingBox& other, int coord, const std::unique_ptr<GameContext>& context);
 
 	static void fixCoord(BoundingBox& bounding, int coord);
 	static void fixBox(BoundingBox& bounding);
 	static void moveCoord(BoundingBox& bounding, float mov, int coord);
+	static void moveBox(BoundingBox &bounding, const Vector3f& mov);
+
 	[[nodiscard]] static bool intersects(const BoundingBox &bounding, const BoundingBox &other);
 
 	struct TTypeFunction {
-		void (*p_func)(BoundingBox& box, Physics& physics, const BoundingBox& other, const std::unique_ptr<GameContext>& context);
+		void (*p_func)(BoundingBox& box, Physics& physics, BoundingBox& other, const int coord, const std::unique_ptr<GameContext>& context);
 	};
 
 	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)
@@ -37,5 +39,4 @@ private:
 		{ staticCollision  },
 		{ rayCollision	   }
 	};
-
 };

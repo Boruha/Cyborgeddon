@@ -149,6 +149,10 @@ void EntityManager::checkEntitiesToDestroy() {
 	// ascendente, podemos eliminar todas las entidades necesarias recorriendo el vector una sola vez
 }
 
+void EntityManager::cleanVectors() {
+	entities.clear();
+	toDeleteVector.clear();
+}
 
 /*		CREATE ENTITIES		*/
 
@@ -265,9 +269,4 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 
 	entities.emplace_back(std::move(door));
 	entities.emplace_back(std::move(key));
-}
-
-void EntityManager::cleanVectors() {
-	entities.clear();
-	toDeleteVector.clear();
 }
