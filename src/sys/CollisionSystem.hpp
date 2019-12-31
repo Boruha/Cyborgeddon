@@ -14,24 +14,35 @@ struct CollisionSystem : System
     void update(const std::unique_ptr<GameContext>& context) const override;
 
 private:
-    void update(const std::unique_ptr<EntityPlayer>&, std::vector<EntityDoor>&) const;
-    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<EntityWall>&) const;
-    void update(const std::unique_ptr<EntityPlayer>&, std::vector<EntityKey>&)  const;
+    void update(const EntityPlayer&, const std::vector<EntityWall>&) const;
     void update(std::vector<EntityEnemy>&, std::vector<EntityBullet>&)  const;
     void update(const std::vector<EntityDoor>&, std::vector<EntityBullet>&)  const;
     void update(const std::vector<EntityWall>&, std::vector<EntityBullet>&)  const;
-    void update(const std::unique_ptr<EntityPlayer>&, const std::vector<EntityEnemy>&)  const;
+    void update(EntityPlayer&, const std::vector<EntityEnemy>&)  const;
 
-    void updatePlayerWall(const std::unique_ptr<EntityPlayer>& player, const BoundingBox& box) const;
-	void updatePlayerDoor(const std::unique_ptr<EntityPlayer>& player, const std::unique_ptr<Entity>& entity) const;
-	void updatePlayerKey(const std::unique_ptr<EntityPlayer>& player, const std::unique_ptr<Entity>& entity) const;
+	static void dynamicCollision(BoundingBox& box, Physics& physics, const BoundingBox& otherBox, const std::unique_ptr<GameContext>& context);
+	static void staticCollision(BoundingBox& box, Physics& physics, const BoundingBox& other, const std::unique_ptr<GameContext>& context);
+	static void rayCollision(BoundingBox& box, Physics& physics, const BoundingBox& other, const std::unique_ptr<GameContext>& context);
 
-	void updatePlayerVsStaticBounding(BoundingBox& player, Physics& physics, const BoundingBox& box) const;
+	inline static void fixCoord(BoundingBox& bounding, int coord);
+	inline static void fixBox(BoundingBox& bounding);
+	inline static void moveCoord(BoundingBox& bounding, float mov, int coord);
+	[[nodiscard]] inline static bool intersects(const BoundingBox &bounding, const BoundingBox &other);
 
-	void fixCoord(BoundingBox &bounding, const int& coord) const;
-	void fixBox(BoundingBox& bounding) const;
-	void moveCoord(BoundingBox& bounding, const float& mov, const int& coord) const;
-	[[nodiscard]] bool intersects(const BoundingBox &bounding, const BoundingBox &other) const;
+	struct TTypeFunction {
+		void (*p_func)(BoundingBox& box, Physics& physics, const BoundingBox& other, const std::unique_ptr<GameContext>& context);
+	};
 
-	void updatePlayerVsDynamicBounding(BoundingBox &playerBox, BoundingBox &otherBox, const std::unique_ptr<GameContext> &context) const;
+	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)
+	// 				Hay que respetar SI O SI el orden de AI_STATE con sus funciones asociadas
+	//				Si el orden de AI_STATE es patrol - pursue - X - Y, el orden de las funciones tiene que ser
+	//				obligatoriamente patrolFunc - pursueFunc - Xfunc - Yfunc.
+	//				Si no se respeta esto, los enemigos se comportaran de manera erratica
+	const TTypeFunction typeFunctions[ColliderType::END_TYPE] // END_STATE es el tamaño del array
+	{
+		{ dynamicCollision },
+		{ staticCollision  },
+		{ rayCollision	   }
+	};
+
 };

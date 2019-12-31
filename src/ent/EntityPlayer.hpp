@@ -22,6 +22,13 @@ struct EntityPlayer : Entity
 	explicit EntityPlayer(Physics& physics, Velocity& velocity, BoundingBox& box, SceneNode& node) :
 			Entity(PLAYER), physics(&physics), velocity(&velocity), collider(&box), node(&node) {  }
 
+	~EntityPlayer() override {
+	//	node->removeFromScene();	// se destruye despues del device de irrlicht asi que hacer remove da segmentation fault
+		physics->makeUndefined();
+		velocity->makeUndefined();
+		collider->makeUndefined();
+	}
+
 	Physics*	  physics { nullptr };
 	Velocity* 	 velocity { nullptr };
 	BoundingBox* collider { nullptr };

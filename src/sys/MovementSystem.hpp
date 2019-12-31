@@ -13,8 +13,5 @@ struct MovementSystem : System
 
 private:
 	//updating position
-	void updatePlayerAndCamera(std::unique_ptr<EntityPlayer>&, std::unique_ptr<EntityCamera>&) const;
-	
-	//others
-	void checkMaxDist_Bullet(const std::vector<std::unique_ptr<Entity>>&) const;
+	void updatePlayerAndCamera(EntityPlayer&, EntityCamera&) const;
 };

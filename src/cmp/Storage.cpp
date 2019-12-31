@@ -22,16 +22,16 @@ Storage::~Storage() {
 	velocityComponents.clear();
 	transformableComponents.clear();
 	cameraNodeComponents.clear();
-	AIComponents.clear();
 	sceneNodeComponents.clear();
+	AIComponents.clear();
 	lockComponents.clear();
 }
 
-Lock& Storage::createLock(const EntityType& e_type, const std::size_t& e_ID) {
+Lock& Storage::createLock(const EntityType e_type, const std::size_t e_ID) {
 	return lockComponents.emplace_back(e_type, e_ID); // lock no depende de una entidad
 }
 
-AI& Storage::createAI(const EntityType& e_type, const std::size_t& e_ID, const vector<Vector3f>& patrol) {
+AI& Storage::createAI(const EntityType e_type, const std::size_t e_ID, const vector<Vector3f>& patrol) {
 	return AIComponents.emplace_back(e_type, e_ID, patrol);
 }
 
@@ -43,18 +43,22 @@ CameraNode& Storage::createCameraNode(const Device& device, const Vector3f& posi
 	return cameraNodeComponents.emplace_back(CameraNode(device, target, position));
 }
 
-Transformable& Storage::createTransformable(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& pos, const Vector3f& rot) {
+Transformable& Storage::createTransformable(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& rot) {
 	return transformableComponents.emplace_back(Transformable(e_type, e_ID, pos, rot));
 }
 
-Velocity& Storage::createVelocity(const EntityType& e_type, const std::size_t& e_ID, const float& speed) {
-	return velocityComponents.emplace_back(Velocity(e_type, e_ID, speed));
+Velocity& Storage::createVelocity(const EntityType e_type, const std::size_t e_ID, const float speed, const float acceleration) {
+	return velocityComponents.emplace_back(Velocity(e_type, e_ID, speed, acceleration));
 }
 
-BoundingBox& Storage::createBoundingBox(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& dim, const Vector3f& pos, const bool is_static) {
-	return boundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, is_static));
+BoundingBox& Storage::createBoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, const ColliderType type) {
+	return boundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, type));
 }
 
-Physics& Storage::createPhysics(const EntityType& e_type, const std::size_t& e_ID, const Vector3f& pos, const Vector3f& vel, const Vector3f& rot) {
+Physics& Storage::createPhysics(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& vel, const Vector3f& rot) {
 	return physicsComponents.emplace_back(Physics(e_type, e_ID, pos, vel, rot));
+}
+
+BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t e_ID, const int lifetime, const bool type) {
+	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, lifetime, type));
 }

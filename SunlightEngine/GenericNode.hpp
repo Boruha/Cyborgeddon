@@ -20,7 +20,7 @@ namespace Sun {
 
         [[nodiscard]] Vector3f getRotation() const { return Vector3f(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
 
-        void removeFromScene() { node->getSceneManager()->addToDeletionQueue(node); node = nullptr; }
+        void removeFromScene() { if(node) node->remove(); node = nullptr; }
 
 		protected:
 			irr::scene::ISceneNode* node { nullptr };

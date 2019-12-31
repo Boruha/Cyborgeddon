@@ -11,18 +11,18 @@ struct AI_System : System
 
 	private:
 
-		void updateState(const std::unique_ptr<EntityPlayer> &player, const std::unique_ptr<Entity>& entity) const;
+		void updateState(const EntityPlayer &player, const std::unique_ptr<Entity>& entity) const;
 
-		static void patrolBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer>& player);
-		static void pursueBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer>& player);
-		static void attackBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer>& player);
+		static void patrolBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player);
+		static void pursueBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player);
+		static void attackBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player);
 
-		static void targetBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer> &player);
+		static void targetBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer &player);
 		static void seekBehaviour(const std::unique_ptr<Entity>& entity);
 		static void alignBehaviour(const std::unique_ptr<Entity>& entity);
 
 	struct TStateFunction {
-		void (*p_func)(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer>& player);
+		void (*p_func)(const std::unique_ptr<Entity>& entity, const EntityPlayer& player);
 	};
 
 	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)

@@ -2,11 +2,13 @@
 
 void GameManager::init()
 {
-	systems.emplace_back(std::make_unique<InputSystem>(InputSystem(render.device)));
+	systems.emplace_back(std::make_unique<VelocitySystem>()); // de momento lo ponemos aqui para que input y AI utilicen la velocidad
+	systems.emplace_back(std::make_unique<InputSystem>(render.device));
 	systems.emplace_back(std::make_unique<AI_System>());
 	systems.emplace_back(std::make_unique<CollisionSystem>());
 	systems.emplace_back(std::make_unique<MovementSystem>());
 	systems.emplace_back(std::make_unique<CooldownSystem>());
+	systems.emplace_back(std::make_unique<BulletSystem>());
 //	systems.emplace_back(std::make_unique<SoundSystem>(SoundSystem()));
 
 	for(auto& sys : systems)
@@ -41,8 +43,8 @@ void GameManager::loop()
 	std::chrono::time_point<std::chrono::high_resolution_clock> now;
 */
 	while(render.device.isActive())
-	{/*
-		now = std::chrono::high_resolution_clock::now();
+	{
+/*		now = std::chrono::high_resolution_clock::now();
 		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - last);
 		last = now;
 		lag += elapsed;
@@ -56,5 +58,5 @@ void GameManager::loop()
 
 		render.update(entityManager);
 		// TODO: interpolar movimiento en render
-	}
+  	}
 }

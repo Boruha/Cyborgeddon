@@ -1,6 +1,6 @@
 #include <cmp/BoundingBox.hpp>
 
-Vector3f& BoundingBox::operator[](const int &index) {
+Vector3f& BoundingBox::operator[](const int index) {
 	switch(index) {
 		case 0  : return min;
 		case 1  : return max;
@@ -8,7 +8,7 @@ Vector3f& BoundingBox::operator[](const int &index) {
 	}
 }
 
-const Vector3f& BoundingBox::operator[](const int &index) const {
+const Vector3f& BoundingBox::operator[](const int index) const {
 	switch(index) {
 		case 0  : return min;
 		case 1  : return max;

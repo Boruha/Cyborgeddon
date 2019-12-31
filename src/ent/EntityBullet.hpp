@@ -5,6 +5,7 @@
 #include <cmp/Velocity.hpp>
 #include <cmp/BoundingBox.hpp>
 #include <cmp/Alive.hpp>
+#include <cmp/BulletData.hpp>
 
 #include <ent/Entity.hpp>
 
@@ -18,22 +19,21 @@ struct EntityBullet : Entity
 {
 	explicit EntityBullet() : Entity(BULLET) {  }
 
-	explicit EntityBullet(Physics& physics, BoundingBox& box, const bool type, SceneNode& node) :
-			Entity(BULLET), physics(&physics), collider(&box), node(&node),
-			dmgType(type)
+	explicit EntityBullet(Physics& physics, BoundingBox& box, BulletData& data, SceneNode& node) :
+			Entity(BULLET), physics(&physics), collider(&box), data(&data), node(&node)
 	{
 
 	}
 
 	~EntityBullet() override {
-		std::cout << "Muere una bala" << std::endl;
 		node->removeFromScene();
+		physics->makeUndefined();
+		collider->makeUndefined();
+		data->makeUndefined();
 	}
 
 	Physics*			  physics { nullptr };
 	BoundingBox*		 collider { nullptr };
+	BulletData*				 data { nullptr };
 	SceneNode*				 node { nullptr };
-
-    float distance_left { 150 };
-	bool dmgType { false };
 };

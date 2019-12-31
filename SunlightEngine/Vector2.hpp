@@ -17,58 +17,58 @@ namespace Sun {
 		Vector2<T>(const Vector2<T> &vec) : x(vec.x), y(vec.y) {}
 
 
-		[[nodiscard]] Vector2<T> operator+(const Vector2<T> &vec) 	const { return Vector2<T>(x + vec.x, y + vec.y); }
+		[[nodiscard]] Vector2<T> operator+(const Vector2<T> vec) 	const { return Vector2<T>(x + vec.x, y + vec.y); }
 
-		[[nodiscard]] Vector2<T> operator-(const Vector2<T> &vec) 	const { return Vector2<T>(x - vec.x, y - vec.y); }
+		[[nodiscard]] Vector2<T> operator-(const Vector2<T> vec) 	const { return Vector2<T>(x - vec.x, y - vec.y); }
 
 		[[nodiscard]] Vector2<T> operator-() 						const { return Vector2<T>(-x, -y); }
 
-		[[nodiscard]] Vector2<T> operator*(const T &mul) 			const { return Vector2<T>(x * mul, y * mul); }
+		[[nodiscard]] Vector2<T> operator*(const T mul) 			const { return Vector2<T>(x * mul, y * mul); }
 
-		[[nodiscard]] Vector2<T> operator/(const T &div) 			const { return Vector2<T>(x / div, y / div); }
+		[[nodiscard]] Vector2<T> operator/(const T div) 			const { return Vector2<T>(x / div, y / div); }
 
 
-		Vector2<T>& operator+=(const Vector2<T> &vec) {
+		Vector2<T>& operator+=(const Vector2<T> vec) {
 			x += vec.x;
 			y += vec.y;
 			return *this;
 		}
 
-		Vector2<T>& operator-=(const Vector2<T> &vec) {
+		Vector2<T>& operator-=(const Vector2<T> vec) {
 			x -= vec.x;
 			y -= vec.y;
 			return *this;
 		}
 
-		Vector2<T>& operator*=(const T &mul) {
+		Vector2<T>& operator*=(const T mul) {
 			x *= mul;
 			y *= mul;
 			return *this;
 		}
 
-		Vector2<T>& operator/=(const T &div) {
+		Vector2<T>& operator/=(const T div) {
 			x /= div;
 			y /= div;
 			return *this;
 		}
 
-		Vector2<T>& operator=(const T& n) {
+		Vector2<T>& operator=(const T n) {
 			x = y = n;
 			return *this;
 		}
 
-		[[nodiscard]] bool operator==(const Vector2<T> &vec) const { return x == vec.x && y == vec.y; }
+		[[nodiscard]] bool operator==(const Vector2<T> vec)  const { return x == vec.x && y == vec.y; }
 		[[nodiscard]] bool operator==(const T n)			 const { return x == n && y == n; }
 
-		[[nodiscard]] bool operator!=(const Vector2<T> &vec) const { return x != vec.x || y != vec.y; }
+		[[nodiscard]] bool operator!=(const Vector2<T> vec)  const { return x != vec.x || y != vec.y; }
 		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n; }
 
-		[[nodiscard]] T& operator[](const int& index)
+		[[nodiscard]] T& operator[](const int index)
 		{
 			return const_cast<T&>(std::as_const(*this).operator[](index));
 		}
 
-		[[nodiscard]] const T& operator[](const int& index) const
+		[[nodiscard]] const T& operator[](const int index) const
 		{
 			switch(index) {
 				case 0  : return x;
@@ -90,7 +90,7 @@ namespace Sun {
 			return static_cast<T>(sqrt(x*x + y*y));
 		}
 
-        void rotate(double deg, const Vector2<T>& origin = Vector2<T>())
+        void rotate(double deg, const Vector2<T> origin = Vector2<T>())
         {
             deg *= DEG2RAD;
 

@@ -23,8 +23,11 @@ struct EntityKey : Entity
 	}
 
 	~EntityKey() override {
-    	std::cout << "Muere una llave" << std::endl;
     	node->removeFromScene();
+
+    	transformable->makeUndefined();
+    	collider->makeUndefined();
+    	// lock no pertenece a la llave sino a la puerta, asi que no hay que hacerlo undefined
     }
 
     Transformable* 	transformable { nullptr };

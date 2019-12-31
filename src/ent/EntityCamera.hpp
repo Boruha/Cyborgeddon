@@ -18,7 +18,11 @@ struct EntityCamera : Entity
 	explicit EntityCamera(Physics& physics, CameraNode& node)
 		: Entity(CAMERA), physics(&physics), node(&node)
 	{
+	}
 
+	~EntityCamera() override {
+	//	node->removeFromScene();				muere depsues del device de irrlicht asi que da segmentation fault
+		physics->makeUndefined();
 	}
 
 	Physics* physics { nullptr };

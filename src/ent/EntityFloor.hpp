@@ -20,6 +20,11 @@ struct EntityFloor : Entity {
 
 	}
 
+	~EntityFloor() override {
+    	node->removeFromScene();
+    	transformable->makeUndefined();
+    };
+
     Transformable* 		transformable { nullptr };
     SceneNode*					 node { nullptr };
 };

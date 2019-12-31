@@ -21,6 +21,12 @@ struct EntityWall : Entity
 
 	}
 
+	~EntityWall() override {
+		node->removeFromScene();
+		transformable->makeUndefined();
+		collider->makeUndefined();
+	}
+
     Transformable* transformable { nullptr };
     BoundingBox*		collider { nullptr };
     SceneNode* 				node { nullptr };

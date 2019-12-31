@@ -22,8 +22,11 @@ struct EntityEnemy : Entity
 	}
 
 	~EntityEnemy() override {
-		std::cout << "Muere un enemigo" << std::endl;
 		node->removeFromScene();
+		physics->makeUndefined();
+		velocity->makeUndefined();
+		collider->makeUndefined();
+		ai->makeUndefined();
 	};
 
 	Physics*			  physics { nullptr };

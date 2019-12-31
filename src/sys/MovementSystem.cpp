@@ -1,4 +1,5 @@
 #include <sys/MovementSystem.hpp>
+#include <cmath>
 
 //TODO / CONSIDERACION: 
 // 		1. Llamar 'Update()' a un método aux del System que se encarge de llamar a sus metodos.
@@ -9,40 +10,22 @@
 
 void MovementSystem::update(const std::unique_ptr<GameContext>& context) const {
 
+	// A la camara hay que darle la velocidad en funcion de la del jugador tras ser modificada por otros sistemas
+	context->getCamera().physics->velocity = context->getPlayer().physics->velocity;
+
 	for (auto& cmp : context->getPhysicsComponents()) {
 		cmp.position += cmp.velocity;
-		cmp.rotation.y > 0 ? cmp.rotation.y -= 360 : cmp.rotation.y += 360;
+		cmp.rotation.y = fmodf(cmp.rotation.y, 360);
 	}
-
-	updatePlayerAndCamera(context->getPlayer(), context->getCamera());
-
-	checkMaxDist_Bullet(context->getEntities());
 }
 
 // TODO: considerar la posicion del nodo para interpolar y la del transformable para mover las cosas en el juego
-void MovementSystem::updatePlayerAndCamera(std::unique_ptr<EntityPlayer>& player, std::unique_ptr<EntityCamera>& camera) const {
-    camera->physics->position += player->physics->velocity;
-
+void MovementSystem::updatePlayerAndCamera(EntityPlayer& player, EntityCamera& camera) const {
 	// TODO: esto es una basura asi como esta hecho, arreglar en el futuro
 	// DASH
-	if(player->velocity->speed > player->velocity->defaultSpeed)
-	    player->velocity->speed -= 1.2f;
-	if(player->velocity->speed < player->velocity->defaultSpeed)
-	    player->velocity->speed = player->velocity->defaultSpeed;
+	if(player.velocity->speed > player.velocity->defaultSpeed)
+	    player.velocity->speed -= 1.2f;
+	if(player.velocity->speed < player.velocity->defaultSpeed)
+	    player.velocity->speed = player.velocity->defaultSpeed;
 	// TODO: las entidades deben tener velocidad maxima const, minima const y actual variable
-}
-
-// TODO: reconsiderar logica -> las balas nunca se frenan. Para evitar calculos se podria tener una variable
-//  	 llamada "distancia recorrida" que fuese sumando speed en cada iteracion y que la condicion de muerte sea
-//  	 que esa distancia sea mayor a la distancia maxima de vida de la bala
-// BORU: Una consideración buenarda.
-void MovementSystem::checkMaxDist_Bullet(const std::vector<std::unique_ptr<Entity>>& entities) const {
-	for (const auto& e : entities) {
-		if(e->getType() == EntityType::BULLET) {
-			auto* bullet = dynamic_cast<EntityBullet*>(e.get());
-			bullet->distance_left -= bullet->physics->velocity.length();
-			if(bullet->distance_left <= 0)
-				bullet->alive.alive = false;
-		}
-	}
 }

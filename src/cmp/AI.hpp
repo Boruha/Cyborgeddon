@@ -9,7 +9,7 @@
 using Sun::Vector3f;
 
 struct AI : public Component {
-	explicit AI(const EntityType& e_type, const std::size_t& e_ID, const std::vector<Vector3f>& patrol);
+	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<Vector3f>& patrol);
 	~AI();
 
 	AI_State state { PATROL_STATE };

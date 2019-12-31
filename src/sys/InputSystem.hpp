@@ -22,23 +22,23 @@ struct InputSystem : System
 		const Device& device;
 		Sun::EventReceiver eventReceiver;
 		// Movement
-		static void w_pressed(std::unique_ptr<EntityPlayer>& player);
-		static void a_pressed(std::unique_ptr<EntityPlayer>& player);
-		static void s_pressed(std::unique_ptr<EntityPlayer>& player);
-		static void d_pressed(std::unique_ptr<EntityPlayer>& player);
+		static void w_pressed(EntityPlayer& player);
+		static void a_pressed(EntityPlayer& player);
+		static void s_pressed(EntityPlayer& player);
+		static void d_pressed(EntityPlayer& player);
 		// Dash
-        static void shift_pressed(std::unique_ptr<EntityPlayer>& player);
+        static void shift_pressed(EntityPlayer& player);
 		// Shoot
-		static void space_pressed(std::unique_ptr<EntityPlayer>& player);
+		static void space_pressed(EntityPlayer& player);
 		// Aim
-		static void left_pressed  (std::unique_ptr<EntityPlayer>& player);
-		static void right_pressed (std::unique_ptr<EntityPlayer>& player);
+		static void left_pressed  (EntityPlayer& player);
+		static void right_pressed (EntityPlayer& player);
 		// Switch Mode
-		static void m_pressed(std::unique_ptr<EntityPlayer>& player);
+		static void m_pressed(EntityPlayer& player);
 
 	struct TKey2func {
 		Sun::KEY_CODE key;
-		void (*p_func)(std::unique_ptr<EntityPlayer>& player);
+		void (*p_func)(EntityPlayer& player);
 	};
 
 	const TKey2func keyMapping[Sun::KEY_CODE_COUNT] // KEY::KODE::COUNT tiene la cantidad de teclas que usamos

@@ -14,10 +14,10 @@ void AI_System::update(const std::unique_ptr<GameContext>& context) const {
 	}
 }
 
-void AI_System::updateState(const std::unique_ptr<EntityPlayer>& player, const std::unique_ptr<Entity>& entity) const {
+void AI_System::updateState(const EntityPlayer& player, const std::unique_ptr<Entity>& entity) const {
 	auto* enemy = dynamic_cast<EntityEnemy*>(entity.get());
 
-	Vector3f v_distance = enemy->physics->position - player->physics->position;
+	Vector3f v_distance = enemy->physics->position - player.physics->position;
 	v_distance.y = 0;
 
 	float distance = v_distance.length();
@@ -31,7 +31,7 @@ void AI_System::updateState(const std::unique_ptr<EntityPlayer>& player, const s
 	}
 }
 
-void AI_System::patrolBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer>& player) {
+void AI_System::patrolBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player) {
 	auto* enemy = dynamic_cast<EntityEnemy*>(entity.get());
 
 	Vector3f distance = enemy->physics->position - enemy->ai->target_position;
@@ -45,21 +45,21 @@ void AI_System::patrolBehaviour(const std::unique_ptr<Entity>& entity, const std
 //	std::cout << &enemy << " esta en su patrol\n";
 }
 
-void AI_System::pursueBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer>& player) {
+void AI_System::pursueBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player) {
 //	std::cout << &entity << " esta persiguiendo al player\n";
 }
 
-void AI_System::attackBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer> &player) {
+void AI_System::attackBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player) {
 //	std::cout << &entity << " esta atacando al player\n";
 }
 
-void AI_System::targetBehaviour(const std::unique_ptr<Entity>& entity, const std::unique_ptr<EntityPlayer> &player) {
+void AI_System::targetBehaviour(const std::unique_ptr<Entity>& entity, const EntityPlayer& player) {
 	auto* enemy = dynamic_cast<EntityEnemy*>(entity.get());
 
 	if (enemy->ai->state == AI_State::PATROL_STATE)
 		enemy->ai->target_position = enemy->ai->patrol_position[enemy->ai->patrol_index];
 	else
-		enemy->ai->target_position = player->physics->position;
+		enemy->ai->target_position = player.physics->position;
 }
 
 void AI_System::seekBehaviour(const std::unique_ptr<Entity>& entity) {

@@ -13,8 +13,6 @@ struct Entity
 	[[nodiscard]] const EntityType& getType() const { return type; }
 	[[nodiscard]] const std::size_t& getID() const { return ID; }
 
-	Alive alive { type, ID };
-
 	protected:
 		const EntityType type { UNDEFINED };
 		const std::size_t ID { nextID++ };

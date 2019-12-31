@@ -1,14 +1,10 @@
 #include <man/EntityManager.hpp>
 #include <algorithm>
 
-/*		Destructor		*/
-void EntityManager::cleanVectors() {
-	entities.clear();
-}
-
 /*		Init - Update	*/
 void EntityManager::init() {
 	entities.reserve(256);
+	toDeleteVector.reserve(8); // si van a morir mas de 8 entidades a la vez, cambiar este valor
 
     createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
 
@@ -114,67 +110,73 @@ void EntityManager::init() {
 
 void EntityManager::update(){
 	checkShooting();
-	checkEntitiesToDestroy();
+	if (!toDeleteVector.empty()) {
+ 		checkEntitiesToDestroy();
+	}
 }
 
 // TODO: en los managers no debe haber logica. Revisar sistema de input
 // BORU: No se puede acceder al createBullet() desde input (al menos ahora). Lo ideal sería crear desde ahí obv.
 // 		 si se consigue, la var. 'Shooting' se podrá elilminar.
 void EntityManager::checkShooting() {
-	if(player->shooting){
+	if(player.shooting){
 		createBullet(Vector3f(3));
-		player->shooting = false;
+		player.shooting = false;
 	}
 }
 
 /*		DESTROY ENTITIES	*/
 
+// aqui recibimos los IDS de las entidades que queremos destruir
+void EntityManager::addToDestroy(std::size_t ID) {
+	if (!std::binary_search(toDeleteVector.begin(), toDeleteVector.end(), ID)) // si no tenemos guardado ya ese valor
+		toDeleteVector.insert(std::upper_bound(toDeleteVector.begin(), toDeleteVector.end(), ID), ID ); // lo insertamos en orden ascendente
+}
 
 void EntityManager::checkEntitiesToDestroy() {
-	auto it = entities.begin();
+	auto itEntities = entities.begin();
+	auto itToDestroy = toDeleteVector.begin();
 
-	while(it != entities.end()) {
-		if (!(*it)->alive.alive)
-			it = entities.erase(it);
-		else
-			++it;
+	while(itToDestroy != toDeleteVector.end()) { 				// mientras haya entidades que eliminar
+		while ((*itEntities)->getID() != (*itToDestroy))		// y no coincidan los IDS
+			++itEntities;										// avanzamos en el array de entidades
+
+		itEntities = entities.erase(itEntities);				// borramos la entidad y actualizamos su iterador
+		itToDestroy = toDeleteVector.erase(itToDestroy);		// borramos el ID y actualizamos el iterador
 	}
+
+	// como el vector de IDS de entidades esta ordenado de menor a mayor, y las entidades generan sus IDS de forma
+	// ascendente, podemos eliminar todas las entidades necesarias recorriendo el vector una sola vez
 }
 
 
 /*		CREATE ENTITIES		*/
 
 void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& pos, const Vector3f& dim, const float& speed, const Vector3f& posCamera) {
-	auto e_player = std::make_unique<EntityPlayer>();
-	auto e_camera = std::make_unique<EntityCamera>();
+	Velocity& velocity = componentStorage.createVelocity(player.getType(), player.getID(), 1.f, 1.f);
 
-	Velocity& velocity = componentStorage.createVelocity(e_player->getType(), e_player->getID(), 1.f);
+	Physics& physicsPlayer = componentStorage.createPhysics(player.getType(), player.getID(), pos + Vector3f(0, dim.y / 2, 0));
+	Physics& physicsCamera = componentStorage.createPhysics(camera.getType(), camera.getID(), posCamera, physicsPlayer.velocity);
 
-	Physics& physicsPlayer = componentStorage.createPhysics(e_player->getType(), e_player->getID(), pos + Vector3f(0, dim.y / 2, 0));
-	Physics& physicsCamera = componentStorage.createPhysics(e_camera->getType(), e_camera->getID(), posCamera, physicsPlayer.velocity);
-
-	BoundingBox& box = componentStorage.createBoundingBox(e_player->getType(), e_player->getID(), dim, physicsPlayer.position);
+	BoundingBox& box = componentStorage.createBoundingBox(player.getType(), player.getID(), dim, physicsPlayer.position, ColliderType::RAY);
 
 	SceneNode& playerNode = componentStorage.createSceneNode(device, physicsPlayer.position, physicsPlayer.rotation, box.dim, nullptr, "./img/textures/testing/testing_demon.jpg");
 	CameraNode& cameraNode = componentStorage.createCameraNode(device, physicsCamera.position, physicsPlayer.position);
 
-	e_player->velocity = &velocity;
-	e_player->physics = &physicsPlayer;
-	e_player->collider = &box;
-	e_player->node = &playerNode;
+	player.velocity = &velocity;
+	player.physics = &physicsPlayer;
+	player.collider = &box;
+	player.node = &playerNode;
 
-	e_camera->physics = &physicsCamera;
-	e_camera->node = &cameraNode;
-
-	player = std::move(e_player);
-	camera = std::move(e_camera);
+	camera.physics = &physicsCamera;
+	camera.node = &cameraNode;
 }
 
 void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
 	auto wall = std::make_unique<EntityWall>();
 
 	Transformable& transformable = componentStorage.createTransformable(wall->getType(), wall->getID(), pos + Vector3f(0, dim.y / 2, 0));
-	BoundingBox& box = componentStorage.createBoundingBox(wall->getType(), wall->getID(), dim, transformable.position, true);
+	BoundingBox& box = componentStorage.createBoundingBox(wall->getType(), wall->getID(), dim, transformable.position, ColliderType::STATIC);
 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, box.dim, nullptr, "./img/textures/testing/testing_wall.jpg");
 
 	wall->transformable = &transformable;
@@ -188,8 +190,8 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	auto enemy = std::make_unique<EntityEnemy>();
 
 	Physics& physics = componentStorage.createPhysics(enemy->getType(), enemy->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
-	Velocity& velocity = componentStorage.createVelocity(enemy->getType(), enemy->getID(), speed);
-	BoundingBox& box = componentStorage.createBoundingBox(enemy->getType(), enemy->getID(), dim, physics.position, true);
+	Velocity& velocity = componentStorage.createVelocity(enemy->getType(), enemy->getID(), speed, 0.f);
+	BoundingBox& box = componentStorage.createBoundingBox(enemy->getType(), enemy->getID(), dim, physics.position, ColliderType::STATIC);
 	AI& ai = componentStorage.createAI(enemy->getType(), enemy->getID(), patrol);
 	SceneNode& node = componentStorage.createSceneNode(device, physics.position, physics.rotation, box.dim, nullptr, "./img/textures/testing/testing_enemy.png");
 
@@ -217,19 +219,21 @@ void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vect
 void EntityManager::createBullet(const Vector3f& dim) {
 	auto bullet = std::make_unique<EntityBullet>();
 
-	Physics& physics = componentStorage.createPhysics(bullet->getType(), bullet->getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y) * 10.f, player->physics->rotation);
+	Physics& physics = componentStorage.createPhysics(bullet->getType(), bullet->getID(), player.physics->position, Vector3f().getXZfromRotationY(player.physics->rotation.y) * 10.f, player.physics->rotation); // 10.f speed
 	physics.position += physics.velocity; // la bala no sale de dentro del player, sino desde delante de el
 
-	BoundingBox& box = componentStorage.createBoundingBox(bullet->getType(), bullet->getID(), dim, physics.position);
+	BoundingBox& box = componentStorage.createBoundingBox(bullet->getType(), bullet->getID(), dim, physics.position, ColliderType::RAY);
+
+	BulletData& data = componentStorage.createBulletData(bullet->getType(), bullet->getID(), static_cast<int>(150 / physics.velocity.length()), player.mode); // 150 dist max
 
 	SceneNode& node = componentStorage.createSceneNode(device, physics.position, physics.rotation, box.dim, nullptr, nullptr);
 
-	player->mode ? node.setTexture("./img/textures/testing/testing_angel.jpg") : node.setTexture("./img/textures/testing/testing_demon.jpg");
+	player.mode ? node.setTexture("./img/textures/testing/testing_angel.jpg") : node.setTexture("./img/textures/testing/testing_demon.jpg");
 
 	bullet->physics = &physics;
 	bullet->collider = &box;
+	bullet->data = &data;
 	bullet->node = &node;
-	bullet->dmgType = player->mode;
 
 	entities.emplace_back(std::move(bullet));
 }
@@ -241,8 +245,8 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 	Transformable& transformableDoor = componentStorage.createTransformable(door->getType(), door->getID(), doorPos + Vector3f(0, doorDim.y / 2, 0));
 	Transformable& transformableKey = componentStorage.createTransformable(key->getType(), key->getID(), keyPos + Vector3f(0, keyDim.y / 2, 0));
 
-	BoundingBox& boxDoor = componentStorage.createBoundingBox(door->getType(), door->getID(), doorDim, transformableDoor.position, true);
-	BoundingBox& boxKey = componentStorage.createBoundingBox(key->getType(), key->getID(), keyDim, transformableKey.position);
+	BoundingBox& boxDoor = componentStorage.createBoundingBox(door->getType(), door->getID(), doorDim, transformableDoor.position, ColliderType::STATIC);
+	BoundingBox& boxKey = componentStorage.createBoundingBox(key->getType(), key->getID(), keyDim, transformableKey.position, ColliderType::DYNAMIC);
 
 	SceneNode& nodeDoor = componentStorage.createSceneNode(device, transformableDoor.position, transformableDoor.rotation, boxDoor.dim, nullptr, "./img/textures/testing/testing_door.png");
 	SceneNode& nodeKey = componentStorage.createSceneNode(device, transformableKey.position, transformableKey.rotation, boxKey.dim, nullptr, "./img/textures/testing/testing_key.png");
@@ -261,4 +265,9 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 
 	entities.emplace_back(std::move(door));
 	entities.emplace_back(std::move(key));
+}
+
+void EntityManager::cleanVectors() {
+	entities.clear();
+	toDeleteVector.clear();
 }

@@ -23,9 +23,9 @@ namespace Sun {
 
 		[[nodiscard]] Vector3<T> operator-() 						const { return Vector3<T>(-x, -y, -z); }
 
-		[[nodiscard]] Vector3<T> operator*(const T &mul) 			const { return Vector3<T>(x * mul, y * mul, z * mul); }
+		[[nodiscard]] Vector3<T> operator*(const T mul) 			const { return Vector3<T>(x * mul, y * mul, z * mul); }
 
-		[[nodiscard]] Vector3<T> operator/(const T &div) 			const { return Vector3<T>(x / div, y / div, z / div); }
+		[[nodiscard]] Vector3<T> operator/(const T div) 			const { return Vector3<T>(x / div, y / div, z / div); }
 
 
 		Vector3<T>& operator+=(const Vector3<T> &vec) {
@@ -42,21 +42,21 @@ namespace Sun {
 			return *this;
 		}
 
-		Vector3<T>& operator*=(const T &mul) {
+		Vector3<T>& operator*=(const T mul) {
 			x *= mul;
 			y *= mul;
 			z *= mul;
 			return *this;
 		}
 
-		Vector3<T>& operator/=(const T &div) {
+		Vector3<T>& operator/=(const T div) {
 			x /= div;
 			y /= div;
 			z /= div;
 			return *this;
 		}
 
-		Vector3<T>& operator=(const T& n) {
+		Vector3<T>& operator=(const T n) {
 			x = y = z = n;
 			return *this;
 		}
@@ -67,12 +67,12 @@ namespace Sun {
 		[[nodiscard]] bool operator!=(const Vector3<T> &vec) const { return x != vec.x || y != vec.y || z != vec.z; }
 		[[nodiscard]] bool operator!=(const T n) 			 const { return x != n || y != n || z != n; }
 
-		[[nodiscard]] T& operator[](const int& index)
+		[[nodiscard]] T& operator[](const int index)
 		{
 			return const_cast<T&>(std::as_const(*this).operator[](index));
 		}
 
-		[[nodiscard]] const T& operator[](const int& index) const
+		[[nodiscard]] const T& operator[](const int index) const
 		{
 			switch(index) {
 				case 0  : return x;
@@ -119,7 +119,7 @@ namespace Sun {
 			z = std::abs(z);
 		}
 
-		void rotateXZ(double deg, const Vector3<T>& origin = Vector3<T>())
+		void rotateXZ(double deg, const Vector3<T> origin = Vector3<T>())
         {
 		    deg *= DEG2RAD;
 
@@ -132,7 +132,7 @@ namespace Sun {
 		    z += origin.z;
         }
 
-        void rotateXY(double deg, const Vector3<T>& origin = Vector3<T>())
+        void rotateXY(double deg, const Vector3<T> origin = Vector3<T>())
         {
             deg *= DEG2RAD;
 
@@ -145,7 +145,7 @@ namespace Sun {
             y += origin.y;
         }
 
-        void rotateYZ(double deg, const Vector3<T>& origin = Vector3<T>())
+        void rotateYZ(double deg, const Vector3<T> origin = Vector3<T>())
         {
             deg *= DEG2RAD;
 

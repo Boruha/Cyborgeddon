@@ -24,8 +24,10 @@ struct EntityDoor : Entity {
 	}
 
 	~EntityDoor() override {
-    	std::cout << "Muere una puerta" << std::endl;
     	node->removeFromScene();
+    	transformable->makeUndefined();
+    	collider->makeUndefined();
+    	lock->makeUndefined();
     }
 
     Transformable*		transformable { nullptr };
