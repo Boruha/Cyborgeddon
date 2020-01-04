@@ -224,7 +224,6 @@ void EntityManager::createBullet(const Vector3f& dim) {
 	auto bullet = std::make_unique<EntityBullet>();
 
 	Physics& physics = componentStorage.createPhysics(bullet->getType(), bullet->getID(), player.physics->position, Vector3f().getXZfromRotationY(player.physics->rotation.y) * 10.f, player.physics->rotation); // 10.f speed
-	physics.position += physics.velocity; // la bala no sale de dentro del player, sino desde delante de el
 
 	BoundingBox& box = componentStorage.createBoundingBox(bullet->getType(), bullet->getID(), dim, physics.position, ColliderType::RAY);
 

@@ -20,23 +20,23 @@ private:
 	static void fixCoord(BoundingBox& bounding, int coord);
 	static void fixBox(BoundingBox& bounding);
 	static void moveCoord(BoundingBox& bounding, float mov, int coord);
-	static void moveBox(BoundingBox &bounding, const Vector3f& mov);
+	static void moveBox(BoundingBox& bounding, const Vector3f& mov);
 
-	[[nodiscard]] static bool intersects(const BoundingBox &bounding, const BoundingBox &other);
+	[[nodiscard]] static bool intersects(const BoundingBox& bounding, const BoundingBox& other);
+	[[nodiscard]] static bool intersects(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Vector3f& d);
+	[[nodiscard]] static bool pointOnSegment(const Vector3f& a, const Vector3f& b, const Vector3f& c);
+	[[nodiscard]] static int segmentOrientation(const Vector3f& a, const Vector3f& b, const Vector3f& c);
 
 	struct TTypeFunction {
 		void (*p_func)(BoundingBox& box, Physics& physics, BoundingBox& other, const int coord, const std::unique_ptr<GameContext>& context);
 	};
 
-	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)
-	// 				Hay que respetar SI O SI el orden de AI_STATE con sus funciones asociadas
-	//				Si el orden de AI_STATE es patrol - pursue - X - Y, el orden de las funciones tiene que ser
-	//				obligatoriamente patrolFunc - pursueFunc - Xfunc - Yfunc.
-	//				Si no se respeta esto, los enemigos se comportaran de manera erratica
-	const TTypeFunction typeFunctions[ColliderType::END_TYPE] // END_STATE es el tamaño del array
+	const TTypeFunction typeFunctions[ColliderType::END_TYPE] // END_TYPE es el tamaño del array
 	{
 		{ dynamicCollision },
 		{ staticCollision  },
 		{ rayCollision	   }
 	};
+
+	void bulletCollision(const std::unique_ptr<GameContext> &context) const;
 };

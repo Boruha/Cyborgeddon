@@ -5,7 +5,15 @@
 
 namespace Sun {
 	struct GenericNode {
-		GenericNode() = default;
+		// Deleted constructors
+		GenericNode() = delete;
+		GenericNode& operator=(const GenericNode& node) = delete;
+		GenericNode& operator=(GenericNode&& node) = delete;
+
+		// Constructors
+		GenericNode(const GenericNode& node) = default;
+		GenericNode(GenericNode&& node) = default;
+
 		explicit GenericNode(irr::scene::ISceneNode* node, const Vector3f& position, const Vector3f& rotation) :
 			node(node), position(&position), rotation(&rotation) {
 		}
