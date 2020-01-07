@@ -17,20 +17,20 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 	// 			alguna modificación. CUALQUIER metodo estatico al final debe SÍ O SÍ hacer un fix de todos los colliders
 	// 			que haya tocado
 
-	BoundingBox& playerBox = *context->getPlayer().collider;
-	Physics& playerPhysics = *context->getPlayer().physics;
-
 	for (auto& collider : context->getBoundingComponents())
 		if (collider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(collider);
 
-	for (int i = 0; i < 3; ++i) {
-		if (playerPhysics.velocity[i] != 0) {								// si es necesario
-			moveCoord(playerBox, playerPhysics.velocity[i], i);			// muevo la caja en la coordenada i (x -> y -> z)
+	BoundingBox& playerBox = *context->getPlayer().collider;
+	Physics& playerPhysics = *context->getPlayer().physics;
 
-			for (auto& collider : context->getBoundingComponents()) 		// compruebo colision con esa coordenada
+	for (int i = 0; i < 3; ++i) {
+		if (playerPhysics.velocity[i] != 0) {																	// si es necesario
+			moveCoord(playerBox,playerPhysics.velocity[i], i);			// muevo la caja en la coordenada i (x -> y -> z)
+
+			for (auto& collider : context->getBoundingComponents()) 												// compruebo colision con esa coordenada
 				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType())	// ahora solo usamos al player, en un futuro esto cambiara
-						typeFunctions[collider.type].p_func(playerBox, playerPhysics, collider, i, context);
+							typeFunctions[collider.type].p_func(playerBox, playerPhysics, collider, i, context);
 		}
 	}
 }

@@ -6,7 +6,8 @@ struct HighSpeedCollisionSystem : System {
 	void init() override {  }
 	void update(const std::unique_ptr<GameContext>& context) const override;
 
-	[[nodiscard]] static bool intersects(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Vector3f& d);
-	[[nodiscard]] static bool pointOnSegment(const Vector3f& a, const Vector3f& b, const Vector3f& c);
-	[[nodiscard]] static int segmentOrientation(const Vector3f& a, const Vector3f& b, const Vector3f& c);
+	[[nodiscard]] bool intersects(const Vector3f &lastPos, const Vector3f &newPos, const BoundingBox &box) const;
+	[[nodiscard]] bool intersects(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Vector3f& d) const;
+	[[nodiscard]] bool pointOnSegment(const Vector3f& a, const Vector3f& b, const Vector3f& c) const;
+	[[nodiscard]] int segmentOrientation(const Vector3f& a, const Vector3f& b, const Vector3f& c) const;
 };
