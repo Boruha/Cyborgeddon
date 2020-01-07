@@ -15,7 +15,6 @@ private:
 
 	static void dynamicCollision(BoundingBox& box, Physics& physics, BoundingBox& otherBox, int coord, const std::unique_ptr<GameContext>& context);
 	static void staticCollision(BoundingBox& box, Physics& physics, BoundingBox& other, int coord, const std::unique_ptr<GameContext>& context);
-	static void rayCollision(BoundingBox& box, Physics& physics, BoundingBox& other, int coord, const std::unique_ptr<GameContext>& context);
 
 	static void fixCoord(BoundingBox& bounding, int coord);
 	static void fixBox(BoundingBox& bounding);
@@ -23,9 +22,6 @@ private:
 	static void moveBox(BoundingBox& bounding, const Vector3f& mov);
 
 	[[nodiscard]] static bool intersects(const BoundingBox& bounding, const BoundingBox& other);
-	[[nodiscard]] static bool intersects(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Vector3f& d);
-	[[nodiscard]] static bool pointOnSegment(const Vector3f& a, const Vector3f& b, const Vector3f& c);
-	[[nodiscard]] static int segmentOrientation(const Vector3f& a, const Vector3f& b, const Vector3f& c);
 
 	struct TTypeFunction {
 		void (*p_func)(BoundingBox& box, Physics& physics, BoundingBox& other, const int coord, const std::unique_ptr<GameContext>& context);
@@ -34,9 +30,8 @@ private:
 	const TTypeFunction typeFunctions[ColliderType::END_TYPE] // END_TYPE es el tamaño del array
 	{
 		{ dynamicCollision },
-		{ staticCollision  },
-		{ rayCollision	   }
+		{ staticCollision  }
 	};
 
-	void bulletCollision(const std::unique_ptr<GameContext> &context) const;
+	void bulletCollision(const std::unique_ptr<GameContext>& context) const;
 };

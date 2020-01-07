@@ -22,26 +22,26 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context) const {
 	context->getPlayer().physics->velocity = context->getPlayer().velocity->direction * context->getPlayer().velocity->speed;
 }
 
-void InputSystem::w_pressed(EntityPlayer& player) { ++player.velocity->direction.z; }
-void InputSystem::a_pressed(EntityPlayer& player) { --player.velocity->direction.x; }
-void InputSystem::s_pressed(EntityPlayer& player) { --player.velocity->direction.z; }
-void InputSystem::d_pressed(EntityPlayer& player) { ++player.velocity->direction.x; }
+void InputSystem::w_pressed(Entity& player) { ++player.velocity->direction.z; }
+void InputSystem::a_pressed(Entity& player) { --player.velocity->direction.x; }
+void InputSystem::s_pressed(Entity& player) { --player.velocity->direction.z; }
+void InputSystem::d_pressed(Entity& player) { ++player.velocity->direction.x; }
 // Dash
-void InputSystem::shift_pressed(EntityPlayer& player) {
+void InputSystem::shift_pressed(Entity& player) {
 	if(player.velocity->speed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady())
 		player.velocity->speed = 16;
 }
 // Shoot
-void InputSystem::space_pressed(EntityPlayer& player) {
-	if(CooldownSystem::shootReady()) player.shooting = true;
+void InputSystem::space_pressed(Entity& player) {
+	if(CooldownSystem::shootReady()) player.characterData->attacking = true;
 }
 // Aim
-void InputSystem::left_pressed  (EntityPlayer& player) { --player.physics->rotation.y; }
-void InputSystem::right_pressed (EntityPlayer& player) { ++player.physics->rotation.y; }
+void InputSystem::left_pressed  (Entity& player) { --player.physics->rotation.y; }
+void InputSystem::right_pressed (Entity& player) { ++player.physics->rotation.y; }
 // Switch Mode
-void InputSystem::m_pressed(EntityPlayer& player) {
-	player.mode = !player.mode;
-	player.mode ?
-		player.node->setTexture("./img/textures/testing/testing_angel.jpg") :
-		player.node->setTexture("./img/textures/testing/testing_demon.jpg");
+void InputSystem::m_pressed(Entity& player) {
+	player.characterData->mode = !player.characterData->mode;
+	player.characterData->mode ?
+		player.node->get()->setTexture("./img/textures/testing/testing_angel.jpg") :
+		player.node->get()->setTexture("./img/textures/testing/testing_demon.jpg");
 }

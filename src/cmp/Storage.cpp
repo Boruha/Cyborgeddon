@@ -8,21 +8,25 @@ using Sun::CameraNode;
 Storage::Storage(std::size_t initialSize) {
 	lockComponents.reserve(initialSize);
 	AIComponents.reserve(initialSize);
-	sceneNodeComponents.reserve(initialSize);
-	cameraNodeComponents.reserve(initialSize);
+	nodeComponents.reserve(initialSize);
 	transformableComponents.reserve(initialSize);
 	velocityComponents.reserve(initialSize);
 	boundingComponents.reserve(initialSize);
+	rayBoundingComponents.resize(initialSize);
 	physicsComponents.reserve(initialSize);
+	bulletDataComponents.reserve(initialSize);
+	characterDataComponents.reserve(initialSize);
 }
 
 Storage::~Storage() {
+	characterDataComponents.clear();
+	bulletDataComponents.clear();
 	physicsComponents.clear();
+	rayBoundingComponents.clear();
 	boundingComponents.clear();
 	velocityComponents.clear();
 	transformableComponents.clear();
-	cameraNodeComponents.clear();
-	sceneNodeComponents.clear();
+	nodeComponents.clear();
 	AIComponents.clear();
 	lockComponents.clear();
 }
@@ -35,12 +39,12 @@ AI& Storage::createAI(const EntityType e_type, const std::size_t e_ID, const vec
 	return AIComponents.emplace_back(e_type, e_ID, patrol);
 }
 
-SceneNode& Storage::createSceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh, const char* texture) {
-	return sceneNodeComponents.emplace_back(SceneNode(device, position, rotation, dim, mesh, texture));
+Node_ptr& Storage::createSceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh, const char* texture) {
+	return nodeComponents.emplace_back(std::make_unique<SceneNode>(device, position, rotation, dim, mesh, texture));
 }
 
-CameraNode& Storage::createCameraNode(const Device& device, const Vector3f& position, const Vector3f &target) {
-	return cameraNodeComponents.emplace_back(CameraNode(device, target, position));
+Node_ptr& Storage::createCameraNode(const Device& device, const Vector3f& position, const Vector3f &target) {
+	return nodeComponents.emplace_back(std::make_unique<CameraNode>(device, target, position));
 }
 
 Transformable& Storage::createTransformable(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& rot) {
@@ -51,8 +55,11 @@ Velocity& Storage::createVelocity(const EntityType e_type, const std::size_t e_I
 	return velocityComponents.emplace_back(Velocity(e_type, e_ID, speed, acceleration));
 }
 
-BoundingBox& Storage::createBoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, const ColliderType type) {
-	return boundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, type));
+BoundingBox& Storage::createBoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type) {
+	if (type == ColliderType::RAY)
+		return rayBoundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, vel, passable, type));
+	else
+		return boundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, vel, passable, type));
 }
 
 Physics& Storage::createPhysics(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& vel, const Vector3f& rot) {
@@ -61,4 +68,8 @@ Physics& Storage::createPhysics(const EntityType e_type, const std::size_t e_ID,
 
 BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t e_ID, const int lifetime, const bool type) {
 	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, lifetime, type));
+}
+
+CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const int attackingCooldown) {
+	return characterDataComponents.emplace_back(CharacterData(e_type, e_ID, mode, health, attackingCooldown));
 }

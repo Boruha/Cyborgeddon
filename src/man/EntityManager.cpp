@@ -4,101 +4,101 @@
 /*		Init - Update	*/
 void EntityManager::init() {
 	entities.reserve(256);
-	toDeleteVector.reserve(8); // si van a morir mas de 8 entidades a la vez, cambiar este valor
+	toDelete.reserve(8); // si van a morir mas de 8 entidades a la vez, cambiar este valor
 
-    createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
+	createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	createFloor("./img/textures/testing/testing_controls.jpg",Vector3f(0,0,5), Vector3f(60,0,35)); //Controls
-    createFloor("./img/textures/testing/testing_tips.jpg",Vector3f(-2,0,-27), Vector3f(45,0,15)); //Tips
+	createFloor("./img/textures/testing/testing_tips.jpg",Vector3f(-2,0,-27), Vector3f(45,0,15)); //Tips
 
-    // Doors and keys
+	// Doors and keys
 
-    createPairKeyDoor(Vector3f(0,0,60), Vector3f(3),Vector3f(-37,0,90), Vector3f(2,20,10));
-    createPairKeyDoor(Vector3f(-70,0,90), Vector3f(3), Vector3f(37,0,0), Vector3f(2,20,10));
-    createPairKeyDoor(Vector3f(70,0,0), Vector3f(3), Vector3f(-37,0,0), Vector3f(2,20,10));
-    createPairKeyDoor(Vector3f(-70,0,0), Vector3f(3), Vector3f(37,0,190), Vector3f(2,20,10));
-    createPairKeyDoor(Vector3f(70,0,190), Vector3f(3), Vector3f(-37,0,190), Vector3f(2,20,10));
-    createPairKeyDoor(Vector3f(-70,0,190), Vector3f(3), Vector3f(37,0,90), Vector3f(2,20,10));
-    createPairKeyDoor(Vector3f(70,0,90), Vector3f(3), Vector3f(152.5,0,300), Vector3f(45,10,10));
-    createPairKeyDoor(Vector3f(158,0,320), Vector3f(3), Vector3f(-180,0,272.5), Vector3f(10,10,45));
-
-
-    //Pasillo inicial
-
-	    //Derecha
-        createWall(Vector3f(40,0,-27.5), Vector3f(10,10,45));
-        createWall(Vector3f(40,0,45), Vector3f(10,10,80));
-        createWall(Vector3f(40,0,140), Vector3f(10,10,90));
-        createWall(Vector3f(40,0,222.5), Vector3f(10,10,55));
-
-        //Izquierda
-        createWall(Vector3f(-40,0,-27.5), Vector3f(10,10,45));
-        createWall(Vector3f(-40,0,45), Vector3f(10,10,80));
-        createWall(Vector3f(-40,0,140), Vector3f(10,10,90));
-        createWall(Vector3f(-40,0,222.5), Vector3f(10,10,55));
-
-        createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
-
-        //Salas del pasillo
-
-            //Sala 1
-            createWall(Vector3f(75,0,-30), Vector3f(60,10,10));    //Abajo
-            createWall(Vector3f(75,0,30), Vector3f(60,10,10));    //Arriba
-            createWall(Vector3f(100,0,0), Vector3f(10,10,50));    //Cierre
-
-            //Sala 2
-            createWall(Vector3f(-75,0,-30), Vector3f(60,10,10));    //Abajo
-            createWall(Vector3f(-75,0,30), Vector3f(60,10,10));    //Arriba
-            createWall(Vector3f(-100,0,0), Vector3f(10,10,50));    //Cierre
-
-            //Sala 3
-            createWall(Vector3f(75,0,60), Vector3f(60,10,10));    //Abajo
-            createWall(Vector3f(75,0,120), Vector3f(60,10,10));    //Arriba
-            createWall(Vector3f(100,0,90), Vector3f(10,10,50));    //Cierre
-
-            //Sala 4
-            createWall(Vector3f(-75,0,60), Vector3f(60,10,10));    //Abajo
-            createWall(Vector3f(-75,0,120), Vector3f(60,10,10));    //Arriba
-            createWall(Vector3f(-100,0,90), Vector3f(10,10,50));    //Cierre
-
-            //Sala 5
-            createWall(Vector3f(-75,0,160), Vector3f(60,10,10));    //Abajo
-            createWall(Vector3f(-75,0,220), Vector3f(60,10,10));    //Arriba
-            createWall(Vector3f(-100,0,190), Vector3f(10,10,50));    //Cierre
-
-            //Sala 6
-            createWall(Vector3f(75,0,160), Vector3f(60,10,10));    //Abajo
-            createWall(Vector3f(75,0,220), Vector3f(60,10,10));    //Arriba
-            createWall(Vector3f(100,0,190), Vector3f(10,10,50));    //Cierre
-
-    //Pasillo Horizontal
-    createWall(Vector3f(-115,0,245), Vector3f(140,10,10));    //Inferior izda
-    createWall(Vector3f(115,0,245), Vector3f(140,10,10));     //Inderior dcha
-    createWall(Vector3f(-27.5,0,300), Vector3f(315,10,10));   //Superior
-    createWall(Vector3f(180,0,277.5), Vector3f(10,10,55));  //Derecha
-
-    //Sala llave principal
-    createWall(Vector3f(200,0,300), Vector3f(30,10,10));
-    createWall(Vector3f(210,0,345), Vector3f(10,10,80));
-    createWall(Vector3f(100,0,345), Vector3f(10,10,80));
-    createWall(Vector3f(157.5,0,380), Vector3f(105,10,10));
-
-    //Zona patrulla
-    createWall(Vector3f(-180,0,227.5), Vector3f(10,10,45)); //Inf der
-    createWall(Vector3f(-180,0,327.5), Vector3f(10,10,45)); //Sup der
-    createWall(Vector3f(-262.5,0,345), Vector3f(160,10,10)); //Sup
-    createWall(Vector3f(-262.5,0,210), Vector3f(160,10,10)); //Inf
-    createWall(Vector3f(-347.5,0,277.5), Vector3f(10,10,145)); //Izq
-    createWall(Vector3f(-265,0,277.5), Vector3f(60,20,55)); //Pilar
-    //------------------------------------  END MAPA  ---------------------------------------------------------------
+	createPairKeyDoor(Vector3f(0,0,60), Vector3f(3),Vector3f(-37,0,90), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(-70,0,90), Vector3f(3), Vector3f(37,0,0), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(70,0,0), Vector3f(3), Vector3f(-37,0,0), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(-70,0,0), Vector3f(3), Vector3f(37,0,190), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(70,0,190), Vector3f(3), Vector3f(-37,0,190), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(-70,0,190), Vector3f(3), Vector3f(37,0,90), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(70,0,90), Vector3f(3), Vector3f(152.5,0,300), Vector3f(45,10,10));
+	createPairKeyDoor(Vector3f(158,0,320), Vector3f(3), Vector3f(-180,0,272.5), Vector3f(10,10,45));
 
 
-    std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270) };
-    std::vector<Vector3f> patrol_2 = { Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200) };
-    std::vector<Vector3f> patrol_3 = { Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100) };
-    std::vector<Vector3f> patrol_4 = { Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270) };
-    std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
+	//Pasillo inicial
+
+	//Derecha
+	createWall(Vector3f(40,0,-27.5), Vector3f(10,10,45));
+	createWall(Vector3f(40,0,45), Vector3f(10,10,80));
+	createWall(Vector3f(40,0,140), Vector3f(10,10,90));
+	createWall(Vector3f(40,0,222.5), Vector3f(10,10,55));
+
+	//Izquierda
+	createWall(Vector3f(-40,0,-27.5), Vector3f(10,10,45));
+	createWall(Vector3f(-40,0,45), Vector3f(10,10,80));
+	createWall(Vector3f(-40,0,140), Vector3f(10,10,90));
+	createWall(Vector3f(-40,0,222.5), Vector3f(10,10,55));
+
+	createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
+
+	//Salas del pasillo
+
+	//Sala 1
+	createWall(Vector3f(75,0,-30), Vector3f(60,10,10));    //Abajo
+	createWall(Vector3f(75,0,30), Vector3f(60,10,10));    //Arriba
+	createWall(Vector3f(100,0,0), Vector3f(10,10,50));    //Cierre
+
+	//Sala 2
+	createWall(Vector3f(-75,0,-30), Vector3f(60,10,10));    //Abajo
+	createWall(Vector3f(-75,0,30), Vector3f(60,10,10));    //Arriba
+	createWall(Vector3f(-100,0,0), Vector3f(10,10,50));    //Cierre
+
+	//Sala 3
+	createWall(Vector3f(75,0,60), Vector3f(60,10,10));    //Abajo
+	createWall(Vector3f(75,0,120), Vector3f(60,10,10));    //Arriba
+	createWall(Vector3f(100,0,90), Vector3f(10,10,50));    //Cierre
+
+	//Sala 4
+	createWall(Vector3f(-75,0,60), Vector3f(60,10,10));    //Abajo
+	createWall(Vector3f(-75,0,120), Vector3f(60,10,10));    //Arriba
+	createWall(Vector3f(-100,0,90), Vector3f(10,10,50));    //Cierre
+
+	//Sala 5
+	createWall(Vector3f(-75,0,160), Vector3f(60,10,10));    //Abajo
+	createWall(Vector3f(-75,0,220), Vector3f(60,10,10));    //Arriba
+	createWall(Vector3f(-100,0,190), Vector3f(10,10,50));    //Cierre
+
+	//Sala 6
+	createWall(Vector3f(75,0,160), Vector3f(60,10,10));    //Abajo
+	createWall(Vector3f(75,0,220), Vector3f(60,10,10));    //Arriba
+	createWall(Vector3f(100,0,190), Vector3f(10,10,50));    //Cierre
+
+	//Pasillo Horizontal
+	createWall(Vector3f(-115,0,245), Vector3f(140,10,10));    //Inferior izda
+	createWall(Vector3f(115,0,245), Vector3f(140,10,10));     //Inderior dcha
+	createWall(Vector3f(-27.5,0,300), Vector3f(315,10,10));   //Superior
+	createWall(Vector3f(180,0,277.5), Vector3f(10,10,55));  //Derecha
+
+	//Sala llave principal
+	createWall(Vector3f(200,0,300), Vector3f(30,10,10));
+	createWall(Vector3f(210,0,345), Vector3f(10,10,80));
+	createWall(Vector3f(100,0,345), Vector3f(10,10,80));
+	createWall(Vector3f(157.5,0,380), Vector3f(105,10,10));
+
+	//Zona patrulla
+	createWall(Vector3f(-180,0,227.5), Vector3f(10,10,45)); //Inf der
+	createWall(Vector3f(-180,0,327.5), Vector3f(10,10,45)); //Sup der
+	createWall(Vector3f(-262.5,0,345), Vector3f(160,10,10)); //Sup
+	createWall(Vector3f(-262.5,0,210), Vector3f(160,10,10)); //Inf
+	createWall(Vector3f(-347.5,0,277.5), Vector3f(10,10,145)); //Izq
+	createWall(Vector3f(-265,0,277.5), Vector3f(60,20,55)); //Pilar
+	//------------------------------------  END MAPA  ---------------------------------------------------------------
+
+
+	std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270) };
+	std::vector<Vector3f> patrol_2 = { Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200) };
+	std::vector<Vector3f> patrol_3 = { Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100) };
+	std::vector<Vector3f> patrol_4 = { Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270) };
+	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
 
 	createEnemy(patrol_1[0], Vector3f(8), 0.6f, patrol_1);
@@ -110,18 +110,32 @@ void EntityManager::init() {
 
 void EntityManager::update(){
 	checkShooting();
-	if (!toDeleteVector.empty()) {
- 		checkEntitiesToDestroy();
-	}
+/*
+	std::cout << "Entidades:";
+	for (const auto& e : entities)
+		std::cout << " " << e.getID();
+	std::cout << std::endl;
+
+	std::cout << "ToDeleteVector:";
+	for (const auto& e : toDelete)
+		std::cout << " " << e;
+	std::cout << std::endl;
+*/
+
+	if (!toDelete.empty())			// si hay entidades que "matar"
+		killEntities();				// las matamos
+
+	moveDeadEntities();				// las entidades muertas se van moviendo hacia el final
+	removeEntities();				// las entidades que estan al final son eliminadas del vector
 }
 
 // TODO: en los managers no debe haber logica. Revisar sistema de input
 // BORU: No se puede acceder al createBullet() desde input (al menos ahora). Lo ideal sería crear desde ahí obv.
 // 		 si se consigue, la var. 'Shooting' se podrá elilminar.
 void EntityManager::checkShooting() {
-	if(player.shooting){
+	if(player->characterData->attacking){
 		createBullet(Vector3f(3));
-		player.shooting = false;
+		player->characterData->attacking = false;
 	}
 }
 
@@ -129,143 +143,144 @@ void EntityManager::checkShooting() {
 
 // aqui recibimos los IDS de las entidades que queremos destruir
 void EntityManager::addToDestroy(std::size_t ID) {
-	if (!std::binary_search(toDeleteVector.begin(), toDeleteVector.end(), ID)) // si no tenemos guardado ya ese valor
-		toDeleteVector.insert(std::upper_bound(toDeleteVector.begin(), toDeleteVector.end(), ID), ID ); // lo insertamos en orden ascendente
+	if (!std::binary_search(toDelete.begin(), toDelete.end(), ID)) // si no tenemos guardado ya ese valor
+		toDelete.insert(std::upper_bound(toDelete.begin(), toDelete.end(), ID), ID ); // lo insertamos en orden ascendente
 }
 
-void EntityManager::checkEntitiesToDestroy() {
-	auto itEntities = entities.begin();
-	auto itToDestroy = toDeleteVector.begin();
-
-	while(itToDestroy != toDeleteVector.end()) { 				// mientras haya entidades que eliminar
-		while ((*itEntities)->getID() != (*itToDestroy))		// y no coincidan los IDS
-			++itEntities;										// avanzamos en el array de entidades
-
-		itEntities = entities.erase(itEntities);				// borramos la entidad y actualizamos su iterador
-		itToDestroy = toDeleteVector.erase(itToDestroy);		// borramos el ID y actualizamos el iterador
+void EntityManager::killEntities() {
+	// recorremos el array de entidades en orden ascendente
+	for (auto [e, d] = std::tuple{entities.begin(), toDelete.begin()}; e != entities.end() && d != toDelete.end(); ++e) {
+		if (e->getID() != *d)
+			continue;
+		if(e->node)								// si la entidad que queremos eliminar tiene nodo
+			e->node->get()->removeFromScene();	// lo eliminamos de la escena
+		e->makeUndefined();						// "matamos" a la entidad haciendo que su tipo y el de sus componentes sea UNDEFINED
+		++d;									// actualizamos la posicion del vector toDelete (antes no se actualiza, pues no habiamos encontrado la entidad)
 	}
+	// no hay que hacer nada mas para comprobar si toDelete alcanza todas las entidades porque tanto "entities" como "toDelete" estan ordenados ascendentemente
 
-	// como el vector de IDS de entidades esta ordenado de menor a mayor, y las entidades generan sus IDS de forma
-	// ascendente, podemos eliminar todas las entidades necesarias recorriendo el vector una sola vez
+	toDelete.clear();							// al acabar de matar las entidades, limpipamos el vector toDelete
+}
+
+
+void EntityManager::moveDeadEntities() {
+	for (auto e = entities.rbegin(); e != entities.rend(); ++e)				// recorremos el vector de entidades inversamente (asi evitamos que se nos queden elementos descolgados
+		if ((e + 1) != entities.rend() && (e + 1)->getType() == UNDEFINED)	// si la proxima entidad es valida y esta "muerta" (type == undefined)
+			std::iter_swap(e,(e + 1));									// entonces la cambiamos con la entidad actual
+
+	// Con esto conseguimos que las entidades muertas avancen en el array con un coste muy bajo (un swap) en cada iteracion
+	// permitiendo a otra funcion eliminar los elementos que se encuentren al final.
+	// Si solo eliminamos los elementos del final nos ahorramos tener que mover los elementos que hay detras.
+	// De esta manera, en lugar de eliminar el elemento numero 10 de un vector de 100, teniendo que mover los elementos
+	// 11 - 100 una posicion atras en una sola iteracion, repartimos esa carga en todas las iteraciones moviendo los
+	// elementos correspondientes una unica posicion. Cuando lleguen al final seran eliminados sin mover nada
+}
+
+void EntityManager::removeEntities() {
+	while(entities.at(entities.size() - 1).getType() == UNDEFINED)
+		entities.erase(entities.end() - 1);
 }
 
 void EntityManager::cleanVectors() {
 	entities.clear();
-	toDeleteVector.clear();
+	toDelete.clear();
 }
 
 /*		CREATE ENTITIES		*/
 
 void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& pos, const Vector3f& dim, const float& speed, const Vector3f& posCamera) {
-	Velocity& velocity = componentStorage.createVelocity(player.getType(), player.getID(), 1.f, 1.f);
+	player = & entities.emplace_back(PLAYER);
+	camera = & entities.emplace_back(CAMERA);
 
-	Physics& physicsPlayer = componentStorage.createPhysics(player.getType(), player.getID(), pos + Vector3f(0, dim.y / 2, 0));
-	Physics& physicsCamera = componentStorage.createPhysics(camera.getType(), camera.getID(), posCamera, physicsPlayer.velocity);
+	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 1.f, 1.f);
+	player->physics 		= & componentStorage.createPhysics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0));
+	player->collider 		= & componentStorage.createBoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, ColliderType::DYNAMIC);
+	player->characterData	= & componentStorage.createCharacterData(player->getType(), player->getID(), false, 100, 15);
+	player->node 			= & componentStorage.createSceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, "./img/textures/testing/testing_demon.jpg");
 
-	BoundingBox& box = componentStorage.createBoundingBox(player.getType(), player.getID(), dim, physicsPlayer.position, ColliderType::RAY);
+	player->addComponent(*player->velocity);
+	player->addComponent(*player->physics);
+	player->addComponent(*player->collider);
+	player->addComponent(*player->velocity);
 
-	SceneNode& playerNode = componentStorage.createSceneNode(device, physicsPlayer.position, physicsPlayer.rotation, box.dim, nullptr, "./img/textures/testing/testing_demon.jpg");
-	CameraNode& cameraNode = componentStorage.createCameraNode(device, physicsCamera.position, physicsPlayer.position);
+	camera->physics 	= & componentStorage.createPhysics(camera->getType(), camera->getID(), posCamera, player->physics->velocity);
+	camera->node 		= & componentStorage.createCameraNode(device, camera->physics->position, player->physics->position);
 
-	player.velocity = &velocity;
-	player.physics = &physicsPlayer;
-	player.collider = &box;
-	player.node = &playerNode;
-
-	camera.physics = &physicsCamera;
-	camera.node = &cameraNode;
+	camera->addComponent(*camera->physics);
 }
 
 void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
-	auto wall = std::make_unique<EntityWall>();
+	Entity& wall = entities.emplace_back(WALL);
 
-	Transformable& transformable = componentStorage.createTransformable(wall->getType(), wall->getID(), pos + Vector3f(0, dim.y / 2, 0));
-	BoundingBox& box = componentStorage.createBoundingBox(wall->getType(), wall->getID(), dim, transformable.position, ColliderType::STATIC);
-	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, box.dim, nullptr, "./img/textures/testing/testing_wall.jpg");
+	wall.physics 	= & componentStorage.createPhysics(wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0));
+	wall.collider 	= & componentStorage.createBoundingBox(wall.getType(), wall.getID(), dim, wall.physics->position, wall.physics->velocity, false, ColliderType::STATIC);
+	wall.node 		= & componentStorage.createSceneNode(device, wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr, "./img/textures/testing/testing_wall.jpg");
 
-	wall->transformable = &transformable;
-	wall->collider = &box;
-	wall->node = &node;
-
-	entities.emplace_back(std::move(wall));
+	wall.addComponent(*wall.physics);
+	wall.addComponent(*wall.collider);
 }
 
 void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) {
-	auto enemy = std::make_unique<EntityEnemy>();
+	Entity& enemy = entities.emplace_back(ENEMY);
 
-	Physics& physics = componentStorage.createPhysics(enemy->getType(), enemy->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
-	Velocity& velocity = componentStorage.createVelocity(enemy->getType(), enemy->getID(), speed, 0.f);
-	BoundingBox& box = componentStorage.createBoundingBox(enemy->getType(), enemy->getID(), dim, physics.position, ColliderType::STATIC);
-	AI& ai = componentStorage.createAI(enemy->getType(), enemy->getID(), patrol);
-	SceneNode& node = componentStorage.createSceneNode(device, physics.position, physics.rotation, box.dim, nullptr, "./img/textures/testing/testing_enemy.png");
+	enemy.physics 	= & componentStorage.createPhysics(enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
+	enemy.velocity 	= & componentStorage.createVelocity(enemy.getType(), enemy.getID(), speed, 0.f);
+	enemy.collider 	= & componentStorage.createBoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, ColliderType::STATIC);
+	enemy.ai 		= & componentStorage.createAI(enemy.getType(), enemy.getID(), patrol);
+	enemy.node 		= & componentStorage.createSceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png");;
 
-	enemy->physics = &physics;
-	enemy->velocity = &velocity;
-	enemy->collider = &box;
-	enemy->ai = &ai;
-	enemy->node = &node;
-
-	entities.emplace_back(std::move(enemy));
+	enemy.addComponent(*enemy.physics);
+	enemy.addComponent(*enemy.velocity);
+	enemy.addComponent(*enemy.collider);
+	enemy.addComponent(*enemy.ai);
 }
 
 void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vector3f& dim) {
-	auto floor = std::make_unique<EntityFloor>();
+	Entity& floor = entities.emplace_back(FLOOR);
 
-	Transformable& transformable = componentStorage.createTransformable(floor->getType(), floor->getID(), pos + Vector3f(0, dim.y / 2, 0));
- 	SceneNode& node = componentStorage.createSceneNode(device, transformable.position, transformable.rotation, dim, nullptr, tex);
+	floor.transformable	= & componentStorage.createTransformable(floor.getType(), floor.getID(), pos + Vector3f(0, dim.y / 2, 0));
+	floor.node 			= & componentStorage.createSceneNode(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex);
 
- 	floor->transformable = &transformable;
- 	floor->node = &node;
-
- 	entities.emplace_back(std::move(floor));
+	floor.addComponent(*floor.transformable);
 }
 
 void EntityManager::createBullet(const Vector3f& dim) {
-	auto bullet = std::make_unique<EntityBullet>();
+	Entity& bullet = entities.emplace_back(BULLET);
 
-	Physics& physics = componentStorage.createPhysics(bullet->getType(), bullet->getID(), player.physics->position, Vector3f().getXZfromRotationY(player.physics->rotation.y) * 10.f, player.physics->rotation); // 10.f speed
+	bullet.physics 		= & componentStorage.createPhysics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y) * 10.f, player->physics->rotation); // 10.f speed
+	bullet.collider 	= & componentStorage.createBoundingBox(bullet.getType(), bullet.getID(), dim, bullet.physics->position, bullet.physics->velocity, true, ColliderType::RAY);
+	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), static_cast<int>(150 / bullet.physics->velocity.length()), player->characterData->mode); // 150 dist max
+	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, bullet.collider->dim, nullptr, nullptr);
 
-	BoundingBox& box = componentStorage.createBoundingBox(bullet->getType(), bullet->getID(), dim, physics.position, ColliderType::RAY);
+	player->characterData->mode ? bullet.node->get()->setTexture("./img/textures/testing/testing_angel.jpg") : bullet.node->get()->setTexture("./img/textures/testing/testing_demon.jpg");
 
-	BulletData& data = componentStorage.createBulletData(bullet->getType(), bullet->getID(), static_cast<int>(150 / physics.velocity.length()), player.mode); // 150 dist max
-
-	SceneNode& node = componentStorage.createSceneNode(device, physics.position, physics.rotation, box.dim, nullptr, nullptr);
-
-	player.mode ? node.setTexture("./img/textures/testing/testing_angel.jpg") : node.setTexture("./img/textures/testing/testing_demon.jpg");
-
-	bullet->physics = &physics;
-	bullet->collider = &box;
-	bullet->data = &data;
-	bullet->node = &node;
-
-	entities.emplace_back(std::move(bullet));
+	bullet.addComponent(*bullet.physics);
+	bullet.addComponent(*bullet.collider);
+	bullet.addComponent(*bullet.bulletData);
 }
 
 void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim) {
-	auto door = std::make_unique<EntityDoor>();
-	auto key = std::make_unique<EntityKey>();
+	Entity& door 	= entities.emplace_back(DOOR);
 
-	Transformable& transformableDoor = componentStorage.createTransformable(door->getType(), door->getID(), doorPos + Vector3f(0, doorDim.y / 2, 0));
-	Transformable& transformableKey = componentStorage.createTransformable(key->getType(), key->getID(), keyPos + Vector3f(0, keyDim.y / 2, 0));
+	Lock& lock 		= componentStorage.createLock(door.getType(), door.getID()); // la cerradura pertenece a la puerta, NO a la llave
 
-	BoundingBox& boxDoor = componentStorage.createBoundingBox(door->getType(), door->getID(), doorDim, transformableDoor.position, ColliderType::STATIC);
-	BoundingBox& boxKey = componentStorage.createBoundingBox(key->getType(), key->getID(), keyDim, transformableKey.position, ColliderType::DYNAMIC);
+	door.lock 		= & lock;
+	door.physics 	= & componentStorage.createPhysics(door.getType(), door.getID(), doorPos + Vector3f(0, doorDim.y / 2, 0));
+	door.collider 	= & componentStorage.createBoundingBox(door.getType(), door.getID(), doorDim, door.physics->position, door.physics->velocity, false, ColliderType::STATIC);
+	door.node 		= & componentStorage.createSceneNode(device, door.physics->position, door.physics->rotation, door.collider->dim, nullptr, "./img/textures/testing/testing_door.png");
 
-	SceneNode& nodeDoor = componentStorage.createSceneNode(device, transformableDoor.position, transformableDoor.rotation, boxDoor.dim, nullptr, "./img/textures/testing/testing_door.png");
-	SceneNode& nodeKey = componentStorage.createSceneNode(device, transformableKey.position, transformableKey.rotation, boxKey.dim, nullptr, "./img/textures/testing/testing_key.png");
+	door.addComponent(*door.lock);
+	door.addComponent(*door.transformable);
+	door.addComponent(*door.collider);
 
-	Lock& lock = componentStorage.createLock(door->getType(), door->getID()); // la cerradura pertenece a la puerta, NO a la llave
+	Entity& key 	= entities.emplace_back(KEY);
 
-	door->lock = &lock;
-	door->transformable = &transformableDoor;
-	door->collider = &boxDoor;
-	door->node = &nodeDoor;
+	key.lock 		= & lock;
+	key.physics 	= & componentStorage.createPhysics(key.getType(), key.getID(), keyPos + Vector3f(0, keyDim.y / 2, 0));
+	key.collider	= & componentStorage.createBoundingBox(key.getType(), key.getID(), keyDim, key.physics->position, key.physics->velocity, true, ColliderType::DYNAMIC);
+	key.node 		= & componentStorage.createSceneNode(device, key.physics->position, key.physics->rotation, key.collider->dim, nullptr, "./img/textures/testing/testing_key.png");
 
-	key->lock = &lock;
-	key->transformable = &transformableKey;
-	key->collider = &boxKey;
-	key->node = &nodeKey;
-
-	entities.emplace_back(std::move(door));
-	entities.emplace_back(std::move(key));
+	key.addComponent(*key.lock);
+	key.addComponent(*key.transformable);
+	key.addComponent(*key.collider);
 }

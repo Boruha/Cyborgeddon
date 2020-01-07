@@ -5,6 +5,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<VelocitySystem>()); // de momento lo ponemos aqui para que input y AI utilicen la velocidad
 	systems.emplace_back(std::make_unique<InputSystem>(render.device));
 	systems.emplace_back(std::make_unique<AI_System>());
+	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());
 	systems.emplace_back(std::make_unique<CollisionSystem>());
 	systems.emplace_back(std::make_unique<MovementSystem>());
 	systems.emplace_back(std::make_unique<CooldownSystem>());

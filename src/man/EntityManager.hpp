@@ -27,37 +27,42 @@ struct EntityManager : GameContext {
     void createPairKeyDoor (const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim);
 
 
-	[[nodiscard]] const EntityPlayer& getPlayer() const override { return player; }
-	[[nodiscard]] 		EntityPlayer& getPlayer() 		override { return player; }
-	[[nodiscard]] const EntityCamera& getCamera() const override { return camera; }
-	[[nodiscard]] 		EntityCamera& getCamera() 		override { return camera; }
+	[[nodiscard]] const Entity& getPlayer() const override { return *player; }
+	[[nodiscard]] 		Entity& getPlayer() 	  override { return *player; }
+	[[nodiscard]] const Entity& getCamera() const override { return *camera; }
+	[[nodiscard]] 		Entity& getCamera() 	  override { return *camera; }
 
-	[[nodiscard]] const std::vector<std::unique_ptr<Entity>>& getEntities() const override { return entities; }
-	[[nodiscard]] 		std::vector<std::unique_ptr<Entity>>& getEntities() 	  override { return entities; }
+	[[nodiscard]] const std::vector<Entity>& getEntities() const override { return entities; }
+	[[nodiscard]] 		std::vector<Entity>& getEntities() 	  override { return entities; }
 
-	[[nodiscard]] std::vector<SceneNode>& getSceneNodeComponents() override { return componentStorage.getSceneNodeComponents(); }
-	[[nodiscard]] std::vector<CameraNode>& getCameraNodeComponents() override { return componentStorage.getCameraNodeComponents(); }
+	[[nodiscard]] std::vector<Node_ptr>& getNodeComponents() override { return componentStorage.getNodeComponents(); }
 
 	[[nodiscard]] std::vector<BoundingBox>& getBoundingComponents() override { return componentStorage.getBoundingComponents(); }
 
-	[[nodiscard]] std::vector<Physics>& getPhysicsComponents() override { return componentStorage.getPhysicsComponents(); }
+	[[nodiscard]] std::vector<BoundingBox>& getRayBoundingComponents() override { return componentStorage.getRayBoundingComponents(); }
 
-	[[nodiscard]] std::vector<BulletData>& getBulletDataComponents() override { return componentStorage.getBulletDataComponents(); }
+	[[nodiscard]] std::vector<Physics>& getPhysicsComponents() override { return componentStorage.getPhysicsComponents(); }
 
 	[[nodiscard]] std::vector<Velocity>& getVelocityComponents() override { return componentStorage.getVelocityComponents(); }
 
+	[[nodiscard]] std::vector<BulletData>& getBulletDataComponents() override { return componentStorage.getBulletDataComponents(); }
+
+	[[nodiscard]] std::vector<CharacterData>& getCharacterDataComponents() override { return componentStorage.getCharacterDataComponents(); }
+
 	private:
         void cleanVectors();
-		void checkEntitiesToDestroy();
+		void killEntities();
+		void moveDeadEntities();
+		void removeEntities();
 
-		EntityPlayer player;
-		EntityCamera camera;
+		Entity* player { nullptr };
+		Entity* camera { nullptr };
 
 	    const Sun::Device& device;
 
-	    std::vector<std::size_t> toDeleteVector;
+	    std::vector<std::size_t> toDelete;
 
-	    std::vector<std::unique_ptr<Entity>> entities;
+	    std::vector<Entity> entities;
 
 		Storage componentStorage { 512 }; // 512 por poner algo
 };

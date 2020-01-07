@@ -3,21 +3,38 @@
 #include <cstdlib>
 #include <util/Alias.hpp>
 
+#include <cmp/Components.hpp>
+
 struct Entity
 {
-	Entity() = default;
-	explicit Entity(EntityType type) : type(type) {  }
-	virtual ~Entity() = default;
+	explicit Entity(EntityType type);
 
-	[[nodiscard]] const EntityType& getType() const { return type; }
-	[[nodiscard]] const std::size_t& getID() const { return ID; }
+	~Entity() = default;
 
-	protected:
-		const EntityType type { UNDEFINED };
-		const std::size_t ID { nextID++ };
+	void addComponent(Component&);
+	void makeUndefined();
+
+	[[nodiscard]] const EntityType& getType() const { return  type; }
+	[[nodiscard]] const std::size_t&  getID() const { return 	ID; }
+
+	Transformable* 	transformable 	{ nullptr };
+	Velocity* 		velocity 		{ nullptr };
+	Physics*		physics			{ nullptr };
+	Lock*			lock			{ nullptr };
+	BulletData*		bulletData		{ nullptr };
+	CharacterData*	characterData	{ nullptr };
+	BoundingBox*	collider		{ nullptr };
+	AI*				ai				{ nullptr };
+
+	Node_ptr* 		node			{ nullptr };
 
 	private:
+		std::vector<Component*> components;
+
 		inline static std::size_t nextID { 0 };
+
+		EntityType type { UNDEFINED };
+		std::size_t ID  {     0	  	};
 };
 
 // TODO: generalizar entidades

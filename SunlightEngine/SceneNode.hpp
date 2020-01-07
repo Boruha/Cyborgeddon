@@ -27,7 +27,7 @@ namespace Sun {
 //			if (mesh) setMesh(mesh);
 
 			if (texture)
-				setTexture(texture);
+				meshNode->setMaterialTexture(0,meshNode->getSceneManager()->getVideoDriver()->getTexture(texture));
 
 			affectedByLight(false);
 		}
@@ -37,7 +37,7 @@ namespace Sun {
 		void update() const override { GenericNode::update(); setRotation(); }
 
        // arena->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR); //makes it transparent
-		void setTexture(const char* texture = "") const {
+		void setTexture(const char* texture) const override {
 			meshNode->setMaterialTexture(0,
 									 meshNode->getSceneManager()->getVideoDriver()->getTexture(
 											 texture));

@@ -21,12 +21,14 @@ namespace Sun {
 		virtual ~GenericNode() = default;
 
 		virtual void update() const { setPosition(); }
+        virtual void setTexture(const char* texture) const {  }
 
 		[[nodiscard]] Vector3f getPosition() const { return Vector3f(node->getPosition().X, node->getPosition().Y, node->getPosition().Z); }
 
         [[nodiscard]] Vector3f getScale() const { return Vector3f(node->getScale().X, node->getScale().Y, node->getScale().Z); }
 
         [[nodiscard]] Vector3f getRotation() const { return Vector3f(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
+
 
         void removeFromScene() { if(node) node->remove(); node = nullptr; }
 

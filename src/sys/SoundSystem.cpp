@@ -31,7 +31,7 @@ void SoundSystem::init() {
 }
 
 void SoundSystem::update(const std::unique_ptr<GameContext>& context) const {
-	if(context->getPlayer().shooting)
+	if(context->getPlayer().characterData->attacking)
 	{
 	//	ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer()->mode) );
 		ERRCHECK ( instanceDisparo->start() );

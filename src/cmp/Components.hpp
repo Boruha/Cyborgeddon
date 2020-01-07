@@ -8,5 +8,6 @@
 #include <cmp/AI.hpp>
 #include <cmp/Physics.hpp>
 #include <cmp/BulletData.hpp>
+#include <cmp/CharacterData.hpp>
 
 // TODO: comprobar const-correctness de todos los componentes y hacer los cambios pertinentes

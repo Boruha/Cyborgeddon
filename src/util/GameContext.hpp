@@ -1,8 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <ent/Entities.hpp>
+#include <ent/Entity.hpp>
 #include <memory>
+#include <SunlightEngine/CameraNode.hpp>
 
 struct GameContext {
 	GameContext() = default;
@@ -12,25 +13,28 @@ struct GameContext {
 	virtual void init() = 0;
 	virtual void update() = 0;
 
-	[[nodiscard]] virtual const EntityPlayer& getPlayer() const = 0;
-	[[nodiscard]] virtual 		EntityPlayer& getPlayer() 		= 0;
+	[[nodiscard]] virtual const Entity& getPlayer() const = 0;
+	[[nodiscard]] virtual 		Entity& getPlayer()		  = 0;
 
-	[[nodiscard]] virtual const EntityCamera& getCamera() const = 0;
-	[[nodiscard]] virtual 		EntityCamera& getCamera() 		= 0;
+	[[nodiscard]] virtual const Entity& getCamera() const = 0;
+	[[nodiscard]] virtual 		Entity& getCamera() 	  = 0;
 
-	[[nodiscard]] virtual const std::vector<std::unique_ptr<Entity>>& getEntities() const = 0;
-	[[nodiscard]] virtual 		std::vector<std::unique_ptr<Entity>>& getEntities() 	  = 0;
+	[[nodiscard]] virtual const std::vector<Entity>& getEntities() const = 0;
+	[[nodiscard]] virtual 		std::vector<Entity>& getEntities() 	  	 = 0;
 
-	[[nodiscard]] virtual std::vector<Sun::SceneNode>& getSceneNodeComponents() = 0;
-	[[nodiscard]] virtual std::vector<Sun::CameraNode>& getCameraNodeComponents() = 0;
+	[[nodiscard]] virtual std::vector<Node_ptr>& getNodeComponents() = 0;
 
 	[[nodiscard]] virtual std::vector<BoundingBox>& getBoundingComponents() = 0;
 
+	[[nodiscard]] virtual std::vector<BoundingBox>& getRayBoundingComponents() = 0;
+
 	[[nodiscard]] virtual std::vector<Physics>& getPhysicsComponents() = 0;
+
+	[[nodiscard]] virtual std::vector<Velocity>& getVelocityComponents() = 0;
 
 	[[nodiscard]] virtual std::vector<BulletData>& getBulletDataComponents() = 0;
 
-	[[nodiscard]] virtual std::vector<Velocity>& getVelocityComponents() = 0;
+	[[nodiscard]] virtual std::vector<CharacterData>& getCharacterDataComponents() = 0;
 
 	virtual void addToDestroy(std::size_t ID) = 0;
 };
