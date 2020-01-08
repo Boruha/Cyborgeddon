@@ -21,22 +21,22 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 		if (collider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(collider);
 
-	BoundingBox& playerBox = *context->getPlayer().collider;
-	Physics& playerPhysics = *context->getPlayer().physics;
+	BoundingBox& playerBox 	= *context->getPlayer().collider;
+	Vector3f& 	 velocity 	=  context->getPlayer().physics->velocity;
 
 	for (int i = 0; i < 3; ++i) {
-		if (playerPhysics.velocity[i] != 0) {																	// si es necesario
-			moveCoord(playerBox,playerPhysics.velocity[i], i);			// muevo la caja en la coordenada i (x -> y -> z)
+		if (velocity[i] != 0) {																						// si es necesario
+			moveCoord(playerBox, velocity[i], i);																// muevo la caja en la coordenada i (x -> y -> z)
 
 			for (auto& collider : context->getBoundingComponents()) 												// compruebo colision con esa coordenada
 				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType())	// ahora solo usamos al player, en un futuro esto cambiara
-							typeFunctions[collider.type].p_func(playerBox, playerPhysics, collider, i, context);
+					typeFunctions[collider.type].p_func(playerBox, velocity, collider, i, context);
 		}
 	}
 }
 
 
-void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Physics& physics, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
+void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
 	if (intersects(playerBox, otherBox)) {
 		context->addToDestroy(otherBox.getEntityID()); // ahora mismo muere cualquier entidad con bounding dinamico
 		if (otherBox.getEntityType() == EntityType::KEY) {
@@ -48,16 +48,16 @@ void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Physics& physics,
 	}
 }
 
-void CollisionSystem::staticCollision(BoundingBox& box, Physics& physics, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
+void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
 	if (intersects(box, otherBox)) {
 		float offset;
 
-		if (physics.velocity[coord] > 0)
+		if (velocity[coord] > 0)
 			offset = otherBox.min[coord] - box.max[coord];
 		else
 			offset = otherBox.max[coord] - box.min[coord];
 
-		physics.velocity[coord] += offset;
+		velocity[coord] += offset;
 		moveCoord(box, offset, coord);
 	}
 }
