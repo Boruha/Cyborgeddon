@@ -72,7 +72,7 @@ ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
 INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I.
-LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL
+LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -Wl,-rpath,$(LIBDIR)
 
 # CLEAN
 

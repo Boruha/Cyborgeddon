@@ -11,14 +11,19 @@ void ERRCHECK_fn(FMOD_RESULT res, const char* file, int line) {
 }
 
 SoundSystem::~SoundSystem() {
+	if(instanceDisparo) instanceDisparo->release();
+	if(eventDisparo) eventDisparo->releaseAllInstances();
+	if(strings) strings->unload();
+	if(master) master->unload();
 	if(system) system->release();
+	if(core) core->release();
 }
 
 void SoundSystem::init() {
 	ERRCHECK ( FMOD::Studio::System::create(&system) );
 
 	ERRCHECK ( system->getCoreSystem(&core) );
-	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
+	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_5POINT1, 0) );
 
 	ERRCHECK ( system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
 
@@ -33,7 +38,7 @@ void SoundSystem::init() {
 void SoundSystem::update(const std::unique_ptr<GameContext>& context) const {
 	if(context->getPlayer().characterData->attacking)
 	{
-	//	ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer()->mode) );
+//		ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );
 		ERRCHECK ( instanceDisparo->start() );
 	}
 

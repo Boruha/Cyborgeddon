@@ -10,7 +10,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<MovementSystem>());
 	systems.emplace_back(std::make_unique<CooldownSystem>());
 	systems.emplace_back(std::make_unique<BulletSystem>());
-//	systems.emplace_back(std::make_unique<SoundSystem>(SoundSystem()));
+	systems.emplace_back(std::make_unique<SoundSystem>(SoundSystem()));
 
 	for(auto& sys : systems)
 		sys->init();
