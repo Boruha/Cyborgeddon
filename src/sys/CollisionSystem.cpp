@@ -9,9 +9,9 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 	// 				varias comprobaciones por bucle
 
 	// Antes de comoprobar cualquier tipo de colision con un collider que NO sea estatico, hay que asegurarse de que
-	// la caja de colision se encuentra en su sitio haciendo collider.fixBox()
+	// la caja de colision se encuentra en su sitio haciendo fixBox()
 	// Después de cualquier metodo que pueda modificar la caja de colisiones (comprobando con otros colliders estaticos)
-	// hay que volver a hacef collider.fixBox()
+	// hay que volver a hacer fixBox()
 
 	// Ejemplo: player -> fix, tras comprobar colision player-pared es posible que la caja de colisiones haya sufrido
 	// 			alguna modificación. CUALQUIER metodo estatico al final debe SÍ O SÍ hacer un fix de todos los colliders
@@ -21,17 +21,25 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 		if (collider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(collider);
 
-	BoundingBox& playerBox 	= *context->getPlayer().collider;
+	BoundingBox& playerBox  = *context->getPlayer().collider;
 	Vector3f& 	 velocity 	=  context->getPlayer().physics->velocity;
 
 	for (int i = 0; i < 3; ++i) {
-		if (velocity[i] != 0) {																						// si es necesario
-			moveCoord(playerBox, velocity[i], i);																// muevo la caja en la coordenada i (x -> y -> z)
+	    if(velocity[i] != 0) {
+            int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
 
-			for (auto& collider : context->getBoundingComponents()) 												// compruebo colision con esa coordenada
-				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType())	// ahora solo usamos al player, en un futuro esto cambiara
-					typeFunctions[collider.type].p_func(playerBox, velocity, collider, i, context);
-		}
+            velocity[i] /= static_cast<float>(numChecks);
+
+            for (int j = 0; j < static_cast<int>(numChecks); ++j) {
+                moveCoord(playerBox, velocity[i], i);																// muevo la caja en la coordenada i (x -> y -> z)
+
+                for (auto& collider : context->getBoundingComponents()) 												// compruebo colision con esa coordenada
+                    if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType())	// ahora solo usamos al player, en un futuro esto cambiara
+                        typeFunctions[collider.type].p_func(playerBox, velocity, collider, i, context);
+            }
+
+            velocity[i] *= static_cast<float>(numChecks);
+	    }
 	}
 }
 
@@ -50,7 +58,7 @@ void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocit
 
 void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
 	if (intersects(box, otherBox)) {
-		float offset;
+		float offset{0};
 
 		if (velocity[coord] > 0)
 			offset = otherBox.min[coord] - box.max[coord];
@@ -58,6 +66,7 @@ void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, Boun
 			offset = otherBox.max[coord] - box.min[coord];
 
 		velocity[coord] += offset;
+
 		moveCoord(box, offset, coord);
 	}
 }

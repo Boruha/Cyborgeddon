@@ -192,7 +192,7 @@ void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& po
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 1.f, 1.f);
+	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 1.f, 3.f);
 	player->physics 		= & componentStorage.createPhysics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0));
 	player->collider 		= & componentStorage.createBoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, ColliderType::DYNAMIC);
 	player->characterData	= & componentStorage.createCharacterData(player->getType(), player->getID(), false, 100, 15);

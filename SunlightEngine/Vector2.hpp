@@ -90,6 +90,20 @@ namespace Sun {
 			return static_cast<T>(sqrt(x*x + y*y));
 		}
 
+        Vector2<T>& fixError() {
+            for (int i = 0; i < 2; ++i)
+                (*this)[i] = std::roundf((*this)[i] * FIX_ERROR_FACTOR) / FIX_ERROR_FACTOR;
+
+            return *this;
+        }
+
+        Vector2<T>& abs() {
+            for(int i = 0; i < 2; ++i)
+                (*this)[i] = std::abs((*this)[i]);
+
+            return *this;
+        }
+
         void rotate(double deg, const Vector2<T> origin = Vector2<T>())
         {
             deg *= DEG2RAD;

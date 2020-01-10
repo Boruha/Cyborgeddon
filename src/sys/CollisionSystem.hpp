@@ -32,6 +32,4 @@ private:
 		{ dynamicCollision },
 		{ staticCollision  }
 	};
-
-	void bulletCollision(const std::unique_ptr<GameContext>& context) const;
 };

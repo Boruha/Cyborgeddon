@@ -55,7 +55,6 @@ void AI_System::attackBehaviour(const Entity& enemy, const Vector3f& player_pos)
 }
 
 void AI_System::targetBehaviour(const Entity& enemy, const Vector3f& player_pos) {
-
 	if (enemy.ai->state == AI_State::PATROL_STATE)
 		enemy.ai->target_position = enemy.ai->patrol_position[enemy.ai->patrol_index];
 	else
