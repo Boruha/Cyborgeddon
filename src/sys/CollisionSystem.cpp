@@ -25,26 +25,33 @@ void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const 
 	Vector3f& 	 velocity 	=  context->getPlayer().physics->velocity;
 
 	for (int i = 0; i < 3; ++i) {
-	    if(velocity[i] != 0) {
-            int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
+//		if (velocity[i] != 0) {
+			int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
 
-            velocity[i] /= static_cast<float>(numChecks);
+			if (numChecks <= 0)
+				continue;
 
-            for (int j = 0; j < static_cast<int>(numChecks); ++j) {
-                moveCoord(playerBox, velocity[i], i);																// muevo la caja en la coordenada i (x -> y -> z)
+			velocity[i] /= static_cast<float>(numChecks);
 
-                for (auto& collider : context->getBoundingComponents()) 												// compruebo colision con esa coordenada
-                    if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType())	// ahora solo usamos al player, en un futuro esto cambiara
-                        typeFunctions[collider.type].p_func(playerBox, velocity, collider, i, context);
-            }
+			for (int j = 0; j < numChecks; ++j) {
+				moveCoord(playerBox, velocity[i], i);
 
-            velocity[i] *= static_cast<float>(numChecks);
-	    }
-	}
+				for (auto &collider : context->getBoundingComponents()) {
+					if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType()) {
+						if (collider.type == STATIC)
+							staticCollision(playerBox, velocity, collider, i, context);
+						else
+							dynamicCollision(playerBox, velocity, collider, context);
+					}
+				}
+			}
+
+			velocity[i] *= static_cast<float>(numChecks);
+		}
+//	}
 }
 
-
-void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
+void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
 	if (intersects(playerBox, otherBox)) {
 		context->addToDestroy(otherBox.getEntityID()); // ahora mismo muere cualquier entidad con bounding dinamico
 		if (otherBox.getEntityType() == EntityType::KEY) {
@@ -56,7 +63,7 @@ void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocit
 	}
 }
 
-void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) {
+void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) const {
 	if (intersects(box, otherBox)) {
 		float offset{0};
 
@@ -68,36 +75,44 @@ void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, Boun
 		velocity[coord] += offset;
 
 		moveCoord(box, offset, coord);
+
+		if (Sun::equal_e(velocity[coord], 0))
+			velocity[coord] = 0;
 	}
 }
 
-void CollisionSystem::fixCoord(BoundingBox& bounding, const int coord) {
+void CollisionSystem::fixCoord(BoundingBox& bounding, const int coord) const {
 	const Vector3f& pos = *bounding.pos;
 
 	bounding.min[coord] = pos[coord] - (bounding.dim[coord] / 2);
 	bounding.max[coord] = pos[coord] + (bounding.dim[coord] / 2);
 }
 
-void CollisionSystem::fixBox(BoundingBox& bounding) {
-	const Vector3f& pos = *bounding.pos;
-
-	for(int i = 0; i < 3; ++i) {
-		bounding.min[i] = pos[i] - (bounding.dim[i] / 2);
-		bounding.max[i] = pos[i] + (bounding.dim[i] / 2);
-	}
+void CollisionSystem::fixBox(BoundingBox& bounding) const {
+	setBox(bounding, *bounding.pos);
 }
 
-void CollisionSystem::moveCoord(BoundingBox& bounding, float mov, int coord) {
+void CollisionSystem::moveCoord(BoundingBox& bounding, float mov, int coord) const {
 	for (int i = 0; i < 2; ++i)
 		bounding[i][coord] += mov;
 }
 
-void CollisionSystem::moveBox(BoundingBox& bounding, const Vector3f& mov) {
+void CollisionSystem::moveBox(BoundingBox& bounding, const Vector3f& mov) const {
 	for (int i = 0; i < 2; ++i)
 		bounding[i] += mov;
 }
 
-bool CollisionSystem::intersects(const BoundingBox& bounding, const BoundingBox& other) {
+void CollisionSystem::setBox(BoundingBox& bounding, const Vector3f& pos) const {
+	for (int i = 0; i < 3; ++i)
+		setCoord(bounding, pos, i);
+}
+
+void CollisionSystem::setCoord(BoundingBox& bounding, const Vector3f& pos, const int coord) const {
+	bounding.min[coord] = pos[coord] - (bounding.dim[coord] / 2);
+	bounding.max[coord] = pos[coord] + (bounding.dim[coord] / 2);
+}
+
+bool CollisionSystem::intersects(const BoundingBox& bounding, const BoundingBox& other) const {
 	for (int i = 0; i < 3; ++i)
 		if(bounding.max[i] <= other.min[i] || bounding.min[i] >= other.max[i])
 			return false;

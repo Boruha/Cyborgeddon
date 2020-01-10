@@ -14,7 +14,7 @@ void MovementSystem::update(const std::unique_ptr<GameContext>& context) const {
 
 	for (auto& cmp : context->getPhysicsComponents()) {
 		if (cmp.getEntityType() != UNDEFINED) {
-			cmp.position += cmp.velocity.fixError();
+			cmp.position += cmp.velocity;
 			cmp.rotation.y = fmodf(cmp.rotation.y, 360);
 		}
 	}
