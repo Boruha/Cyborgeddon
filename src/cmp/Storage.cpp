@@ -55,6 +55,10 @@ Velocity& Storage::createVelocity(const EntityType e_type, const std::size_t e_I
 	return velocityComponents.emplace_back(Velocity(e_type, e_ID, speed, acceleration));
 }
 
+Velocity& Storage::createVelocity(EntityType e_type, std::size_t e_ID, const Vector3f& dir, float speed, float acceleration) {
+	return velocityComponents.emplace_back(Velocity(e_type, e_ID, dir, speed, acceleration));
+}
+
 BoundingBox& Storage::createBoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type) {
 	if (type == ColliderType::RAY)
 		return rayBoundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, vel, passable, type));
@@ -66,8 +70,8 @@ Physics& Storage::createPhysics(const EntityType e_type, const std::size_t e_ID,
 	return physicsComponents.emplace_back(Physics(e_type, e_ID, pos, vel, rot));
 }
 
-BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t e_ID, const int lifetime, const bool type) {
-	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, lifetime, type));
+BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t e_ID, const float speed, const bool type) {
+	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, speed, type));
 }
 
 CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const int attackingCooldown) {

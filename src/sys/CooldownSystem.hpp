@@ -9,7 +9,7 @@
 struct CooldownSystem : System {
 
     void init() override {  };
-    void update(const std::unique_ptr<GameContext>& context) const override {  }
+    void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override {  }
 
     static bool shootReady();
     static bool dashReady();

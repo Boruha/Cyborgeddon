@@ -1,7 +1,7 @@
 #include <sys/AI_System.hpp>
 
 // TODO: considerar los estados de la IA como punteros a funcion
-void AI_System::update(const std::unique_ptr<GameContext>& context) const {
+void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	const Vector3f player_pos = context->getPlayer().physics->position;
 
 	for (const auto& enemy : context->getEntities()) {
@@ -11,7 +11,7 @@ void AI_System::update(const std::unique_ptr<GameContext>& context) const {
 
 			stateFunctions[enemy.ai->state].p_func(enemy, player_pos);
 
-			seekBehaviour(enemy);
+			seekBehaviour(enemy, deltaTime);
 			alignBehaviour(enemy);
 		}
 	}
@@ -61,7 +61,7 @@ void AI_System::targetBehaviour(const Entity& enemy, const Vector3f& player_pos)
 		enemy.ai->target_position = player_pos;
 }
 
-void AI_System::seekBehaviour(const Entity& enemy) {
+void AI_System::seekBehaviour(const Entity& enemy, const float deltaTime) {
 
 	enemy.velocity->direction = enemy.ai->target_position - enemy.physics->position;
 	enemy.velocity->direction.y = 0;
@@ -69,9 +69,13 @@ void AI_System::seekBehaviour(const Entity& enemy) {
 	if (enemy.ai->state == AI_State::ATTACK_STATE || enemy.velocity->direction.length() < 1.f)
 		enemy.physics->velocity = 0;
 	else
-		enemy.physics->velocity = enemy.velocity->direction.normalize() * enemy.velocity->speed;
+		enemy.physics->velocity = enemy.velocity->direction.normalize() * enemy.velocity->speed * deltaTime;
 }
 
 void AI_System::alignBehaviour(const Entity& enemy) {
-	enemy.physics->rotation.y = enemy.velocity->direction.getRotationYfromXZ();
+	auto start = enemy.physics->rotation.y;
+	auto end   = enemy.velocity->direction.getRotationYfromXZ();
+
+	// Formula angulo mas cercano para interpolar (para que en lugar de ir de 170 a -170, vaya de 170 a 190 (es lo mismo pero al interpolar da la vuelta))
+	enemy.physics->rotation.y = start + std::fmod((std::fmod((std::fmod(end - start, 360) + 540), 360) - 180), 360);
 }

@@ -11,7 +11,7 @@ struct SoundSystem : public System {
 	~SoundSystem();
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext>& context) const override;
+	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
 
 private:
     FMOD::System* core { nullptr };

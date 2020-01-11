@@ -7,7 +7,7 @@
 struct AI_System : System
 {
 	void init() override {  }
-    void update(const std::unique_ptr<GameContext>& context) const override;
+    void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
 
 	private:
 
@@ -18,7 +18,7 @@ struct AI_System : System
 		static void attackBehaviour(const Entity& enemy, const Vector3f& player_pos);
 
 		static void targetBehaviour(const Entity& enemy, const Vector3f& player_pos);
-		static void seekBehaviour(const Entity& enemy);
+		static void seekBehaviour(const Entity& enemy, float deltaTime);
 		static void alignBehaviour(const Entity& enemy);
 
 	struct TStateFunction {

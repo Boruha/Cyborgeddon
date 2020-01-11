@@ -5,5 +5,5 @@
 
 struct System {
 	virtual void init() = 0;
-	virtual void update(const std::unique_ptr<GameContext>& context) const = 0;
+	virtual void update(const std::unique_ptr<GameContext> &context, const float deltaTime) const = 0;
 };

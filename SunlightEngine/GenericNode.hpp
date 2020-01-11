@@ -20,25 +20,28 @@ namespace Sun {
 
 		virtual ~GenericNode() = default;
 
-		virtual void update() const { setPosition(); }
+		virtual void update(const float deltaTime) const { setPosition(deltaTime); }
         virtual void setTexture(const char* texture) const {  }
 
 		[[nodiscard]] Vector3f getPosition() const { return Vector3f(node->getPosition().X, node->getPosition().Y, node->getPosition().Z); }
+ 		[[nodiscard]] Vector3f getRotation() const { return Vector3f(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
+ 		[[nodiscard]] Vector3f getScale() 	 const { return Vector3f(node->getScale().X, node->getScale().Y, node->getScale().Z); }
 
-        [[nodiscard]] Vector3f getScale() const { return Vector3f(node->getScale().X, node->getScale().Y, node->getScale().Z); }
-
-        [[nodiscard]] Vector3f getRotation() const { return Vector3f(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
-
+        void setPos(const Vector3f& pos) const { if(node) node->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z)); }
+		void setRot(const Vector3f& rot) const { if(node) node->setRotation(irr::core::vector3df(rot.x, rot.y, rot.z)); }
 
         void removeFromScene() { if(node) node->remove(); node = nullptr; }
 
 		protected:
 			irr::scene::ISceneNode* node { nullptr };
 
-			void setScale(const Vector3f& dim) const { node->setScale(irr::core::vector3df(dim.x, dim.y, dim.z)); }
+			void setPosition() const { if(node) setPos(*position); }
+			void setRotation() const { if(node) setPos(*position); }
 
-			void setPosition() const { if(node) node->setPosition(irr::core::vector3df(position->x, position->y, position->z)); }
-	        void setRotation() const { if(node) node->setRotation(irr::core::vector3df(rotation->x, rotation->y, rotation->z)); }
+			void setPosition(const float deltaTime) const { if(node) setPos(getPosition() + (*position - getPosition()) * deltaTime); }
+	        void setRotation(const float deltaTime) const { if(node) setRot(getRotation() + (*rotation - getRotation()) * deltaTime); }
+
+	        void setScale(const Vector3f& dim) const { node->setScale(irr::core::vector3df(dim.x, dim.y, dim.z)); }
 
 		private:
 

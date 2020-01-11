@@ -101,11 +101,11 @@ void EntityManager::init() {
 	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
 
-	createEnemy(patrol_1[0], Vector3f(8), 0.6f, patrol_1);
-	createEnemy(patrol_2[0], Vector3f(8), 0.5f, patrol_2);
-	createEnemy(patrol_3[0], Vector3f(8), 0.4f, patrol_3);
-	createEnemy(patrol_4[0], Vector3f(8), 0.3f, patrol_4);
-	createEnemy(patrol_5[0], Vector3f(8), 0.3f, patrol_5);
+	createEnemy(patrol_1[0], Vector3f(8), 25.f, patrol_1);
+	createEnemy(patrol_2[0], Vector3f(8), 25.f, patrol_2);
+	createEnemy(patrol_3[0], Vector3f(8), 25.f, patrol_3);
+	createEnemy(patrol_4[0], Vector3f(8), 25.f, patrol_4);
+	createEnemy(patrol_5[0], Vector3f(8), 25.f, patrol_5);
 }
 
 void EntityManager::update(){
@@ -192,7 +192,7 @@ void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& po
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 1.f, 3.f);
+	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 30.f, 30.f);
 	player->physics 		= & componentStorage.createPhysics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0));
 	player->collider 		= & componentStorage.createBoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, ColliderType::DYNAMIC);
 	player->characterData	= & componentStorage.createCharacterData(player->getType(), player->getID(), false, 100, 15);
@@ -247,9 +247,10 @@ void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vect
 void EntityManager::createBullet(const Vector3f& dim) {
 	Entity& bullet = entities.emplace_back(BULLET);
 
-	bullet.physics 		= & componentStorage.createPhysics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y) * 10.f, player->physics->rotation); // 10.f speed
+	bullet.physics 		= & componentStorage.createPhysics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f(), player->physics->rotation);
+	bullet.velocity		= & componentStorage.createVelocity(bullet.getType(), bullet.getID(), Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize(), 300.f, 0.f);
 	bullet.collider 	= & componentStorage.createBoundingBox(bullet.getType(), bullet.getID(), dim, bullet.physics->position, bullet.physics->velocity, true, ColliderType::RAY);
-	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), static_cast<int>(150 / bullet.physics->velocity.length()), player->characterData->mode); // 150 dist max
+	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), bullet.velocity->defaultSpeed, player->characterData->mode); // 100 dist max
 	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, bullet.collider->dim, nullptr, nullptr);
 
 	player->characterData->mode ? bullet.node->get()->setTexture("./img/textures/testing/testing_angel.jpg") : bullet.node->get()->setTexture("./img/textures/testing/testing_demon.jpg");

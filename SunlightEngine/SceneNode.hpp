@@ -23,6 +23,8 @@ namespace Sun {
 			this->node = meshNode; 									// aqui se inicializa el generic node
 
 			setScale(dim);
+			setPosition();
+			setRotation();
 
 //			if (mesh) setMesh(mesh);
 
@@ -34,7 +36,7 @@ namespace Sun {
 
 		~SceneNode() override = default;
 
-		void update() const override { GenericNode::update(); setRotation(); }
+		void update(const float deltaTime) const override { GenericNode::update(deltaTime); setRotation(deltaTime); }
 
        // arena->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR); //makes it transparent
 		void setTexture(const char* texture) const override {

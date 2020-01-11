@@ -3,9 +3,10 @@
 #include <cmp/Component.hpp>
 
 struct BulletData : Component {
-	explicit BulletData(EntityType e_type, std::size_t e_ID, const int lifetime, const bool damageType)
-		: Component(e_type, e_ID), lifetime(lifetime), damageType(damageType) {  }
+	explicit BulletData(EntityType e_type, std::size_t e_ID, const float speed, const bool damageType)
+		: Component(e_type, e_ID), speed(speed), damageType(damageType) {  }
 
-	int lifetime { 15 };
-	const bool damageType { false };
+	const float speed { 100.f };
+	const bool  damageType { false };
+	float distance_left { 100.f };
 };

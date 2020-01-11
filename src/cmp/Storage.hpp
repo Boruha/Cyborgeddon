@@ -35,12 +35,13 @@ struct Storage {
 	Transformable& createTransformable(EntityType e_type, std::size_t e_ID, const Vector3f& pos = Vector3f(), const Vector3f& rot = Vector3f());
 
 	Velocity& createVelocity(EntityType e_type, std::size_t e_ID, float speed, float acceleration);
+	Velocity& createVelocity(EntityType e_type, std::size_t e_ID, const Vector3f& dir, float speed, float acceleration);
 
 	BoundingBox& createBoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, bool passable, ColliderType type);
 
 	Physics& createPhysics(EntityType e_type, std::size_t e_ID, const Vector3f& pos = Vector3f(), const Vector3f& vel = Vector3f(), const Vector3f& rot = Vector3f());
 
-	BulletData& createBulletData(EntityType e_type, std::size_t e_ID, int lifetime, bool type);
+	BulletData& createBulletData(EntityType e_type, std::size_t e_ID, float speed, bool type);
 
 	CharacterData& createCharacterData(EntityType e_type, std::size_t e_ID, bool mode, int health, int attackingCooldown);
 

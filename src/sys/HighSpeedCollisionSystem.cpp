@@ -1,6 +1,6 @@
 #include <sys/HighSpeedCollisionSystem.hpp>
 
-void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext>& context) const {
+void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	for (auto& fastObject : context->getRayBoundingComponents()) {
 		if (fastObject.getEntityType() != UNDEFINED && fastObject.getEntityType() != PLAYER) {
 

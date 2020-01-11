@@ -3,7 +3,7 @@
 
 // TODO: quiza sea conveniente tener 3 sistemas de colisiones distintos, uno para objetos dinamicos, otro para estaticos y otro para objetos que se muevan muy rapido (ray)
 
-void CollisionSystem::update(const std::unique_ptr<GameContext>& context) const {
+void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	// IMPORTANTE:  si puedo tocar dos llaves (o dos puertas) a la vez en una misma iteracion del bucle del juego,
 	// 			 	las condiciones siguientes NO seran correctas. No poner puertas muy juntas y asi nos ahorramos
 	// 				varias comprobaciones por bucle

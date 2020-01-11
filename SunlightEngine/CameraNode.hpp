@@ -21,20 +21,24 @@ namespace Sun {
 				: GenericNode(nullptr, position, rotation), cameraNode(device.getInnerDevice()->getSceneManager()->addCameraSceneNode()), target(&target)
 				{
 					this->node = cameraNode;		// aqui se inicializa el nodo padre realmente ya que la camara aun no ha sido creada
+					setPosition();
+					updateTarget(target);
 				}
 
 		~CameraNode() override = default;
 
-		void update() const override {
-			GenericNode::update();
-			updateTarget();
+		void update(const float deltaTime) const override {
+			GenericNode::update(deltaTime);
+			updateTarget(deltaTime);
 		}
 
 		irr::scene::ICameraSceneNode* getInner() { return cameraNode; }
 
 	private:
 
-		void updateTarget() const { if(cameraNode) cameraNode->setTarget(irr::core::vector3df(target->x, target->y, target->z)); }
+		[[nodiscard]] Vector3f getTarget() const { return Vector3f(cameraNode->getTarget().X,cameraNode->getTarget().Y,cameraNode->getTarget().Z); }
+		void updateTarget(const float deltaTime) const { if(cameraNode) { updateTarget(getTarget() + (*target - getTarget()) * deltaTime); } }
+		void updateTarget(const Vector3f& targ) const { cameraNode->setTarget(irr::core::vector3df(targ.x, targ.y, targ.z)); }
 
 		irr::scene::ICameraSceneNode* cameraNode { nullptr };
 

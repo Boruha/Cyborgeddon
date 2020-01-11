@@ -35,7 +35,7 @@ void SoundSystem::init() {
 	ERRCHECK ( eventDisparo->createInstance(&instanceDisparo) );
 }
 
-void SoundSystem::update(const std::unique_ptr<GameContext>& context) const {
+void SoundSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	if(context->getPlayer().characterData->attacking)
 	{
 //		ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );

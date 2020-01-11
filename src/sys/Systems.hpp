@@ -10,5 +10,4 @@
 #include <sys/BulletSystem.hpp>
 #include <sys/VelocitySystem.hpp>
 #include <sys/SoundSystem.hpp>
-#include <sys/SynchronizeNodeSystem.hpp>
 #include <sys/RenderSystem.hpp>
