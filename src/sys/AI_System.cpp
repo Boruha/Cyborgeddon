@@ -40,7 +40,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos)
 	distance.y = 0;
 
 	if (distance.length() < 1.f) {
-		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->patrol_position.size(); // sumo uno a patrol_index y evito que se pase del size del vector de patrol_position
+		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
 		enemy.ai->target_position = enemy.ai->patrol_position[enemy.ai->patrol_index];
 	}
 
