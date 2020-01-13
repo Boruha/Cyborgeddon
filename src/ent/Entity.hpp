@@ -20,7 +20,6 @@ struct Entity
 	Transformable* 	transformable 	{ nullptr };
 	Velocity* 		velocity 		{ nullptr };
 	Physics*		physics			{ nullptr };
-	Lock*			lock			{ nullptr };
 	BulletData*		bulletData		{ nullptr };
 	CharacterData*	characterData	{ nullptr };
 	BoundingBox*	collider		{ nullptr };

@@ -11,3 +11,18 @@ const Vector3f& BoundingBox::operator[](const int index) const {
 		default : std::cerr << "Out of bound BoundingBox\n"; exit(-1);
 	}
 }
+
+std::ostream& operator<<(std::ostream &os, const BoundingBox& box) {
+	os 	<< "\nBoundingBox\nPos: " 	<< *box.pos 							<< "\nVel: " << *box.velocity
+		<< "\nMin: " 				<<  box.min								<< "\nMax: " <<  box.max
+		<< "\nPasable: " 			<< (box.passable ? "true" : "false")	<< "\nType: ";
+
+	switch (box.type) {
+		case DYNAMIC: 	os << "DYNAMIC"; 	break;
+		case STATIC:	os << "STATIC";		break;
+		case RAY:		os << "RAY";		break;
+		case END_TYPE:	os << "ENDTYPE";	break;
+	}
+
+	return os << std::endl;
+}

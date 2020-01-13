@@ -1,4 +1,5 @@
 #include <sys/AI_System.hpp>
+#include <SunlightEngine/Math.hpp>
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -73,9 +74,5 @@ void AI_System::seekBehaviour(const Entity& enemy, const float deltaTime) {
 }
 
 void AI_System::alignBehaviour(const Entity& enemy) {
-	auto start = enemy.physics->rotation.y;
-	auto end   = enemy.velocity->direction.getRotationYfromXZ();
-
-	// Formula angulo mas cercano para interpolar (para que en lugar de ir de 170 a -170, vaya de 170 a 190 (es lo mismo pero al interpolar da la vuelta))
-	enemy.physics->rotation.y = start + std::fmod((std::fmod((std::fmod(end - start, 360) + 540), 360) - 180), 360);
+	enemy.physics->rotation.y = Sun::nearestAngle(enemy.physics->rotation.y, enemy.velocity->direction.getRotationYfromXZ());
 }

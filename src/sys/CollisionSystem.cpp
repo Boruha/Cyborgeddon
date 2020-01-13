@@ -21,49 +21,57 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 		if (collider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(collider);
 
+	for (auto& staticCollider : context->getStaticBoundingComponents())
+		if (staticCollider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
+			fixBox(staticCollider);
+
 	BoundingBox& playerBox  = *context->getPlayer().collider;
-	Vector3f& 	 velocity 	=  context->getPlayer().physics->velocity;
+	Vector3f& 	 velocity 	= *playerBox.velocity;
 
 	for (int i = 0; i < 3; ++i) {
 //		if (velocity[i] != 0) {
-			int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
+		int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
 
-			if (numChecks <= 0)
-				continue;
+		if (numChecks <= 0)
+			continue;
 
-			velocity[i] /= static_cast<float>(numChecks);
+		velocity[i] /= static_cast<float>(numChecks);
 
-			for (int j = 0; j < numChecks; ++j) {
-				moveCoord(playerBox, velocity[i], i);
+		for (int j = 0; j < numChecks; ++j) {
+			moveCoord(playerBox, velocity[i], i);
 
-				for (auto &collider : context->getBoundingComponents()) {
-					if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType()) {
-						if (collider.type == STATIC)
-							staticCollision(playerBox, velocity, collider, i, context);
-						else
-							dynamicCollision(playerBox, velocity, collider, context);
-					}
+			for (const auto& staticCollider : context->getStaticBoundingComponents())
+				if (staticCollider.getEntityType() != UNDEFINED)
+					staticCollision(playerBox, velocity, staticCollider, i);
+
+			for (auto& collider : context->getBoundingComponents()) {
+				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType()) {
+					if (collider.type == STATIC)
+						staticCollision(playerBox, velocity, collider, i);
+					else
+						dynamicCollision(playerBox, velocity, collider, context);
 				}
 			}
-
-			velocity[i] *= static_cast<float>(numChecks);
 		}
+		velocity[i] *= static_cast<float>(numChecks);
+	}
 //	}
 }
 
 void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
 	if (intersects(playerBox, otherBox)) {
-		context->addToDestroy(otherBox.getEntityID()); // ahora mismo muere cualquier entidad con bounding dinamico
-		if (otherBox.getEntityType() == EntityType::KEY) {
-			for(auto& e : context->getEntities())
-				if (e.getID() == otherBox.getEntityID() - 1)
-					e.collider->type = DYNAMIC;
+		if (otherBox.type == DYNAMIC) {
+			context->addToDestroy(otherBox.getEntityID()); // ahora mismo mueren solo llaves
+			if (otherBox.getEntityType() == KEY)
+				for(auto& e : context->getEntities())
+					if (e.getID() == otherBox.getEntityID() - 1)
+						e.collider->type = DYNAMIC;
+			otherBox.makeUndefined();	// nos ahorramos comprobaciones si hacemos que el sistema ignore la bounding
 		}
-		otherBox.makeUndefined();	// nos ahorramos comprobaciones si hacemos que el sistema ignore la bounding
 	}
 }
 
-void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const int coord, const std::unique_ptr<GameContext>& context) const {
+void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, const BoundingBox& otherBox, const int coord) const {
 	if (intersects(box, otherBox)) {
 		float offset{0};
 

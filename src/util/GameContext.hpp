@@ -24,9 +24,9 @@ struct GameContext {
 
 	[[nodiscard]] virtual std::vector<Node_ptr>& getNodeComponents() = 0;
 
-	[[nodiscard]] virtual std::vector<BoundingBox>& getBoundingComponents() = 0;
+	[[nodiscard]] virtual std::vector<BoundingBox>& getStaticBoundingComponents() = 0;
 
-	[[nodiscard]] virtual std::vector<BoundingBox>& getRayBoundingComponents() = 0;
+	[[nodiscard]] virtual std::vector<BoundingBox>& getBoundingComponents() = 0;
 
 	[[nodiscard]] virtual std::vector<Physics>& getPhysicsComponents() = 0;
 

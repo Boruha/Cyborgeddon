@@ -18,6 +18,8 @@ struct BoundingBox : Component
 
 	[[nodiscard]] const Vector3f& operator[](int index) const;
 
+	friend std::ostream& operator<<(std::ostream& os, const BoundingBox& box);
+
 	const Vector3f dim;
 	const Vector3f* pos { nullptr };
 	Vector3f* velocity 	{ nullptr };

@@ -14,7 +14,7 @@ struct CollisionSystem : System
 private:
 
 	void dynamicCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const;
-	void staticCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& other, int coord, const std::unique_ptr<GameContext>& context) const;
+	void staticCollision(BoundingBox& box, Vector3f& velocity, const BoundingBox& other, int coord) const;
 
 	void fixCoord(BoundingBox& bounding, int coord) const;
 	void fixBox(BoundingBox& bounding) const;

@@ -37,9 +37,9 @@ struct EntityManager : GameContext {
 
 	[[nodiscard]] std::vector<Node_ptr>& getNodeComponents() override { return componentStorage.getNodeComponents(); }
 
-	[[nodiscard]] std::vector<BoundingBox>& getBoundingComponents() override { return componentStorage.getBoundingComponents(); }
+	[[nodiscard]] vector<BoundingBox>& getStaticBoundingComponents() override { return componentStorage.getStaticBoundingComponents(); }
 
-	[[nodiscard]] std::vector<BoundingBox>& getRayBoundingComponents() override { return componentStorage.getRayBoundingComponents(); }
+	[[nodiscard]] std::vector<BoundingBox>& getBoundingComponents() override { return componentStorage.getBoundingComponents(); }
 
 	[[nodiscard]] std::vector<Physics>& getPhysicsComponents() override { return componentStorage.getPhysicsComponents(); }
 

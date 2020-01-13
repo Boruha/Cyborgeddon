@@ -33,7 +33,7 @@ void InputSystem::shift_pressed(Entity& player) {
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player) {
-	if(CooldownSystem::shootReady()) player.characterData->attacking = true;
+	if(player.characterData->attackingCooldown <= 0.f) player.characterData->attacking = true;
 }
 // Aim
 void InputSystem::left_pressed  (Entity& player) { player.physics->rotation.y -= 5; }

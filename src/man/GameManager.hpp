@@ -15,7 +15,7 @@ struct GameManager {
 	void update(float deltaTime);
 	void loop();
 
-	static constexpr unsigned int UPS = 30;
+	static constexpr unsigned int UPS = 60;
 	static constexpr std::chrono::duration<float> TICK_MS = std::chrono::duration<float>(1.f / UPS);
 
 	// render first so we use its device for the other systems and/or managers

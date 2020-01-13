@@ -26,7 +26,6 @@ struct Storage {
 	Storage& operator=(const Storage& ) = delete;
 	Storage& operator=(		 Storage&&) = delete;
 
-	Lock& 	createLock(EntityType e_type, std::size_t e_ID);
 	AI&		createAI(EntityType e_type, std::size_t e_ID, const vector<Vector3f>& patrol);
 
 	Node_ptr& createSceneNode  (const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh = nullptr, const char* texture = nullptr);
@@ -37,16 +36,13 @@ struct Storage {
 	Velocity& createVelocity(EntityType e_type, std::size_t e_ID, float speed, float acceleration);
 	Velocity& createVelocity(EntityType e_type, std::size_t e_ID, const Vector3f& dir, float speed, float acceleration);
 
-	BoundingBox& createBoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, bool passable, ColliderType type);
+	BoundingBox& createBoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, bool passable, ColliderType type, bool canMutate);
 
 	Physics& createPhysics(EntityType e_type, std::size_t e_ID, const Vector3f& pos = Vector3f(), const Vector3f& vel = Vector3f(), const Vector3f& rot = Vector3f());
 
 	BulletData& createBulletData(EntityType e_type, std::size_t e_ID, float speed, bool type);
 
-	CharacterData& createCharacterData(EntityType e_type, std::size_t e_ID, bool mode, int health, int attackingCooldown);
-
-	[[nodiscard]] const vector<Lock>& getLockComponents() const { return lockComponents; }
-	[[nodiscard]] 		vector<Lock>& getLockComponents() 	   	{ return lockComponents; }
+	CharacterData& createCharacterData(EntityType e_type, std::size_t e_ID, bool mode, int health, float attackingCooldown);
 
 	[[nodiscard]] const vector<AI>&   getAIComponents()   const { return   AIComponents; }
 	[[nodiscard]] 		vector<AI>&   getAIComponents() 	   	{ return   AIComponents; }
@@ -59,6 +55,9 @@ struct Storage {
 
 	[[nodiscard]] const vector<Velocity>&   getVelocityComponents() const { return   velocityComponents; }
 	[[nodiscard]] 		vector<Velocity>&   getVelocityComponents()	   	  { return   velocityComponents; }
+
+	[[nodiscard]] const vector<BoundingBox>&   getStaticBoundingComponents() const { return   staticBoundingComponents; }
+	[[nodiscard]] 		vector<BoundingBox>&   getStaticBoundingComponents()	   { return   staticBoundingComponents; }
 
 	[[nodiscard]] const vector<BoundingBox>&   getBoundingComponents() const { return   boundingComponents; }
 	[[nodiscard]] 		vector<BoundingBox>&   getBoundingComponents()	   	 { return   boundingComponents; }
@@ -76,12 +75,12 @@ struct Storage {
 	[[nodiscard]] 		vector<CharacterData>&   getCharacterDataComponents()	   	{ return   characterDataComponents; }
 
 private:
-	vector<Lock> 			 		 lockComponents;
 	vector<AI> 		  		   		   AIComponents;
 	vector<Node_ptr>		 		 nodeComponents;
 	vector<Transformable> 	transformableComponents;
 	vector<Velocity>			 velocityComponents;
 	vector<BoundingBox>		 	 boundingComponents;
+	vector<BoundingBox>	   staticBoundingComponents;
 	vector<BoundingBox>		  rayBoundingComponents;
 	vector<Physics>				  physicsComponents;
 	vector<BulletData>		   bulletDataComponents;

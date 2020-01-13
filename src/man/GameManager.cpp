@@ -2,6 +2,8 @@
 
 void GameManager::init()
 {
+	systems.reserve(9); // TODO cambiar este valor al anadir un nuevo sistema
+
 	systems.emplace_back(std::make_unique<VelocitySystem>()); // de momento lo ponemos aqui para que input y AI utilicen la velocidad
 	systems.emplace_back(std::make_unique<InputSystem>(render.device));
 	systems.emplace_back(std::make_unique<AI_System>());
@@ -47,7 +49,7 @@ void GameManager::loop()
 
 		while(delta.count() > TICK_MS.count())
 		{
-			update(delta.count());
+			update(TICK_MS.count());
 			delta -= TICK_MS;
 		}
 

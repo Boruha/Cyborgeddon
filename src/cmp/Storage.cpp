@@ -6,11 +6,11 @@ using Sun::SceneNode;
 using Sun::CameraNode;
 
 Storage::Storage(std::size_t initialSize) {
-	lockComponents.reserve(initialSize);
 	AIComponents.reserve(initialSize);
 	nodeComponents.reserve(initialSize);
 	transformableComponents.reserve(initialSize);
 	velocityComponents.reserve(initialSize);
+	staticBoundingComponents.reserve(initialSize);
 	boundingComponents.reserve(initialSize);
 	rayBoundingComponents.resize(initialSize);
 	physicsComponents.reserve(initialSize);
@@ -24,15 +24,11 @@ Storage::~Storage() {
 	physicsComponents.clear();
 	rayBoundingComponents.clear();
 	boundingComponents.clear();
+	staticBoundingComponents.clear();
 	velocityComponents.clear();
 	transformableComponents.clear();
 	nodeComponents.clear();
 	AIComponents.clear();
-	lockComponents.clear();
-}
-
-Lock& Storage::createLock(const EntityType e_type, const std::size_t e_ID) {
-	return lockComponents.emplace_back(e_type, e_ID); // lock no depende de una entidad
 }
 
 AI& Storage::createAI(const EntityType e_type, const std::size_t e_ID, const vector<Vector3f>& patrol) {
@@ -59,11 +55,14 @@ Velocity& Storage::createVelocity(EntityType e_type, std::size_t e_ID, const Vec
 	return velocityComponents.emplace_back(Velocity(e_type, e_ID, dir, speed, acceleration));
 }
 
-BoundingBox& Storage::createBoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type) {
+BoundingBox& Storage::createBoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type, const bool canMutate) {
 	if (type == ColliderType::RAY)
 		return rayBoundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, vel, passable, type));
-	else
+
+	if (canMutate || type == DYNAMIC)
 		return boundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, vel, passable, type));
+	else
+		return staticBoundingComponents.emplace_back(BoundingBox(e_type, e_ID, dim, pos, vel, passable, type));
 }
 
 Physics& Storage::createPhysics(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& vel, const Vector3f& rot) {
@@ -74,6 +73,6 @@ BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t
 	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, speed, type));
 }
 
-CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const int attackingCooldown) {
+CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const float attackingCooldown) {
 	return characterDataComponents.emplace_back(CharacterData(e_type, e_ID, mode, health, attackingCooldown));
 }

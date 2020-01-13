@@ -113,16 +113,11 @@ namespace Sun {
 			return *this;
 		}
 
-		Vector3<T>& fixError() {
-		    for (int i = 0; i < 3; ++i)
-                (*this)[i] = std::roundf((*this)[i] * FIX_ERROR_FACTOR) / FIX_ERROR_FACTOR;
-
-		    return *this;
-		}
-
 		Vector3<T>& abs() {
-			for(int i = 0; i < 3; ++i)
-                (*this)[i] = std::abs((*this)[i]);
+
+			x = std::abs(x);
+			y = std::abs(y);
+			z = std::abs(z);
 
 			return *this;
 		}

@@ -1,22 +1,5 @@
 #include <sys/CooldownSystem.hpp>
 
-bool CooldownSystem::shootReady() {
-
-    generalClock = clock();
-
-    // CADENCIA DE LA BALA (en microsegundos)
-    // 100000 = Enfriamiento de 1 segundo; 30000 ~= 3 balas/segundo
-    if(bulletClock - lastBullet > 30000) {
-        lastBullet = bulletClock;
-        bulletClock = 0;
-        return true;
-    }
-    else {
-        bulletClock = generalClock;
-        return false;
-    }
-}
-
 bool CooldownSystem::dashReady() {
 
     generalClock = clock();
@@ -32,4 +15,11 @@ bool CooldownSystem::dashReady() {
         dashClock = generalClock;
         return false;
     }
+}
+
+void CooldownSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
+	for (auto& data : context->getCharacterDataComponents()) {
+		if ((data.attackingCooldown -= deltaTime) < 0)
+			data.attackingCooldown = 0.f;
+	}
 }

@@ -8,5 +8,5 @@ struct BulletData : Component {
 
 	const float speed { 100.f };
 	const bool  damageType { false };
-	float distance_left { 100.f };
+	float 		distance_left { 100.f };
 };

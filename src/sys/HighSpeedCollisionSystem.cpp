@@ -1,34 +1,44 @@
 #include <sys/HighSpeedCollisionSystem.hpp>
 
+struct EntityHitData {
+	float lessDistance { -1 };		// sabremos si la bala choca con algo porque la distancia siempre es positiva
+	std::size_t closerEntity { 0 };
+	bool killEntity { false };
+};
+
 void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
-	for (auto& fastObject : context->getRayBoundingComponents()) {
-		if (fastObject.getEntityType() != UNDEFINED && fastObject.getEntityType() != PLAYER) {
+	for (const auto& fastObject : context->getPhysicsComponents()) {
+		if (fastObject.getEntityType() == BULLET) {
 
-			const Vector3f lastPos = *fastObject.pos;
-			const Vector3f newPos  = lastPos + *fastObject.velocity;
+			EntityHitData hitData;
 
-			float lessDistance {-1};		// sabremos si la bala choca con algo porque la distancia siempre es positiva
-			std::size_t closerEntity {0};
-			bool killEntity {false};
+			Vector3f lastPos = fastObject.position;
+			Vector3f newPos	 = fastObject.position + fastObject.velocity * deltaTime;
 
-			for (auto& collider : context->getBoundingComponents()) {
-				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != PLAYER && !collider.passable) {
-					if (intersects(lastPos, newPos, collider)) {
-						float distance = (((collider.min + collider.max) / 2) - lastPos).length();
+			for (const auto& staticCollider : context->getStaticBoundingComponents())
+				checkHit(lastPos, newPos, staticCollider, hitData);
 
-						if (lessDistance < 0 || (distance < lessDistance)) {
-							killEntity = collider.getEntityType() == EntityType::ENEMY;
-							lessDistance = distance;
-							closerEntity = collider.getEntityID();
-						}
-					}
-				}
+			for (const auto& otherCollider : context->getBoundingComponents())
+				checkHit(lastPos, newPos, otherCollider, hitData);
+
+			if (hitData.lessDistance >= 0) {                                // si hemos chocado con algo
+				if (hitData.killEntity)                                     // y ese algo se puede eliminar
+					context->addToDestroy(hitData.closerEntity);            // lo eliminamos
+				context->addToDestroy(fastObject.getEntityID());            // y eliminamos el objeto rapido
 			}
+		}
+	}
+}
 
-			if (lessDistance >= 0) { 								// si hemos chocado con algo
-				if (killEntity)										// y ese algo se puede eliminar
-					context->addToDestroy(closerEntity); 			// lo eliminamos
-				context->addToDestroy(fastObject.getEntityID());	// y eliminamos el objeto rapido
+void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f& newPos, const BoundingBox& box, EntityHitData& hitData) const {
+	if (box.getEntityType() != UNDEFINED && !box.passable) {
+		if (intersects(lastPos, newPos, box)) {
+			float distance = (((box.min + box.max) / 2) - lastPos).length();
+
+			if (hitData.lessDistance < 0 || (distance < hitData.lessDistance)) {
+				hitData.killEntity = box.getEntityType() == ENEMY;				// de momento matamos enemigos
+				hitData.lessDistance = distance;								// si son lo mas cercano
+				hitData.closerEntity = box.getEntityID();						// aqui guardamos el id por si necesitamos borrar
 			}
 		}
 	}
