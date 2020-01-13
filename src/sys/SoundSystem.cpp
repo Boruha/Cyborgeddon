@@ -11,8 +11,13 @@ void ERRCHECK_fn(FMOD_RESULT res, const char* file, int line) {
 }
 
 SoundSystem::~SoundSystem() {
-	if(instanceDisparo) instanceDisparo->release();
-	if(eventDisparo) eventDisparo->releaseAllInstances();
+    //Disparo demonio
+	if(instanceDisparo_Demon) instanceDisparo_Demon->release();
+	if(eventDisparo_Demon) eventDisparo_Demon->releaseAllInstances();
+	//Musica ingame bucle
+    if(instanceMusic_ingame) instanceMusic_ingame->release();
+    if(eventMusic_ingame) eventMusic_ingame->releaseAllInstances();
+
 	if(strings) strings->unload();
 	if(master) master->unload();
 	if(system) system->release();
@@ -23,24 +28,34 @@ void SoundSystem::init() {
 	ERRCHECK ( FMOD::Studio::System::create(&system) );
 
 	ERRCHECK ( system->getCoreSystem(&core) );
-	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_5POINT1, 0) );
+	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
 
 	ERRCHECK ( system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
 
 	ERRCHECK ( system->loadBankFile("./resources/sounds/banks/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
 	ERRCHECK ( system->loadBankFile("./resources/sounds/banks/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
 
-	ERRCHECK ( system->getEvent("event:/Disparos", &eventDisparo) );
+	//Disparo demonio
+	ERRCHECK ( system->getEvent("event:/disparo_demon", &eventDisparo_Demon) );
+	ERRCHECK ( eventDisparo_Demon->createInstance(&instanceDisparo_Demon) );
 
-	ERRCHECK ( eventDisparo->createInstance(&instanceDisparo) );
+    //Musica ingame bucle
+    ERRCHECK ( system->getEvent("event:/loop_music", &eventMusic_ingame) );
+    ERRCHECK ( eventMusic_ingame->createInstance(&instanceMusic_ingame) );
 }
 
 void SoundSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	if(context->getPlayer().characterData->attacking)
 	{
 //		ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );
-		ERRCHECK ( instanceDisparo->start() );
+        //Disparo demonio
+		ERRCHECK ( instanceDisparo_Demon->start() );
+        //Musica ingame bucle -> CAMBIAR A GAME CONTEXT DEL ESTADO DEL JUEGO (activo, pausado, menu principal, etc...)
+        ERRCHECK ( instanceMusic_ingame->start() );
 	}
+	if()
+
+
 
 	ERRCHECK (system->update() );
 }

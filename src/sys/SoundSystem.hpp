@@ -18,6 +18,10 @@ private:
 	FMOD::Studio::System* system { nullptr };
 	FMOD::Studio::Bank* master { nullptr };
 	FMOD::Studio::Bank* strings { nullptr };
-	FMOD::Studio::EventDescription* eventDisparo { nullptr };
-	FMOD::Studio::EventInstance* instanceDisparo { nullptr };
+	//Disparo demonio
+	FMOD::Studio::EventDescription* eventDisparo_Demon { nullptr };
+	FMOD::Studio::EventInstance* instanceDisparo_Demon { nullptr };
+	//Musica ingame bucle
+    FMOD::Studio::EventDescription* eventMusic_ingame { nullptr };
+    FMOD::Studio::EventInstance* instanceMusic_ingame { nullptr };
 };
