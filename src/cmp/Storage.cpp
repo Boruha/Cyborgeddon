@@ -73,6 +73,6 @@ BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t
 	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, speed, type, damage));
 }
 
-CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const float attackDamage, const float attackingCooldown) {
+CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const float health, const float attackDamage, const float attackingCooldown) {
 	return characterDataComponents.emplace_back(CharacterData(e_type, e_ID, mode, health, attackDamage, attackingCooldown));
 }
