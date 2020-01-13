@@ -3,7 +3,7 @@
 
 /*		Init - Update	*/
 void EntityManager::init() {
-	entities.reserve(256);
+	entities.reserve(512);
 	toDelete.reserve(8); // si van a morir mas de 8 entidades a la vez, cambiar este valor
 
 	createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
@@ -110,17 +110,6 @@ void EntityManager::init() {
 
 void EntityManager::update(){
 	checkShooting();
-/*
-	std::cout << "Entidades:";
-	for (const auto& e : entities)
-		std::cout << " " << e.getID();
-	std::cout << std::endl;
-
-	std::cout << "ToDeleteVector:";
-	for (const auto& e : toDelete)
-		std::cout << " " << e;
-	std::cout << std::endl;
-*/
 
 	if (!toDelete.empty())			// si hay entidades que "matar"
 		killEntities();				// las matamos
@@ -136,7 +125,7 @@ void EntityManager::checkShooting() {
 	if(player->characterData->attacking){
 		createBullet(Vector3f(3));
 		player->characterData->attacking = false;
-		player->characterData->attackingCooldown = 1.f;
+		player->characterData->currentAttackingCooldown = player->characterData->attackingCooldown;
 	}
 }
 
@@ -193,16 +182,16 @@ void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& po
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 30.f, 30.f);
+	player->velocity 		= & componentStorage.createVelocity(player->getType(), player->getID(), 30.f, 150.f);
 	player->physics 		= & componentStorage.createPhysics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0));
 	player->collider 		= & componentStorage.createBoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, ColliderType::DYNAMIC, true);
-	player->characterData	= & componentStorage.createCharacterData(player->getType(), player->getID(), false, 100, 1);
+	player->characterData	= & componentStorage.createCharacterData(player->getType(), player->getID(), false, 100, 50.f, 1.f/8.f);
 	player->node 			= & componentStorage.createSceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, "./img/textures/testing/testing_demon.jpg");
 
 	player->addComponent(*player->velocity);
 	player->addComponent(*player->physics);
 	player->addComponent(*player->collider);
-	player->addComponent(*player->velocity);
+	player->addComponent(*player->characterData);
 
 	camera->physics 	= & componentStorage.createPhysics(camera->getType(), camera->getID(), posCamera, player->physics->velocity);
 	camera->node 		= & componentStorage.createCameraNode(device, camera->physics->position, player->physics->position);
@@ -224,16 +213,18 @@ void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
 void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) {
 	Entity& enemy = entities.emplace_back(ENEMY);
 
-	enemy.physics 	= & componentStorage.createPhysics(enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
-	enemy.velocity 	= & componentStorage.createVelocity(enemy.getType(), enemy.getID(), speed, 0.f);
-	enemy.collider 	= & componentStorage.createBoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, ColliderType::STATIC, true);
-	enemy.ai 		= & componentStorage.createAI(enemy.getType(), enemy.getID(), patrol);
-	enemy.node 		= & componentStorage.createSceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png");;
+	enemy.physics 		= & componentStorage.createPhysics(enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
+	enemy.velocity 		= & componentStorage.createVelocity(enemy.getType(), enemy.getID(), speed, 0.f);
+	enemy.collider 		= & componentStorage.createBoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, ColliderType::STATIC, true);
+	enemy.ai 			= & componentStorage.createAI(enemy.getType(), enemy.getID(), patrol);
+	enemy.characterData = &componentStorage.createCharacterData(enemy.getType(), enemy.getID(), false, 100.f, 20.f, 1.f/2.f);
+	enemy.node 			= & componentStorage.createSceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png");;
 
 	enemy.addComponent(*enemy.physics);
 	enemy.addComponent(*enemy.velocity);
 	enemy.addComponent(*enemy.collider);
 	enemy.addComponent(*enemy.ai);
+	enemy.addComponent(*enemy.characterData);
 }
 
 void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vector3f& dim) {
@@ -249,7 +240,7 @@ void EntityManager::createBullet(const Vector3f& dim) {
 	Entity& bullet = entities.emplace_back(BULLET);
 
 	bullet.physics 		= & componentStorage.createPhysics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * 300.f, player->physics->rotation);
-	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode);
+	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage);
 	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr);
 
 	player->characterData->mode ? bullet.node->get()->setTexture("./img/textures/testing/testing_angel.jpg") : bullet.node->get()->setTexture("./img/textures/testing/testing_demon.jpg");
@@ -276,4 +267,16 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 
 	key.addComponent(*key.physics);
 	key.addComponent(*key.collider);
+}
+
+const Entity* EntityManager::getEntityByID(const std::size_t id) const {
+	for (auto& ent : entities)
+		if (ent.getID() == id)
+			return &ent;
+
+	return nullptr;
+}
+
+const Entity* EntityManager::getEntityByID(const std::size_t id) {
+	return const_cast<Entity*>(std::as_const(*this).getEntityByID(id));
 }

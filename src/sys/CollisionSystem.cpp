@@ -29,7 +29,6 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	Vector3f& 	 velocity 	= *playerBox.velocity;
 
 	for (int i = 0; i < 3; ++i) {
-//		if (velocity[i] != 0) {
 		int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
 
 		if (numChecks <= 0)
@@ -55,7 +54,6 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 		}
 		velocity[i] *= static_cast<float>(numChecks);
 	}
-//	}
 }
 
 void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {

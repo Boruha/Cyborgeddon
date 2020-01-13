@@ -3,7 +3,7 @@
 struct EntityHitData {
 	float lessDistance { -1 };		// sabremos si la bala choca con algo porque la distancia siempre es positiva
 	std::size_t closerEntity { 0 };
-	bool killEntity { false };
+	bool damageEntity { false };
 };
 
 void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -21,9 +21,13 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 			for (const auto& otherCollider : context->getBoundingComponents())
 				checkHit(lastPos, newPos, otherCollider, hitData);
 
-			if (hitData.lessDistance >= 0) {                                // si hemos chocado con algo
-				if (hitData.killEntity)                                     // y ese algo se puede eliminar
-					context->addToDestroy(hitData.closerEntity);            // lo eliminamos
+			if (hitData.lessDistance >= 0) { // si hemos chocado con algo
+				if (hitData.damageEntity) {
+					auto bullet 		 = context->getEntityByID(fastObject.getEntityID());
+					auto entityToDamage = context->getEntityByID(hitData.closerEntity);
+
+					damageEntity(*bullet->bulletData, *entityToDamage->characterData); // lo dañamos
+				}
 				context->addToDestroy(fastObject.getEntityID());            // y eliminamos el objeto rapido
 			}
 		}
@@ -36,11 +40,19 @@ void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f&
 			float distance = (((box.min + box.max) / 2) - lastPos).length();
 
 			if (hitData.lessDistance < 0 || (distance < hitData.lessDistance)) {
-				hitData.killEntity = box.getEntityType() == ENEMY;				// de momento matamos enemigos
+				hitData.damageEntity = box.getEntityType() == ENEMY;			// de momento matamos enemigos
 				hitData.lessDistance = distance;								// si son lo mas cercano
 				hitData.closerEntity = box.getEntityID();						// aqui guardamos el id por si necesitamos borrar
 			}
 		}
+	}
+}
+
+void HighSpeedCollisionSystem::damageEntity(const BulletData& bullet, CharacterData& character) const {
+	if (bullet.damageType != character.mode) {
+		character.health -= (bullet.damage * 2);
+	} else {
+		character.health -= bullet.damage;
 	}
 }
 

@@ -69,10 +69,10 @@ Physics& Storage::createPhysics(const EntityType e_type, const std::size_t e_ID,
 	return physicsComponents.emplace_back(Physics(e_type, e_ID, pos, vel, rot));
 }
 
-BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t e_ID, const float speed, const bool type) {
-	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, speed, type));
+BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t e_ID, const float speed, const bool type, const float damage) {
+	return bulletDataComponents.emplace_back(BulletData(e_type, e_ID, speed, type, damage));
 }
 
-CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const float attackingCooldown) {
-	return characterDataComponents.emplace_back(CharacterData(e_type, e_ID, mode, health, attackingCooldown));
+CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const float attackDamage, const float attackingCooldown) {
+	return characterDataComponents.emplace_back(CharacterData(e_type, e_ID, mode, health, attackDamage, attackingCooldown));
 }

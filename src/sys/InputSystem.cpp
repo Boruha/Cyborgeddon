@@ -29,11 +29,11 @@ void InputSystem::d_pressed(Entity& player) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(Entity& player) {
 	if(player.velocity->speed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady())
-		player.velocity->speed = 150;
+		player.velocity->speed = 600;
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player) {
-	if(player.characterData->attackingCooldown <= 0.f) player.characterData->attacking = true;
+	if(player.characterData->currentAttackingCooldown <= 0.f) player.characterData->attacking = true;
 }
 // Aim
 void InputSystem::left_pressed  (Entity& player) { player.physics->rotation.y -= 5; }

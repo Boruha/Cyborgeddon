@@ -40,9 +40,9 @@ struct Storage {
 
 	Physics& createPhysics(EntityType e_type, std::size_t e_ID, const Vector3f& pos = Vector3f(), const Vector3f& vel = Vector3f(), const Vector3f& rot = Vector3f());
 
-	BulletData& createBulletData(EntityType e_type, std::size_t e_ID, float speed, bool type);
+	BulletData& createBulletData(EntityType e_type, std::size_t e_ID, float speed, bool type, float damage);
 
-	CharacterData& createCharacterData(EntityType e_type, std::size_t e_ID, bool mode, int health, float attackingCooldown);
+	CharacterData& createCharacterData(EntityType e_type, std::size_t e_ID, bool mode, int health, float attackDamage, float attackingCooldown);
 
 	[[nodiscard]] const vector<AI>&   getAIComponents()   const { return   AIComponents; }
 	[[nodiscard]] 		vector<AI>&   getAIComponents() 	   	{ return   AIComponents; }

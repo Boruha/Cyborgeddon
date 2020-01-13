@@ -3,11 +3,13 @@
 #include <cmp/Component.hpp>
 
 struct CharacterData : Component {
-	explicit CharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const int health, const float attackingCooldown)
-			: Component(e_type, e_ID), mode(mode), health(health), attackingCooldown(attackingCooldown) {  }
+	explicit CharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const float health, const float attackDamage, const float attackingCooldown)
+			: Component(e_type, e_ID), mode(mode), health(health), attackDamage(attackDamage), attackingCooldown(attackingCooldown) {  }
 
-	bool 	attacking 			{ false };
-	bool 	mode 	   			{ false };		// true(1) = angel, false(0) = demon;
-	int  	health    			{  100  };
-	float  	attackingCooldown   {   0   };
+	bool 		mode 	   					{ false };		// true(1) = angel, false(0) = demon;
+	float  		health    					{ 100.f };
+	const float attackDamage				{  50.f };
+	const float attackingCooldown			{   0.f };
+	float  		currentAttackingCooldown   	{	0.f };
+	bool 		attacking 					{ false };
 };

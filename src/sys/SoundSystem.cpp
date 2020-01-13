@@ -42,6 +42,10 @@ void SoundSystem::init() {
     //Musica ingame bucle
     ERRCHECK ( system->getEvent("event:/loop_music", &eventMusic_ingame) );
     ERRCHECK ( eventMusic_ingame->createInstance(&instanceMusic_ingame) );
+
+	//Musica ingame bucle -> CAMBIAR A GAME CONTEXT DEL ESTADO DEL JUEGO (activo, pausado, menu principal, etc...)
+
+	ERRCHECK ( instanceMusic_ingame->setVolume(0.25f) );
 }
 
 void SoundSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -50,12 +54,14 @@ void SoundSystem::update(const std::unique_ptr<GameContext> &context, const floa
 //		ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );
         //Disparo demonio
 		ERRCHECK ( instanceDisparo_Demon->start() );
-        //Musica ingame bucle -> CAMBIAR A GAME CONTEXT DEL ESTADO DEL JUEGO (activo, pausado, menu principal, etc...)
-        ERRCHECK ( instanceMusic_ingame->start() );
 	}
-	if()
 
-
+//	TODO: Generalizar sonidos en bucle
+	FMOD_STUDIO_PLAYBACK_STATE state;
+	ERRCHECK( instanceMusic_ingame->getPlaybackState(&state) );
+	if (state == FMOD_STUDIO_PLAYBACK_STOPPED)
+		ERRCHECK ( instanceMusic_ingame->start() );
+//	TODO: Generalizar sonidos en bucle
 
 	ERRCHECK (system->update() );
 }

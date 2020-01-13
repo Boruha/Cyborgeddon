@@ -9,5 +9,6 @@
 #include <sys/CooldownSystem.hpp>
 #include <sys/BulletSystem.hpp>
 #include <sys/VelocitySystem.hpp>
+#include <sys/CharacterDataSystem.hpp>
 #include <sys/SoundSystem.hpp>
 #include <sys/RenderSystem.hpp>

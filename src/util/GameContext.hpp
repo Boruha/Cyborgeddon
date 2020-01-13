@@ -22,6 +22,9 @@ struct GameContext {
 	[[nodiscard]] virtual const std::vector<Entity>& getEntities() const = 0;
 	[[nodiscard]] virtual 		std::vector<Entity>& getEntities() 	  	 = 0;
 
+	[[nodiscard]] virtual const Entity* getEntityByID(std::size_t id) const = 0;
+	[[nodiscard]] virtual const Entity* getEntityByID(std::size_t id) 	    = 0;
+
 	[[nodiscard]] virtual std::vector<Node_ptr>& getNodeComponents() = 0;
 
 	[[nodiscard]] virtual std::vector<BoundingBox>& getStaticBoundingComponents() = 0;
