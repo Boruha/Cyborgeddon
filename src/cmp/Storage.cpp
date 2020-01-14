@@ -68,8 +68,8 @@ CharacterData& Storage::createCharacterData(const EntityType e_type, const std::
 	return std::get<vector<CharacterData>>(map[CHARACTER_DATA_TYPE]).emplace_back(CharacterData(e_type, e_ID, mode, health, attackDamage, attackingCooldown));
 }
 
-const variantComponentVectorTypes& Storage::getComponents(const ComponentType type)  const {
-	return const_cast<std::unordered_map<ComponentType , variantComponentVectorTypes> &>(map)[type];
+const variantComponentVectorTypes& Storage::getComponents(const ComponentType type) const {
+	return const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type];
 }
 
 variantComponentVectorTypes& Storage::getComponents(const ComponentType type) {

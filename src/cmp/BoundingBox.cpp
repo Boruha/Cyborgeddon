@@ -12,10 +12,14 @@ const Vector3f& BoundingBox::operator[](const int index) const {
 	}
 }
 
-std::ostream& operator<<(std::ostream &os, const BoundingBox& box) {
-	os 	<< "\nBoundingBox\nPos: " 	<< *box.pos 							<< "\nVel: " << *box.velocity
-		<< "\nMin: " 				<<  box.min								<< "\nMax: " <<  box.max
-		<< "\nPasable: " 			<< (box.passable ? "true" : "false")	<< "\nType: ";
+std::ostream& operator<<(std::ostream& os, const BoundingBox& box) {
+	box.print(os, "BoundingBox")
+	<< "\n\tPos: " 							<< *box.pos
+	<< "\n\tVel: " 							<< *box.velocity
+	<< "\n\tMin: " 							<<  box.min
+	<< "\n\tMax: " 							<<  box.max
+	<< "\n\tPasable: " 	<< std::boolalpha 	<< box.passable
+	<< "\n\tType: ";
 
 	switch (box.type) {
 		case DYNAMIC: 	os << "DYNAMIC"; 	break;
@@ -24,5 +28,5 @@ std::ostream& operator<<(std::ostream &os, const BoundingBox& box) {
 		case END_TYPE:	os << "ENDTYPE";	break;
 	}
 
-	return os << std::endl;
+	return os;
 }

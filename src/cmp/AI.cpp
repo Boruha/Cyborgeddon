@@ -11,13 +11,15 @@ AI::AI(const EntityType e_type, const std::size_t e_ID, const std::vector<Vector
 }
 
 std::ostream& operator<<(std::ostream& os, const AI &ai) {
-	os 	<< "\nAI_State: " << ai.state
-		<< "\nPatrol positions: ";
+	ai.print(os, "AI")
+	<< "\n\tAI_State: " 		<< ai.state
+	<< "\n\tPatrol Index: " 	<< ai.patrol_index
+	<< "\n\tMax Index: " 		<< ai.max_index
+	<< "\n\tTarget: " 			<< ai.target_position
+	<< "\n\tPatrol positions: ";
+
 	for (int i = 0; i < ai.max_index; ++i)
-		os << "\n\t" << ai.patrol_position[i];
-	os 	<< "\nPatrol Index: " << ai.patrol_index
-		<< "\nMax Index: " << ai.max_index
-		<< "\nTarget: " << ai.target_position;
+		os << "\n\t\t" << ai.patrol_position[i];
 
 	return os;
 }

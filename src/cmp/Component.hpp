@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdlib>
 #include <util/Alias.hpp>
 
 struct Component {
@@ -17,9 +16,9 @@ struct Component {
 	protected:
 		EntityType entityType;
 		const std::size_t entityID;
+		std::ostream& print(std::ostream& os, const std::string& name) const;
 
 	private:
 		const std::size_t ID { nextID++ };
-
 		inline static std::size_t nextID { 0 };
 };
