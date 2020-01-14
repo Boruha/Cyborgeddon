@@ -23,10 +23,10 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 
 			if (hitData.lessDistance >= 0) { // si hemos chocado con algo
 				if (hitData.damageEntity) {
-					auto bullet 		 = context->getEntityByID(fastObject.getEntityID());
+					auto bullet 		= context->getEntityByID(fastObject.getEntityID());
 					auto entityToDamage = context->getEntityByID(hitData.closerEntity);
 
-					damageEntity(*bullet->bulletData, *entityToDamage->characterData); // lo dañamos
+					damageEntity(*bullet.bulletData, *entityToDamage.characterData); // lo dañamos
 				}
 				context->addToDestroy(fastObject.getEntityID());            // y eliminamos el objeto rapido
 			}

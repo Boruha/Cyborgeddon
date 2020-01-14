@@ -19,7 +19,7 @@ void InputSystem::update(const std::unique_ptr<GameContext> &context, const floa
 		++next;
 	}
 
-	context->getPlayer().physics->velocity = context->getPlayer().velocity->direction.normalize() * context->getPlayer().velocity->speed * deltaTime;
+	context->getPlayer().physics->velocity = context->getPlayer().velocity->direction.normalize() * context->getPlayer().velocity->currentSpeed * deltaTime;
 }
 
 void InputSystem::w_pressed(Entity& player) { ++player.velocity->direction.z; }
@@ -28,8 +28,8 @@ void InputSystem::s_pressed(Entity& player) { --player.velocity->direction.z; }
 void InputSystem::d_pressed(Entity& player) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(Entity& player) {
-	if(player.velocity->speed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady())
-		player.velocity->speed = 600;
+	if(player.velocity->currentSpeed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady())
+		player.velocity->currentSpeed = 600;
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player) {

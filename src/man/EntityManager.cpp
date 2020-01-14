@@ -269,14 +269,14 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 	key.addComponent(*key.collider);
 }
 
-const Entity* EntityManager::getEntityByID(const std::size_t id) const {
+const Entity& EntityManager::getEntityByID(const std::size_t id) const {
 	for (auto& ent : entities)
 		if (ent.getID() == id)
-			return &ent;
-
-	return nullptr;
+			return ent;
+	std::cerr << "Entity not found!\n";
+	exit(-1);
 }
 
-const Entity* EntityManager::getEntityByID(const std::size_t id) {
-	return const_cast<Entity*>(std::as_const(*this).getEntityByID(id));
+const Entity& EntityManager::getEntityByID(const std::size_t id) {
+	return const_cast<Entity&>(std::as_const(*this).getEntityByID(id));
 }

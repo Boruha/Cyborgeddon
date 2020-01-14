@@ -70,7 +70,7 @@ void AI_System::seekBehaviour(const Entity& enemy, const float deltaTime) {
 	if (enemy.ai->state == AI_State::ATTACK_STATE || enemy.velocity->direction.length() < 1.f)
 		enemy.physics->velocity = 0;
 	else
-		enemy.physics->velocity = enemy.velocity->direction.normalize() * enemy.velocity->speed * deltaTime;
+		enemy.physics->velocity = enemy.velocity->direction.normalize() * enemy.velocity->currentSpeed * deltaTime;
 }
 
 void AI_System::alignBehaviour(const Entity& enemy) {

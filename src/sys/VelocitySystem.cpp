@@ -3,16 +3,16 @@
 void VelocitySystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	for (auto& cmp : std::get<vector<Velocity>>(context->getComponents(VELOCITY_TYPE)))
 		if (cmp.getEntityType() != UNDEFINED)
-			if (cmp.speed != cmp.defaultSpeed)
-				cmp.speed < cmp.defaultSpeed ? accelerate(cmp) : decelerate(cmp);
+			if (cmp.currentSpeed != cmp.defaultSpeed)
+				cmp.currentSpeed < cmp.defaultSpeed ? accelerate(cmp) : decelerate(cmp);
 }
 
 void VelocitySystem::accelerate(Velocity& vel) const {
-	if ((vel.speed += vel.acceleration) > vel.defaultSpeed)
-		vel.speed = vel.defaultSpeed;
+	if ((vel.currentSpeed += vel.acceleration) > vel.defaultSpeed)
+		vel.currentSpeed = vel.defaultSpeed;
 }
 
 void VelocitySystem::decelerate(Velocity& vel) const {
-	if ((vel.speed -= vel.acceleration) < vel.defaultSpeed)
-		vel.speed = vel.defaultSpeed;
+	if ((vel.currentSpeed -= vel.acceleration) < vel.defaultSpeed)
+		vel.currentSpeed = vel.defaultSpeed;
 }
