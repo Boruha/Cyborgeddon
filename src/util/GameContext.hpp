@@ -4,6 +4,7 @@
 #include <ent/Entity.hpp>
 #include <memory>
 #include <SunlightEngine/CameraNode.hpp>
+#include <util/ComponentVectorType.hpp>
 
 struct GameContext {
 	GameContext() = default;
@@ -25,19 +26,7 @@ struct GameContext {
 	[[nodiscard]] virtual const Entity* getEntityByID(std::size_t id) const = 0;
 	[[nodiscard]] virtual const Entity* getEntityByID(std::size_t id) 	    = 0;
 
-	[[nodiscard]] virtual std::vector<Node_ptr>& getNodeComponents() = 0;
-
-	[[nodiscard]] virtual std::vector<BoundingBox>& getStaticBoundingComponents() = 0;
-
-	[[nodiscard]] virtual std::vector<BoundingBox>& getBoundingComponents() = 0;
-
-	[[nodiscard]] virtual std::vector<Physics>& getPhysicsComponents() = 0;
-
-	[[nodiscard]] virtual std::vector<Velocity>& getVelocityComponents() = 0;
-
-	[[nodiscard]] virtual std::vector<BulletData>& getBulletDataComponents() = 0;
-
-	[[nodiscard]] virtual std::vector<CharacterData>& getCharacterDataComponents() = 0;
+	[[nodiscard]] virtual variantComponentVectorTypes& getComponents(ComponentType type) = 0;
 
 	virtual void addToDestroy(std::size_t ID) = 0;
 };

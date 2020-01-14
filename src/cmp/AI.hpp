@@ -14,6 +14,8 @@ struct AI : public Component {
 	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<Vector3f>& patrol);
 	~AI() = default;
 
+	friend std::ostream& operator<<(std::ostream& os, const AI& ai);
+
 	AI_State state { PATROL_STATE };
 
 	Vector3f patrol_position[MAX_PATROL_POSITIONS];

@@ -33,24 +33,12 @@ struct EntityManager : GameContext {
 	[[nodiscard]] 		Entity& getCamera() 	  override { return *camera; }
 
 	[[nodiscard]] const std::vector<Entity>& getEntities() const override { return entities; }
-	[[nodiscard]] 		std::vector<Entity>& getEntities() 	  override { return entities; }
+	[[nodiscard]] 		std::vector<Entity>& getEntities() 	  	 override { return entities; }
 
 	[[nodiscard]] const Entity* getEntityByID(std::size_t id) const override;
 	[[nodiscard]] const Entity* getEntityByID(std::size_t id) 		override;
 
-	[[nodiscard]] std::vector<Node_ptr>& getNodeComponents() override { return componentStorage.getNodeComponents(); }
-
-	[[nodiscard]] vector<BoundingBox>& getStaticBoundingComponents() override { return componentStorage.getStaticBoundingComponents(); }
-
-	[[nodiscard]] std::vector<BoundingBox>& getBoundingComponents() override { return componentStorage.getBoundingComponents(); }
-
-	[[nodiscard]] std::vector<Physics>& getPhysicsComponents() override { return componentStorage.getPhysicsComponents(); }
-
-	[[nodiscard]] std::vector<Velocity>& getVelocityComponents() override { return componentStorage.getVelocityComponents(); }
-
-	[[nodiscard]] std::vector<BulletData>& getBulletDataComponents() override { return componentStorage.getBulletDataComponents(); }
-
-	[[nodiscard]] std::vector<CharacterData>& getCharacterDataComponents() override { return componentStorage.getCharacterDataComponents(); }
+	[[nodiscard]] variantComponentVectorTypes& getComponents(ComponentType type) override { return componentStorage.getComponents(type); }
 
 	private:
         void cleanVectors();

@@ -1,7 +1,7 @@
 #include <sys/CharacterDataSystem.hpp>
 
 void CharacterDataSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
-	for (const auto& data : context->getCharacterDataComponents())
+	for (const auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE)))
 		if (data.getEntityType() != UNDEFINED)
 			if (data.health <= 0)
 				context->addToDestroy(data.getEntityID());

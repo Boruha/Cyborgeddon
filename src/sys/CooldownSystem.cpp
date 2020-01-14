@@ -18,7 +18,7 @@ bool CooldownSystem::dashReady() {
 }
 
 void CooldownSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
-	for (auto& data : context->getCharacterDataComponents()) {
+	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
 		if ((data.currentAttackingCooldown -= deltaTime) < 0)
 			data.currentAttackingCooldown = 0.f;
 	}

@@ -1,7 +1,7 @@
 #include <sys/VelocitySystem.hpp>
 
 void VelocitySystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
-	for (auto& cmp : context->getVelocityComponents())
+	for (auto& cmp : std::get<vector<Velocity>>(context->getComponents(VELOCITY_TYPE)))
 		if (cmp.getEntityType() != UNDEFINED)
 			if (cmp.speed != cmp.defaultSpeed)
 				cmp.speed < cmp.defaultSpeed ? accelerate(cmp) : decelerate(cmp);

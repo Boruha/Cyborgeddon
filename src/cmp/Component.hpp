@@ -12,6 +12,8 @@ struct Component {
 
 	void makeUndefined() { entityType = UNDEFINED; } // si el tipo de entidad de un componente es undefined lo ignoramos
 
+	~Component() = default;
+
 	protected:
 		EntityType entityType;
 		const std::size_t entityID;

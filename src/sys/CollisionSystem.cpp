@@ -17,11 +17,11 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	// 			alguna modificación. CUALQUIER metodo estatico al final debe SÍ O SÍ hacer un fix de todos los colliders
 	// 			que haya tocado
 
-	for (auto& collider : context->getBoundingComponents())
+	for (auto& collider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE)))
 		if (collider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(collider);
 
-	for (auto& staticCollider : context->getStaticBoundingComponents())
+	for (auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
 		if (staticCollider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(staticCollider);
 
@@ -39,11 +39,11 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 		for (int j = 0; j < numChecks; ++j) {
 			moveCoord(playerBox, velocity[i], i);
 
-			for (const auto& staticCollider : context->getStaticBoundingComponents())
+			for (const auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
 				if (staticCollider.getEntityType() != UNDEFINED)
 					staticCollision(playerBox, velocity, staticCollider, i);
 
-			for (auto& collider : context->getBoundingComponents()) {
+			for (auto& collider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE))) {
 				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType()) {
 					if (collider.type == STATIC)
 						staticCollision(playerBox, velocity, collider, i);

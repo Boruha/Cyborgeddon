@@ -7,7 +7,7 @@ struct EntityHitData {
 };
 
 void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
-	for (const auto& fastObject : context->getPhysicsComponents()) {
+	for (const auto& fastObject : std::get<vector<Physics>>(context->getComponents(PHYSICS_TYPE))) {
 		if (fastObject.getEntityType() == BULLET) {
 
 			EntityHitData hitData;
@@ -15,10 +15,10 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 			Vector3f lastPos = fastObject.position;
 			Vector3f newPos	 = fastObject.position + fastObject.velocity * deltaTime;
 
-			for (const auto& staticCollider : context->getStaticBoundingComponents())
+			for (const auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
 				checkHit(lastPos, newPos, staticCollider, hitData);
 
-			for (const auto& otherCollider : context->getBoundingComponents())
+			for (const auto& otherCollider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE)))
 				checkHit(lastPos, newPos, otherCollider, hitData);
 
 			if (hitData.lessDistance >= 0) { // si hemos chocado con algo
