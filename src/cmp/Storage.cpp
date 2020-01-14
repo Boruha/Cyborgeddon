@@ -67,3 +67,11 @@ BulletData& Storage::createBulletData(const EntityType e_type, const std::size_t
 CharacterData& Storage::createCharacterData(const EntityType e_type, const std::size_t e_ID, const bool mode, const float health, const float attackDamage, const float attackingCooldown) {
 	return std::get<vector<CharacterData>>(map[CHARACTER_DATA_TYPE]).emplace_back(CharacterData(e_type, e_ID, mode, health, attackDamage, attackingCooldown));
 }
+
+const variantComponentVectorTypes& Storage::getComponents(const ComponentType type)  const {
+	return const_cast<std::unordered_map<ComponentType , variantComponentVectorTypes> &>(map)[type];
+}
+
+variantComponentVectorTypes& Storage::getComponents(const ComponentType type) {
+	return const_cast<variantComponentVectorTypes&>(std::as_const(*this).getComponents(type));
+}

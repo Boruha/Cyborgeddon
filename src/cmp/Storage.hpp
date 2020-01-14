@@ -39,8 +39,8 @@ struct Storage {
 
 	CharacterData& createCharacterData(EntityType e_type, std::size_t e_ID, bool mode, float health, float attackDamage, float attackingCooldown);
 
-	[[nodiscard]] const variantComponentVectorTypes& getComponents(const ComponentType type)  const { return const_cast<std::unordered_map<ComponentType , variantComponentVectorTypes> &>(map)[type]; }
-	[[nodiscard]] 		variantComponentVectorTypes& getComponents(const ComponentType type) 		{ return const_cast<variantComponentVectorTypes&>(std::as_const(*this).getComponents(type)); }
+	[[nodiscard]] const variantComponentVectorTypes& getComponents(ComponentType type) const;
+	[[nodiscard]] 		variantComponentVectorTypes& getComponents(ComponentType type);
 
 private:
 
