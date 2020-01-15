@@ -52,10 +52,10 @@ struct EntityManager : GameContext {
 	    const Sun::Device& device;
 
 	    std::vector<std::size_t> toDelete;
-
 	    std::vector<Entity> entities;
+		int entitiesLeftToDelete { 0 };
 
-		Storage componentStorage { 512 }; // 512 por poner algo
+		Storage componentStorage { 256 }; // 512 por poner algo
 };
 
 // TODO: Player y camera solo uno de momento

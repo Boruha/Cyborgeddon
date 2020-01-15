@@ -9,9 +9,9 @@ struct CharacterData : Component {
 	friend std::ostream& operator<<(std::ostream& os, const CharacterData& data);
 
 	bool 		mode 	   					{ false };		// true(1) = angel, false(0) = demon;
-	float  		health    					{ 100.f };
-	const float attackDamage				{  50.f };
-	const float attackingCooldown			{   0.f };
-	float  		currentAttackingCooldown   	{	0.f };
 	bool 		attacking 					{ false };
+	float  		health    					{ 100.f };
+	float 		attackDamage				{  50.f };
+	float 		attackingCooldown			{   0.f };
+	float  		currentAttackingCooldown   	{	0.f };
 };

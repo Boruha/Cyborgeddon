@@ -5,15 +5,13 @@
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
 	const Vector3f player_pos = context->getPlayer().physics->position;
 
+	for (auto& ai : std::get<vector<AI>>(context->getComponents(AI_TYPE)))
+		targetBehaviour(ai);
+
 	for (const auto& enemy : context->getEntities()) {
 		if (enemy.getType() != UNDEFINED && enemy.ai) {
 			updateState(enemy, player_pos);
-			targetBehaviour(enemy, player_pos);
-
-			stateFunctions[enemy.ai->state].p_func(enemy, player_pos);
-
-			seekBehaviour(enemy, deltaTime);
-			alignBehaviour(enemy);
+			stateFunctions[enemy.ai->state].p_func(enemy, player_pos, deltaTime);
 		}
 	}
 }
@@ -34,7 +32,7 @@ void AI_System::updateState(const Entity& enemy, const Vector3f& player_pos) con
 	}
 }
 
-void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos) {
+void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
 
 	Vector3f distance = enemy.physics->position - enemy.ai->target_position;
 	distance.y = 0;
@@ -44,35 +42,38 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos)
 		enemy.ai->target_position = enemy.ai->patrol_position[enemy.ai->patrol_index];
 	}
 
+	seekBehaviour(enemy, enemy.ai->target_position, deltaTime);
+	alignBehaviour(enemy, enemy.ai->target_position);
 //	std::cout << &enemy << " esta en su patrol\n";
 }
 
-void AI_System::pursueBehaviour(const Entity& enemy, const Vector3f& player_pos) {
+void AI_System::pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
+	seekBehaviour(enemy, player_pos, deltaTime);
+	alignBehaviour(enemy, player_pos);
 //	std::cout << &entity << " esta persiguiendo al player\n";
 }
 
-void AI_System::attackBehaviour(const Entity& enemy, const Vector3f& player_pos) {
+void AI_System::attackBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
+	seekBehaviour(enemy, enemy.physics->position, deltaTime);
+	alignBehaviour(enemy, player_pos);
 //	std::cout << &entity << " esta atacando al player\n";
 }
 
-void AI_System::targetBehaviour(const Entity& enemy, const Vector3f& player_pos) {
-	if (enemy.ai->state == AI_State::PATROL_STATE)
-		enemy.ai->target_position = enemy.ai->patrol_position[enemy.ai->patrol_index];
-	else
-		enemy.ai->target_position = player_pos;
+void AI_System::targetBehaviour(AI& ai) {
+	ai.target_position = ai.patrol_position[ai.patrol_index];
 }
 
-void AI_System::seekBehaviour(const Entity& enemy, const float deltaTime) {
+void AI_System::seekBehaviour(const Entity& enemy, const Vector3f& target, const float deltaTime) {
 
-	enemy.velocity->direction = enemy.ai->target_position - enemy.physics->position;
+	enemy.velocity->direction = target - enemy.physics->position;
 	enemy.velocity->direction.y = 0;
-
+/*
 	if (enemy.ai->state == AI_State::ATTACK_STATE || enemy.velocity->direction.length() < 1.f)
 		enemy.physics->velocity = 0;
-	else
+	else*/
 		enemy.physics->velocity = enemy.velocity->direction.normalize() * enemy.velocity->currentSpeed * deltaTime;
 }
 
-void AI_System::alignBehaviour(const Entity& enemy) {
-	enemy.physics->rotation.y = Sun::nearestAngle(enemy.physics->rotation.y, enemy.velocity->direction.getRotationYfromXZ());
+void AI_System::alignBehaviour(const Entity& enemy, const Vector3f& target) {
+	enemy.physics->rotation.y = Sun::nearestAngle(enemy.physics->rotation.y, (enemy.physics->position - target).getRotationYfromXZ());
 }

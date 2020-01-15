@@ -13,16 +13,16 @@ struct AI_System : System
 
 		void updateState(const Entity& enemy, const Vector3f& player_pos) const;
 
-		static void patrolBehaviour(const Entity& enemy, const Vector3f& player_pos);
-		static void pursueBehaviour(const Entity& enemy, const Vector3f& player_pos);
-		static void attackBehaviour(const Entity& enemy, const Vector3f& player_pos);
+		static void patrolBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
+		static void pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
+		static void attackBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 
-		static void targetBehaviour(const Entity& enemy, const Vector3f& player_pos);
-		static void seekBehaviour(const Entity& enemy, float deltaTime);
-		static void alignBehaviour(const Entity& enemy);
+		static void targetBehaviour(AI& ai);
+		static void seekBehaviour(const Entity& enemy, const Vector3f& target, float deltaTime);
+		static void alignBehaviour(const Entity& enemy, const Vector3f& target);
 
 	struct TStateFunction {
-		void (*p_func)(const Entity& enemy, const Vector3f& player_pos);
+		void (*p_func)(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 	};
 
 	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)

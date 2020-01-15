@@ -8,11 +8,10 @@
 
 using Sun::Vector3f;
 
-constexpr static std::size_t MAX_PATROL_POSITIONS = 8;
+constexpr static unsigned short MAX_PATROL_POSITIONS = 6;
 
 struct AI : public Component {
 	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<Vector3f>& patrol);
-	~AI() = default;
 
 	friend std::ostream& operator<<(std::ostream& os, const AI& ai);
 
@@ -24,5 +23,4 @@ struct AI : public Component {
 	unsigned short max_index { 0 };
 
 	Vector3f target_position {0};
-
 };

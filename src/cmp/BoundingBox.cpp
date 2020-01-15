@@ -18,7 +18,7 @@ std::ostream& operator<<(std::ostream& os, const BoundingBox& box) {
 	<< "\n\tVel: " 							<< *box.velocity
 	<< "\n\tMin: " 							<<  box.min
 	<< "\n\tMax: " 							<<  box.max
-	<< "\n\tPasable: " 	<< std::boolalpha 	<< box.passable
+	<< "\n\tPasable: " 	<< std::boolalpha 	<<  box.passable
 	<< "\n\tType: ";
 
 	switch (box.type) {

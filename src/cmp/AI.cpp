@@ -7,7 +7,6 @@ AI::AI(const EntityType e_type, const std::size_t e_ID, const std::vector<Vector
 			++max_index;
 		}
 	}
-
 }
 
 std::ostream& operator<<(std::ostream& os, const AI &ai) {

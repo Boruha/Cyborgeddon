@@ -6,6 +6,7 @@
 #include <util/Alias.hpp>
 
 #include <unordered_map>
+#include <queue>
 #include <util/ComponentVectorType.hpp>
 
 using Sun::Device;
@@ -31,7 +32,7 @@ struct Storage {
 	Velocity& createVelocity(EntityType e_type, std::size_t e_ID, float speed, float acceleration);
 	Velocity& createVelocity(EntityType e_type, std::size_t e_ID, const Vector3f& dir, float speed, float acceleration);
 
-	BoundingBox& createBoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, bool passable, ColliderType type, bool canMutate);
+	BoundingBox& createBoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, Vector3f& pos, Vector3f& vel, bool passable, ColliderType type, bool canMutate);
 
 	Physics& createPhysics(EntityType e_type, std::size_t e_ID, const Vector3f& pos = Vector3f(), const Vector3f& vel = Vector3f(), const Vector3f& rot = Vector3f());
 
@@ -45,4 +46,5 @@ struct Storage {
 private:
 
 	std::unordered_map <ComponentType, variantComponentVectorTypes> map;
+//	std::unordered_map <ComponentType, vector<int>> 	spacesAvailable;
 };

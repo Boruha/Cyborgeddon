@@ -32,6 +32,8 @@ namespace Sun {
 
         void removeFromScene() { if(node) node->remove(); node = nullptr; }
 
+        bool isAlive() { return node != nullptr; }
+
 		protected:
 			irr::scene::ISceneNode* node { nullptr };
 

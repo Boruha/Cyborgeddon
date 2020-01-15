@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdlib>
 #include <util/Alias.hpp>
 
 #include <cmp/Components.hpp>
@@ -14,8 +13,8 @@ struct Entity
 	void addComponent(Component&);
 	void makeUndefined();
 
-	[[nodiscard]] const EntityType& getType() const { return  type; }
-	[[nodiscard]] const std::size_t&  getID() const { return 	ID; }
+	[[nodiscard]] const EntityType& getType() 	const { return  type; }
+	[[nodiscard]] const EntityID&  	getID() 	const { return 	  ID; }
 
 	Transformable* 	transformable 	{ nullptr };
 	Velocity* 		velocity 		{ nullptr };
@@ -30,10 +29,10 @@ struct Entity
 	private:
 		std::vector<Component*> components;
 
-		inline static std::size_t nextID { 0 };
+		inline static EntityID nextID { 0 };
 
 		EntityType type { UNDEFINED };
-		std::size_t ID  {     0	  	};
+		EntityID 	ID  {     0	  	};
 };
 
 // TODO: generalizar entidades

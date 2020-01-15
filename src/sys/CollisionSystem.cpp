@@ -59,11 +59,11 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
 	if (intersects(playerBox, otherBox)) {
 		if (otherBox.type == DYNAMIC) {
-			context->addToDestroy(otherBox.getEntityID()); // ahora mismo mueren solo llaves
-			if (otherBox.getEntityType() == KEY)
-				for(auto& e : context->getEntities())
-					if (e.getID() == otherBox.getEntityID() - 1)
-						e.collider->type = DYNAMIC;
+			context->addToDestroy(otherBox.getEntityID());
+			if (otherBox.getEntityType() == KEY) {
+				auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
+				door.collider->type = DYNAMIC;
+			}
 			otherBox.makeUndefined();	// nos ahorramos comprobaciones si hacemos que el sistema ignore la bounding
 		}
 	}

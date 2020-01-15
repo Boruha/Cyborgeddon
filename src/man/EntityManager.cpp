@@ -3,8 +3,8 @@
 
 /*		Init - Update	*/
 void EntityManager::init() {
-	entities.reserve(512);
-	toDelete.reserve(8); // si van a morir mas de 8 entidades a la vez, cambiar este valor
+	entities.reserve(256);
+	toDelete.reserve(16); // si van a morir mas de 8 entidades a la vez, cambiar este valor
 
 	createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
 
@@ -114,8 +114,10 @@ void EntityManager::update(){
 	if (!toDelete.empty())			// si hay entidades que "matar"
 		killEntities();				// las matamos
 
-	moveDeadEntities();				// las entidades muertas se van moviendo hacia el final
-	removeEntities();				// las entidades que estan al final son eliminadas del vector
+	if (entitiesLeftToDelete > 0) {
+		moveDeadEntities();				// las entidades muertas se van moviendo hacia el final
+		removeEntities();				// las entidades que estan al final son eliminadas del vector
+	}
 }
 
 // TODO: en los managers no debe haber logica. Revisar sistema de input
@@ -133,8 +135,15 @@ void EntityManager::checkShooting() {
 
 // aqui recibimos los IDS de las entidades que queremos destruir
 void EntityManager::addToDestroy(std::size_t ID) {
-	if (!std::binary_search(toDelete.begin(), toDelete.end(), ID)) // si no tenemos guardado ya ese valor
-		toDelete.insert(std::upper_bound(toDelete.begin(), toDelete.end(), ID), ID ); // lo insertamos en orden ascendente
+	for (const auto& id : toDelete)
+		if (id == ID)
+			return;
+
+	if (std::find(toDelete.begin(), toDelete.end(), ID) == toDelete.end()) { 	// si no existe el elemento
+		toDelete.emplace_back(ID);
+		std::sort(toDelete.begin(), toDelete.end(), std::less<>());	// ordenamos de forma ascendente (apenas tiene coste, el vector no ocupa mas de 8 * size_t de momento)
+		++entitiesLeftToDelete;															// actualizamos el numero de entidades que nos faltan por eliminar
+	}
 }
 
 void EntityManager::killEntities() {
@@ -142,8 +151,10 @@ void EntityManager::killEntities() {
 	for (auto [e, d] = std::tuple{entities.begin(), toDelete.begin()}; e != entities.end() && d != toDelete.end(); ++e) {
 		if (e->getID() != *d)
 			continue;
-		if(e->node)								// si la entidad que queremos eliminar tiene nodo
+		if(e->node){
 			e->node->get()->removeFromScene();	// lo eliminamos de la escena
+			e->node = nullptr;
+		}								// si la entidad que queremos eliminar tiene nodo
 		e->makeUndefined();						// "matamos" a la entidad haciendo que su tipo y el de sus componentes sea UNDEFINED
 		++d;									// actualizamos la posicion del vector toDelete (antes no se actualiza, pues no habiamos encontrado la entidad)
 	}
@@ -167,8 +178,10 @@ void EntityManager::moveDeadEntities() {
 }
 
 void EntityManager::removeEntities() {
-	while(entities.at(entities.size() - 1).getType() == UNDEFINED)
+	while(entities.at(entities.size() - 1).getType() == UNDEFINED) {
 		entities.erase(entities.end() - 1);
+		--entitiesLeftToDelete;							// una entidad menos que borrar
+	}
 }
 
 void EntityManager::cleanVectors() {
@@ -217,7 +230,7 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	enemy.velocity 		= & componentStorage.createVelocity(enemy.getType(), enemy.getID(), speed, 0.f);
 	enemy.collider 		= & componentStorage.createBoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, ColliderType::STATIC, true);
 	enemy.ai 			= & componentStorage.createAI(enemy.getType(), enemy.getID(), patrol);
-	enemy.characterData = &componentStorage.createCharacterData(enemy.getType(), enemy.getID(), false, 100.f, 20.f, 1.f/2.f);
+	enemy.characterData = & componentStorage.createCharacterData(enemy.getType(), enemy.getID(), false, 100.f, 20.f, 1.f/2.f);
 	enemy.node 			= & componentStorage.createSceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png");;
 
 	enemy.addComponent(*enemy.physics);
@@ -247,6 +260,8 @@ void EntityManager::createBullet(const Vector3f& dim) {
 
 	bullet.addComponent(*bullet.physics);
 	bullet.addComponent(*bullet.bulletData);
+
+	std::cout << bullet.getID() << std::endl;
 }
 
 void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim) {
