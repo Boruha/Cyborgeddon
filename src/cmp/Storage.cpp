@@ -1,9 +1,6 @@
 #include <cmp/Storage.hpp>
 #include <SunlightEngine/SceneNode.hpp>
 #include <SunlightEngine/CameraNode.hpp>
-#include <new>
-
-// TODO : REFACTORIZAR CODIGO usando "variant" para los distintos tipos de componentes como se ha hecho con los distintos tipos de vectores
 
 using Sun::SceneNode;
 using Sun::CameraNode;
@@ -40,14 +37,14 @@ Storage::~Storage() {
 	map.clear();
 //	spacesAvailable.clear();
 }
-
+/*
 AI& Storage::createAI(const EntityType e_type, const std::size_t e_ID, const vector<Vector3f>& patrol) {
 	std::cout 	<< "Capacity: " << std::get<vector<AI>>(map[AI_TYPE]).capacity() 	<< std::endl
 				<< "Size: " 	<< std::get<vector<AI>>(map[AI_TYPE]).size() 		<< std::endl;
 
 	return createComponent(std::get<vector<AI>>(map[AI_TYPE]), e_type, e_ID, patrol);
 }
-
+*/
 Node_ptr& Storage::createSceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh, const char* texture) {
 	std::cout 	<< "Capacity: " << std::get<vector<Node_ptr>>(map[NODE_TYPE]).capacity() 	<< std::endl
 				<< "Size: " 	<< std::get<vector<Node_ptr>>(map[NODE_TYPE]).size() 		<< std::endl;
@@ -69,7 +66,7 @@ Node_ptr& Storage::createCameraNode(const Device& device, const Vector3f& positi
 
 	return std::get<vector<Node_ptr>>(map[NODE_TYPE]).emplace_back(std::make_unique<CameraNode>(device, target, position));
 }
-
+/*
 Transformable& Storage::createTransformable(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& rot) {
 	std::cout 	<< "Capacity: " << std::get<vector<Transformable>>(map[TRANSFORMABLE_TYPE]).capacity() 	<< std::endl
 				<< "Size: " 	<< std::get<vector<Transformable>>(map[TRANSFORMABLE_TYPE]).size() 		<< std::endl;
@@ -133,15 +130,15 @@ CharacterData& Storage::createCharacterData(const EntityType e_type, const std::
 
 	return createComponent(std::get<vector<CharacterData>>(map[CHARACTER_DATA_TYPE]), e_type, e_ID, mode, health, attackDamage, attackingCooldown);
 }
+*/
+/*template<typename T>
+T& Storage::createComponent(std::vector<T>& vector, const T& cmp) {
+	for (auto& item : vector)
+		if (!item)
+			return *(new (&cmp) T(std::move(cmp)));
 
-template<typename T, typename... Args>
-T& Storage::createComponent(std::vector<T>& vector, Args&&... args) {
-	for (auto& cmp : vector)
-		if (!cmp)
-			return *(new (&cmp) T(args...));
-
-	return vector.emplace_back(args...);
-}
+	return vector.emplace_back(std::move(cmp));
+}*/
 
 const variantComponentVectorTypes& Storage::getComponents(const ComponentType type) const {
 	return const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type];
@@ -150,9 +147,16 @@ const variantComponentVectorTypes& Storage::getComponents(const ComponentType ty
 variantComponentVectorTypes& Storage::getComponents(const ComponentType type) {
 	return const_cast<variantComponentVectorTypes&>(std::as_const(*this).getComponents(type));
 }
+/*
+template<typename T>
+T& Storage::createComponent(const ComponentType type, const T& cmp) {
+	for (auto& item : std::get<vector<T>>(map[type]))
+		if (!item)
+			return *(new (&cmp) T(std::move(cmp)));
 
-template<typename T, typename... Args>
-T& Storage::createComponent(ComponentType type, Args &&... args) {
+	return std::get<vector<T>>(map[type]).emplace_back(std::move(cmp));
+
+	return createComponent(std::get<vector<T>>(map[type]), cmp);
 	switch(type) {
 		case AI_TYPE:
 			return createComponent(std::get<vector<AI>>(map[type]), args...);
@@ -184,4 +188,4 @@ T& Storage::createComponent(ComponentType type, Args &&... args) {
 		case RAY_BOUNDING_BOX_TYPE:
 			return createComponent(std::get<vector<BoundingBox>>(map[type]), args...);
 	}
-}
+}*/

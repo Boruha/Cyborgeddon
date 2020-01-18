@@ -55,7 +55,7 @@ struct EntityManager : GameContext {
 	    std::vector<Entity> entities;
 		int entitiesLeftToDelete { 0 };
 
-		Storage componentStorage { 256 }; // 512 por poner algo
+		Storage componentStorage { 128 };
 };
 
 // TODO: Player y camera solo uno de momento
