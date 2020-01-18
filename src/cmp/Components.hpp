@@ -14,5 +14,5 @@
 using std::vector;
 
 using variantComponentVectorTypes = std::variant<vector<AI>, vector<Node_ptr>, vector<Transformable>, vector<Velocity>, vector<BoundingBox>, vector<Physics>, vector<BulletData>, vector<CharacterData>>;
-
+using variantComponentTypes = std::variant<AI, Node_ptr, Transformable, Velocity, BoundingBox, Physics, BulletData, CharacterData>;
 // TODO: comprobar const-correctness de todos los componentes y hacer los cambios pertinentes

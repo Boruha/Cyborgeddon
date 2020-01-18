@@ -4,7 +4,7 @@
 #include <ent/Entity.hpp>
 #include <memory>
 #include <SunlightEngine/CameraNode.hpp>
-#include <util/ComponentVectorType.hpp>
+#include <util/ComponentType.hpp>
 
 struct GameContext {
 	GameContext() = default;

@@ -4,7 +4,7 @@
 /*		Init - Update	*/
 void EntityManager::init() {
 	entities.reserve(256);
-	toDelete.reserve(16); // si van a morir mas de 8 entidades a la vez, cambiar este valor
+	toDelete.reserve(16); // si van a morir mas de 16 entidades a la vez, cambiar este valor
 
 	createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
 

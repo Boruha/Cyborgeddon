@@ -7,7 +7,7 @@
 
 #include <unordered_map>
 #include <queue>
-#include <util/ComponentVectorType.hpp>
+#include <util/ComponentType.hpp>
 
 using Sun::Device;
 
@@ -43,8 +43,13 @@ struct Storage {
 	[[nodiscard]] const variantComponentVectorTypes& getComponents(ComponentType type) const;
 	[[nodiscard]] 		variantComponentVectorTypes& getComponents(ComponentType type);
 
+	template<typename T, typename... Args>
+	T& createComponent(ComponentType, Args&&... args);
+
 private:
 
 	std::unordered_map <ComponentType, variantComponentVectorTypes> map;
 //	std::unordered_map <ComponentType, vector<int>> 	spacesAvailable;
+	template<typename T, typename... Args>
+	T& createComponent(vector<T>& vector, Args&&... args);
 };

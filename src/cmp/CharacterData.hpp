@@ -11,7 +11,7 @@ struct CharacterData : Component {
 	bool 		mode 	   					{ false };		// true(1) = angel, false(0) = demon;
 	bool 		attacking 					{ false };
 	float  		health    					{ 100.f };
-	float 		attackDamage				{  50.f };
-	float 		attackingCooldown			{   0.f };
+	const float attackDamage				{  50.f };	// intentar hacer const
+	const float attackingCooldown			{   0.f };  // intentar hacer const
 	float  		currentAttackingCooldown   	{	0.f };
 };

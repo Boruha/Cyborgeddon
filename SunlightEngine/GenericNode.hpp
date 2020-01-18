@@ -20,6 +20,8 @@ namespace Sun {
 
 		virtual ~GenericNode() = default;
 
+		explicit operator bool() const { return node != nullptr; }
+
 		virtual void update(const float deltaTime) const { setPosition(deltaTime); }
         virtual void setTexture(const char* texture) const {  }
 
@@ -31,8 +33,6 @@ namespace Sun {
 		void setRot(const Vector3f& rot) const { if(node) node->setRotation(irr::core::vector3df(rot.x, rot.y, rot.z)); }
 
         void removeFromScene() { if(node) node->remove(); node = nullptr; }
-
-        bool isAlive() { return node != nullptr; }
 
 		protected:
 			irr::scene::ISceneNode* node { nullptr };
