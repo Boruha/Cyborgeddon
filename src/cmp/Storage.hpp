@@ -29,6 +29,10 @@ struct Storage {
 
 	template<typename T>
 	const T& createComponent(const ComponentType type, const T& cmp) const {
+		std::cout 	<< cmp 			<< std::endl;
+		std::cout 	<< "Capacity: " << std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]).capacity() 	<< std::endl
+					<< "Size: " 	<< std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]).size() 		<< std::endl;
+
 		for (auto& item : std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]))
 			if (!item)
 				return *(new (&item) T(std::move(cmp)));
@@ -44,7 +48,4 @@ struct Storage {
 private:
 
 	std::unordered_map <ComponentType, variantComponentVectorTypes> map;
-//	std::unordered_map <ComponentType, vector<int>> 	spacesAvailable;
-/*	template<typename T>
-	T& createComponent(vector<T>& vector, const T& cmp);*/
 };

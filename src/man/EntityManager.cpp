@@ -276,7 +276,7 @@ void EntityManager::createBullet(const Vector3f& dim) {
 	bullet.bulletData	= & componentStorage.createComponent(BULLET_DATA_TYPE, BulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage));
 //	TODO generalizar el nodo
 	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr);
-	std::cout << *bullet.physics << std::endl;
+
 	player->characterData->mode ? bullet.node->get()->setTexture("./img/textures/testing/testing_angel.jpg") : bullet.node->get()->setTexture("./img/textures/testing/testing_demon.jpg");
 
 	bullet.addComponent(*bullet.physics);
