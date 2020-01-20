@@ -1,9 +1,6 @@
 #pragma once
 
-#include <vector>
 #include <ent/Entity.hpp>
-#include <memory>
-#include <SunlightEngine/CameraNode.hpp>
 #include <util/ComponentType.hpp>
 
 struct GameContext {

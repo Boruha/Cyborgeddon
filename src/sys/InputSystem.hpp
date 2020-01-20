@@ -3,11 +3,7 @@
 #include <SunlightEngine/EventReceiver.hpp>
 #include <SunlightEngine/KeyCodes.hpp>
 
-#include <ent/EntityPlayer.hpp>
-
 #include <sys/System.hpp>
-
-#include <src/man/EntityManager.hpp>
 
 #include <sys/CooldownSystem.hpp>
 

@@ -21,7 +21,7 @@ Storage::Storage(std::size_t initialSize) {
 }
 
 Storage::~Storage() {
-	map.clear();
+	cleanData();
 }
 
 const variantComponentVectorTypes& Storage::getComponents(const ComponentType type) const {
@@ -30,4 +30,8 @@ const variantComponentVectorTypes& Storage::getComponents(const ComponentType ty
 
 variantComponentVectorTypes& Storage::getComponents(const ComponentType type) {
 	return const_cast<variantComponentVectorTypes&>(std::as_const(*this).getComponents(type));
+}
+
+void Storage::cleanData() {
+	map.clear();
 }

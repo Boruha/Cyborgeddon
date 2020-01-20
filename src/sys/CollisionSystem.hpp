@@ -1,10 +1,7 @@
 #pragma once
 
-#include <ent/Entities.hpp>
 #include <src/man/EntityManager.hpp>
 #include <sys/System.hpp>
-
-#include <vector>
 
 struct CollisionSystem : System
 {

@@ -1,5 +1,4 @@
 #include <sys/CollisionSystem.hpp>
-#include <SunlightEngine/Vector3.hpp>
 
 // TODO: quiza sea conveniente tener 3 sistemas de colisiones distintos, uno para objetos dinamicos, otro para estaticos y otro para objetos que se muevan muy rapido (ray)
 

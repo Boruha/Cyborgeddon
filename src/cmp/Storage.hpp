@@ -58,6 +58,8 @@ struct Storage {
 		return const_cast<Node_ptr&>(std::as_const(*this).createNode(node));
 	}
 
+	void cleanData();
+
 private:
 
 	template <typename T>

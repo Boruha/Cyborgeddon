@@ -1,8 +1,6 @@
 #pragma once
 
 #include <sys/System.hpp>
-#include <ent/Entities.hpp>
-#include <util/GameContext.hpp>
 
 struct AI_System : System
 {
@@ -11,13 +9,16 @@ struct AI_System : System
 
 	private:
 
-		void updateState(const Entity& enemy, const Vector3f& player_pos) const;
+
+		void updateState(AI& ai, const Physics& phy, const Vector3f& player_pos) const;
 
 		static void patrolBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 		static void pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 		static void attackBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 
-		static void targetBehaviour(AI& ai);
+		static void basicBehaviour(const Entity& enemy, const Vector3f& target, float deltaTime, bool align);
+
+		static void targetBehaviour(AI& ai, const Vector3f& target);
 		static void seekBehaviour(const Entity& enemy, const Vector3f& target, float deltaTime);
 		static void alignBehaviour(const Entity& enemy, const Vector3f& target);
 

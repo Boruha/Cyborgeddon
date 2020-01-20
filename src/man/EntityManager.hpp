@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ent/Entities.hpp>
-
 #include <memory>
 #include <vector>
 #include <util/GameContext.hpp>
@@ -10,7 +8,7 @@
 
 struct EntityManager : GameContext {
 	explicit EntityManager(const Device& device) : device(device) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
-	~EntityManager() override { cleanVectors(); }
+	~EntityManager() override { cleanData(); }
 
 	void init() override;
 	void update() override;
@@ -42,7 +40,7 @@ struct EntityManager : GameContext {
 	[[nodiscard]] 		variantComponentVectorTypes& getComponents(ComponentType type) 		 override { return componentStorage.getComponents(type); }
 
 	private:
-        void cleanVectors();
+        void cleanData();
 		void killEntities();
 		void moveDeadEntities();
 		void removeEntities();

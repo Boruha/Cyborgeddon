@@ -1,6 +1,7 @@
 #include <man/EntityManager.hpp>
 #include <algorithm>
 #include <SunlightEngine/SceneNode.hpp>
+#include <SunlightEngine/CameraNode.hpp>
 
 /*		Init - Update	*/
 void EntityManager::init() {
@@ -95,10 +96,10 @@ void EntityManager::init() {
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
 
-	std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270), Vector3f(-160, 0, 270) };
-	std::vector<Vector3f> patrol_2 = { Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200), Vector3f(0, 0, 200) };
-	std::vector<Vector3f> patrol_3 = { Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100), Vector3f(0, 0, 100) };
-	std::vector<Vector3f> patrol_4 = { Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270), Vector3f(120, 0, 270) };
+	std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270) };
+	std::vector<Vector3f> patrol_2 = { Vector3f(   0, 0, 200) };
+	std::vector<Vector3f> patrol_3 = { Vector3f(   0, 0, 100) };
+	std::vector<Vector3f> patrol_4 = { Vector3f( 120, 0, 270) };
 	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
 
@@ -185,7 +186,7 @@ void EntityManager::removeEntities() {
 	}
 }
 
-void EntityManager::cleanVectors() {
+void EntityManager::cleanData() {
 	entities.clear();
 	toDelete.clear();
 }
