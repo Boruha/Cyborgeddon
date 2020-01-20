@@ -19,8 +19,8 @@ struct AI : public Component {
 
 	Vector3f patrol_position[MAX_PATROL_POSITIONS]; // intentar hacer const
 
-	unsigned short patrol_index { 0 };
-	unsigned short max_index { 0 };		// intentar hacer const
+		  unsigned short patrol_index { 0 };
+	const unsigned short max_index 	  { 0 };
 
 	Vector3f target_position {0};
 };

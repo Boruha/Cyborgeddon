@@ -31,7 +31,7 @@ std::ostream& operator<<(std::ostream& os, const BoundingBox& box) {
 	return os;
 }
 
-BoundingBox::BoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type)
+BoundingBox::BoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, const Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type)
 		: Component(e_type, e_ID), passable(passable), type(type), dim(dim), pos(&pos), velocity(&vel) {
 
 }

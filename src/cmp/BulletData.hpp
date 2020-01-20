@@ -8,8 +8,8 @@ struct BulletData : Component {
 
 	friend std::ostream& operator<<(std::ostream& os, const BulletData& data);
 
-	const bool  damageType { false };	// intentar hacer const
-	const float speed { 100.f };		// intentar hacer const
-	const float damage { 0.f };		// intentar hacer const
+	const bool  damageType { false };
+	const float speed { 100.f };
+	const float damage { 0.f };
 	float 		distance_left { 100.f };
 };
