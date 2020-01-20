@@ -26,7 +26,8 @@ struct GameContext {
 	[[nodiscard]] virtual const Entity& getEntityByID(std::size_t id) const = 0;
 	[[nodiscard]] virtual const Entity& getEntityByID(std::size_t id) 	    = 0;
 
-	[[nodiscard]] virtual variantComponentVectorTypes& getComponents(ComponentType type) = 0;
+	[[nodiscard]] virtual const variantComponentVectorTypes& getComponents(ComponentType type) const = 0;
+	[[nodiscard]] virtual 		variantComponentVectorTypes& getComponents(ComponentType type) 		 = 0;
 
 	virtual void addToDestroy(std::size_t ID) = 0;
 };
