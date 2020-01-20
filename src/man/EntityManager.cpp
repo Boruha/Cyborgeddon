@@ -1,5 +1,6 @@
 #include <man/EntityManager.hpp>
 #include <algorithm>
+#include <SunlightEngine/SceneNode.hpp>
 
 /*		Init - Update	*/
 void EntityManager::init() {
@@ -203,8 +204,8 @@ void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& po
 	player->collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC));
 //	player->characterData	= & componentStorage.createCharacterData(player->getType(), player->getID(), false, 100, 50.f, 1.f/8.f);
 	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), false, 100, 50.f, 1.f/8.f));
-//	TODO generalizar el nodo
-	player->node 			= & componentStorage.createSceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, "./img/textures/testing/testing_demon.jpg");
+//	player->node 			= & componentStorage.createSceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, "./img/textures/testing/testing_demon.jpg");
+	player->node			= & componentStorage.createNode(Sun::SceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, "./img/textures/testing/testing_demon.jpg"));
 
 	player->addComponent(*player->velocity);
 	player->addComponent(*player->physics);
@@ -213,8 +214,8 @@ void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& po
 
 //	camera->physics 	= & componentStorage.createPhysics(camera->getType(), camera->getID(), posCamera, player->physics->velocity);
 	camera->physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(camera->getType(), camera->getID(), posCamera, player->physics->velocity, Vector3f()));
-//	TODO generalizar el nodo
-	camera->node 		= & componentStorage.createCameraNode(device, camera->physics->position, player->physics->position);
+//	camera->node 		= & componentStorage.createCameraNode(device, camera->physics->position, player->physics->position);
+	camera->node		= & componentStorage.createNode(Sun::CameraNode(device, player->physics->position, camera->physics->position));
 
 	camera->addComponent(*camera->physics);
 }
@@ -226,8 +227,8 @@ void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
 	wall.physics	= & componentStorage.createComponent(PHYSICS_TYPE, Physics(wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
 //	wall.collider 	= & componentStorage.createBoundingBox(wall.getType(), wall.getID(), dim, wall.physics->position, wall.physics->velocity, false, ColliderType::STATIC, false);
 	wall.collider	= & componentStorage.createComponent(STATIC_BOUNDING_BOX_TYPE, BoundingBox(wall.getType(), wall.getID(), dim, wall.physics->position, wall.physics->velocity, false, STATIC));
-//	TODO generalizar el nodo
-	wall.node 		= & componentStorage.createSceneNode(device, wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr, "./img/textures/testing/testing_wall.jpg");
+//	wall.node 		= & componentStorage.createSceneNode(device, wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr, "./img/textures/testing/testing_wall.jpg");
+	wall.node		= & componentStorage.createNode(Sun::SceneNode(device,wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr, "./img/textures/testing/testing_wall.jpg"));
 
 	wall.addComponent(*wall.physics);
 	wall.addComponent(*wall.collider);
@@ -246,8 +247,8 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	enemy.ai			= & componentStorage.createComponent(AI_TYPE, AI(enemy.getType(), enemy.getID(), patrol));
 //	enemy.characterData = & componentStorage.createCharacterData(enemy.getType(), enemy.getID(), false, 100.f, 20.f, 1.f/2.f);
 	enemy.characterData = & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(enemy.getType(), enemy.getID(), false, 100.f, 20.f, 1.f/2.f));
-//	TODO generalizar el nodo
-	enemy.node 			= & componentStorage.createSceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png");;
+//	enemy.node 			= & componentStorage.createSceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png");;
+	enemy.node			= & componentStorage.createNode(Sun::SceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, "./img/textures/testing/testing_enemy.png"));
 
 	enemy.addComponent(*enemy.physics);
 	enemy.addComponent(*enemy.velocity);
@@ -261,8 +262,8 @@ void EntityManager::createFloor(const char* tex, const Vector3f& pos, const Vect
 
 //	floor.transformable	= & componentStorage.createTransformable(floor.getType(), floor.getID(), pos + Vector3f(0, dim.y / 2, 0));
 	floor.transformable = & componentStorage.createComponent(TRANSFORMABLE_TYPE, Transformable(floor.getType(), floor.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f()));
-//	TODO generalizar el nodo
-	floor.node 			= & componentStorage.createSceneNode(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex);
+//	floor.node 			= & componentStorage.createSceneNode(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex);
+	floor.node			= & componentStorage.createNode(Sun::SceneNode(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex));
 
 	floor.addComponent(*floor.transformable);
 }
@@ -274,8 +275,8 @@ void EntityManager::createBullet(const Vector3f& dim) {
 	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * 300.f, player->physics->rotation));
 //	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage);
 	bullet.bulletData	= & componentStorage.createComponent(BULLET_DATA_TYPE, BulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage));
-//	TODO generalizar el nodo
-	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr);
+//	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr);
+	bullet.node			= & componentStorage.createNode(Sun::SceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr));
 
 	player->characterData->mode ? bullet.node->get()->setTexture("./img/textures/testing/testing_angel.jpg") : bullet.node->get()->setTexture("./img/textures/testing/testing_demon.jpg");
 
@@ -290,8 +291,8 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 	door.physics	= & componentStorage.createComponent(PHYSICS_TYPE, Physics(door.getType(), door.getID(), doorPos + Vector3f(0, doorDim.y / 2, 0), Vector3f(), Vector3f()));
 //	door.collider 	= & componentStorage.createBoundingBox(door.getType(), door.getID(), doorDim, door.physics->position, door.physics->velocity, false, ColliderType::STATIC, true);
 	door.collider	= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(door.getType(), door.getID(), doorDim, door.physics->position, door.physics->velocity, false, STATIC));
-//	TODO generalizar el nodo
-	door.node 		= & componentStorage.createSceneNode(device, door.physics->position, door.physics->rotation, door.collider->dim, nullptr, "./img/textures/testing/testing_door.png");
+//	door.node 		= & componentStorage.createSceneNode(device, door.physics->position, door.physics->rotation, door.collider->dim, nullptr, "./img/textures/testing/testing_door.png");
+	door.node		= & componentStorage.createNode(Sun::SceneNode(device, door.physics->position, door.physics->rotation, door.collider->dim, nullptr, "./img/textures/testing/testing_door.png"));
 
 	door.addComponent(*door.physics);
 	door.addComponent(*door.collider);
@@ -302,8 +303,8 @@ void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& ke
 	key.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(key.getType(), key.getID(), keyPos + Vector3f(0, keyDim.y / 2, 0), Vector3f(), Vector3f()));
 //	key.collider	= & componentStorage.createBoundingBox(key.getType(), key.getID(), keyDim, key.physics->position, key.physics->velocity, true, ColliderType::DYNAMIC, false);
 	key.collider	= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(key.getType(), key.getID(), keyDim, key.physics->position, key.physics->velocity, true, DYNAMIC));
-//	TODO generalizar el nodo
-	key.node 		= & componentStorage.createSceneNode(device, key.physics->position, key.physics->rotation, key.collider->dim, nullptr, "./img/textures/testing/testing_key.png");
+//	key.node 		= & componentStorage.createSceneNode(device, key.physics->position, key.physics->rotation, key.collider->dim, nullptr, "./img/textures/testing/testing_key.png");
+	key.node		= & componentStorage.createNode(Sun::SceneNode(device, key.physics->position, key.physics->rotation, key.collider->dim, nullptr, "./img/textures/testing/testing_key.png"));
 
 	key.addComponent(*key.physics);
 	key.addComponent(*key.collider);

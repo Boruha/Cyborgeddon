@@ -24,28 +24,6 @@ Storage::~Storage() {
 	map.clear();
 }
 
-Node_ptr& Storage::createSceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh, const char* texture) {
-	std::cout 	<< "Capacity: " << std::get<vector<Node_ptr>>(map[NODE_TYPE]).capacity() 	<< std::endl
-				<< "Size: " 	<< std::get<vector<Node_ptr>>(map[NODE_TYPE]).size() 		<< std::endl;
-
-	for (auto& cmp : std::get<vector<Node_ptr>>(map[NODE_TYPE]))
-		if (!(*cmp))
-			return *(new (&cmp) Node_ptr(std::make_unique<SceneNode>(device, position, rotation, dim, mesh, texture)));
-
-	return std::get<vector<Node_ptr>>(map[NODE_TYPE]).emplace_back(std::make_unique<SceneNode>(device, position, rotation, dim, mesh, texture));
-}
-
-Node_ptr& Storage::createCameraNode(const Device& device, const Vector3f& position, const Vector3f& target) {
-	std::cout 	<< "Capacity: " << std::get<vector<Node_ptr>>(map[NODE_TYPE]).capacity() 	<< std::endl
-				 << "Size: " 	<< std::get<vector<Node_ptr>>(map[NODE_TYPE]).size() 		<< std::endl;
-
-	for (auto& cmp : std::get<vector<Node_ptr>>(map[NODE_TYPE]))
-		if(!(*cmp))
-			return *(new (&cmp) Node_ptr(std::make_unique<CameraNode>(device, target, position)));
-
-	return std::get<vector<Node_ptr>>(map[NODE_TYPE]).emplace_back(std::make_unique<CameraNode>(device, target, position));
-}
-
 const variantComponentVectorTypes& Storage::getComponents(const ComponentType type) const {
 	return const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type];
 }
