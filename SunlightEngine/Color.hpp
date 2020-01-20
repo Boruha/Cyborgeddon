@@ -12,7 +12,7 @@ namespace Sun {
 	};
 
 	struct Color {
-		explicit Color(const u_int32_t& color) : r(color >> 24 & 0xFF), g(color >> 16 & 0xFF), b(color >> 8 & 0xFF), a(color & 0xFF) { }
+		explicit Color(const u_int32_t& color) : r(color >> 24u & 0xFFu), g(color >> 16u & 0xFFu), b(color >> 8u & 0xFFu), a(color & 0xFFu) { }
 
 		Color(const u_int8_t& r, const u_int8_t& g, const uint8_t& b) : r(r), g(g), b(b) {  }
 

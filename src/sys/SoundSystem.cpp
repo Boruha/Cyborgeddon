@@ -32,15 +32,15 @@ void SoundSystem::init() {
 
 	ERRCHECK ( system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
 
-	ERRCHECK ( system->loadBankFile("./resources/sounds/banks/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
-	ERRCHECK ( system->loadBankFile("./resources/sounds/banks/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
+	ERRCHECK ( system->loadBankFile(MASTER_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
+	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
 
 	//Disparo demonio
-	ERRCHECK ( system->getEvent("event:/disparo_demon", &eventDisparo_Demon) );
+	ERRCHECK ( system->getEvent(DEMON_SHOOT_EVENT, &eventDisparo_Demon) );
 	ERRCHECK ( eventDisparo_Demon->createInstance(&instanceDisparo_Demon) );
 
     //Musica ingame bucle
-    ERRCHECK ( system->getEvent("event:/loop_music", &eventMusic_ingame) );
+    ERRCHECK ( system->getEvent(BACKGROUND_MUSIC_EVENT, &eventMusic_ingame) );
     ERRCHECK ( eventMusic_ingame->createInstance(&instanceMusic_ingame) );
 
 	//Musica ingame bucle -> CAMBIAR A GAME CONTEXT DEL ESTADO DEL JUEGO (activo, pausado, menu principal, etc...)

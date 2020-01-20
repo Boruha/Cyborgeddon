@@ -5,10 +5,9 @@
 #include <SunlightEngine/Vector3.hpp>
 #include <cmp/Component.hpp>
 #include <util/Alias.hpp>
+#include <util/Constants.hpp>
 
 using Sun::Vector3f;
-
-constexpr static unsigned int MAX_PATROL_POSITIONS = 6;
 
 struct AI : public Component {
 	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<Vector3f>& patrol);

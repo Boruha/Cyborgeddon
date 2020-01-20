@@ -14,9 +14,6 @@ struct CooldownSystem : System {
 
     inline static std::clock_t generalClock;
 
-    inline static float bulletClock;
-    inline static float lastBullet;
-
     inline static float dashClock;
     inline static float lastDash;
 };
