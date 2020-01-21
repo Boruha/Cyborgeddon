@@ -23,3 +23,7 @@ void CooldownSystem::update(const std::unique_ptr<GameContext>& context, const f
 			data.currentAttackingCooldown = 0.f;
 	}
 }
+
+void CooldownSystem::reset() {
+	dashClock = lastDash = 0;
+}

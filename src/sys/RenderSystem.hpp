@@ -9,6 +9,7 @@ struct RenderSystem : public System {
 
 	void init() override {  }
 	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
+	void reset() override {  }
 
 	Sun::Device device {Sun::Vector2u(640, 480), L"Cyborgeddon" };
 	Sun::Color background { 0x330044FF };

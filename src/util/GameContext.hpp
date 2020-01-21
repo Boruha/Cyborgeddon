@@ -9,7 +9,9 @@ struct GameContext {
 	virtual ~GameContext() = default;
 
 	virtual void init() = 0;
-	virtual void update() = 0;
+	virtual bool update() = 0;
+
+	virtual void createLevel() = 0;
 
 	[[nodiscard]] virtual const Entity& getPlayer() const = 0;
 	[[nodiscard]] virtual 		Entity& getPlayer()		  = 0;

@@ -11,10 +11,9 @@
 using Sun::Device;
 
 struct Storage {
-	explicit Storage(std::size_t);
+	explicit Storage() = default;
 	~Storage();
 
-	Storage(			   ) = delete;
 	Storage(const Storage& ) = delete;
 	Storage(	  Storage&&) = delete;
 
@@ -31,7 +30,7 @@ struct Storage {
 
 		for (auto& item : std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]))
 			if (!item)
-				return *(new (&item) T(std::move(cmp)));
+				return item = T(std::move(cmp));
 
 		return std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]).emplace_back(std::move(cmp));
 	}
@@ -48,7 +47,7 @@ struct Storage {
 
 		for (auto& item : std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]))
 			if (!(*item))
-				return *(new (&item) Node_ptr(std::make_unique<T>(std::move(node))));
+				return item = std::make_unique<T>(std::move(node));
 
 		return std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]).emplace_back(std::make_unique<T>(std::move(node)));
 	}
@@ -58,6 +57,7 @@ struct Storage {
 		return const_cast<Node_ptr&>(std::as_const(*this).createNode(node));
 	}
 
+	void initData(int maxComponents);
 	void cleanData();
 
 private:

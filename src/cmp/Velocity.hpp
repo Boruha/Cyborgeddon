@@ -17,6 +17,6 @@ struct Velocity : public Component
 
 	Vector3f		direction {0};
 	float 	 		currentSpeed {0};
-	const float 	defaultSpeed {0};
+	float		 	defaultSpeed {0};
 	float 			acceleration {0};
 };

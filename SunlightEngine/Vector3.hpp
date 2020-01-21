@@ -164,18 +164,8 @@ namespace Sun {
 		T x{0}, y{0}, z{0};
 	};
 
-	//typedef Vector3<short> 				Vector3s;
-	typedef Vector3<int> 					Vector3i;
-	//typedef Vector3<long> 				Vector3l;
-	//typedef Vector3<long long> 			Vector3ll;
-
-	//typedef Vector3<unsigned short> 		Vector3us;
-	typedef Vector3<unsigned int> 			Vector3u;
-	//typedef Vector3<unsigned long> 		Vector3ul;
-	//typedef Vector3<unsigned long long>	Vector3ull;
-
-	typedef Vector3<float> 					Vector3f;
-	//typedef Vector3<double> 				Vector3d;
-	//typedef Vector3<long double>			Vector3ld;
+	using Vector3i = Vector3<int>;
+	using Vector3u = Vector3<unsigned int>;
+	using Vector3f = Vector3<float>;
 
 } // namespace Sun

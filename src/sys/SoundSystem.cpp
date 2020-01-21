@@ -65,3 +65,8 @@ void SoundSystem::update(const std::unique_ptr<GameContext> &context, const floa
 
 	ERRCHECK (system->update() );
 }
+
+void SoundSystem::reset() {
+	ERRCHECK( instanceDisparo_Demon->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+	ERRCHECK( instanceMusic_ingame->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+}

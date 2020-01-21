@@ -36,10 +36,9 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 	if (distance.length() > 1.f) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
 	} else {
-		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], 0, false);
+		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
 
-		if (enemy.ai->max_index > 1)
-			enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
+		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], 0, false);
 	}
 //	std::cout << &enemy << " esta en su patrol\n";
 }

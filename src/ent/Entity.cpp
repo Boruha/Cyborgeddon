@@ -16,4 +16,7 @@ void Entity::makeUndefined() {
 			component->makeUndefined();
 		component = nullptr;
 	}
+
+	components.clear();
+	components.shrink_to_fit();
 }

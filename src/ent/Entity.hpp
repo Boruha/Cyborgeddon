@@ -10,6 +10,8 @@ struct Entity
 
 	~Entity() = default;
 
+	inline static void resetIDManagementValue() { nextID = 0; }
+
 	void addComponent(Component&);
 	void makeUndefined();
 

@@ -113,18 +113,8 @@ namespace Sun {
 		T x{0}, y{0};
 	};
 
-	//typedef Vector2<short> 				Vector2s;
-	typedef Vector2<int> 					Vector2i;
-	//typedef Vector2<long> 				Vector2l;
-	//typedef Vector2<long long> 			Vector2ll;
-
-	//typedef Vector2<unsigned short> 		Vector2us;
-	typedef Vector2<unsigned int> 			Vector2u;
-	//typedef Vector2<unsigned long> 		Vector2ul;
-	//typedef Vector2<unsigned long long>	Vector2ull;
-
-	typedef Vector2<float> 					Vector2f;
-	//typedef Vector2<double> 				Vector2d;
-	//typedef Vector2<long double>			Vector2ld;
+	using Vector2i = Vector2<int>;
+	using Vector2u = Vector2<unsigned int>;
+	using Vector2f = Vector2<float>;
 
 } // namespace Sun

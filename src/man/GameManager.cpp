@@ -2,7 +2,7 @@
 
 void GameManager::init()
 {
-	systems.reserve(9); // TODO cambiar este valor al anadir un nuevo sistema
+	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
 
 	systems.emplace_back(std::make_unique<VelocitySystem>()); // de momento lo ponemos aqui para que input y AI utilicen la velocidad
 	systems.emplace_back(std::make_unique<InputSystem>(render.device));
@@ -31,7 +31,11 @@ void GameManager::update(const float deltaTime)
 		sys->update(entityManager, deltaTime);
 
 	// entity manager crea y destruye entidades en funcion de lo que hagan los sistemas
-	entityManager->update();
+	if(entityManager->update()) {			// TODO : hacer maquina de estados para permitir estado inicio, pausa, en juego...
+		for (auto& sys : systems)
+			sys->reset();
+		entityManager->createLevel();
+	}
 }
 
 // TODO: bucle del juego

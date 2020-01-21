@@ -36,7 +36,7 @@ C           := gcc
 # FLAGS
 CCFLAGS     := -pthread -Wall -pedantic -std=c++17
 CFLAGS      := $(CCFLAGS)
-RELEASEFLAG := -O3 -Os
+RELEASEFLAG := -O3
 DEBUGFLAG   := -Og
 
 # MAIN FOLDERS

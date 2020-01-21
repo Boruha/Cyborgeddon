@@ -7,6 +7,8 @@ struct Component {
 
 	explicit operator bool() const { return entityType != UNDEFINED; }
 
+	inline static void resetIDManagementValue() { nextID = 0; }
+
 	[[nodiscard]] const ComponentID& getID() const { return ID; }
 	[[nodiscard]] const EntityID& getEntityID() const { return entityID; }
 	[[nodiscard]] const EntityType& getEntityType() const { return entityType; }
