@@ -38,7 +38,7 @@ namespace Sun {
 			irr::scene::ISceneNode* node { nullptr };
 
 			void setPosition() const { if(node) setPos(*position); }
-			void setRotation() const { if(node) setPos(*position); }
+			void setRotation() const { if(node) setRot(*rotation); }
 
 			void setPosition(const float deltaTime) const { if(node) setPos(getPosition() + (*position - getPosition()) * deltaTime); }
 	        void setRotation(const float deltaTime) const { if(node) setRot(getRotation() + (*rotation - getRotation()) * deltaTime); }

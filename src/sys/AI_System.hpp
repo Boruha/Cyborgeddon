@@ -10,9 +10,6 @@ struct AI_System : System
 
 	private:
 
-
-		void updateState(AI& ai, const Physics& phy, const Vector3f& player_pos) const;
-
 		static void patrolBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 		static void pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
 		static void attackBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);

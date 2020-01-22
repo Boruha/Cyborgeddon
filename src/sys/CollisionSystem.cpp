@@ -16,48 +16,63 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	// 			alguna modificación. CUALQUIER metodo estatico al final debe SÍ O SÍ hacer un fix de todos los colliders
 	// 			que haya tocado
 
-	for (auto& collider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE)))
-		if (collider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
+	auto& specialBoundings 	= std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE));
+	auto& staticBoundings	= std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE));
+
+	for (auto& collider : specialBoundings)
+		if (collider)					// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(collider);
 
-	for (auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
-		if (staticCollider.getEntityType() != UNDEFINED)		// ignoramos los componentes que no pertenecen a ninguna entidad
+	for (auto& staticCollider : staticBoundings)
+		if (staticCollider)				// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(staticCollider);
 
-	BoundingBox& playerBox  = *context->getPlayer().collider;
-	Vector3f& 	 velocity 	= *playerBox.velocity;
+	for (auto& movingBox : specialBoundings) {											// recorremos el array de objetos no estaticos
+		if (movingBox) {																// y si son moviles
+			for (int i = 0; i < 3; ++i) {
+				Vector3f& velocity = *movingBox.velocity;
 
-	for (int i = 0; i < 3; ++i) {
-		int numChecks = ceil(abs(velocity[i]) / (playerBox.dim[i] / 2));
+				int numChecks = ceil(abs(velocity[i]) / (movingBox.dim[i] / 2));
 
-		if (numChecks <= 0)
-			continue;
+				if (numChecks <= 0)
+					continue;
 
-		velocity[i] /= static_cast<float>(numChecks);
+				velocity[i] /= static_cast<float>(numChecks);
 
-		for (int j = 0; j < numChecks; ++j) {
-			moveCoord(playerBox, velocity[i], i);
+				for (int j = 0; j < numChecks; ++j) {
 
-			for (const auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
-				if (staticCollider.getEntityType() != UNDEFINED)
-					staticCollision(playerBox, velocity, staticCollider, i);
+					moveCoord(movingBox, velocity[i], i);
 
-			for (auto& collider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE))) {
-				if (collider.getEntityType() != UNDEFINED && collider.getEntityType() != playerBox.getEntityType()) {
-					if (collider.type == STATIC)
-						staticCollision(playerBox, velocity, collider, i);
-					else
-						dynamicCollision(playerBox, velocity, collider, context);
+					for (const auto& staticCollider : staticBoundings) {
+						if (staticCollider)
+							staticCollision(movingBox, velocity, staticCollider, i);
+
+						if (Sun::equal_e(velocity[i], 0))
+							break;
+					}
+
+					for (auto& dynamicCollider : specialBoundings) {
+						if (dynamicCollider && movingBox.getEntityID() != dynamicCollider.getEntityID()) {
+							if (dynamicCollider.type == STATIC)
+								staticCollision(movingBox, velocity, dynamicCollider, i);
+							else
+								dynamicCollision(movingBox, velocity, dynamicCollider, context);
+						}
+
+						if (Sun::equal_e(velocity[i], 0))
+							break;
+					}
 				}
+
+				velocity[i] *= static_cast<float>(numChecks);
 			}
 		}
-		velocity[i] *= static_cast<float>(numChecks);
 	}
 }
 
-void CollisionSystem::dynamicCollision(BoundingBox& playerBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
-	if (intersects(playerBox, otherBox)) {
-		if (otherBox.type == DYNAMIC) {
+void CollisionSystem::dynamicCollision(BoundingBox& movingBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
+	if (intersects(movingBox, otherBox)) {
+		if (movingBox.getEntityType() == PLAYER && otherBox.type == DYNAMIC) {
 			context->addToDestroy(otherBox.getEntityID());
 			if (otherBox.getEntityType() == KEY) {
 				auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
@@ -74,7 +89,7 @@ void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, cons
 
 		if (velocity[coord] > 0)
 			offset = otherBox.min[coord] - box.max[coord];
-		else
+		else if (velocity[coord] < 0)
 			offset = otherBox.max[coord] - box.min[coord];
 
 		velocity[coord] += offset;
@@ -119,7 +134,7 @@ void CollisionSystem::setCoord(BoundingBox& bounding, const Vector3f& pos, const
 
 bool CollisionSystem::intersects(const BoundingBox& bounding, const BoundingBox& other) const {
 	for (int i = 0; i < 3; ++i)
-		if(bounding.max[i] <= other.min[i] || bounding.min[i] >= other.max[i])
+		if (!(Sun::greater_e(bounding.max[i], other.min[i]) && Sun::less_e(bounding.min[i], other.max[i])))
 			return false;
 
 	return true;

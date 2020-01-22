@@ -35,7 +35,7 @@ bool EntityManager::update(){
 // 		 si se consigue, la var. 'Shooting' se podrá elilminar.
 void EntityManager::checkShooting() {
 	if(player->characterData->attacking){
-		createBullet(Vector3f(3));
+		createBullet(Vector3f(0.5, 0, player->collider->dim.z));
 		player->characterData->attacking = false;
 		player->characterData->currentAttackingCooldown = player->characterData->attackingCooldown;
 	}
@@ -199,7 +199,7 @@ void EntityManager::createBullet(const Vector3f& dim) {
 	Entity& bullet = entities.emplace_back(BULLET);
 
 //	bullet.physics 		= & componentStorage.createPhysics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * 300.f, player->physics->rotation);
-	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * 300.f, player->physics->rotation));
+	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * 400.f, player->physics->rotation));
 //	bullet.bulletData 	= & componentStorage.createBulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage);
 	bullet.bulletData	= & componentStorage.createComponent(BULLET_DATA_TYPE, BulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage));
 //	bullet.node 		= & componentStorage.createSceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr);

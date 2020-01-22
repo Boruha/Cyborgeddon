@@ -35,11 +35,11 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 }
 
 void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f& newPos, const BoundingBox& box, EntityHitData& hitData) const {
-	if (box.getEntityType() != UNDEFINED && !box.passable) {
+	if (box && !box.passable) {
 		if (intersects(lastPos, newPos, box)) {
 			float distance = (((box.min + box.max) / 2) - lastPos).length();
 
-			if (hitData.lessDistance < 0 || (distance < hitData.lessDistance)) {
+			if (hitData.lessDistance < 0 || (Sun::less_e(distance, hitData.lessDistance))) {
 				hitData.damageEntity = box.getEntityType() == ENEMY;			// de momento matamos enemigos
 				hitData.lessDistance = distance;								// si son lo mas cercano
 				hitData.closerEntity = box.getEntityID();						// aqui guardamos el id por si necesitamos borrar

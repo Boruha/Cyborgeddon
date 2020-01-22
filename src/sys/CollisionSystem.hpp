@@ -11,8 +11,8 @@ struct CollisionSystem : System
 
 private:
 
-	void dynamicCollision(BoundingBox& box, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const;
-	void staticCollision(BoundingBox& box, Vector3f& velocity, const BoundingBox& other, int coord) const;
+	void dynamicCollision(BoundingBox& movingBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const;
+	void staticCollision(BoundingBox& movingBox, Vector3f& velocity, const BoundingBox& otherBox, int coord) const;
 
 	void fixCoord(BoundingBox& bounding, int coord) const;
 	void fixBox(BoundingBox& bounding) const;
@@ -22,5 +22,4 @@ private:
 	void setCoord(BoundingBox& bounding, const Vector3f& pos, int coord) const;
 
 	[[nodiscard]] bool intersects(const BoundingBox& bounding, const BoundingBox& other) const;
-
 };

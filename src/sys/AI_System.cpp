@@ -6,26 +6,19 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 	const Vector3f player_pos = context->getPlayer().physics->position;
 
 	for (const auto& enemy : context->getEntities()) {
-		if (enemy.getType() != UNDEFINED && enemy.ai) {
-			updateState(*enemy.ai, *enemy.physics, player_pos);
-			stateFunctions[enemy.ai->state].p_func(enemy, player_pos, deltaTime);
+		if (enemy && enemy.ai) {
+			Vector3f v_distance = enemy.physics->position - player_pos;
+			v_distance.y = 0;
+
+			float distance = v_distance.length();
+
+			if (distance > 50)
+				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
+			else if (distance > 25)
+				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
+			else
+				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
 		}
-	}
-}
-
-void AI_System::updateState(AI& ai, const Physics& phy, const Vector3f& player_pos) const {
-
-	Vector3f v_distance = phy.position - player_pos;
-	v_distance.y = 0;
-
-	float distance = v_distance.length();
-
-	if (distance > 50) {
-		ai.state = AI_State::PATROL_STATE;
-	} else if (distance > 25) {
-		ai.state = AI_State::PURSUE_STATE;
-	} else {
-		ai.state = AI_State::ATTACK_STATE;
 	}
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 // CMP AI
-constexpr static unsigned int MAX_PATROL_POSITIONS = 6;
+constexpr unsigned int MAX_PATROL_POSITIONS 	= 6;
 
 // TEXTURES
 constexpr char const * WALL_TEXTURE  			= "./img/textures/testing/testing_wall.jpg";
@@ -13,8 +13,10 @@ constexpr char const * ENEMY_TEXTURE 			= "./img/textures/testing/testing_enemy.
 constexpr char const * CONTROLS_TEXTURE 		= "./img/textures/testing/testing_controls.jpg";
 constexpr char const * TIPS_TEXTURE				= "./img/textures/testing/testing_tips.jpg";
 
-// SOUNDS
+// SOUND BANKS
 constexpr char const * MASTER_BANK				= "./resources/sounds/banks/Master.bank";
 constexpr char const * MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Master.strings.bank";
+
+// SOUND EVENTS
 constexpr char const * DEMON_SHOOT_EVENT		= "event:/disparo_demon";
 constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/loop_music";

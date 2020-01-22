@@ -10,6 +10,8 @@ struct Entity
 
 	~Entity() = default;
 
+	explicit operator bool() const { return type != UNDEFINED; }
+
 	inline static void resetIDManagementValue() { nextID = 0; }
 
 	void addComponent(Component&);
