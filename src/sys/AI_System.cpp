@@ -12,9 +12,9 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 
 			float distance = v_distance.length();
 
-			if (distance > 70)
+			if (Sun::greater_e(distance, 70.f))
 				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (distance > 15)
+			else if (Sun::greater_e(distance, 15.f))
 				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
 			else
 				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
@@ -26,7 +26,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 	Vector3f distance = enemy.physics->position - enemy.ai->target_position;
 	distance.y = 0;
 
-	if (distance.length() > 1.f) {
+	if (Sun::greater_e(distance.length(), 1.f)) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
 	} else {
 		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
