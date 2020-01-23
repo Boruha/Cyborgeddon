@@ -8,6 +8,7 @@ using Sun::Vector3f;
 struct BoundingBox : Component
 {
 	explicit BoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, Vector3f& pos, Vector3f& vel, bool passable, ColliderType type);
+	explicit BoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, Vector3f& pos, bool passable, ColliderType type);
 
 	[[nodiscard]] Vector3f& operator[](int index);
 

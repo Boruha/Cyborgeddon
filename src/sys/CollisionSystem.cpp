@@ -28,7 +28,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 			fixBox(staticCollider);
 
 	for (auto& movingBox : specialBoundings) {											// recorremos el array de objetos no estaticos
-		if (movingBox) {																// y si son moviles
+		if (movingBox && movingBox.velocity) {
 			for (int i = 0; i < 3; ++i) {
 				Vector3f& velocity = *movingBox.velocity;
 
