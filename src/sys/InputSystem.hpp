@@ -19,23 +19,23 @@ struct InputSystem : System
 		const Device& device;
 		Sun::EventReceiver eventReceiver;
 		// Movement
-		static void w_pressed(Entity& player);
-		static void a_pressed(Entity& player);
-		static void s_pressed(Entity& player);
-		static void d_pressed(Entity& player);
+		static void w_pressed(Entity& player, float deltaTime);
+		static void a_pressed(Entity& player, float deltaTime);
+		static void s_pressed(Entity& player, float deltaTime);
+		static void d_pressed(Entity& player, float deltaTime);
 		// Dash
-        static void shift_pressed(Entity& player);
+        static void shift_pressed(Entity& player, float deltaTime);
 		// Shoot
-		static void space_pressed(Entity& player);
+		static void space_pressed(Entity& player, float deltaTime);
 		// Aim
-		static void left_pressed  (Entity& player);
-		static void right_pressed (Entity& player);
+		static void left_pressed  (Entity& player, float deltaTime);
+		static void right_pressed (Entity& player, float deltaTime);
 		// Switch Mode
-		static void m_pressed(Entity& player);
+		static void m_pressed(Entity& player, float deltaTime);
 
 	struct TKey2func {
 		Sun::KEY_CODE key;
-		void (*p_func)(Entity& player);
+		void (*p_func)(Entity& player, float deltaTime);
 	};
 
 	const TKey2func keyMapping[Sun::KEY_CODE_COUNT] // KEY::KODE::COUNT tiene la cantidad de teclas que usamos

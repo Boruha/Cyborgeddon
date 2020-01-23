@@ -3,9 +3,8 @@
 // TODO: poder dibujar las cosas individualmente de alguna manera ( prescindir de sceneManager->drawAll() )
 void RenderSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const
 {
-	for (auto& node : std::get<vector<Node_ptr>>(context->getComponents(NODE_TYPE))) {
-		node->update(deltaTime);
-	}
+	for (auto& node : std::get<vector<Node_ptr>>(context->getComponents(NODE_TYPE)))
+		node->update(1.f);
 
 	device.clear(&background);
 	device.draw();

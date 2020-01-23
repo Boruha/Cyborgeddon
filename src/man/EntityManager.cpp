@@ -102,9 +102,7 @@ void EntityManager::cleanData() {
 	Entity::resetIDManagementValue();		// reiniciamos ID
 
 	entities.clear();						// limpiamos entidades
-	entities.shrink_to_fit();
 	toDelete.clear();						// limpiamos vector de entidades a borrar
-	toDelete.shrink_to_fit();
 
 	entitiesLeftToDelete = 0;				// reiniciamos valor
 	enemiesLeft = 0;						// reiniciamos valor
@@ -117,14 +115,14 @@ void EntityManager::cleanData() {
 
 /*		CREATE ENTITIES		*/
 
-void EntityManager::createPairPlayerCamera(const int& health, const Vector3f& pos, const Vector3f& dim, const float& speed, const Vector3f& posCamera) {
+void EntityManager::createPairPlayerCamera(const int health, const Vector3f& pos, const Vector3f& dim, const float speed, const Vector3f& posCamera) {
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(player->getType(), player->getID(), 30.f, 150.f));
+	player->velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(player->getType(), player->getID(), 30.f, 6000.f));
 	player->physics			= & componentStorage.createComponent(PHYSICS_TYPE, Physics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
 	player->collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC));
-	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), false, 100, 50.f, 1.f/8.f));
+	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), false, health, 50.f, 1.f/8.f));
 	player->node			= & componentStorage.createNode(Sun::SceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, DEMON_TEXTURE));
 
 	player->addComponent(*player->velocity);
@@ -149,7 +147,7 @@ void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
 	wall.addComponent(*wall.collider);
 }
 
-void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float& speed, const std::vector<Vector3f>& patrol) {
+void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float speed, const std::vector<Vector3f>& patrol) {
 	Entity& enemy = entities.emplace_back(ENEMY);
 
 	enemy.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
@@ -225,7 +223,7 @@ const Entity& EntityManager::getEntityByID(const std::size_t id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(10, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
+	createPairPlayerCamera(100, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	createFloor(CONTROLS_TEXTURE,Vector3f(0,0,5), Vector3f(60,0,35)); //Controls
@@ -320,11 +318,11 @@ void EntityManager::createLevel() {
 	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
 
-	createEnemy(patrol_1[0], Vector3f(8), 25.f, patrol_1);
-	createEnemy(patrol_2[0], Vector3f(8), 25.f, patrol_2);
-	createEnemy(patrol_3[0], Vector3f(8), 25.f, patrol_3);
-	createEnemy(patrol_4[0], Vector3f(8), 25.f, patrol_4);
-	createEnemy(patrol_5[0], Vector3f(8), 25.f, patrol_5);
+	createEnemy(patrol_1[0], Vector3f(8), 35.f, patrol_1);
+	createEnemy(patrol_2[0], Vector3f(8), 35.f, patrol_2);
+	createEnemy(patrol_3[0], Vector3f(8), 35.f, patrol_3);
+	createEnemy(patrol_4[0], Vector3f(8), 35.f, patrol_4);
+	createEnemy(patrol_5[0], Vector3f(8), 35.f, patrol_5);
 }
 
 bool EntityManager::checkVictory() {

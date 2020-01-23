@@ -12,9 +12,9 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 
 			float distance = v_distance.length();
 
-			if (distance > 50)
+			if (distance > 70)
 				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (distance > 25)
+			else if (distance > 15)
 				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
 			else
 				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
