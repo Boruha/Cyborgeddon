@@ -4,4 +4,5 @@ constexpr char const * MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Master.
 
 // SOUND EVENTS
 constexpr char const * DEMON_SHOOT_EVENT		= "event:/disparo_demon";
-constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/loop_music";
+constexpr char const * ANGEL_SHOOT_EVENT		= "event:/disparo_angel";
+constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/main_music";

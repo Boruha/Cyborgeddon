@@ -22,6 +22,9 @@ private:
 	//Disparo demonio
 	FMOD::Studio::EventDescription* eventDisparo_Demon { nullptr };
 	FMOD::Studio::EventInstance* instanceDisparo_Demon { nullptr };
+	//Disparo angel
+    FMOD::Studio::EventDescription* eventDisparo_Angel { nullptr };
+    FMOD::Studio::EventInstance* instanceDisparo_Angel { nullptr };
 	//Musica ingame bucle
     FMOD::Studio::EventDescription* eventMusic_ingame { nullptr };
     FMOD::Studio::EventInstance* instanceMusic_ingame { nullptr };

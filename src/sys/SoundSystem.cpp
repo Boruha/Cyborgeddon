@@ -15,6 +15,9 @@ SoundSystem::~SoundSystem() {
     //Disparo demonio
 	if(instanceDisparo_Demon) instanceDisparo_Demon->release();
 	if(eventDisparo_Demon) eventDisparo_Demon->releaseAllInstances();
+    //Disparo demonio
+    if(instanceDisparo_Angel) instanceDisparo_Angel->release();
+    if(eventDisparo_Angel) eventDisparo_Angel->releaseAllInstances();
 	//Musica ingame bucle
     if(instanceMusic_ingame) instanceMusic_ingame->release();
     if(eventMusic_ingame) eventMusic_ingame->releaseAllInstances();
@@ -40,6 +43,10 @@ void SoundSystem::init() {
 	ERRCHECK ( system->getEvent(DEMON_SHOOT_EVENT, &eventDisparo_Demon) );
 	ERRCHECK ( eventDisparo_Demon->createInstance(&instanceDisparo_Demon) );
 
+    //Disparo angel
+    ERRCHECK ( system->getEvent(ANGEL_SHOOT_EVENT, &eventDisparo_Angel) );
+    ERRCHECK ( eventDisparo_Angel->createInstance(&instanceDisparo_Angel) );
+
     //Musica ingame bucle
     ERRCHECK ( system->getEvent(BACKGROUND_MUSIC_EVENT, &eventMusic_ingame) );
     ERRCHECK ( eventMusic_ingame->createInstance(&instanceMusic_ingame) );
@@ -50,12 +57,20 @@ void SoundSystem::init() {
 }
 
 void SoundSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
-	if(context->getPlayer().characterData->attacking)
-	{
-//		ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );
-        //Disparo demonio
-		ERRCHECK ( instanceDisparo_Demon->start() );
-	}
+
+    //Pegamos un tiro
+	if(context->getPlayer().characterData->attacking) {
+        //Comprobamos si es modo Demonio
+        if (context->getPlayer().characterData->mode) {
+            ERRCHECK (instanceDisparo_Angel->start());  //Disparo Demonio
+        }
+        //Modo demon
+        else{
+            ERRCHECK (instanceDisparo_Demon->start());  //Disparo Angel
+        }
+
+        //	ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );
+    }
 
 //	TODO: Generalizar sonidos en bucle
 	FMOD_STUDIO_PLAYBACK_STATE state;
