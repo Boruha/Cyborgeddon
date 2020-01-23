@@ -4,6 +4,9 @@ AI::AI(const EntityType e_type, const std::size_t e_ID, const std::vector<Vector
 	if (max_index <= MAX_PATROL_POSITIONS) {
 		for (int i = 0; i < max_index; ++i)
 			patrol_position[i] = patrol[i];
+	} else {
+		std::cerr << "Se ha pasado un patrol de mas de " << MAX_PATROL_POSITIONS << " posiciones\n";
+		exit(-1);
 	}
 }
 

@@ -1,4 +1,5 @@
 #include <sys/SoundSystem.hpp>
+#include <util/SoundPaths.hpp>
 
 #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 

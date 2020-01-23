@@ -1,8 +1,12 @@
 #include <man/EntityManager.hpp>
+
 #include <algorithm>
+
 #include <SunlightEngine/SceneNode.hpp>
 #include <SunlightEngine/CameraNode.hpp>
-#include <util/Constants.hpp>
+
+#include <util/ComponentConstants.hpp>
+#include <util/TexturePaths.hpp>
 
 /*		Init - Update	*/
 void EntityManager::init() {
@@ -115,14 +119,14 @@ void EntityManager::cleanData() {
 
 /*		CREATE ENTITIES		*/
 
-void EntityManager::createPairPlayerCamera(const int health, const Vector3f& pos, const Vector3f& dim, const float speed, const Vector3f& posCamera) {
+void EntityManager::createPairPlayerCamera(const Vector3f& pos, const Vector3f& dim, const Vector3f& posCamera) {
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(player->getType(), player->getID(), 30.f, 6000.f));
+	player->velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION));
 	player->physics			= & componentStorage.createComponent(PHYSICS_TYPE, Physics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
 	player->collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC));
-	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), false, health, 50.f, 1.f/8.f));
+	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), false, PLAYER_HEALTH, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN));
 	player->node			= & componentStorage.createNode(Sun::SceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, DEMON_TEXTURE));
 
 	player->addComponent(*player->velocity);
@@ -141,20 +145,20 @@ void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
 
 	wall.physics	= & componentStorage.createComponent(PHYSICS_TYPE, Physics(wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
 	wall.collider	= & componentStorage.createComponent(STATIC_BOUNDING_BOX_TYPE, BoundingBox(wall.getType(), wall.getID(), dim, wall.physics->position, wall.physics->velocity, false, STATIC));
-	wall.node		= & componentStorage.createNode(Sun::SceneNode(device,wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr, WALL_TEXTURE));
+	wall.node		= & componentStorage.createNode(Sun::SceneNode(device, wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr, WALL_TEXTURE));
 
 	wall.addComponent(*wall.physics);
 	wall.addComponent(*wall.collider);
 }
 
-void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const float speed, const std::vector<Vector3f>& patrol) {
+void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol) {
 	Entity& enemy = entities.emplace_back(ENEMY);
 
 	enemy.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
-	enemy.velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(enemy.getType(), enemy.getID(), speed, 0.f));
+	enemy.velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	enemy.collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC));
 	enemy.ai			= & componentStorage.createComponent(AI_TYPE, AI(enemy.getType(), enemy.getID(), patrol));
-	enemy.characterData = & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(enemy.getType(), enemy.getID(), false, 100.f, 20.f, 1.f/2.f));
+	enemy.characterData = & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(enemy.getType(), enemy.getID(), false, ENEMY_HEALTH, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN));
 	enemy.node			= & componentStorage.createNode(Sun::SceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, ENEMY_TEXTURE));
 
 	enemy.addComponent(*enemy.physics);
@@ -178,7 +182,7 @@ void EntityManager::createFloor(const char * const tex, const Vector3f& pos, con
 void EntityManager::createBullet(const Vector3f& dim) {
 	Entity& bullet = entities.emplace_back(BULLET);
 
-	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * 400.f, player->physics->rotation));
+	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * BULLET_SPEED, player->physics->rotation));
 	bullet.bulletData	= & componentStorage.createComponent(BULLET_DATA_TYPE, BulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage));
 	bullet.node			= & componentStorage.createNode(Sun::SceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, nullptr));
 
@@ -223,7 +227,7 @@ const Entity& EntityManager::getEntityByID(const std::size_t id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(100, Vector3f(), Vector3f(6.f), 1.f, Vector3f(10, 90, -30));
+	createPairPlayerCamera(Vector3f(), Vector3f(6.f), Vector3f(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	createFloor(CONTROLS_TEXTURE,Vector3f(0,0,5), Vector3f(60,0,35)); //Controls
@@ -318,11 +322,11 @@ void EntityManager::createLevel() {
 	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
 
-	createEnemy(patrol_1[0], Vector3f(8), 35.f, patrol_1);
-	createEnemy(patrol_2[0], Vector3f(8), 35.f, patrol_2);
-	createEnemy(patrol_3[0], Vector3f(8), 35.f, patrol_3);
-	createEnemy(patrol_4[0], Vector3f(8), 35.f, patrol_4);
-	createEnemy(patrol_5[0], Vector3f(8), 35.f, patrol_5);
+	createEnemy(patrol_1[0], Vector3f(8), patrol_1);
+	createEnemy(patrol_2[0], Vector3f(8), patrol_2);
+	createEnemy(patrol_3[0], Vector3f(8), patrol_3);
+	createEnemy(patrol_4[0], Vector3f(8), patrol_4);
+	createEnemy(patrol_5[0], Vector3f(8), patrol_5);
 }
 
 bool EntityManager::checkVictory() {

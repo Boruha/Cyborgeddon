@@ -1,6 +1,7 @@
 #include <sys/InputSystem.hpp>
-
 #include <src/man/EntityManager.hpp>
+#include <util/ComponentConstants.hpp>
+#include <util/TexturePaths.hpp>
 
 void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);
@@ -8,7 +9,7 @@ void InputSystem::init() {
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
-void InputSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
+void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
 	context->getPlayer().velocity->direction = 0;
 
 	auto* next = const_cast<TKey2func*>(keyMapping);
@@ -28,16 +29,16 @@ void InputSystem::s_pressed(Entity& player, const float deltaTime) { --player.ve
 void InputSystem::d_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
-	if(player.velocity->currentSpeed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady())
-		player.velocity->currentSpeed = 600;
+	if(player.velocity->currentSpeed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady()) // TODO: cambiar cooldownsystem
+		player.velocity->currentSpeed = PLAYER_DASH_SPEED;
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player, const float deltaTime) {
-	if(player.characterData->currentAttackingCooldown <= 0.f) player.characterData->attacking = true;
+	if(!Sun::greater_e(player.characterData->currentAttackingCooldown, 0.f)) player.characterData->attacking = true;
 }
 // Aim
-void InputSystem::left_pressed  (Entity& player, const float deltaTime) { player.physics->rotation.y -= 270 * deltaTime; }
-void InputSystem::right_pressed (Entity& player, const float deltaTime) { player.physics->rotation.y += 270 * deltaTime; }
+void InputSystem::left_pressed  (Entity& player, const float deltaTime) { player.physics->rotation.y -= PLAYER_ROTATION_SPEED * deltaTime; }
+void InputSystem::right_pressed (Entity& player, const float deltaTime) { player.physics->rotation.y += PLAYER_ROTATION_SPEED * deltaTime; }
 // Switch Mode
 void InputSystem::m_pressed(Entity& player, const float deltaTime) {
 	player.characterData->mode = !player.characterData->mode;

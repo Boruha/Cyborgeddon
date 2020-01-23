@@ -36,8 +36,8 @@ struct EntityManager : GameContext {
 		void initData(int maxEntities, int maxToDelete, int maxComponents);
         void cleanData();
 
-		void createPairPlayerCamera (int health, const Vector3f& pos, const Vector3f& dim, float speed, const Vector3f& posCamera);
-		void createEnemy  (const Vector3f& pos, const Vector3f& dim, float speed, const std::vector<Vector3f>& patrol);
+		void createPairPlayerCamera (const Vector3f& pos, const Vector3f& dim, const Vector3f& posCamera);
+		void createEnemy  (const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol);
 		void createWall   (const Vector3f& pos, const Vector3f& dim);
 		void createBullet (const Vector3f& dim);
 		void createFloor  (const char* tex, const Vector3f& pos, const Vector3f& dim);

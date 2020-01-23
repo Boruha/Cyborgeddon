@@ -1,5 +1,6 @@
 #include <sys/AI_System.hpp>
 #include <SunlightEngine/Math.hpp>
+#include <util/SystemConstants.hpp>
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -12,11 +13,11 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 
 			float distance = v_distance.length();
 
-			if (Sun::greater_e(distance, 70.f))
+			if (Sun::greater_e(distance, PATROL_MIN_DISTANCE))
 				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (Sun::greater_e(distance, 15.f))
+			else if (Sun::greater_e(distance, PURSUE_MIN_DISTANCE))
 				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
-			else
+			else if (Sun::greater_e(distance, ATTACK_MIN_DISTANCE))
 				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
 		}
 	}
@@ -26,7 +27,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 	Vector3f distance = enemy.physics->position - enemy.ai->target_position;
 	distance.y = 0;
 
-	if (Sun::greater_e(distance.length(), 1.f)) {
+	if (Sun::greater_e(distance.length(), ARRIVED_MIN_DISTANCE)) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
 	} else {
 		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)

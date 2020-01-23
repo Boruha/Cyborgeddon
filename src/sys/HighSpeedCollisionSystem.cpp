@@ -1,4 +1,5 @@
 #include <sys/HighSpeedCollisionSystem.hpp>
+#include <util/ComponentConstants.hpp>
 
 struct EntityHitData {
 	float lessDistance { -1 };		// sabremos si la bala choca con algo porque la distancia siempre es positiva
@@ -21,7 +22,7 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 			for (const auto& otherCollider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE)))
 				checkHit(lastPos, newPos, otherCollider, hitData);
 
-			if (hitData.lessDistance >= 0) { // si hemos chocado con algo
+			if (!Sun::less_e(hitData.lessDistance, 0)) { // si hemos chocado con algo
 				if (hitData.damageEntity) {
 					auto bullet 		= context->getEntityByID(fastObject.getEntityID());
 					auto entityToDamage = context->getEntityByID(hitData.closerEntity);
@@ -39,7 +40,7 @@ void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f&
 		if (intersects(lastPos, newPos, box)) {
 			float distance = (((box.min + box.max) / 2) - lastPos).length();
 
-			if (hitData.lessDistance < 0 || (Sun::less_e(distance, hitData.lessDistance))) {
+			if (Sun::less_e(hitData.lessDistance, 0) || (Sun::less_e(distance, hitData.lessDistance))) {
 				hitData.damageEntity = box.getEntityType() == ENEMY;			// de momento matamos enemigos
 				hitData.lessDistance = distance;								// si son lo mas cercano
 				hitData.closerEntity = box.getEntityID();						// aqui guardamos el id por si necesitamos borrar
@@ -50,9 +51,9 @@ void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f&
 
 void HighSpeedCollisionSystem::damageEntity(const BulletData& bullet, CharacterData& character) const {
 	if (bullet.damageType != character.mode) {
-		character.health -= (bullet.damage * 2);
+		character.health -= (bullet.damage * FACTOR_DIFFERENT_MODE);
 	} else {
-		character.health -= bullet.damage;
+		character.health -= (bullet.damage * FACTOR_SAME_MODE);
 	}
 }
 

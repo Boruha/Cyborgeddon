@@ -5,7 +5,7 @@
 #include <SunlightEngine/Vector3.hpp>
 #include <cmp/Component.hpp>
 #include <util/Alias.hpp>
-#include <util/Constants.hpp>
+#include <util/ComponentConstants.hpp>
 
 using Sun::Vector3f;
 
