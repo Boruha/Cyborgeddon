@@ -4,6 +4,8 @@
 #include <iostream>
 #include <utility>
 
+// TODO : quiza este archivo pertenezca a util
+
 namespace Sun {
 
 	template<typename T>

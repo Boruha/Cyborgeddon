@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+// TODO : quiza este archivo pertenezca a util
+
 namespace Sun {
 	constexpr double PI = 3.141592653589793238463;
 	constexpr double DEG2RAD = PI / 180.0;

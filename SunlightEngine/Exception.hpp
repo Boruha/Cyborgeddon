@@ -10,7 +10,7 @@ namespace Sun {
 			message += " value is out of range (" + std::to_string(min) + " - " + std::to_string(max);
 		}
 
-		[[nodiscard]] const char *what() const noexcept override {
+		[[nodiscard]] const char * what() const noexcept override {
 			return message.c_str();
 		}
 
@@ -18,4 +18,4 @@ namespace Sun {
 	};
 }
 
-// TODO: valorar si las excepciones son necesarias
+// TODO: valorar si las excepciones son necesarias (yo creo que no, por lo menos no de esta manera)

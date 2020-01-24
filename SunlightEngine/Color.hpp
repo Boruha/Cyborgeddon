@@ -2,8 +2,6 @@
 
 #include <irrlicht/irrlicht.h>
 
-#include <SunlightEngine/Exception.hpp>
-
 namespace Sun {
 
 	struct ColorData {

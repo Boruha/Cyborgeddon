@@ -12,10 +12,10 @@ namespace Sun {
 		SceneNode() = delete;
 		SceneNode& operator=(const SceneNode& node) = delete;
 		SceneNode& operator=(SceneNode&& node) = delete;
+		SceneNode(SceneNode&& node) = delete;
 
 		// Constructors
 		SceneNode(const SceneNode& node) = default;
-		SceneNode(SceneNode&& node) = default;
 
 		explicit SceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh = nullptr, const char* texture = nullptr)
 			: GenericNode(nullptr, position, rotation), meshNode(device.getInnerDevice()->getSceneManager()->addCubeSceneNode(1))

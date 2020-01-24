@@ -40,15 +40,15 @@ struct InputSystem : System
 
 	const TKey2func keyMapping[Sun::KEY_CODE_COUNT] // KEY::KODE::COUNT tiene la cantidad de teclas que usamos
 	{
-		{Sun::KEY_W,                 			w_pressed },
-		{Sun::KEY_A,                 			a_pressed },
-		{Sun::KEY_S,                 			s_pressed },
-		{Sun::KEY_D,                 			d_pressed },
-        {Sun::KEY_LSHIFT,                 	shift_pressed },
-		{Sun::KEY_SPACE,                 	space_pressed },
-		{Sun::KEY_LEFT,                 	 left_pressed },
-		{Sun::KEY_RIGHT,                 	right_pressed },
-		{Sun::KEY_M,                 			m_pressed },
-		{static_cast<Sun::KEY_CODE>(0),  nullptr }
+		{Sun::KEY_W,                    w_pressed 		},
+		{Sun::KEY_A,                    a_pressed 		},
+		{Sun::KEY_S,                    s_pressed 		},
+		{Sun::KEY_D,                    d_pressed 		},
+        {Sun::KEY_LSHIFT,               shift_pressed 	},
+		{Sun::KEY_SPACE,                space_pressed 	},
+		{Sun::KEY_LEFT,                 left_pressed 	},
+		{Sun::KEY_RIGHT,                right_pressed 	},
+		{Sun::KEY_M,                    m_pressed 		},
+		{static_cast<Sun::KEY_CODE>(0), nullptr}
 	};
 };

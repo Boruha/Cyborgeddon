@@ -12,10 +12,10 @@ namespace Sun {
 		CameraNode() = delete;
 		CameraNode& operator=(const CameraNode& camera) = delete;
 		CameraNode& operator=(CameraNode&& camera) = delete;
+		CameraNode(CameraNode&& camera) = delete;
 
 		// Constructors
 		CameraNode(const CameraNode& camera) = default;
-		CameraNode(CameraNode&& camera) = default;
 
 		explicit CameraNode(const Device& device, const Vector3f& target, const Vector3f& position, const Vector3f& rotation = Vector3f())
 				: GenericNode(nullptr, position, rotation), cameraNode(device.getInnerDevice()->getSceneManager()->addCameraSceneNode()), target(&target)
