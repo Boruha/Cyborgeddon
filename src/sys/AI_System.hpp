@@ -31,8 +31,8 @@ struct AI_System : System
 	//				Si no se respeta esto, los enemigos se comportaran de manera erratica
 	const TStateFunction stateFunctions[AI_State::END_STATE] // END_STATE es el tamaño del array
 	{
-		{ patrolBehaviour },
-		{ pursueBehaviour },
-		{ attackBehaviour }
+		patrolBehaviour,
+		pursueBehaviour,
+		attackBehaviour
 	};
 };
