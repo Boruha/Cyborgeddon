@@ -3,7 +3,7 @@
 
 #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 
-void ERRCHECK_fn(FMOD_RESULT res, const char* file, int line) {
+void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line) {
 	if (res != FMOD_OK)
 	{
 		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << std::endl;
@@ -68,6 +68,8 @@ void SoundSystem::init() {
 
 	//Musica ingame bucle -> CAMBIAR A GAME CONTEXT DEL ESTADO DEL JUEGO (activo, pausado, menu principal, etc...)
 	ERRCHECK ( instanceMusicIngame->setVolume(0.25f) );
+
+	startBackgroundMusic();
 }
 
 void SoundSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
@@ -94,13 +96,6 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 		player.characterData->switchingMode = false; // TODO: quitar esto de aqui e intentar llamar al sistema/motor de audio en el momento en que se necesite
 	}
 
-//	TODO: Generalizar sonidos en bucle
-	FMOD_STUDIO_PLAYBACK_STATE state;
-	ERRCHECK( instanceMusicIngame->getPlaybackState(&state) );
-	if (state == FMOD_STUDIO_PLAYBACK_STOPPED)
-		ERRCHECK ( instanceMusicIngame->start() );
-//	TODO: Generalizar sonidos en bucle
-
 	ERRCHECK (system->update() );
 }
 
@@ -111,4 +106,10 @@ void SoundSystem::reset() {
 	ERRCHECK( instanceDisparoDemon->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
     ERRCHECK( instanceDisparoAngel->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
 	ERRCHECK( instanceMusicIngame->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+
+	startBackgroundMusic();
+}
+
+void SoundSystem::startBackgroundMusic() {
+	ERRCHECK( instanceMusicIngame->start() );
 }
