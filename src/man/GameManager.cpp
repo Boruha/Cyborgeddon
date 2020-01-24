@@ -58,7 +58,7 @@ void GameManager::loop()
 			delta -= TICK_MS;
 		}
 
+		render.updateFPS(delta.count());
 		render.update(entityManager, delta.count() / TICK_MS.count());
-		// TODO: interpolar movimiento en render
   	}
 }

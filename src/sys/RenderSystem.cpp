@@ -1,7 +1,6 @@
 #include <sys/RenderSystem.hpp>
 
-// TODO: poder dibujar las cosas individualmente de alguna manera ( prescindir de sceneManager->drawAll() )
-void RenderSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const
+void RenderSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const
 {
 	for (auto& node : std::get<vector<Node_ptr>>(context->getComponents(NODE_TYPE)))
 		node->update(1.f);
@@ -9,4 +8,14 @@ void RenderSystem::update(const std::unique_ptr<GameContext> &context, const flo
 	device.clear(&background);
 	device.draw();
 	device.showDrawn();
+}
+
+void RenderSystem::updateFPS(const float deltaTime) {
+	++FPS_counter;
+
+	if (Sun::greater_e((timeForFPS += deltaTime), 1.f)) {
+		device.setWindowName(std::wstring(L"Cyborgeddon | FPS[" + std::to_wstring(FPS_counter) + L"]").c_str());
+		timeForFPS -= 1.f;
+		FPS_counter = 0;
+	}
 }

@@ -53,7 +53,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 
 					for (auto& dynamicCollider : specialBoundings) {
 						if (dynamicCollider && movingBox.getEntityID() != dynamicCollider.getEntityID()) {
-							if (dynamicCollider.type == STATIC)
+							if (dynamicCollider.type == STATIC || (dynamicCollider.getEntityType() == DOOR && movingBox.getEntityType() != PLAYER)) // TODO : cambiar esta condicion, no podemos depender de la puerta y el player. Considerar nuevo componente u otra variable para boundingbox
 								staticCollision(movingBox, velocity, dynamicCollider, i);
 							else
 								dynamicCollision(movingBox, velocity, dynamicCollider, context);
