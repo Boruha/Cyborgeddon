@@ -10,17 +10,19 @@ void InputSystem::init() {
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
 void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
-	context->getPlayer().velocity->direction = 0;
+	auto& player = context->getPlayer();
+
+	player.velocity->direction = 0;
 
 	auto* next = const_cast<TKey2func*>(keyMapping);
 
 	while (next->p_func) {
 		if (eventReceiver.IsKeyDown(next->key))
-			next->p_func(context->getPlayer(), deltaTime);
+			next->p_func(player, deltaTime);
 		++next;
 	}
 
-	context->getPlayer().physics->velocity = context->getPlayer().velocity->direction.normalize() * context->getPlayer().velocity->currentSpeed * deltaTime;
+	player.physics->velocity = player.velocity->direction.normalize() * player.velocity->currentSpeed * deltaTime;
 }
 
 void InputSystem::w_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.z; }
@@ -34,15 +36,20 @@ void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player, const float deltaTime) {
-	if(!Sun::greater_e(player.characterData->currentAttackingCooldown, 0.f)) player.characterData->attacking = true;
+	if(!Sun::greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
+		player.characterData->attacking = true;
+		player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+	}
 }
 // Aim
 void InputSystem::left_pressed  (Entity& player, const float deltaTime) { player.physics->rotation.y -= PLAYER_ROTATION_SPEED * deltaTime; }
 void InputSystem::right_pressed (Entity& player, const float deltaTime) { player.physics->rotation.y += PLAYER_ROTATION_SPEED * deltaTime; }
 // Switch Mode
 void InputSystem::m_pressed(Entity& player, const float deltaTime) {
-	player.characterData->mode = !player.characterData->mode;
-	player.characterData->mode ?
-		player.node->get()->setTexture(ANGEL_TEXTURE) :
-		player.node->get()->setTexture(DEMON_TEXTURE);
+	if (!Sun::greater_e(player.characterData->currentSwitchingCooldown, 0)) {
+		player.characterData->switchingMode = true;
+		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;
+		player.characterData->mode == DEMON ? player.node->get()->setTexture(DEMON_TEXTURE) : player.node->get()->setTexture(ANGEL_TEXTURE);
+		player.characterData->currentSwitchingCooldown = player.characterData->switchingCooldown;
+	}
 }

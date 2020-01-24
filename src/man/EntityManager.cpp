@@ -41,8 +41,11 @@ void EntityManager::checkShooting() {
 	if(player->characterData->attacking){
 		createBullet(Vector3f(0.5, 0, player->collider->dim.z));
 		player->characterData->attacking = false;
-		player->characterData->currentAttackingCooldown = player->characterData->attackingCooldown;
 	}
+}
+
+bool EntityManager::checkVictory() {
+	return enemiesLeft <= 0;
 }
 
 /*		DESTROY ENTITIES	*/
@@ -126,7 +129,7 @@ void EntityManager::createPairPlayerCamera(const Vector3f& pos, const Vector3f& 
 	player->velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION));
 	player->physics			= & componentStorage.createComponent(PHYSICS_TYPE, Physics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
 	player->collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC));
-	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), false, PLAYER_HEALTH, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN));
+	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_SWITCH_MODE_COOLDOWN));
 	player->node			= & componentStorage.createNode(Sun::SceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, DEMON_TEXTURE));
 
 	player->addComponent(*player->velocity);
@@ -158,7 +161,7 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	enemy.velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	enemy.collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC));
 	enemy.ai			= & componentStorage.createComponent(AI_TYPE, AI(enemy.getType(), enemy.getID(), patrol));
-	enemy.characterData = & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(enemy.getType(), enemy.getID(), false, ENEMY_HEALTH, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN));
+	enemy.characterData = & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_SWITCH_MODE_COOLDOWN));
 	enemy.node			= & componentStorage.createNode(Sun::SceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, ENEMY_TEXTURE));
 
 	enemy.addComponent(*enemy.physics);
@@ -325,8 +328,4 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_3[0], Vector3f(8), patrol_3);
 	createEnemy(patrol_4[0], Vector3f(8), patrol_4);
 	createEnemy(patrol_5[0], Vector3f(8), patrol_5);
-}
-
-bool EntityManager::checkVictory() {
-	return enemiesLeft <= 0;
 }

@@ -12,15 +12,22 @@ void ERRCHECK_fn(FMOD_RESULT res, const char* file, int line) {
 }
 
 SoundSystem::~SoundSystem() {
-    //Disparo demonio
-	if(instanceDisparo_Demon) instanceDisparo_Demon->release();
-	if(eventDisparo_Demon) eventDisparo_Demon->releaseAllInstances();
-    //Disparo demonio
-    if(instanceDisparo_Angel) instanceDisparo_Angel->release();
-    if(eventDisparo_Angel) eventDisparo_Angel->releaseAllInstances();
+	//TODO: generalizar sonidos
+	//Cambio demonio
+	if(instanceCambioDemon) instanceCambioDemon->release();
+	if(eventCambioDemon) eventCambioDemon->releaseAllInstances();
+	//Cambio angel
+	if(instanceCambioAngel) instanceCambioAngel->release();
+	if(eventCambioAngel) eventCambioAngel->releaseAllInstances();
+	//Disparo demonio
+	if(instanceDisparoDemon) instanceDisparoDemon->release();
+	if(eventDisparoDemon) eventDisparoDemon->releaseAllInstances();
+    //Disparo angel
+    if(instanceDisparoAngel) instanceDisparoAngel->release();
+    if(eventDisparoAngel) eventDisparoAngel->releaseAllInstances();
 	//Musica ingame bucle
-    if(instanceMusic_ingame) instanceMusic_ingame->release();
-    if(eventMusic_ingame) eventMusic_ingame->releaseAllInstances();
+    if(instanceMusicIngame) instanceMusicIngame->release();
+    if(eventMusicIngame) eventMusicIngame->releaseAllInstances();
 
 	if(strings) strings->unload();
 	if(master) master->unload();
@@ -40,50 +47,68 @@ void SoundSystem::init() {
 	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
 
 	//Disparo demonio
-	ERRCHECK ( system->getEvent(DEMON_SHOOT_EVENT, &eventDisparo_Demon) );
-	ERRCHECK ( eventDisparo_Demon->createInstance(&instanceDisparo_Demon) );
+	ERRCHECK ( system->getEvent(DEMON_SHOOT_EVENT, &eventDisparoDemon) );
+	ERRCHECK ( eventDisparoDemon->createInstance(&instanceDisparoDemon) );
 
     //Disparo angel
-    ERRCHECK ( system->getEvent(ANGEL_SHOOT_EVENT, &eventDisparo_Angel) );
-    ERRCHECK ( eventDisparo_Angel->createInstance(&instanceDisparo_Angel) );
+    ERRCHECK ( system->getEvent(ANGEL_SHOOT_EVENT, &eventDisparoAngel) );
+    ERRCHECK ( eventDisparoAngel->createInstance(&instanceDisparoAngel) );
+
+    //Cambio demonio
+	ERRCHECK ( system->getEvent(DEMON_CHANGE_EVENT, &eventCambioDemon) );
+	ERRCHECK ( eventCambioDemon->createInstance(&instanceCambioDemon) );
+
+	//Cambio angel
+	ERRCHECK ( system->getEvent(ANGEL_CHANGE_EVENT, &eventCambioAngel) );
+	ERRCHECK ( eventCambioAngel->createInstance(&instanceCambioAngel) );
 
     //Musica ingame bucle
-    ERRCHECK ( system->getEvent(BACKGROUND_MUSIC_EVENT, &eventMusic_ingame) );
-    ERRCHECK ( eventMusic_ingame->createInstance(&instanceMusic_ingame) );
+    ERRCHECK ( system->getEvent(BACKGROUND_MUSIC_EVENT, &eventMusicIngame) );
+    ERRCHECK ( eventMusicIngame->createInstance(&instanceMusicIngame) );
 
 	//Musica ingame bucle -> CAMBIAR A GAME CONTEXT DEL ESTADO DEL JUEGO (activo, pausado, menu principal, etc...)
-
-	ERRCHECK ( instanceMusic_ingame->setVolume(0.25f) );
+	ERRCHECK ( instanceMusicIngame->setVolume(0.25f) );
 }
 
-void SoundSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
+void SoundSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
+	auto& player = context->getPlayer();
+
+	// TODO: generalizar (tipo entidad - ataque - switch - (dash) segun el modo) (FMOD Studio parametros)
 
     //Pegamos un tiro
-	if(context->getPlayer().characterData->attacking) {
-        //Comprobamos si es modo Demonio
-        if (context->getPlayer().characterData->mode) {
-            ERRCHECK (instanceDisparo_Angel->start());  //Disparo Demonio
+	if (player.characterData->attacking) {
+        if (player.characterData->mode == ANGEL) {
+            ERRCHECK (instanceDisparoAngel->start());  //Disparo Angel
+        } else {
+            ERRCHECK (instanceDisparoDemon->start());  //Disparo Demonio
         }
-        //Modo demon
-        else{
-            ERRCHECK (instanceDisparo_Demon->start());  //Disparo Angel
-        }
-
-        //	ERRCHECK ( instanceDisparo->setParameterByName("mode", context->getPlayer().characterData->mode) );
     }
+	//Cambiamos de modo
+	if (player.characterData->switchingMode) {
+		if (player.characterData->mode == ANGEL) {
+			ERRCHECK (instanceCambioAngel->start());	  //Cambio Angel
+		} else {
+			ERRCHECK (instanceCambioDemon->start());  //Cambio Demonio
+		}
+
+		player.characterData->switchingMode = false; // TODO: quitar esto de aqui e intentar llamar al sistema/motor de audio en el momento en que se necesite
+	}
 
 //	TODO: Generalizar sonidos en bucle
 	FMOD_STUDIO_PLAYBACK_STATE state;
-	ERRCHECK( instanceMusic_ingame->getPlaybackState(&state) );
+	ERRCHECK( instanceMusicIngame->getPlaybackState(&state) );
 	if (state == FMOD_STUDIO_PLAYBACK_STOPPED)
-		ERRCHECK ( instanceMusic_ingame->start() );
+		ERRCHECK ( instanceMusicIngame->start() );
 //	TODO: Generalizar sonidos en bucle
 
 	ERRCHECK (system->update() );
 }
 
 void SoundSystem::reset() {
-	ERRCHECK( instanceDisparo_Demon->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
-    ERRCHECK( instanceDisparo_Angel->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
-	ERRCHECK( instanceMusic_ingame->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+	//TODO: generalizar (cmp, vector, loquesea)
+	ERRCHECK( instanceCambioAngel->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+	ERRCHECK( instanceCambioDemon->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+	ERRCHECK( instanceDisparoDemon->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+    ERRCHECK( instanceDisparoAngel->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+	ERRCHECK( instanceMusicIngame->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
 }

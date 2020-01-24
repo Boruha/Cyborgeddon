@@ -21,6 +21,8 @@ void CooldownSystem::update(const std::unique_ptr<GameContext>& context, const f
 	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
 		if (Sun::less_e((data.currentAttackingCooldown -= deltaTime), 0))
 			data.currentAttackingCooldown = 0.f;
+		if (Sun::less_e((data.currentSwitchingCooldown -= deltaTime), 0))
+			data.currentSwitchingCooldown = 0.f;
 	}
 }
 

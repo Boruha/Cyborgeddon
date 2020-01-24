@@ -20,10 +20,12 @@ constexpr float BULLET_SPEED					= 400.f;
 constexpr float PLAYER_HEALTH					= 100.f;
 constexpr float PLAYER_ATTACK_DAMAGE			= 50.f;
 constexpr float PLAYER_ATTACKING_COOLDOWN		= 1.f / 8.f;
+constexpr float PLAYER_SWITCH_MODE_COOLDOWN		= 5.f;
 
 constexpr float ENEMY_HEALTH					= 100.f;
 constexpr float ENEMY_ATTACK_DAMAGE				= 20.f;
 constexpr float ENEMY_ATTACKING_COOLDOWN		= 1.f / 2.f;
+constexpr float ENEMY_SWITCH_MODE_COOLDOWN		= 0.f;
 
 constexpr float FACTOR_DIFFERENT_MODE			= 2.f;
 constexpr float FACTOR_SAME_MODE				= 1.f / FACTOR_DIFFERENT_MODE;

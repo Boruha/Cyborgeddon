@@ -20,12 +20,18 @@ private:
 	FMOD::Studio::Bank* master { nullptr };
 	FMOD::Studio::Bank* strings { nullptr };
 	//Disparo demonio
-	FMOD::Studio::EventDescription* eventDisparo_Demon { nullptr };
-	FMOD::Studio::EventInstance* instanceDisparo_Demon { nullptr };
+	FMOD::Studio::EventDescription* eventDisparoDemon { nullptr };
+	FMOD::Studio::EventInstance* instanceDisparoDemon { nullptr };
 	//Disparo angel
-    FMOD::Studio::EventDescription* eventDisparo_Angel { nullptr };
-    FMOD::Studio::EventInstance* instanceDisparo_Angel { nullptr };
+    FMOD::Studio::EventDescription* eventDisparoAngel { nullptr };
+    FMOD::Studio::EventInstance* instanceDisparoAngel { nullptr };
+	//Cambio demonio
+	FMOD::Studio::EventDescription* eventCambioDemon  { nullptr };
+	FMOD::Studio::EventInstance* instanceCambioDemon  { nullptr };
+	//Cambio angel
+	FMOD::Studio::EventDescription* eventCambioAngel  { nullptr };
+	FMOD::Studio::EventInstance* instanceCambioAngel  { nullptr };
 	//Musica ingame bucle
-    FMOD::Studio::EventDescription* eventMusic_ingame { nullptr };
-    FMOD::Studio::EventInstance* instanceMusic_ingame { nullptr };
+    FMOD::Studio::EventDescription* eventMusicIngame  { nullptr };
+    FMOD::Studio::EventInstance* instanceMusicIngame  { nullptr };
 };

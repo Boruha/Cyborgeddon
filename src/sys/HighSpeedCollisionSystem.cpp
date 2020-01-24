@@ -50,10 +50,13 @@ void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f&
 }
 
 void HighSpeedCollisionSystem::damageEntity(const BulletData& bullet, CharacterData& character) const {
-	if (bullet.damageType != character.mode) {
-		character.health -= (bullet.damage * FACTOR_DIFFERENT_MODE);
+	if (character.mode == NEUTRAL) {
+		character.health -= bullet.damage;
 	} else {
-		character.health -= (bullet.damage * FACTOR_SAME_MODE);
+		if (character.mode != bullet.damageType)
+			character.health -= (bullet.damage * FACTOR_DIFFERENT_MODE);
+		else
+			character.health -= (bullet.damage * FACTOR_SAME_MODE);
 	}
 }
 
