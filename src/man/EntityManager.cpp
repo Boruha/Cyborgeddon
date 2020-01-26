@@ -85,7 +85,7 @@ void EntityManager::killEntities() {
 void EntityManager::moveDeadEntities() {
 	for (auto e = entities.rbegin(); e != entities.rend(); ++e)				// recorremos el vector de entidades inversamente (asi evitamos que se nos queden elementos descolgados
 		if ((e + 1) != entities.rend() && (e + 1)->getType() == UNDEFINED)	// si la proxima entidad es valida y esta "muerta" (type == undefined)
-			std::iter_swap(e,(e + 1));									// entonces la cambiamos con la entidad actual
+			std::iter_swap(e,(e + 1));										// entonces la cambiamos con la entidad actual
 
 	// Con esto conseguimos que las entidades muertas avancen en el array con un coste muy bajo (un swap) en cada iteracion
 	// permitiendo a otra funcion eliminar los elementos que se encuentren al final.
@@ -327,6 +327,7 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_3[0], Vector3f(8), patrol_3);
 	createEnemy(patrol_4[0], Vector3f(8), patrol_4);
 	createEnemy(patrol_5[0], Vector3f(8), patrol_5);
+
 }
 
 bool EntityManager::checkVictory() {
