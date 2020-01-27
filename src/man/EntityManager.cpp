@@ -18,6 +18,8 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 	entities.reserve(maxEntities);				// reservamos memoria para la cantidad maxima de entidades esperada
 	toDelete.reserve(maxToDelete);				// lo mismo para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
 	componentStorage.initData(maxComponents);	// reservamos (de momento la misma) memoria para los vectores que tendran los componentes
+	graph.reserve(5);
+	createMapNode();
 }
 
 bool EntityManager::update(){
@@ -234,7 +236,7 @@ void EntityManager::createLevel() {
 	createFloor(TIPS_TEXTURE,Vector3f(-2,0,-27), Vector3f(45,0,15)); //Tips
 
 	// Doors and keys
-
+/*
 	createPairKeyDoor(Vector3f(0,0,60), Vector3f(3),Vector3f(-37,0,90), Vector3f(2,20,10));
 	createPairKeyDoor(Vector3f(-70,0,90), Vector3f(3), Vector3f(37,0,0), Vector3f(2,20,10));
 	createPairKeyDoor(Vector3f(70,0,0), Vector3f(3), Vector3f(-37,0,0), Vector3f(2,20,10));
@@ -243,7 +245,7 @@ void EntityManager::createLevel() {
 	createPairKeyDoor(Vector3f(-70,0,190), Vector3f(3), Vector3f(37,0,90), Vector3f(2,20,10));
 	createPairKeyDoor(Vector3f(70,0,90), Vector3f(3), Vector3f(152.5,0,300), Vector3f(45,10,10));
 	createPairKeyDoor(Vector3f(158,0,320), Vector3f(3), Vector3f(-180,0,272.5), Vector3f(10,10,45));
-
+*/
 
 	//Pasillo inicial
 
@@ -314,6 +316,14 @@ void EntityManager::createLevel() {
 	createWall(Vector3f(-265,0,277.5), Vector3f(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
+	//-------REMOVE IN FUTURE--------------
+	/*createMapNode(Vector3f(0,0,250), Vector3f(10));
+	createMapNode(Vector3f(0,0,50), Vector3f(10));
+	createMapNode(Vector3f(0,0,100), Vector3f(10));
+	createMapNode(Vector3f(0,0,150), Vector3f(10));
+	createMapNode(Vector3f(0,0,200), Vector3f(10));*/
+	//-------REMOVE IN FUTURE--------------
+
 
 	std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270) };
 	std::vector<Vector3f> patrol_2 = { Vector3f(   0, 0, 200) };
@@ -321,11 +331,12 @@ void EntityManager::createLevel() {
 	std::vector<Vector3f> patrol_4 = { Vector3f( 120, 0, 270) };
 	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
 
-
+/*
 	createEnemy(patrol_1[0], Vector3f(8), patrol_1);
 	createEnemy(patrol_2[0], Vector3f(8), patrol_2);
 	createEnemy(patrol_3[0], Vector3f(8), patrol_3);
 	createEnemy(patrol_4[0], Vector3f(8), patrol_4);
+*/
 	createEnemy(patrol_5[0], Vector3f(8), patrol_5);
 
 }
@@ -333,3 +344,43 @@ void EntityManager::createLevel() {
 bool EntityManager::checkVictory() {
 	return enemiesLeft <= 0;
 }
+
+
+//REMOVE IN FUTURE
+void EntityManager::createMapNode(){
+	/*Entity& wall = entities.emplace_back(WALL);
+
+	wall.physics	= & componentStorage.createComponent(PHYSICS_TYPE, Physics(wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
+	wall.collider	= & componentStorage.createComponent(STATIC_BOUNDING_BOX_TYPE, BoundingBox(wall.getType(), wall.getID(), dim, wall.physics->position, wall.physics->velocity, false, STATIC));
+	wall.node		= & componentStorage.createNode(Sun::SceneNode(device, wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr));
+	
+
+	wall.addComponent(*wall.physics);
+	wall.addComponent(*wall.collider);
+	graph.emplace_back(MapNode(pos.x, pos.y));*/
+
+	auto& node_1 = graph.emplace_back(MapNode(0, 0));
+	auto& node_2 = graph.emplace_back(MapNode(0, 50));
+	node_1.connections.emplace_back(Connection(&node_1, &node_2, 1));
+	node_2.connections.emplace_back(Connection(&node_2, &node_1, 2));
+
+	auto& node_3 = graph.emplace_back(MapNode(0, 100));
+	node_2.connections.emplace_back(Connection(&node_2, &node_3, 10));
+	node_3.connections.emplace_back(Connection(&node_3, &node_1, 2));
+	
+	auto& node_4 = graph.emplace_back(MapNode(0, 200));
+	node_4.connections.emplace_back(Connection(&node_4, &node_1, 2));
+
+	for(auto& node : graph)
+	{
+		std::cout << "Nodo: (" << node.coord.x << ", " << node.coord.y << ")" << std::endl;
+		for(auto& conn : node.connections)
+		{
+			std::cout << "Conn to: (" << conn.nodeTo->coord.x << ", " << conn.nodeTo->coord.y << ") / Peso: " << conn.cost << std::endl;
+		}
+	}
+
+
+}
+
+/////////

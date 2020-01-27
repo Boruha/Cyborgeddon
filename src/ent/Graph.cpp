@@ -5,6 +5,7 @@ MapNode::MapNode(const float x, const float y) : coord(x,y) { connections.reserv
 
 void MapNode::addConnection(Connection& new_conn){ connections.emplace_back(new_conn); }
 
+
 //void MapNode::sortConnections(){ std::sort(connections.begin(), connections.end()); }
 
 

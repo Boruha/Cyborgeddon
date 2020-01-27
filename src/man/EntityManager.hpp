@@ -5,6 +5,7 @@
 #include <util/GameContext.hpp>
 #include <SunlightEngine/Device.hpp>
 #include <src/cmp/Storage.hpp>
+#include <ent/Graph.hpp>
 
 struct EntityManager : GameContext {
 	explicit EntityManager(const Device& device) : device(device) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
@@ -43,6 +44,9 @@ struct EntityManager : GameContext {
 		void createFloor  (const char* tex, const Vector3f& pos, const Vector3f& dim);
 		void createPairKeyDoor (const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim);
 
+		//remove in future
+		void createMapNode ();
+
 		void killEntities();
 		void moveDeadEntities();
 		void removeEntities();
@@ -62,6 +66,9 @@ struct EntityManager : GameContext {
 		unsigned int enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
 
 		Storage componentStorage;
+
+		//remove in future
+		std::vector<MapNode> graph;
 };
 
 // TODO: Player y camera solo uno de momento
