@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-//#include <algorithm>
+#include <algorithm>
 #include <SunlightEngine/Vector2.hpp>
 
 using Sun::Vector2f;
@@ -17,7 +17,7 @@ struct MapNode
     ~MapNode() = default;
 
     void addConnection(Connection&);
-    //void sortConnections();
+    void sortConnections();
     const std::vector<Connection>& getConnections() const { return connections; }
     
     Vector2f& getCoord();
@@ -28,14 +28,15 @@ struct MapNode
 
 struct Connection
 {
-    Connection(const MapNode* from, const MapNode* to, const short weight) : nodeFrom(from), nodeTo(to), cost(weight) {}
+    Connection(MapNode* from, MapNode* to, short weight) : nodeFrom(from), nodeTo(to), cost(weight) {}
     ~Connection() = default;
-    //friend bool operator< (Connection& c1, Connection& c2);
+    bool operator< (const Connection&) const;
+    //friend bool operator< (const Connection& , const Connection&) const;
 
     //possibly unnecessary
-    const MapNode* nodeFrom { nullptr };
-    const MapNode* nodeTo { nullptr };
-    const short   cost {0};
+    MapNode* nodeFrom { nullptr };
+    MapNode* nodeTo { nullptr };
+    short   cost { 0 };
 
     //available
     // 2 options:

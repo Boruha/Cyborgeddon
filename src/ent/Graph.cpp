@@ -6,8 +6,9 @@ MapNode::MapNode(const float x, const float y) : coord(x,y) { connections.reserv
 void MapNode::addConnection(Connection& new_conn){ connections.emplace_back(new_conn); }
 
 
-//void MapNode::sortConnections(){ std::sort(connections.begin(), connections.end()); }
+void MapNode::sortConnections(){ std::sort(connections.begin(), connections.end()); }
 
 
 //CONNECTION FUNCTIONS
-//bool operator< (Connection& c1, Connection& c2){ return c1.cost < c2.cost; }
+bool Connection::operator< (const Connection& c) const { return this->cost < c.cost; }
+//bool Connection::operator< (const Connection& c, const Connection& c2) const { return c.cost < c2.cost; }
