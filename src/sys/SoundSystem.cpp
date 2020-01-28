@@ -58,23 +58,7 @@ void SoundSystem::init() {
 		ERRCHECK ( system->getEvent(changeEventName[i], &sounds[false][i].event) );
 		ERRCHECK ( sounds[false][i].event->createInstance(&sounds[false][i].instance) );
 	}
-/*
-	//Disparo demonio
-	ERRCHECK ( system->getEvent(DEMON_SHOOT_EVENT, &eventDisparoDemon) );
-	ERRCHECK ( eventDisparoDemon->createInstance(&instanceDisparoDemon) );
 
-    //Disparo angel
-    ERRCHECK ( system->getEvent(ANGEL_SHOOT_EVENT, &eventDisparoAngel) );
-    ERRCHECK ( eventDisparoAngel->createInstance(&instanceDisparoAngel) );
-
-    //Cambio demonio
-	ERRCHECK ( system->getEvent(DEMON_CHANGE_EVENT, &eventCambioDemon) );
-	ERRCHECK ( eventCambioDemon->createInstance(&instanceCambioDemon) );
-
-	//Cambio angel
-	ERRCHECK ( system->getEvent(ANGEL_CHANGE_EVENT, &eventCambioAngel) );
-	ERRCHECK ( eventCambioAngel->createInstance(&instanceCambioAngel) );
-*/
 	startBackgroundMusic();
 }
 
