@@ -1,9 +1,24 @@
 #pragma once
 
 #include <sys/System.hpp>
+
 #include <fmod.hpp>
 #include <fmod_studio.hpp>
 #include <fmod_errors.h>
+
+#include <util/SoundPaths.hpp>
+
+#include <unordered_map>
+
+using Event = FMOD::Studio::EventDescription;
+using Instance = FMOD::Studio::EventInstance;
+using EngineSystem = FMOD::Studio::System;
+
+struct Sound {
+	Event* 		event 		{  nullptr  };
+	Instance* 	instance 	{  nullptr  };
+	ModeType	mode		{  NEUTRAL  };
+};
 
 struct SoundSystem : public System {
 
@@ -11,12 +26,13 @@ struct SoundSystem : public System {
 	~SoundSystem();
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
+	void update(const std::unique_ptr<GameContext>& context, float deltaTime) const override;
 	void reset() override;
 
 	void startBackgroundMusic();
 
 private:
+
     FMOD::System* core { nullptr };
 	FMOD::Studio::System* system { nullptr };
 	FMOD::Studio::Bank* master { nullptr };
@@ -36,4 +52,19 @@ private:
 	//Musica ingame bucle
     FMOD::Studio::EventDescription* eventMusicIngame  { nullptr };
     FMOD::Studio::EventInstance* instanceMusicIngame  { nullptr };
+
+
+    // TODO : crear enum como clave de este mapa
+    Sound backingTrack;
+	std::unordered_map<bool, std::vector<Sound>> sounds; // Ahora mismo key true = attacking, key false = changing
+
+	const char * const attackEventName[2] {
+		DEMON_SHOOT_EVENT,
+		ANGEL_SHOOT_EVENT
+	};
+
+	const char * const changeEventName[2] {
+		DEMON_CHANGE_EVENT,
+		ANGEL_CHANGE_EVENT
+	};
 };
