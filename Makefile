@@ -30,13 +30,14 @@ $(patsubst %.c,%.h,$(patsubst %.cpp,%.hpp,$(1)))
 endef
 
 # COMPILER
-CC          := g++
-C           := gcc
+CCACHE		:= ccache
+CC          := $(CCACHE) g++
+C           := $(CCACHE) gcc
 
 # FLAGS
 CCFLAGS     := -pthread -Wall -pedantic -std=c++17
 CFLAGS      := $(CCFLAGS)
-RELEASEFLAG := -O3
+RELEASEFLAG := -O0
 DEBUGFLAG   := -Og
 
 # MAIN FOLDERS
@@ -45,7 +46,7 @@ RELEASEDIR  := Release/
 DEBUGDIR    := Debug/
 
 # DEBUG OR RELEASE
-ifeq (${debug}, true)
+ifeq ($(debug), true)
     CCFLAGS += $(DEBUGFLAG)
     CFLAGS  += $(DEBUGFLAG)
     APPDIR  := $(DEBUGDIR)
