@@ -44,6 +44,11 @@ void AI_System::pursueBehaviour(const Entity& enemy, const Vector3f& player_pos,
 
 void AI_System::attackBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, 0, true);
+
+    if(!Sun::greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
+        enemy.characterData->attacking = true;
+        enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
+    }
 //	std::cout << &entity << " esta atacando al player\n";
 }
 
