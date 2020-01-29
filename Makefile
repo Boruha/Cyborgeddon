@@ -74,6 +74,7 @@ ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 # HEADERS AND LIBRARIES
 INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I.
 LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -Wl,-rpath,$(LIBDIR)
+GOLD_OPTION	:= -fuse-ld=gold
 
 # CLEAN
 
@@ -91,7 +92,7 @@ DEL_DEBUG   := $(RM) $(DEBUGDIR)$(APP) -r $(DEBUGDIR)$(OBJ)
 #                       make debug=true
 
 $(APPDIR)$(APP) : $(OBJSUBDIRS) $(ALLOBJ)
-	$(CC) -o $(APPDIR)$(APP) $(ALLOBJ) $(LIBS)
+	$(CC) -o $(APPDIR)$(APP) $(ALLOBJ) $(LIBS) $(GOLD_OPTION)
 
 #========================================================================
 #	COMPILER C++
