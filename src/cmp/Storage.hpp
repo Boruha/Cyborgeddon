@@ -1,14 +1,9 @@
 #pragma once
 
-#include <cmp/Components.hpp>
-
-#include <SunlightEngine/Device.hpp>
-#include <util/Alias.hpp>
+#include <cmp/ComponentVariant.hpp>
 
 #include <unordered_map>
 #include <util/ComponentType.hpp>
-
-using Sun::Device;
 
 struct Storage {
 	explicit Storage() = default;

@@ -3,7 +3,6 @@
 #include <irrlicht/irrlicht.h>
 
 #include <SunlightEngine/Device.hpp>
-#include <SunlightEngine/Vector3.hpp>
 #include <SunlightEngine/GenericNode.hpp>
 
 namespace Sun {

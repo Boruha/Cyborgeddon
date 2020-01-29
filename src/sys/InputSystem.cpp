@@ -1,7 +1,7 @@
 #include <sys/InputSystem.hpp>
-#include <src/man/EntityManager.hpp>
-#include <util/ComponentConstants.hpp>
 #include <util/TexturePaths.hpp>
+#include <ent/Entity.hpp>
+#include <SunlightEngine/Device.hpp>
 
 void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);

@@ -1,22 +1,40 @@
 #include <ent/Entity.hpp>
 
-Entity::Entity(EntityType type) : type(type), ID(++nextID) {
-	components.reserve(8);
-}
+#include <cmp/Transformable.hpp>
+#include <cmp/Velocity.hpp>
+#include <cmp/BoundingBox.hpp>
+#include <cmp/AI.hpp>
+#include <cmp/Physics.hpp>
+#include <cmp/BulletData.hpp>
+#include <cmp/CharacterData.hpp>
 
-void Entity::addComponent(Component& componente) {
-	components.emplace_back(&componente);
-}
+Entity::Entity(EntityType type) : type(type), ID(++nextID) {  }
 
 void Entity::makeUndefined() {
 	type = UNDEFINED;
 
-	for (auto& component : components) {
-		if (component)
-			component->makeUndefined();
-		component = nullptr;
-	}
+	if (transformable)
+	    transformable->makeUndefined();
+    if (velocity)
+        velocity->makeUndefined();
+    if (physics)
+        physics->makeUndefined();
+    if (bulletData)
+        bulletData->makeUndefined();
+    if (characterData)
+        characterData->makeUndefined();
+    if (collider)
+        collider->makeUndefined();
+    if (ai)
+        ai->makeUndefined();
 
-	components.clear();
-	components.shrink_to_fit();
+    transformable 	= { nullptr };
+    velocity 		= { nullptr };
+    physics			= { nullptr };
+    bulletData		= { nullptr };
+    characterData	= { nullptr };
+    collider		= { nullptr };
+    ai				= { nullptr };
+
+    node	        = { nullptr };
 }

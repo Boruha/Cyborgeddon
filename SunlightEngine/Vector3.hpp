@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SunlightEngine/Math.hpp>
-#include <iostream>
 #include <utility>
+#include <iostream>
 
 // TODO : quiza este arhcivo pertenezca a util
 
@@ -80,7 +80,7 @@ namespace Sun {
 				case 0  : return x;
 				case 1  : return y;
 				case 2  : return z;
-				default : std::cerr << "Out of bound Vector3<T>\n"; exit(-1);
+				default : std::cout << "Out of bound Vector3<T>\n"; exit(-1);
 			}
 		}
 

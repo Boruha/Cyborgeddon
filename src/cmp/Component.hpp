@@ -1,6 +1,7 @@
 #pragma once
 
 #include <util/Alias.hpp>
+#include <iosfwd>
 
 struct Component {
 	explicit Component(const EntityType type, const EntityID e_ID) : entityID(e_ID), entityType(type) {  }

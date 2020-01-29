@@ -1,13 +1,14 @@
 #pragma once
 
-#include <memory>
-#include <vector>
 #include <util/GameContext.hpp>
-#include <SunlightEngine/Device.hpp>
 #include <src/cmp/Storage.hpp>
 
+namespace Sun {
+    struct Device;
+}
+
 struct EntityManager : GameContext {
-	explicit EntityManager(const Device& device) : device(device) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
+	explicit EntityManager(const Sun::Device& device) : device(device) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override { cleanData(); }
 
 	void init() override;

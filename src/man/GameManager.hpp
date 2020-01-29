@@ -3,7 +3,6 @@
 #include <sys/Systems.hpp>
 
 #include <util/GameContext.hpp>
-#include <man/EntityManager.hpp>
 
 #include <chrono>
 

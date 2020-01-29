@@ -7,16 +7,20 @@
 
 #include <sys/CooldownSystem.hpp>
 
+namespace Sun {
+    struct Device;
+}
+
 struct InputSystem : System
 {
-	explicit InputSystem(const Device& device) : device(device) {  }
+	explicit InputSystem(const Sun::Device& device) : device(device) {  }
 
 	void init() override;
 	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
 	void reset() override {  }
 
 	private:
-		const Device& device;
+		const Sun::Device& device;
 		Sun::EventReceiver eventReceiver;
 		// Movement
 		static void w_pressed(Entity& player, float deltaTime);

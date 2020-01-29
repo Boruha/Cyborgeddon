@@ -1,6 +1,5 @@
 #pragma once
 
-#include <SunlightEngine/Vector2.hpp>
 #include <SunlightEngine/Device.hpp>
 #include <sys/System.hpp>
 
@@ -13,7 +12,7 @@ struct RenderSystem : public System {
 
 	void updateFPS(float deltaTime);
 
-	Sun::Device device {Sun::Vector2u(640, 480), L"Cyborgeddon" };
+	Sun::Device device;
 	Sun::Color background { 0x330044FF };
 
 	float timeForFPS {0};

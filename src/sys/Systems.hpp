@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sys/System.hpp>
 #include <sys/InputSystem.hpp>
 #include <sys/MovementSystem.hpp>
 #include <sys/AI_System.hpp>

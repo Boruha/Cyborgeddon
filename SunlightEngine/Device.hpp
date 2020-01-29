@@ -2,8 +2,6 @@
 
 #include <irrlicht/irrlicht.h>
 
-#include <iostream>
-
 #include <SunlightEngine/Vector2.hpp>
 #include <SunlightEngine/Color.hpp>
 #include <SunlightEngine/EventReceiver.hpp>

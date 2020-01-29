@@ -1,9 +1,6 @@
 #pragma once
 
-#include <SunlightEngine/Vector3.hpp>
 #include <cmp/Component.hpp>
-
-using Sun::Vector3f;
 
 struct Transformable : public Component
 {

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <src/man/EntityManager.hpp>
 #include <sys/System.hpp>
 
 struct CollisionSystem : System

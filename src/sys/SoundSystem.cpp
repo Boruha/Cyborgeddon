@@ -1,5 +1,9 @@
 #include <sys/SoundSystem.hpp>
 
+#include <fmod.hpp>
+#include <fmod_studio.hpp>
+#include <fmod_errors.h>
+
 #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 
 void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line) {

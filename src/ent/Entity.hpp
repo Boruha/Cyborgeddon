@@ -2,7 +2,15 @@
 
 #include <util/Alias.hpp>
 
-#include <cmp/Components.hpp>
+struct Component;
+
+struct Transformable;
+struct Velocity;
+struct Physics;
+struct BulletData;
+struct CharacterData;
+struct BoundingBox;
+struct AI;
 
 struct Entity
 {
@@ -14,7 +22,6 @@ struct Entity
 
 	inline static void resetIDManagementValue() { nextID = 0; }
 
-	void addComponent(Component&);
 	void makeUndefined();
 
 	[[nodiscard]] const EntityType& getType() 	const { return  type; }
@@ -31,7 +38,6 @@ struct Entity
 	Node_ptr* 		node			{ nullptr };
 
 	private:
-		std::vector<Component*> components;
 
 		inline static EntityID nextID { 0 };
 

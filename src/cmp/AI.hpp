@@ -1,13 +1,9 @@
 #pragma once
 
-#include <cstdlib>
-#include <vector>
-#include <SunlightEngine/Vector3.hpp>
 #include <cmp/Component.hpp>
 #include <util/Alias.hpp>
 #include <util/ComponentConstants.hpp>
-
-using Sun::Vector3f;
+#include <vector>
 
 struct AI : public Component {
 	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<Vector3f>& patrol);

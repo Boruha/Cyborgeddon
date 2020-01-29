@@ -2,13 +2,20 @@
 
 #include <sys/System.hpp>
 
-#include <fmod.hpp>
-#include <fmod_studio.hpp>
-#include <fmod_errors.h>
-
 #include <util/SoundPaths.hpp>
 
 #include <unordered_map>
+
+namespace FMOD {
+    namespace Studio {
+        struct EventDescription;
+        struct EventInstance;
+        struct System;
+        struct Bank;
+    }
+
+    struct System;
+}
 
 using Event = FMOD::Studio::EventDescription;
 using Instance = FMOD::Studio::EventInstance;
@@ -37,21 +44,6 @@ private:
 	FMOD::Studio::System* system { nullptr };
 	FMOD::Studio::Bank* master { nullptr };
 	FMOD::Studio::Bank* strings { nullptr };
-	//Disparo demonio
-	FMOD::Studio::EventDescription* eventDisparoDemon { nullptr };
-	FMOD::Studio::EventInstance* instanceDisparoDemon { nullptr };
-	//Disparo angel
-    FMOD::Studio::EventDescription* eventDisparoAngel { nullptr };
-    FMOD::Studio::EventInstance* instanceDisparoAngel { nullptr };
-	//Cambio demonio
-	FMOD::Studio::EventDescription* eventCambioDemon  { nullptr };
-	FMOD::Studio::EventInstance* instanceCambioDemon  { nullptr };
-	//Cambio angel
-	FMOD::Studio::EventDescription* eventCambioAngel  { nullptr };
-	FMOD::Studio::EventInstance* instanceCambioAngel  { nullptr };
-	//Musica ingame bucle
-    FMOD::Studio::EventDescription* eventMusicIngame  { nullptr };
-    FMOD::Studio::EventInstance* instanceMusicIngame  { nullptr };
 
 
     // TODO : crear enum como clave de este mapa

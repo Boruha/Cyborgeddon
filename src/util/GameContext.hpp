@@ -1,7 +1,8 @@
 #pragma once
 
-#include <ent/Entity.hpp>
 #include <util/ComponentType.hpp>
+#include <cmp/ComponentVariant.hpp>
+#include <ent/Entity.hpp>
 
 struct GameContext {
 	GameContext() = default;

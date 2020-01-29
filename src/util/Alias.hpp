@@ -44,3 +44,5 @@ using EntityID = uint16_t;
 using ComponentID = uint16_t;
 
 using Node_ptr = std::unique_ptr<Sun::GenericNode>;
+
+using Sun::Vector3f;
