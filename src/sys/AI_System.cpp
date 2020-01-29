@@ -30,7 +30,8 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 	if (Sun::greater_e(distance.length(), ARRIVED_MIN_DISTANCE)) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
 	} else {
-		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
+		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index;
+		// sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
 
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], 0, false);
 	}
@@ -39,12 +40,12 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 
 void AI_System::pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, deltaTime, true);
-//	std::cout << &entity << " esta persiguiendo al player\n";
+	//std::cout << &entity << " esta persiguiendo al player\n";
 }
 
 void AI_System::attackBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, 0, true);
-//	std::cout << &entity << " esta atacando al player\n";
+	std::cout << &enemy << " esta atacando al player\n";
 }
 
 void AI_System::basicBehaviour(const Entity& enemy, const Vector3f& target, const float deltaTime, const bool align) {
@@ -69,4 +70,35 @@ void AI_System::seekBehaviour(const Entity& enemy, const Vector3f& target, const
 
 void AI_System::alignBehaviour(const Entity& enemy, const Vector3f& target) {
 	enemy.physics->rotation.y = Sun::nearestAngle(enemy.physics->rotation.y, (enemy.physics->position - target).getRotationYfromXZ());
+}
+
+//PATHFINDING
+void AI_System::calculePath(MapNode& start, MapNode& end)
+{
+	NodeRecord startNodeRecord;
+	startNodeRecord.node = &start;
+	startNodeRecord.fromConn = nullptr;
+	startNodeRecord.const_so_far = 0;
+
+	std::vector<NodeRecord> open;
+	open.emplace_back(startNodeRecord);
+	std::vector<NodeRecord> closed;
+
+	NodeRecord currentNodeRecord;
+	NodeRecord nextNodeRecord;
+	std::vector<Connection> currentConnections;
+
+	while (!open.empty())
+	{
+		currentNodeRecord = open.front();
+
+		if(currentNodeRecord.node == &end) { break; }
+
+		currentConnections = currentNodeRecord.node->connections;
+		for(auto& conn : currentConnections)
+		{
+
+		}
+	}
+	
 }

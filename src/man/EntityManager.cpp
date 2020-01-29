@@ -347,17 +347,8 @@ bool EntityManager::checkVictory() {
 
 
 //REMOVE IN FUTURE
+
 void EntityManager::createMapNode(){
-	/*Entity& wall = entities.emplace_back(WALL);
-
-	wall.physics	= & componentStorage.createComponent(PHYSICS_TYPE, Physics(wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
-	wall.collider	= & componentStorage.createComponent(STATIC_BOUNDING_BOX_TYPE, BoundingBox(wall.getType(), wall.getID(), dim, wall.physics->position, wall.physics->velocity, false, STATIC));
-	wall.node		= & componentStorage.createNode(Sun::SceneNode(device, wall.physics->position, wall.physics->rotation, wall.collider->dim, nullptr));
-	
-
-	wall.addComponent(*wall.physics);
-	wall.addComponent(*wall.collider);
-	graph.emplace_back(MapNode(pos.x, pos.y));*/
 
 	auto& node_1 = graph.emplace_back(MapNode(0, 0));
 	auto& node_2 = graph.emplace_back(MapNode(0, 50));
@@ -387,7 +378,7 @@ void EntityManager::createMapNode(){
 		}
 		std::cout << "\n";
 	}
-
+/*
 	std::cout << "	NOOOOOOODOOOOOOOOOS   ORDENADOS\n";
 
 	for(auto& node : graph)
@@ -400,7 +391,7 @@ void EntityManager::createMapNode(){
 		}
 		std::cout << "\n";
 	}
-
+*/
 }
 
 /////////

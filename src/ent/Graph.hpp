@@ -16,12 +16,6 @@ struct MapNode
     explicit MapNode(const float x, const float y);
     ~MapNode() = default;
 
-    void addConnection(Connection&);
-    void sortConnections();
-    const std::vector<Connection>& getConnections() const { return connections; }
-    
-    Vector2f& getCoord();
-
     const Vector2f coord {0,0};
     std::vector<Connection> connections;
 };
@@ -30,19 +24,26 @@ struct Connection
 {
     Connection(MapNode* from, MapNode* to, short weight) : nodeFrom(from), nodeTo(to), cost(weight) {}
     ~Connection() = default;
-    bool operator< (const Connection&) const;
-    //friend bool operator< (const Connection& , const Connection&) const;
 
-    //possibly unnecessary
     MapNode* nodeFrom { nullptr };
     MapNode* nodeTo { nullptr };
     short   cost { 0 };
-
-    //available
-    // 2 options:
-    //     1.- check if the connection is available (doors locked, etc..).
-    //     2.- if a enemy is going to crash into a wall then continue the patrol.          
 };
+
+struct NodeRecord
+{
+    explicit NodeRecord();
+    ~NodeRecord() = default;
+
+    bool operator< (const NodeRecord&) const;
+    void sortNodeRecord(std::vector<NodeRecord>&);
+
+    MapNode* node;              //path node.
+    Connection* fromConn;       //bond to the node we came from.
+    float const_so_far { 0 };   //Cost from this node to the start of the path.
+};
+
 
 //TODO IN FUTURE:
 //  1.- CLEAN EVERYTHING
+//  2.- Enhance structure
