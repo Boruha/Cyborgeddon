@@ -21,7 +21,6 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 }
 
 bool EntityManager::update(){
-	checkShooting();
 
 	if (!toDelete.empty())			// si hay entidades que "matar"
 		killEntities();				// las matamos
@@ -32,16 +31,6 @@ bool EntityManager::update(){
 	}
 
 	return checkVictory();
-}
-
-// TODO: en los managers no debe haber logica. Revisar sistema de input
-// BORU: No se puede acceder al createBullet() desde input (al menos ahora). Lo ideal sería crear desde ahí obv.
-// 		 si se consigue, la var. 'Shooting' se podrá elilminar.
-void EntityManager::checkShooting() {
-	if(player->characterData->attacking){
-		createBullet(Vector3f(0.5, 0, player->collider->dim.z));
-		player->characterData->attacking = false;
-	}
 }
 
 bool EntityManager::checkVictory() {
@@ -164,12 +153,12 @@ void EntityManager::createFloor(const char * const tex, const Vector3f& pos, con
 	floor.node			= & componentStorage.createNode(Sun::SceneNode(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex));
 }
 
-void EntityManager::createBullet(const Vector3f& dim) {
+void EntityManager::createBullet() {
 	Entity& bullet 		= entities.emplace_back(BULLET);
 
 	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * BULLET_SPEED, player->physics->rotation));
 	bullet.bulletData	= & componentStorage.createComponent(BULLET_DATA_TYPE, BulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage));
-	bullet.node			= & componentStorage.createNode(Sun::SceneNode(device, bullet.physics->position, bullet.physics->rotation, dim, nullptr, player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE));
+	bullet.node			= & componentStorage.createNode(Sun::SceneNode(device, bullet.physics->position, bullet.physics->rotation, Vector3f(0.5, 0, player->collider->dim.z), nullptr, player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE));
 }
 
 void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim) {

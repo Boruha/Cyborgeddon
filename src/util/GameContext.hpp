@@ -14,6 +14,8 @@ struct GameContext {
 
 	virtual void createLevel() = 0;
 
+	virtual void createBullet() = 0;
+
 	[[nodiscard]] virtual const Entity& getPlayer() const = 0;
 	[[nodiscard]] virtual 		Entity& getPlayer()		  = 0;
 

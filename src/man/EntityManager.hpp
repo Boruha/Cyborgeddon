@@ -15,6 +15,7 @@ struct EntityManager : GameContext {
 	bool update() override;
 
 	void createLevel() override;
+	void createBullet () override;
 
 	void addToDestroy(std::size_t ID) override;
 
@@ -40,7 +41,6 @@ struct EntityManager : GameContext {
 		void createPairPlayerCamera (const Vector3f& pos, const Vector3f& dim, const Vector3f& posCamera);
 		void createEnemy  (const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol);
 		void createWall   (const Vector3f& pos, const Vector3f& dim);
-		void createBullet (const Vector3f& dim);
 		void createFloor  (const char* tex, const Vector3f& pos, const Vector3f& dim);
 		void createPairKeyDoor (const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim);
 
@@ -48,7 +48,6 @@ struct EntityManager : GameContext {
 		void moveDeadEntities();
 		void removeEntities();
 
-		void checkShooting();
 		bool checkVictory();
 
 		Entity* player { nullptr };

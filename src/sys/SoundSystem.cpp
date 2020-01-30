@@ -71,20 +71,33 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 
 	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
 		if (data.mode == DEMON) {
-			if (data.attacking)
+			if (data.attacking){
+				if (data.getEntityType() == PLAYER)
+					context->createBullet();
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[true][0].instance->start();
-			if (data.switchingMode)
+				data.attacking = false;
+			}
+			if (data.switchingMode) {
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[false][0].instance->start();
+				data.switchingMode = false;
+			}
 		} else if (data.mode == ANGEL) {
-			if (data.attacking)
+			if (data.attacking) {
+				if (data.getEntityType() == PLAYER)
+					context->createBullet();
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[true][1].instance->start();
-			if (data.switchingMode)
+				data.attacking = false;
+			}
+			if (data.switchingMode) {
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[false][1].instance->start();
+				data.switchingMode = false;
+			}
 		}
 
-		if (data.getEntityType() != PLAYER)
-			data.attacking = false;
-		data.switchingMode = false;  // TODO: quitar esto de aqui e intentar llamar al sistema/motor de audio en el momento en que se necesite
+		// TODO: quitar esto de aqui e intentar llamar al sistema/motor de audio en el momento en que se necesite
+		data.attacking = false;
+		data.switchingMode = false;
+		data.dashing = false;
 	}
 
 	ERRCHECK (system->update() );
