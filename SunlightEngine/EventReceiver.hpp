@@ -2,6 +2,7 @@
 
 #include <irrlicht/IEventReceiver.h>
 #include <SunlightEngine/KeyCodes.hpp>
+#include <SunlightEngine/Vector2.hpp>
 
 // TODO : Raton!!!!!!!!!!!!!!!!
 

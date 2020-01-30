@@ -4,7 +4,6 @@ void CharacterDataSystem::update(const std::unique_ptr<GameContext>& context, co
 	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) { // TODO : gestionar cmp ataque
         if (data && data.getEntityType() == ENEMY && data.attacking) {
             context->getPlayer().characterData->health -= data.attackDamage;
-            data.attacking = false;
 
             std::cout << "\n\nPLAYER RECIBE UN ATAQUE" << *(context->getPlayer().characterData);
 

@@ -2,6 +2,7 @@
 #include <util/TexturePaths.hpp>
 #include <ent/Entity.hpp>
 #include <SunlightEngine/Device.hpp>
+#include <SunlightEngine/Vector2.hpp>
 
 void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);
@@ -21,6 +22,15 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
 			next->p_func(player, deltaTime);
 		++next;
 	}
+
+	if (eventReceiver.getMouse().leftPressed) {
+		if(!Sun::greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
+			player.characterData->attacking = true;
+			player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+		}
+	}
+
+	std::cout << eventReceiver.getMouse().position << std::endl;
 
 	player.physics->velocity = player.velocity->direction.normalize() * player.velocity->currentSpeed * deltaTime;
 }

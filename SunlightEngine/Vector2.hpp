@@ -79,6 +79,11 @@ namespace Sun {
 			}
 		}
 
+		friend std::ostream& operator<<(std::ostream& os, const Vector2& v)
+		{
+			return os << "(\t" << v.x << "\t,\t" << v.y << "\t)";
+		}
+
 		Vector2<T>& normalize() {
 			T length = this->length();
 
