@@ -11,10 +11,22 @@ struct CharacterData : Component {
 	ModeType	mode						{ NEUTRAL };
 	bool 		attacking 					{  false  };
 	bool		switchingMode				{  false  };
+	bool 		dashing						{  false  };
+
 	float  		health    					{  100.f  };
+	float 		switchingCooldown			{    0.f  };
+	float		currentSwitchingCooldown	{    0.f  };
+
 	float 		attackDamage				{   50.f  };
 	float 		attackingCooldown			{    0.f  };
 	float  		currentAttackingCooldown   	{	 0.f  };
-	float 		switchingCooldown			{    0.f  };
-	float		currentSwitchingCooldown	{    0.f  };
+
+	float 		dashSpeed					{    0.f  };
+	float 		dashingCooldown				{	 0.f  };
+	float		currentDashingCooldown		{    0.f  };
+
+	// TODO : Componentes
+	// 		Character 	-> mode, health, attack, attacking, attackingCooldown, currentAttackingCooldown
+	//		Switch		-> switching, switchingCooldown, currentSwitchingCooldown
+	//		Dash		-> dashing, dashingCooldown, currentDashingCooldown
 };
