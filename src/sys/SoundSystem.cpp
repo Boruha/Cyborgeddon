@@ -82,7 +82,8 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[false][1].instance->start();
 		}
 
-		data.attacking = false;
+		if (data.getEntityType() != PLAYER)
+			data.attacking = false;
 		data.switchingMode = false;  // TODO: quitar esto de aqui e intentar llamar al sistema/motor de audio en el momento en que se necesite
 	}
 
