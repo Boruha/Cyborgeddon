@@ -27,7 +27,7 @@ struct Connection
 
     MapNode* nodeFrom { nullptr };
     MapNode* nodeTo { nullptr };
-    short   cost { 0 };
+    float   cost { 0 };
 };
 
 struct NodeRecord
@@ -37,6 +37,8 @@ struct NodeRecord
 
     bool operator< (const NodeRecord&) const;
     void sortNodeRecord(std::vector<NodeRecord>&);
+    bool contains(std::vector<NodeRecord>&, MapNode*); 
+    NodeRecord& find(std::vector<NodeRecord>&, MapNode*); 
 
     MapNode* node;              //path node.
     Connection* fromConn;       //bond to the node we came from.
