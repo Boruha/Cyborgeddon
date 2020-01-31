@@ -3,8 +3,7 @@
 #include <cmp/Component.hpp>
 
 struct CharacterData : Component {
-	explicit CharacterData(const EntityType e_type, const std::size_t e_ID, const ModeType mode, const float health, const float attackDamage, const float attackingCooldown, const float switchingCooldown)
-			: Component(e_type, e_ID), mode(mode), health(health), attackDamage(attackDamage), attackingCooldown(attackingCooldown), switchingCooldown(switchingCooldown) {  }
+	explicit CharacterData(EntityType, std::size_t, ModeType, float hp, float sw_cd, float dmg, float dmg_cd, float dsh, float dsh_cd);
 
 	friend std::ostream& operator<<(std::ostream& os, const CharacterData& data);
 

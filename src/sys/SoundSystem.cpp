@@ -72,8 +72,6 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
 		if (data.mode == DEMON) {
 			if (data.attacking){
-				if (data.getEntityType() == PLAYER)
-					context->createBullet();
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[true][0].instance->start();
 				data.attacking = false;
 			}
@@ -83,8 +81,6 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 			}
 		} else if (data.mode == ANGEL) {
 			if (data.attacking) {
-				if (data.getEntityType() == PLAYER)
-					context->createBullet();
 				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[true][1].instance->start();
 				data.attacking = false;
 			}

@@ -1,5 +1,16 @@
 #include <cmp/CharacterData.hpp>
 
+CharacterData::CharacterData(   const EntityType type,          const std::size_t e_ID,         const ModeType mode,
+                                const float health,             const float switchCD,           const float attackDamage,
+                                const float attackingCD,        const float dashSpeed,          const float dashCD
+                            )
+                            :   Component(type,                 e_ID),                          mode(mode),
+                                health(health),                 switchingCooldown(switchCD),    attackDamage(attackDamage),
+                                attackingCooldown(attackingCD), dashSpeed(dashSpeed),           dashingCooldown(dashCD)
+                            {
+
+                            }
+
 std::ostream& operator<<(std::ostream& os, const CharacterData& data) {
 	data.print(os, "CharacterData")
 	<< "\n\tHealth: " 									<< data.health

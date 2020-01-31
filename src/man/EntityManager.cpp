@@ -118,7 +118,7 @@ void EntityManager::createPairPlayerCamera(const Vector3f& pos, const Vector3f& 
 	player->velocity        = & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
 	player->physics         = & componentStorage.createComponent<Physics>(PHYSICS_TYPE, player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f());
     player->collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
-	player->characterData   = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_SWITCH_MODE_COOLDOWN);
+	player->characterData   = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
 	player->node			= & componentStorage.createNode<Sun::SceneNode>(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, DEMON_TEXTURE);
 
 	camera->physics			= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, camera->getType(), camera->getID(), posCamera, player->physics->velocity, Vector3f());
@@ -140,7 +140,7 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	enemy.velocity		= & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION);
 	enemy.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC);
 	enemy.ai			= & componentStorage.createComponent<AI>(AI_TYPE, enemy.getType(), enemy.getID(), patrol);
-	enemy.characterData = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_SWITCH_MODE_COOLDOWN);
+	enemy.characterData = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN);
 	enemy.node			= & componentStorage.createNode<Sun::SceneNode>(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, ENEMY_TEXTURE);
 
 	++enemiesLeft;
@@ -179,7 +179,7 @@ const Entity& EntityManager::getEntityByID(const std::size_t id) const {
 	for (auto& ent : entities)
 		if (ent.getID() == id)
 			return ent;
-	std::cerr << "Entity not found!\n";
+	std::cerr << "Entity not found?!?!\n";
 	exit(-1);
 }
 

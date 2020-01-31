@@ -43,8 +43,11 @@ void InputSystem::s_pressed(Entity& player, const float deltaTime) { --player.ve
 void InputSystem::d_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
-	if(player.velocity->currentSpeed == player.velocity->defaultSpeed && player.velocity->direction != 0 && CooldownSystem::dashReady()) // TODO: cambiar cooldownsystem
-		player.velocity->currentSpeed = PLAYER_DASH_SPEED;
+    if(!Sun::greater_e(player.characterData->currentDashingCooldown, 0.f) && player.velocity->direction != 0) {
+        player.characterData->dashing = true;
+        player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
+        player.velocity->currentSpeed = player.characterData->dashSpeed;
+    }
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player, const float deltaTime) {
