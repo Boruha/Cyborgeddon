@@ -97,6 +97,10 @@ namespace Sun {
 			return static_cast<T>(sqrt(x*x + y*y));
 		}
 
+        T dot(const Vector2<T>& v) const {
+            return x * v.x + y * v.y;
+        }
+
         Vector2<T>& abs() {
             for(int i = 0; i < 2; ++i)
                 (*this)[i] = std::abs((*this)[i]);

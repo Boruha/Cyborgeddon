@@ -102,6 +102,10 @@ namespace Sun {
 			return (*this) /= length;
 		}
 
+		T dot(const Vector3<T>& v) const {
+		    return x * v.x + y * v.y + z * v.z;
+		}
+
 		[[nodiscard]] T getRotationYfromXZ() const {
 			return static_cast<T>(std::atan2(x, z) * RAD2DEG);
 		}

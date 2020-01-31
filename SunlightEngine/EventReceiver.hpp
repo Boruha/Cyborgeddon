@@ -11,7 +11,7 @@ namespace Sun {
 	{
 		Mouse() = default;
 
-		Vector2i position;
+		Vector2u position;
 		bool leftPressed  { false };
 		bool rightPressed { false };
 	};
