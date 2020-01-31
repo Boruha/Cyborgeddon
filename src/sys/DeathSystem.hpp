@@ -1,14 +1,11 @@
-//
-// Created by mateo1198 on 31/1/20.
-//
+#pragma once
 
-#ifndef CYBORGEDDON_DEATHSYSTEM_HPP
-#define CYBORGEDDON_DEATHSYSTEM_HPP
+#include <sys/System.hpp>
 
+struct DeathSystem : System {
 
-class DeathSystem {
+    void init() override {  }
+    void update(const std::unique_ptr<GameContext>& context, float deltaTime) const override;
+    void reset() override {  }
 
 };
-
-
-#endif //CYBORGEDDON_DEATHSYSTEM_HPP

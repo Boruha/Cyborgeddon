@@ -1,10 +1,10 @@
 #include <sys/VelocitySystem.hpp>
 
 void VelocitySystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
-	for (auto& cmp : std::get<vector<Velocity>>(context->getComponents(VELOCITY_TYPE)))
-		if (cmp.getEntityType() != UNDEFINED)
-			if (cmp.currentSpeed != cmp.defaultSpeed)
-				Sun::less_e(cmp.currentSpeed, cmp.defaultSpeed) ? accelerate(cmp, deltaTime) : decelerate(cmp, deltaTime);
+	for (auto& velocity : std::get<vector<Velocity>>(context->getComponents(VELOCITY_TYPE)))
+		if (velocity)
+			if (velocity.currentSpeed != velocity.defaultSpeed)
+				Sun::less_e(velocity.currentSpeed, velocity.defaultSpeed) ? accelerate(velocity, deltaTime) : decelerate(velocity, deltaTime);
 }
 
 void VelocitySystem::accelerate(Velocity& vel, const float deltaTime) const {

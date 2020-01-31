@@ -5,8 +5,6 @@
 
 #include <sys/System.hpp>
 
-#include <sys/CooldownSystem.hpp>
-
 namespace Sun {
     struct Device;
 }
