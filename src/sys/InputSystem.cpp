@@ -71,8 +71,8 @@ void InputSystem::aim_mouse(Physics& phy, const Sun::Vector2u& mouse) const
 {
     Vector3f r_a, r_b;
 
-    // Do both un-projections for z-near (0) and z-far (1).
-    // This produces a line segment going from z-near to far.
+    // Deshacer proyeccion para profundidad = 0 (obtenemos punto a de la recta r)
+    // Deshacer proyeccion para profundidad = profundidad de la camara (obtenemos punto b de la recta r)
     cursorCoordToWorldCoord(mouse.x, mouse.y, 0, r_a);
     cursorCoordToWorldCoord(mouse.x, mouse.y, 1, r_b);
 
@@ -82,8 +82,11 @@ void InputSystem::aim_mouse(Physics& phy, const Sun::Vector2u& mouse) const
     float n_a  = n.dot(r_a);
     float n_ba = n.dot(ba);
 
-    phy.rotation.y = (r_a + (ba * ((phy.position.y - n_a) / n_ba))).getRotationYfromXZ();
+    // obtenemos el punto de interseccion entre recta y plano, siendo el plano (y - altura_disparo = 0)
+    Vector3f worldPosition = r_a + (ba * ((phy.position.y - n_a) / n_ba));
 
+    // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
+    phy.rotation.y = (worldPosition - phy.position).getRotationYfromXZ();
 }
 
 void InputSystem::cursorCoordToWorldCoord(float x, float y, float far, Vector3f& worldCoordinates) const {
