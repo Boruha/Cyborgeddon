@@ -92,10 +92,11 @@ void InputSystem::aim_mouse(Physics& phy, const Sun::Vector2u& mouse) const
     phy.rotation.y = (worldPosition - phy.position).getRotationYfromXZ();
 }
 
+// TODO : llevar cada parte de este codigo a su lugar correspondiente
 void InputSystem::cursorCoordToWorldCoord(float x, float y, float far, Vector3f& worldCoordinates) const {
     auto proj = device.getInnerDevice()->getSceneManager()->getActiveCamera()->getProjectionMatrix();
 
-    glm::mat4x4 projection = glm::mat4x4(
+    glm::mat4x4 projectionMatrix = glm::mat4x4(
             proj[0], proj[1], proj[2], proj[3],
             proj[4], proj[5], proj[6], proj[7],
             proj[8], proj[9], proj[10], proj[11],
@@ -103,30 +104,28 @@ void InputSystem::cursorCoordToWorldCoord(float x, float y, float far, Vector3f&
 
     auto mview = device.getInnerDevice()->getSceneManager()->getActiveCamera()->getViewMatrix();
 
-    glm::mat4x4 view = glm::mat4x4(
+    glm::mat4x4 viewMatrix = glm::mat4x4(
             mview[0], mview[1], mview[2], mview[3],
             mview[4], mview[5], mview[6], mview[7],
             mview[8], mview[9], mview[10], mview[11],
             mview[12], mview[13], mview[14], mview[15]);
 
-    // Compute (projection x modelView) ^ -1:
-    glm::mat4x4 m = glm::inverse(projection * view);
+    // Deshacemos [projection * view] obteniendo su inversa (para pasar de coordenadas del mundo a la pantalla, hay que hacer projection * view)
+    glm::mat4x4 unprojectMatrix = glm::inverse(projectionMatrix * viewMatrix);
 
     auto viewport = device.getInnerDevice()->getVideoDriver()->getViewPort();
 
-    // Need to invert Y since screen Y-origin point down,
-    // while 3D Y-origin points up (this is an OpenGL only requirement):
+    // Por algun motivo OpenGL lee la Y de la pantalla de abajo a arriba, asi que invertimos la y
     y = viewport.getHeight() - y;
 
-    // Transformation of normalized coordinates between -1 and 1:
-    glm::vec4 in (x / viewport.getWidth() * 2.0 - 1, y / viewport.getHeight() * 2.0 - 1.0, far * 2.0 - 1.0, 1.0);
+    // Hay que normalizar las coordenadas entre -1 (izquierda/abajo) y +1 (derecha/arriba)
+    glm::vec4 viewportPos (x / viewport.getWidth() * 2.0 - 1, y / viewport.getHeight() * 2.0 - 1.0, far * 2.0 - 1.0, 1.0);
 
-    // To world coordinates:
-    glm::vec4 out(m * in);
-    assert(out[3] != 0.0); // Avoid a division by zero
+    // Obtenemos las coordenadas del mundo en funcion de la distancia "far" calculada en viewportPos (profundidad desde el punto de vista de la camara)
+    glm::vec4 worldPos(unprojectMatrix * viewportPos);
+    assert(worldPos[3] != 0.0); // Avoid a division by zero
 
-    out[3] = 1.0 / out[3];
-    worldCoordinates.x = out[0] * out[3];
-    worldCoordinates.y = out[1] * out[3];
-    worldCoordinates.z = out[2] * out[3];
+    worldCoordinates.x = worldPos[0] / worldPos[3];
+    worldCoordinates.y = worldPos[1] / worldPos[3];
+    worldCoordinates.z = worldPos[2] / worldPos[3];
 }
