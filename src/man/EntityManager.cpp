@@ -115,32 +115,32 @@ void EntityManager::createPairPlayerCamera(const Vector3f& pos, const Vector3f& 
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION));
-	player->physics			= & componentStorage.createComponent(PHYSICS_TYPE, Physics(player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
-	player->collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC));
-	player->characterData	= & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_SWITCH_MODE_COOLDOWN));
+	player->velocity        = & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
+	player->physics         = & componentStorage.createComponent<Physics>(PHYSICS_TYPE, player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f());
+    player->collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
+	player->characterData   = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_SWITCH_MODE_COOLDOWN);
 	player->node			= & componentStorage.createNode(Sun::SceneNode(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, DEMON_TEXTURE));
 
-	camera->physics			= & componentStorage.createComponent(PHYSICS_TYPE, Physics(camera->getType(), camera->getID(), posCamera, player->physics->velocity, Vector3f()));
+	camera->physics			= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, camera->getType(), camera->getID(), posCamera, player->physics->velocity, Vector3f());
 	camera->node			= & componentStorage.createNode(Sun::CameraNode(device, player->physics->position, camera->physics->position));
 }
 
 void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
 	Entity& wall 		= entities.emplace_back(WALL);
 
-	wall.transformable	= & componentStorage.createComponent(TRANSFORMABLE_TYPE, Transformable(wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f()));
-	wall.collider		= & componentStorage.createComponent(STATIC_BOUNDING_BOX_TYPE, BoundingBox(wall.getType(), wall.getID(), dim, wall.transformable->position, false, STATIC));
+	wall.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
+	wall.collider		= & componentStorage.createComponent<BoundingBox>(STATIC_BOUNDING_BOX_TYPE, wall.getType(), wall.getID(), dim, wall.transformable->position, false, STATIC);
 	wall.node			= & componentStorage.createNode(Sun::SceneNode(device, wall.transformable->position, wall.transformable->rotation, wall.collider->dim, nullptr, WALL_TEXTURE));
 }
 
 void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol) {
 	Entity& enemy 		= entities.emplace_back(ENEMY);
 
-	enemy.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f()));
-	enemy.velocity		= & componentStorage.createComponent(VELOCITY_TYPE, Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
-	enemy.collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC));
-	enemy.ai			= & componentStorage.createComponent(AI_TYPE, AI(enemy.getType(), enemy.getID(), patrol));
-	enemy.characterData = & componentStorage.createComponent(CHARACTER_DATA_TYPE, CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_SWITCH_MODE_COOLDOWN));
+	enemy.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f());
+	enemy.velocity		= & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION);
+	enemy.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC);
+	enemy.ai			= & componentStorage.createComponent<AI>(AI_TYPE, enemy.getType(), enemy.getID(), patrol);
+	enemy.characterData = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_SWITCH_MODE_COOLDOWN);
 	enemy.node			= & componentStorage.createNode(Sun::SceneNode(device, enemy.physics->position, enemy.physics->rotation, enemy.collider->dim, nullptr, ENEMY_TEXTURE));
 
 	++enemiesLeft;
@@ -149,29 +149,29 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 void EntityManager::createFloor(const char * const tex, const Vector3f& pos, const Vector3f& dim) {
 	Entity& floor 		= entities.emplace_back(FLOOR);
 
-	floor.transformable = & componentStorage.createComponent(TRANSFORMABLE_TYPE, Transformable(floor.getType(), floor.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f()));
+	floor.transformable = & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, floor.getType(), floor.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
 	floor.node			= & componentStorage.createNode(Sun::SceneNode(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex));
 }
 
 void EntityManager::createBullet() {
 	Entity& bullet 		= entities.emplace_back(BULLET);
 
-	bullet.physics		= & componentStorage.createComponent(PHYSICS_TYPE, Physics(bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * BULLET_SPEED, player->physics->rotation));
-	bullet.bulletData	= & componentStorage.createComponent(BULLET_DATA_TYPE, BulletData(bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage));
+	bullet.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * BULLET_SPEED, player->physics->rotation);
+	bullet.bulletData	= & componentStorage.createComponent<BulletData>(BULLET_DATA_TYPE, bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage);
 	bullet.node			= & componentStorage.createNode(Sun::SceneNode(device, bullet.physics->position, bullet.physics->rotation, Vector3f(0.5, 0, player->collider->dim.z), nullptr, player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE));
 }
 
 void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim) {
 	Entity& door 		= entities.emplace_back(DOOR);
 
-	door.transformable 	= & componentStorage.createComponent(TRANSFORMABLE_TYPE, Transformable(door.getType(), door.getID(), doorPos + Vector3f(0, doorDim.y / 2, 0), Vector3f()));
-	door.collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(door.getType(), door.getID(), doorDim, door.transformable->position, false, STATIC));
+	door.transformable 	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, door.getType(), door.getID(), doorPos + Vector3f(0, doorDim.y / 2, 0), Vector3f());
+	door.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, door.getType(), door.getID(), doorDim, door.transformable->position, false, STATIC);
 	door.node			= & componentStorage.createNode(Sun::SceneNode(device, door.transformable->position, door.transformable->rotation, door.collider->dim, nullptr, DOOR_TEXTURE));
 
 	Entity& key 		= entities.emplace_back(KEY);
 
-	key.transformable	= & componentStorage.createComponent(TRANSFORMABLE_TYPE, Transformable(key.getType(), key.getID(), keyPos + Vector3f(0, keyDim.y / 2, 0), Vector3f()));
-	key.collider		= & componentStorage.createComponent(SPECIAL_BOUNDING_BOX_TYPE, BoundingBox(key.getType(), key.getID(), keyDim, key.transformable->position, true, DYNAMIC));
+	key.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, key.getType(), key.getID(), keyPos + Vector3f(0, keyDim.y / 2, 0), Vector3f());
+	key.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, key.getType(), key.getID(), keyDim, key.transformable->position, true, DYNAMIC);
 	key.node			= & componentStorage.createNode(Sun::SceneNode(device, key.transformable->position, key.transformable->rotation, key.collider->dim, nullptr, KEY_TEXTURE));
 }
 

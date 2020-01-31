@@ -2,7 +2,7 @@
 #include <util/TexturePaths.hpp>
 #include <ent/Entity.hpp>
 #include <SunlightEngine/Device.hpp>
-#include <SunlightEngine/Vector2.hpp>
+#include <util/Vector2.hpp>
 
 void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SunlightEngine/Vector3.hpp>
+#include <util/Vector3.hpp>
 #include <irrlicht/irrlicht.h>
 
 namespace Sun {

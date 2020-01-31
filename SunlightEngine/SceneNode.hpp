@@ -2,7 +2,7 @@
 
 #include <irrlicht/irrlicht.h>
 
-#include <SunlightEngine/Vector3.hpp>
+#include <util/Vector3.hpp>
 #include <SunlightEngine/Device.hpp>
 #include <SunlightEngine/GenericNode.hpp>
 
