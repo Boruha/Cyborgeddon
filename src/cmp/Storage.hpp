@@ -20,6 +20,8 @@ struct Storage {
 
 	template <typename T, typename ... Args>
 	const T& createComponent(const ComponentType type, Args&& ... args) const {
+        std::cout << "\n\nComponent\n";
+        printVecInfo(std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]));
 
         for (auto& item : std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]))
             if (!item)
@@ -33,31 +35,23 @@ struct Storage {
         return const_cast<T&>(std::as_const(*this).createComponent<T>(type, args...));
     }
 
-	template <typename T>
-	const Node_ptr& createNode(const T& node) const {
+	template <typename T, typename ... Args>
+	const Node_ptr& createNode(Args&& ... args) const {
 		std::cout << "\n\nNode_ptr\n";
 		printVecInfo(std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]));
 
 		for (auto& item : std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]))
 			if (!(*item))
-				return item = std::make_unique<T>(std::move(node));
+				return item = std::make_unique<T>(args...);
 
-		return std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]).emplace_back(std::make_unique<T>(std::move(node)));
+		return std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]).emplace_back(std::make_unique<T>(args...));
 	}
 
-	template <typename T>
-	Node_ptr& createNode(const T& node) {
-		return const_cast<Node_ptr&>(std::as_const(*this).createNode(node));
-	}
-	/*
 	template <typename T, typename ... Args>
 	Node_ptr& createNode(Args&& ... args) {
-        std::cout << "\n\nNode_ptr\n";
-        printVecInfo(std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]));
-
-        return std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType, variantComponentVectorTypes>&>(map)[NODE_TYPE]).emplace_back(std::make_unique<T>(args...));
+		return const_cast<Node_ptr&>(std::as_const(*this).createNode<T>(args...));
 	}
-*/
+
 	void initData(int maxComponents);
 	void cleanData();
 
