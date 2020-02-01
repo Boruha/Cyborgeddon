@@ -1,17 +1,9 @@
 #include <man/EngineManager.hpp>
+#include <cassert>
 
-EngineManager::EngineManager(const EngineType engineType) : type(engineType) {
+EngineManager::EngineManager(const EngineType engineType) : type(engineType) {  }
 
-}
-
-void EngineManager::init(const Vector2u& dim) {
-    engine[type]->init(dim);
-}
-
-void EngineManager::run() {
-    engine[type]->run();
-}
-
-void EngineManager::shutdown() {
-    engine[type]->shutdown();
+std::shared_ptr<Engine> EngineManager::getEngine() {
+    assert(engine[type]);
+    return std::move(engine[type]);
 }
