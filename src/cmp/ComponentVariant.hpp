@@ -12,4 +12,13 @@
 
 using std::vector;
 
-using variantComponentVectorTypes = std::variant<vector<AI>, vector<Node_ptr>, vector<Transformable>, vector<Velocity>, vector<BoundingBox>, vector<Physics>, vector<BulletData>, vector<CharacterData>>;
+using variantComponentVectorTypes = std::variant<
+                                                   vector<AI>,
+                                                   vector<Node_ptr>,
+                                                   vector<Transformable>,
+                                                   vector<Velocity>,
+                                                   vector<BoundingBox>,
+                                                   vector<Physics>,
+                                                   vector<BulletData>,
+                                                   vector<CharacterData>
+                                                 >;
