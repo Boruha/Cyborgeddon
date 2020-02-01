@@ -1,6 +1,6 @@
 #pragma once
 
-#include <irrlicht/Keycodes.h>
+#include <algorithm>
 #include <util/Enum.hpp>
 
 struct Keyboard {
@@ -8,5 +8,3 @@ struct Keyboard {
 
     bool keys[KEY_CODE_COUNT] {  };
 };
-
-// TODO: agregar teclas en funcion de las necesidades

@@ -1,23 +1,53 @@
 #pragma once
 
 #include <Engine/Engine.hpp>
+#include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
 #include <irrlicht/irrlicht.h>
 
-struct IrrlichtEngine : Engine {
+struct IrrlichtEngine final : public virtual Engine {
 
-    void init(const Vector2u& dim)  final {
-        device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(dim.x, dim.y));
+    void init(const unsigned width, const unsigned height, const wchar_t * const name) final {
+        device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(width, height));
+        device->setWindowCaption(name);
+        device->setEventReceiver(&eventReceiver);
+
+        sceneManager = device->getSceneManager();
+        videoDriver  = device->getVideoDriver();
     };
 
-    void run()                      final {
-
+    [[nodiscard]] bool run() const final {
+        return device->run();
     };
 
-    void shutdown()                 final {
-
+    void shutdown() const final {
+        device->drop();
     };
 
-private:
-    const irr::IrrlichtDevice * device { nullptr };
+    [[nodiscard]] bool isKeyPressed(KEY_CODE code) const final {
+        return eventReceiver.IsKeyDown(code);
+    }
+
+    [[nodiscard]] const Mouse& getMouse() const final {
+        return eventReceiver.getMouse();
+    }
+
+    void clear(Color color) const final {
+        videoDriver->beginScene(true, true, irr::video::SColor(color.a, color.r, color.g, color.b));
+    }
+
+    void draw() const final {
+        sceneManager->drawAll();
+    }
+
+    void display() const final {
+        videoDriver->endScene();
+    }
+
+    private:
+        irr::IrrlichtDevice *       device       { nullptr };
+        irr::scene::ISceneManager * sceneManager { nullptr };
+        irr::video::IVideoDriver *  videoDriver  { nullptr };
+
+        InputEventReceiver          eventReceiver;
 };
 

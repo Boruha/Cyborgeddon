@@ -16,10 +16,10 @@ namespace Sun {
 		~Device() { if(device) device->drop(); }
 
 		void clear(const Color * const color) const { device->getVideoDriver()->beginScene(true, true,
-																	   irr::video::SColor(color->getColorData().a,
-																								color->getColorData().r,
-																								color->getColorData().g,
-																								color->getColorData().b));
+																	   irr::video::SColor(color->a,
+																								color->r,
+																								color->g,
+																								color->b));
 		}
 
 		void draw() const { device->getSceneManager()->drawAll(); }

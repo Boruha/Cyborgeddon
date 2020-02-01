@@ -2,24 +2,11 @@
 
 #include <irrlicht/IEventReceiver.h>
 #include <SunlightEngine/KeyCodes.hpp>
-#include <util/Vector2.hpp>
-
-// TODO : Raton!!!!!!!!!!!!!!!!
+#include <util/Mouse.hpp>
 
 namespace Sun {
-	struct Mouse
-	{
-		Mouse() = default;
 
-		Vector2u position;
-		bool leftPressed  { false };
-		bool rightPressed { false };
-	};
-
-	struct EventReceiver : public irr::IEventReceiver {
-		EventReceiver() {
-			std::fill(keys, keys + KEY_CODE_COUNT, false);
-		}
+	struct EventReceiver : irr::IEventReceiver {
 
 		bool OnEvent(const irr::SEvent& event) override {
 			switch (event.EventType) {
@@ -58,7 +45,7 @@ namespace Sun {
 
 				case irr::EET_KEY_INPUT_EVENT :
 
-					keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
+					keyboard.keys[event.KeyInput.Key] = event.KeyInput.PressedDown;
 
 					break;
 
@@ -69,14 +56,16 @@ namespace Sun {
 		}
 
 		[[nodiscard]] virtual bool IsKeyDown(KEY_CODE keyCode) const {
-			return keys[keyCode];
+			return keyboard.keys[keyCode];
 		}
 
 		[[nodiscard]] const Mouse& getMouse() const { return mouse; }
 
+		[[nodiscard]] const Keyboard& getKeyboard() const { return keyboard; }
+
 	private:
 
-		bool keys [KEY_CODE_COUNT] {  };
+		Keyboard keyboard;
 		Mouse mouse;
 	};
 } // namespace Sun

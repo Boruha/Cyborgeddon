@@ -36,22 +36,22 @@ struct InputSystem : System
 		static void m_pressed(Entity& player, float deltaTime);
 
 	struct TKey2func {
-		Sun::KEY_CODE key;
+		KEY_CODE key;
 		void (*p_func)(Entity& player, float deltaTime);
 	};
 
-	const TKey2func keyMapping[Sun::KEY_CODE_COUNT] // KEY::KODE::COUNT tiene la cantidad de teclas que usamos
+	const TKey2func keyMapping[KEY_CODE_COUNT] // KEY::KODE::COUNT tiene la cantidad de teclas que usamos
 	{
-		{Sun::KEY_W,                    w_pressed 		},
-		{Sun::KEY_A,                    a_pressed 		},
-		{Sun::KEY_S,                    s_pressed 		},
-		{Sun::KEY_D,                    d_pressed 		},
-        {Sun::KEY_LSHIFT,               shift_pressed 	},
-		{Sun::KEY_SPACE,                space_pressed 	},
-		{Sun::KEY_LEFT,                 left_pressed 	},
-		{Sun::KEY_RIGHT,                right_pressed 	},
-		{Sun::KEY_M,                    m_pressed 		},
-		{static_cast<Sun::KEY_CODE>(0), nullptr}
+		{KEY_W,                    w_pressed 		},
+		{KEY_A,                    a_pressed 		},
+		{KEY_S,                    s_pressed 		},
+		{KEY_D,                    d_pressed 		},
+        {KEY_LSHIFT,               shift_pressed 	},
+		{KEY_SPACE,                space_pressed 	},
+		{KEY_LEFT,                 left_pressed    },
+		{KEY_RIGHT,                right_pressed   },
+		{KEY_M,                    m_pressed       },
+		{static_cast<KEY_CODE>(0), nullptr }
 	};
 
     void aim_mouse(Physics& phy, const Vector2u &mouse) const;
