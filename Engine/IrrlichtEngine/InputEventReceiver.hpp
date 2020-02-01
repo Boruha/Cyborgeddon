@@ -1,8 +1,8 @@
 #pragma once
 
 #include <irrlicht/IEventReceiver.h>
-#include <util/Keyboard.hpp>
-#include <util/Mouse.hpp>
+#include <Engine/util/Keyboard.hpp>
+#include <Engine/util/Mouse.hpp>
 
 struct InputEventReceiver : irr::IEventReceiver {
 

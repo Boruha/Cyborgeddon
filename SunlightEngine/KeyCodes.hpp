@@ -1,7 +1,7 @@
 #pragma once
 
 #include <irrlicht/Keycodes.h>
-#include <util/Enum.hpp>
+#include <Engine/util/Enum.hpp>
 
 struct Keyboard {
     Keyboard() { std::fill(keys, keys + sizeof(keys), false); }

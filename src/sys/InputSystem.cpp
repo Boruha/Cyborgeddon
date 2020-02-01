@@ -2,7 +2,7 @@
 #include <util/TexturePaths.hpp>
 #include <ent/Entity.hpp>
 #include <SunlightEngine/Device.hpp>
-#include <util/Vector2.hpp>
+#include <Engine/util/Vector2.hpp>
 #include <glm/glm.hpp>
 #include <cassert>
 

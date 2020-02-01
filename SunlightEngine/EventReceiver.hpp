@@ -2,7 +2,7 @@
 
 #include <irrlicht/IEventReceiver.h>
 #include <SunlightEngine/KeyCodes.hpp>
-#include <util/Mouse.hpp>
+#include <Engine/util/Mouse.hpp>
 
 namespace Sun {
 
