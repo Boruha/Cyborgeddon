@@ -14,11 +14,10 @@ struct GameManager {
 	void update(float deltaTime);
 	void loop();
 
-	static constexpr unsigned int UPS = 60;
-	static constexpr std::chrono::duration<float> TICK_MS { 1.f / UPS };
+	static constexpr std::chrono::duration<float> fixedDelta { FIXED_DELTA_TIME };
 
 	// render first so we use its device for the other systems and/or managers
-	RenderSystem render { Vector2u(1280, 720), L"Cyborgeddon" };
+	RenderSystem render { Vector2u(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME };
 
 	std::vector<std::unique_ptr<System>> systems;
 

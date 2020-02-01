@@ -3,7 +3,7 @@
 #include <irrlicht/irrlicht.h>
 
 #include <Engine/util/Vector2.hpp>
-#include <SunlightEngine/Color.hpp>
+#include <Engine/util/Color.hpp>
 #include <SunlightEngine/EventReceiver.hpp>
 
 namespace Sun {
@@ -15,12 +15,7 @@ namespace Sun {
 		}
 		~Device() { if(device) device->drop(); }
 
-		void clear(const Color * const color) const { device->getVideoDriver()->beginScene(true, true,
-																	   irr::video::SColor(color->a,
-																								color->r,
-																								color->g,
-																								color->b));
-		}
+		void clear(const Color * const color) const { device->getVideoDriver()->beginScene(true, true,irr::video::SColor(color->a, color->r, color->g, color->b)); }
 
 		void draw() const { device->getSceneManager()->drawAll(); }
 
@@ -28,14 +23,15 @@ namespace Sun {
 
 		void setEventReceiver(EventReceiver* receiver) const { device->setEventReceiver(receiver); }
 
-		void setWindowName(const wchar_t * const name) const { device->setWindowCaption(name); }
+        void setWindowName(const wchar_t * const name) const { device->setWindowCaption(name); }
 
 		[[nodiscard]] bool isActive() const { return device->run(); }
 
 		// TODO: eliminar esta funcion cuando todas las necesidades de irrlicht esten cubiertas
 		[[nodiscard]] irr::IrrlichtDevice* getInnerDevice() const { return device; }
 
-		private:
+    private:
+
 			irr::IrrlichtDevice* device { nullptr };
-	};
+    };
 }

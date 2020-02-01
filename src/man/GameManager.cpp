@@ -59,13 +59,13 @@ void GameManager::loop()
 		delta += now - last;
 		last = now;
 
-		while(delta.count() > TICK_MS.count())
+		while(delta.count() > fixedDelta.count())
 		{
-			update(TICK_MS.count());
-			delta -= TICK_MS;
+			update(fixedDelta.count());
+			delta -= fixedDelta;
 		}
 
 		render.updateFPS(delta.count());
-		render.update(entityManager, delta.count() / TICK_MS.count());
+		render.update(entityManager, delta.count() / fixedDelta.count());
   	}
 }
