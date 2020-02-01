@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cmp/Component.hpp>
-#include <util/Alias.hpp>
 #include <util/ComponentConstants.hpp>
 #include <vector>
 

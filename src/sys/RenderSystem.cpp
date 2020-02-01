@@ -13,7 +13,7 @@ void RenderSystem::update(const std::unique_ptr<GameContext>& context, const flo
 void RenderSystem::updateFPS(const float deltaTime) {
 	++FPS_counter;
 
-	if (Sun::greater_e((timeForFPS += deltaTime), 1.f)) {
+	if (greater_e((timeForFPS += deltaTime), 1.f)) {
 		device.setWindowName(std::wstring(L"Cyborgeddon | FPS[" + std::to_wstring(FPS_counter) + L"]").c_str());
 		timeForFPS -= 1.f;
 		FPS_counter = 0;

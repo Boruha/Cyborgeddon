@@ -2,8 +2,6 @@
 
 #include <cmp/Component.hpp>
 
-using Sun::Vector3f;
-
 struct BoundingBox : Component
 {
 	explicit BoundingBox(EntityType e_type, std::size_t e_ID, const Vector3f& dim, Vector3f& pos, Vector3f& vel, bool passable, ColliderType type);

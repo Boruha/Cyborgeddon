@@ -28,7 +28,7 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
     aim_mouse(*player.physics, eventReceiver.getMouse().position);
 
 	if (eventReceiver.getMouse().leftPressed) {
-		if(!Sun::greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
+		if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 			player.characterData->attacking = true;
 			player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
 		}
@@ -43,7 +43,7 @@ void InputSystem::s_pressed(Entity& player, const float deltaTime) { --player.ve
 void InputSystem::d_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
-    if(!Sun::greater_e(player.characterData->currentDashingCooldown, 0.f) && player.velocity->direction != 0) {
+    if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && player.velocity->direction != 0) {
         player.characterData->dashing = true;
         player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
         player.velocity->currentSpeed = player.characterData->dashSpeed;
@@ -51,7 +51,7 @@ void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player, const float deltaTime) {
-	if(!Sun::greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
+	if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 		player.characterData->attacking = true;
 		player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
 	}
@@ -61,7 +61,7 @@ void InputSystem::left_pressed  (Entity& player, const float deltaTime) { player
 void InputSystem::right_pressed (Entity& player, const float deltaTime) { player.physics->rotation.y += PLAYER_ROTATION_SPEED * deltaTime; }
 // Switch Mode
 void InputSystem::m_pressed(Entity& player, const float deltaTime) {
-	if (!Sun::greater_e(player.characterData->currentSwitchingCooldown, 0)) {
+	if (!greater_e(player.characterData->currentSwitchingCooldown, 0)) {
 		player.characterData->switchingMode = true;
 		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;
 		player.characterData->mode == DEMON ? player.node->get()->setTexture(DEMON_TEXTURE) : player.node->get()->setTexture(ANGEL_TEXTURE);
@@ -70,7 +70,7 @@ void InputSystem::m_pressed(Entity& player, const float deltaTime) {
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-void InputSystem::aim_mouse(Physics& phy, const Sun::Vector2u& mouse) const
+void InputSystem::aim_mouse(Physics& phy, const Vector2u& mouse) const
 {
     Vector3f r_a, r_b;
 

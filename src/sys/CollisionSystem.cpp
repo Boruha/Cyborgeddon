@@ -47,7 +47,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 						if (staticCollider)
 							staticCollision(movingBox, velocity, staticCollider, i);
 
-						if (Sun::equal_e(velocity[i], 0))
+						if (equal_e(velocity[i], 0))
 							break;
 					}
 
@@ -59,7 +59,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 								dynamicCollision(movingBox, velocity, dynamicCollider, context);
 						}
 
-						if (Sun::equal_e(velocity[i], 0))
+						if (equal_e(velocity[i], 0))
 							break;
 					}
 				}
@@ -96,7 +96,7 @@ void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, cons
 
 		moveCoord(box, offset, coord);
 
-		if (Sun::equal_e(velocity[coord], 0))
+		if (equal_e(velocity[coord], 0))
 			velocity[coord] = 0;
 	}
 }
@@ -134,7 +134,7 @@ void CollisionSystem::setCoord(BoundingBox& bounding, const Vector3f& pos, const
 
 bool CollisionSystem::intersects(const BoundingBox& bounding, const BoundingBox& other) const {
 	for (int i = 0; i < 3; ++i)
-		if (!(Sun::greater_e(bounding.max[i], other.min[i]) && Sun::less_e(bounding.min[i], other.max[i])))
+		if (!(greater_e(bounding.max[i], other.min[i]) && less_e(bounding.min[i], other.max[i])))
 			return false;
 
 	return true;

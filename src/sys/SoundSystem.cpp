@@ -10,7 +10,6 @@ void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line)
 	if (res != FMOD_OK)
 	{
 		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << std::endl;
-		exit(-1);
 	}
 }
 

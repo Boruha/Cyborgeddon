@@ -1,9 +1,6 @@
 #pragma once
 
-#include <util/Vector3.hpp>
 #include <cmp/Component.hpp>
-
-using Sun::Vector3f;
 
 struct Physics : public Component {
 	explicit Physics(const EntityType e_type, const std::size_t e_ID, const Vector3f& pos, const Vector3f& vel, const Vector3f& rot)

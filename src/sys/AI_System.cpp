@@ -13,11 +13,11 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 
 			float distance = v_distance.length();
 
-			if (Sun::greater_e(distance, PATROL_MIN_DISTANCE))
+			if (greater_e(distance, PATROL_MIN_DISTANCE))
 				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (Sun::greater_e(distance, PURSUE_MIN_DISTANCE))
+			else if (greater_e(distance, PURSUE_MIN_DISTANCE))
 				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (Sun::greater_e(distance, ATTACK_MIN_DISTANCE))
+			else if (greater_e(distance, ATTACK_MIN_DISTANCE))
 				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
 		}
 	}
@@ -27,7 +27,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 	Vector3f distance = enemy.physics->position - enemy.ai->target_position;
 	distance.y = 0;
 
-	if (Sun::greater_e(distance.length(), ARRIVED_MIN_DISTANCE)) {
+	if (greater_e(distance.length(), ARRIVED_MIN_DISTANCE)) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
 	} else {
 		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
@@ -45,7 +45,7 @@ void AI_System::pursueBehaviour(const Entity& enemy, const Vector3f& player_pos,
 void AI_System::attackBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, 0, true);
 
-    if(!Sun::greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
+    if(!greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
         enemy.characterData->attacking = true;
         enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
     }
@@ -73,5 +73,5 @@ void AI_System::seekBehaviour(const Entity& enemy, const Vector3f& target, const
 }
 
 void AI_System::alignBehaviour(const Entity& enemy, const Vector3f& target) {
-	enemy.physics->rotation.y = Sun::nearestAngle(enemy.physics->rotation.y, (enemy.physics->position - target).getRotationYfromXZ());
+	enemy.physics->rotation.y = nearestAngle(enemy.physics->rotation.y, (enemy.physics->position - target).getRotationYfromXZ());
 }

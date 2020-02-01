@@ -54,7 +54,7 @@ struct InputSystem : System
 		{static_cast<Sun::KEY_CODE>(0), nullptr}
 	};
 
-    void aim_mouse(Physics& phy, const Sun::Vector2u &mouse) const;
+    void aim_mouse(Physics& phy, const Vector2u &mouse) const;
 
     void cursorCoordToWorldCoord(float x, float y, float far, Vector3f &worldCoordinates) const;
 };

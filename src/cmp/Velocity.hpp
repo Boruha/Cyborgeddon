@@ -2,8 +2,6 @@
 
 #include <cmp/Component.hpp>
 
-using Sun::Vector3f;
-
 struct Velocity : public Component
 {
 	explicit Velocity(const EntityType e_type, const std::size_t e_ID, const float defaultSpeed, const float acceleration)

@@ -18,7 +18,7 @@ struct GameManager {
 	static constexpr std::chrono::duration<float> TICK_MS { 1.f / UPS };
 
 	// render first so we use its device for the other systems and/or managers
-	RenderSystem render { Sun::Vector2u(1280, 720), L"Cyborgeddon" };
+	RenderSystem render { Vector2u(1280, 720), L"Cyborgeddon" };
 
 	std::vector<std::unique_ptr<System>> systems;
 
