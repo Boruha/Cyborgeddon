@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SunlightEngine/EventReceiver.hpp>
-#include <SunlightEngine/KeyCodes.hpp>
+#include <Engine/util/KeyCodes.hpp>
 
 #include <sys/System.hpp>
 

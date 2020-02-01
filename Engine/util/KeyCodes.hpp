@@ -2,6 +2,7 @@
 
 #include <irrlicht/Keycodes.h>
 #include <Engine/util/Enum.hpp>
+#include <algorithm>
 
 struct Keyboard {
     Keyboard() { std::fill(keys, keys + sizeof(keys), false); }

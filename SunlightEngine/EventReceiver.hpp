@@ -1,7 +1,7 @@
 #pragma once
 
 #include <irrlicht/IEventReceiver.h>
-#include <SunlightEngine/KeyCodes.hpp>
+#include <Engine/util/KeyCodes.hpp>
 #include <Engine/util/Mouse.hpp>
 
 namespace Sun {
