@@ -1,9 +1,12 @@
 #include <man/EngineManager.hpp>
-#include <cassert>
 
 EngineManager::EngineManager(const EngineType engineType) : type(engineType) {  }
 
-std::shared_ptr<Engine> EngineManager::getEngine() {
-    assert(engine[type]);
-    return std::move(engine[type]);
+std::unique_ptr<Engine> EngineManager::getEngine() const {
+    switch (type) {
+        case IRRLICHT : return std::make_unique<IrrlichtEngine>();
+        case SUNLIGHT : return std::make_unique<SunlightEngine>();
+        default       : std::cerr << "\n\nMotor distinto de irrlicht y sunlight?!?\n\n";
+                        exit(-1);
+    }
 }

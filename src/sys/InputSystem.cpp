@@ -2,9 +2,9 @@
 #include <util/TexturePaths.hpp>
 #include <ent/Entity.hpp>
 #include <SunlightEngine/Device.hpp>
-#include <Engine/util/Vector2.hpp>
 #include <glm/glm.hpp>
 #include <cassert>
+#include <Engine/util/MathIntersection.hpp>
 
 void InputSystem::init() {
 	device.setEventReceiver(&eventReceiver);
@@ -72,28 +72,17 @@ void InputSystem::m_pressed(Entity& player, const float deltaTime) {
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
 void InputSystem::aim_mouse(Physics& phy, const Vector2u& mouse) const
 {
-    Vector3f r_a, r_b;
+    const Plane shootingPlane(Vector3f(0,1,0), phy.position.y);
+    const Line  ray(cursorCoordToWorldCoord(mouse.x, mouse.y, 0), cursorCoordToWorldCoord(mouse.x, mouse.y, 1));
 
-    // Deshacer proyeccion para profundidad = 0 (obtenemos punto a de la recta r)
-    // Deshacer proyeccion para profundidad = profundidad de la camara (obtenemos punto b de la recta r)
-    cursorCoordToWorldCoord(mouse.x, mouse.y, 0, r_a);
-    cursorCoordToWorldCoord(mouse.x, mouse.y, 1, r_b);
-
-    Vector3f n  = Vector3f(0,1,0);   // normal del plano
-    Vector3f ba = r_b - r_a; // vector director de la recta
-
-    float n_a  = n.dot(r_a);
-    float n_ba = n.dot(ba);
-
-    // obtenemos el punto de interseccion entre recta y plano, siendo el plano (y - altura_disparo = 0)
-    Vector3f worldPosition = r_a + (ba * ((phy.position.y - n_a) / n_ba));
+    const Vector3f intersectPoint = intersectionPoint(shootingPlane, ray);
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
-    phy.rotation.y = (worldPosition - phy.position).getRotationYfromXZ();
+    phy.rotation.y = (intersectPoint - phy.position).getRotationYfromXZ();
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-void InputSystem::cursorCoordToWorldCoord(float x, float y, float far, Vector3f& worldCoordinates) const {
+Vector3f InputSystem::cursorCoordToWorldCoord(float x, float y, float far) const {
     auto proj = device.getInnerDevice()->getSceneManager()->getActiveCamera()->getProjectionMatrix();
 
     glm::mat4x4 projectionMatrix = glm::mat4x4(
@@ -123,9 +112,7 @@ void InputSystem::cursorCoordToWorldCoord(float x, float y, float far, Vector3f&
 
     // Obtenemos las coordenadas del mundo en funcion de la distancia "far" calculada en viewportPos (profundidad desde el punto de vista de la camara)
     glm::vec4 worldPos(unprojectMatrix * viewportPos);
-    assert(worldPos[3] != 0.0); // Avoid a division by zero
+    assert(worldPos.w != 0.0); // Avoid a division by zero
 
-    worldCoordinates.x = worldPos[0] / worldPos[3];
-    worldCoordinates.y = worldPos[1] / worldPos[3];
-    worldCoordinates.z = worldPos[2] / worldPos[3];
+    return Vector3(worldPos.x, worldPos.y, worldPos.z) / worldPos.w;
 }
