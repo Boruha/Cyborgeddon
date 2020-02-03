@@ -1,29 +1,30 @@
 #pragma once
 
-#include <Engine/Engine.hpp>
+#include <Engine/EngineInterface/Engine.hpp>
 
-struct SunlightEngine : Engine {
-    void init(const unsigned width, const unsigned height, const wchar_t * const name) final {
+struct SunlightEngine final : public virtual Engine {
 
-    };
+    void init(unsigned width, unsigned height, const wchar_t * name) final {
+
+    }
 
     [[nodiscard]] bool run() const final {
         return false;
-    };
+    }
 
     void shutdown() const final {
 
-    };
+    }
 
-    [[nodiscard]] bool isKeyPressed(KEY_CODE code) const final {
+    [[nodiscard]] bool isKeyPressed(const KEY_CODE code) const final {
         return false;
     }
 
-    [[nodiscard]] const Mouse& getMouse() const final {
-        return mouse;
+    [[nodiscard]] const Mouse & getMouse() const final {
+
     }
 
-    void clear(Color color) const final {
+    void clear(const Color color) const final {
 
     }
 
@@ -34,7 +35,4 @@ struct SunlightEngine : Engine {
     void display() const final {
 
     }
-
-    private:
-        Mouse mouse;
 };

@@ -1,10 +1,12 @@
 #pragma once
 
-#include <Engine/IrrlichtEngine/IrrlichtEngine.hpp>
-#include <Engine/SunlightEngine/SunlightEngine.hpp>
 #include <memory>
 
 enum EngineType { IRRLICHT, SUNLIGHT };
+
+struct Engine;
+struct IrrlichtEngine;
+struct SunlightEngine;
 
 struct EngineManager {
     explicit EngineManager(EngineType);

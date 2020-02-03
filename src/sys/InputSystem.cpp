@@ -17,7 +17,7 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
 
 	player.velocity->direction = 0;
 
-	auto* next = const_cast<TKey2func*>(keyMapping);
+	auto * next = keyMapping;
 
 	while (next->p_func) {
 		if (eventReceiver.IsKeyDown(next->key))

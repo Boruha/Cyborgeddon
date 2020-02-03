@@ -1,5 +1,10 @@
 #include <man/EngineManager.hpp>
 
+#include <Engine/IrrlichtEngine/IrrlichtEngine.hpp>
+#include <Engine/SunlightEngine/SunlightEngine.hpp>
+
+#include <iostream>
+
 EngineManager::EngineManager(const EngineType engineType) : type(engineType) {  }
 
 std::unique_ptr<Engine> EngineManager::getEngine() const {

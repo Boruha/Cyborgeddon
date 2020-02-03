@@ -1,37 +1,38 @@
 #pragma once
 
-#include <Engine/Engine.hpp>
+#include <Engine/EngineInterface/Engine.hpp>
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
+
 #include <irrlicht/irrlicht.h>
 
 struct IrrlichtEngine final : public virtual Engine {
 
-    void init(const unsigned width, const unsigned height, const wchar_t * const name) final {
+    void init(unsigned width, unsigned height, const wchar_t * name) final {
         device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(width, height));
         device->setWindowCaption(name);
         device->setEventReceiver(&eventReceiver);
 
         sceneManager = device->getSceneManager();
         videoDriver  = device->getVideoDriver();
-    };
+    }
 
     [[nodiscard]] bool run() const final {
         return device->run();
-    };
+    }
 
     void shutdown() const final {
         device->drop();
-    };
+    }
 
-    [[nodiscard]] bool isKeyPressed(KEY_CODE code) const final {
+    [[nodiscard]] bool isKeyPressed(const KEY_CODE code) const final {
         return eventReceiver.IsKeyDown(code);
     }
 
-    [[nodiscard]] const Mouse& getMouse() const final {
+    [[nodiscard]] const Mouse & getMouse() const final {
         return eventReceiver.getMouse();
     }
 
-    void clear(Color color) const final {
+    void clear(const Color color) const final {
         videoDriver->beginScene(true, true, irr::video::SColor(color.a, color.r, color.g, color.b));
     }
 

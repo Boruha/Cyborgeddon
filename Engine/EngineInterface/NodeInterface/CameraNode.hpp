@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/GameNode.hpp>
+#include <Engine/Node/GameNode.hpp>
 #include <glm/glm.hpp>
 
 struct CameraNode : GameNode {
