@@ -20,6 +20,9 @@ bool SunlightEngine::isKeyPressed(const KEY_CODE code) const {
 }
 
 const Mouse &SunlightEngine::getMouse() const {
+	// TODO : 	CAMBIAR EL VALOR DE RETORNO
+	//  			vamos a hacer que el juego acabe para evitar que se nos pase actualizar este metodo
+	exit(-1);
 	return *(new Mouse());
 }
 
