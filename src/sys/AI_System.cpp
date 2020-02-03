@@ -1,6 +1,8 @@
 #include <sys/AI_System.hpp>
 #include <SunlightEngine/Math.hpp>
 #include <util/SystemConstants.hpp>
+#include <ent/Graph.hpp>
+
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -40,6 +42,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const Vector3f& player_pos,
 
 void AI_System::pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, deltaTime, true);
+
 	//std::cout << &entity << " esta persiguiendo al player\n";
 }
 
@@ -70,74 +73,4 @@ void AI_System::seekBehaviour(const Entity& enemy, const Vector3f& target, const
 
 void AI_System::alignBehaviour(const Entity& enemy, const Vector3f& target) {
 	enemy.physics->rotation.y = Sun::nearestAngle(enemy.physics->rotation.y, (enemy.physics->position - target).getRotationYfromXZ());
-}
-
-//PATHFINDING
-void AI_System::calculePath(MapNode& start, MapNode& end)
-{
-	NodeRecord startNodeRecord;
-	startNodeRecord.node = &start;
-	startNodeRecord.fromConn = nullptr;
-	startNodeRecord.const_so_far = 0;
-
-	std::vector<NodeRecord> open.reserve(5);
-	open.push_back(startNodeRecord);
-	std::vector<NodeRecord> closed.reserve(5);
-	std::vector<Connection> path.reserve(5);
-
-	NodeRecord currentNodeRecord;
-	NodeRecord nextNodeRecord;
-
-	MapNode* nextNode = nullptr;
-	float nextCost = 0;
-	std::vector<Connection> currentConnections;
-
-	while (!open.empty())
-	{
-		currentNodeRecord = open.front();
-
-		if(currentNodeRecord.node == &end) break;
-
-		currentConnections = currentNodeRecord.node->connections;
-		for(auto& conn : currentConnections)
-		{
-			nextNode = conn.nodeTo;
-			nextCost = conn.cost + currentNodeRecord.const_so_far;
-
-			if(nextNodeRecord.contains(closed, nextNode)) continue;
-
-			if(nextNodeRecord = nextNodeRecord.find(open, nextNode))
-			{
-				if(nextNodeRecord.const_so_far <= nextCost) continue;
-			}
-			else
-			{
-				nextNodeRecord = open.emplace_back();
-				nextNodeRecord.node = nextNode;
-			}
-
-			nextNodeRecord.const_so_far = nextCost;
-			nextNodeRecord.fromConn = conn;
-
-
-		}
-
-		open.erase(0);
-		currentNodeRecord.sortNodeRecord(open);
-		closed.push_back(currentNodeRecord);
-
-
-		if(currentNodeRecord.node != end){ /*return null*/ }
-
-		else
-		{
-			while (currentNodeRecord.node != startNodeRecord.node)
-			{
-				path.insert(0, currentNodeRecord.fromConn);
-				currentNodeRecord 
-			}
-			
-		}
-	}
-	
 }

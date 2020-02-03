@@ -18,8 +18,6 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 	entities.reserve(maxEntities);				// reservamos memoria para la cantidad maxima de entidades esperada
 	toDelete.reserve(maxToDelete);				// lo mismo para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
 	componentStorage.initData(maxComponents);	// reservamos (de momento la misma) memoria para los vectores que tendran los componentes
-	graph.reserve(5);
-	createMapNode();
 }
 
 bool EntityManager::update(){
@@ -344,54 +342,3 @@ void EntityManager::createLevel() {
 bool EntityManager::checkVictory() {
 	return enemiesLeft <= 0;
 }
-
-
-//REMOVE IN FUTURE
-
-void EntityManager::createMapNode(){
-
-	auto& node_1 = graph.emplace_back(MapNode(0, 0));
-	auto& node_2 = graph.emplace_back(MapNode(0, 50));
-	auto& node_3 = graph.emplace_back(MapNode(0, 100));
-	auto& node_4 = graph.emplace_back(MapNode(0, 200));
-
-	node_1.connections.emplace_back(Connection(&node_1, &node_2, 5));
-	node_1.connections.emplace_back(Connection(&node_1, &node_3, 10));
-	node_1.connections.emplace_back(Connection(&node_1, &node_1, 2));
-
-	node_2.connections.emplace_back(Connection(&node_2, &node_1, 11));
-	node_2.connections.emplace_back(Connection(&node_2, &node_3, 10));
-	
-	node_3.connections.emplace_back(Connection(&node_3, &node_1, 1));
-
-	//node_4.connections.emplace_back(Connection(&node_4, &node_1, 2));
-
-
-	std::cout << "	NOOOOOOODOOOOOOOOOS\n";
-
-	for(auto& node : graph)
-	{
-		std::cout << "Nodo: (" << node.coord.x << ", " << node.coord.y << ")\n";
-		for(auto& conn : node.connections)
-		{
-			std::cout << "Conn to: (" << conn.nodeTo->coord.x << ", " << conn.nodeTo->coord.y << ") / Peso: " << conn.cost << "\n";
-		}
-		std::cout << "\n";
-	}
-/*
-	std::cout << "	NOOOOOOODOOOOOOOOOS   ORDENADOS\n";
-
-	for(auto& node : graph)
-	{
-		node.sortConnections();
-		std::cout << "Nodo: (" << node.coord.x << ", " << node.coord.y << ")\n";
-		for(auto& conn : node.connections)
-		{
-			std::cout << "Conn to: (" << conn.nodeTo->coord.x << ", " << conn.nodeTo->coord.y << ") / Peso: " << conn.cost << "\n";
-		}
-		std::cout << "\n";
-	}
-*/
-}
-
-/////////

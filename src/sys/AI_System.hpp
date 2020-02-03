@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sys/System.hpp>
-#include <ent/Graph.hpp>
 
 
 struct AI_System : System
@@ -21,8 +20,6 @@ struct AI_System : System
 		static void targetBehaviour(AI& ai, const Vector3f& target);
 		static void seekBehaviour(const Entity& enemy, const Vector3f& target, float deltaTime);
 		static void alignBehaviour(const Entity& enemy, const Vector3f& target);
-
-		void calculePath(MapNode&, MapNode&);
 
 	struct TStateFunction {
 		void (*p_func)(const Entity& enemy, const Vector3f& player_pos, float deltaTime);

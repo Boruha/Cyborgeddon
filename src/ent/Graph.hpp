@@ -13,36 +13,42 @@ struct Connection;
 
 struct MapNode
 {
-    explicit MapNode(const float x, const float y);
-    ~MapNode() = default;
+    explicit    MapNode(float x, float y);
+                ~MapNode() = default;
 
-    const Vector2f coord {0,0};
+    bool                            operator!= (const MapNode&) const;
+    bool                            operator== (const MapNode&) const;
+    std::vector<Connection>&  getConns();
+
+    Vector2f                coord { 0,0 };
     std::vector<Connection> connections;
 };
 
 struct Connection
 {
-    Connection(MapNode* from, MapNode* to, short weight) : nodeFrom(from), nodeTo(to), cost(weight) {}
+    explicit Connection(int from, int to, float weight) : nodeFrom(from), nodeTo(to), cost(weight) {};
     ~Connection() = default;
 
-    MapNode* nodeFrom { nullptr };
-    MapNode* nodeTo { nullptr };
-    float   cost { 0 };
+    int     nodeFrom    { -1 };
+    int     nodeTo      { -1 };
+    float   cost        { 0 };
 };
 
 struct NodeRecord
 {
-    explicit NodeRecord();
-    ~NodeRecord() = default;
+    explicit    NodeRecord() {};
+                ~NodeRecord() = default;
 
-    bool operator< (const NodeRecord&) const;
-    void sortNodeRecord(std::vector<NodeRecord>&);
-    bool contains(std::vector<NodeRecord>&, MapNode*); 
-    NodeRecord& find(std::vector<NodeRecord>&, MapNode*); 
+    bool        operator<      (const NodeRecord&) const;
 
-    MapNode* node;              //path node.
-    Connection* fromConn;       //bond to the node we came from.
-    float const_so_far { 0 };   //Cost from this node to the start of the path.
+    void         sortNodeRecord (std::vector<NodeRecord>&);
+    bool         contains       (std::vector<NodeRecord>&, int); 
+    NodeRecord*  find           (std::vector<NodeRecord>&, int); 
+
+    int         node            { -1 };  //path node.
+    int         fromNode        { -1 };  //bond to the node we came from.
+    int         toNode          { -1 };  //bond to the node we came from.
+    float       const_so_far    { 0 };   //Cost from this node to the start of the path.
 };
 
 

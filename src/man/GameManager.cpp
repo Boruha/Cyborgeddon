@@ -14,6 +14,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<BulletSystem>());
 	systems.emplace_back(std::make_unique<CharacterDataSystem>());
 	systems.emplace_back(std::make_unique<SoundSystem>());
+	systems.emplace_back(std::make_unique<Path_System>());
 
 	for(auto& sys : systems)
 		sys->init();
