@@ -1,6 +1,7 @@
 #pragma once
 
 #include <man/EntityManager.hpp>
+#include <man/TextureManager.hpp>
 #include <sys/RenderSystem.hpp>
 #include <chrono>
 
@@ -22,6 +23,8 @@ struct GameManager {
 	std::vector<std::unique_ptr<System>> systems;
 
 	std::unique_ptr<GameContext> entityManager = std::make_unique<EntityManager>(render.device);
+
+	TextureManager textureManager { render.device };
 };
 
 // TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)

@@ -40,3 +40,10 @@ void IrrlichtEngine::draw() const {
 void IrrlichtEngine::display() const {
 	videoDriver->endScene();
 }
+
+const Texture * IrrlichtEngine::loadTexture(const char * const path) const {
+    // TODO :   de momento solo nos interesa la direccion de memoria, asi que casteamos la textura de
+    //          irrlicht a void * (que es un puntero sin tipo) y a su vez lo casteamos a puntero a textura
+    //          Esto simplemente es para saber que desde nuestro motor recibiremos un puntero a "Texture"
+    return static_cast<Texture *>(static_cast<void *>(videoDriver->getTexture(path)));
+}

@@ -4,6 +4,7 @@
 
 struct Mouse;
 struct Color;
+struct Texture;
 
 struct Engine {
     virtual void init(unsigned, unsigned, const wchar_t *)  = 0;
@@ -16,4 +17,6 @@ struct Engine {
     virtual void clear(Color)                         const = 0;
     virtual void draw()                               const = 0;
     virtual void display()                            const = 0;
+
+    virtual const Texture * loadTexture(const char *) const = 0;
 };

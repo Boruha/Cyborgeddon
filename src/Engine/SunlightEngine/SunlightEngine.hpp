@@ -19,4 +19,6 @@ struct SunlightEngine final : public virtual Engine {
     void draw() const final;
 
     void display() const final;
+
+    const Texture * loadTexture(const char * path) const final;
 };

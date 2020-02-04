@@ -6,8 +6,9 @@
 
 void GameManager::init()
 {
-	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
+    textureManager.loadTextures();
 
+	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
 	                                                                            // ORDEN DE EJECUCION
 	systems.emplace_back(std::make_unique<InputSystem>(render.device));      // se detecta input del player
 	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
@@ -25,7 +26,6 @@ void GameManager::init()
 
 
 	entityManager->init();
-
 
 	render.init();
 }

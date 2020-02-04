@@ -33,6 +33,8 @@ struct IrrlichtEngine final : public virtual Engine {
 
     void display() const final;
 
+    const Texture * loadTexture(const char * path) const final;
+
     private:
         irr::IrrlichtDevice *       device       { nullptr };
         irr::scene::ISceneManager * sceneManager { nullptr };
