@@ -2,6 +2,9 @@
 
 #include <Engine/util/Color.hpp>
 
+#include <Engine/IrrlichtEngine/SceneInterface/IrrlichtObjectNode.hpp>
+#include <Engine/IrrlichtEngine/SceneInterface/IrrlichtCameraNode.hpp>
+
 #include <irrlicht/irrlicht.h>
 
 void IrrlichtEngine::init(unsigned width, unsigned height, const wchar_t *name) {
@@ -11,6 +14,8 @@ void IrrlichtEngine::init(unsigned width, unsigned height, const wchar_t *name) 
 
 	sceneManager = device->getSceneManager();
 	videoDriver  = device->getVideoDriver();
+
+	scene = std::make_unique<IrrlichtScene>(sceneManager);
 }
 
 void IrrlichtEngine::shutdown() const {
@@ -39,11 +44,4 @@ void IrrlichtEngine::draw() const {
 
 void IrrlichtEngine::display() const {
 	videoDriver->endScene();
-}
-
-const Texture * IrrlichtEngine::loadTexture(const char * const path) const {
-    // TODO :   de momento solo nos interesa la direccion de memoria, asi que casteamos la textura de
-    //          irrlicht a void * (que es un puntero sin tipo) y a su vez lo casteamos a puntero a textura
-    //          Esto simplemente es para saber que desde nuestro motor recibiremos un puntero a "Texture"
-    return static_cast<Texture *>(static_cast<void *>(videoDriver->getTexture(path)));
 }

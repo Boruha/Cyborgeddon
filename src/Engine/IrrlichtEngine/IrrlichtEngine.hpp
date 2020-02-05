@@ -2,6 +2,9 @@
 
 #include <Engine/EngineInterface/Engine.hpp>
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
+#include <Engine/IrrlichtEngine/SceneInterface/IrrlichtScene.hpp>
+
+#include <memory>
 
 namespace irr {
 	struct IrrlichtDevice;
@@ -16,6 +19,8 @@ namespace irr {
 }
 
 struct IrrlichtEngine final : public virtual Engine {
+
+    ~IrrlichtEngine() override = default;
 
     void init(unsigned width, unsigned height, const wchar_t * name) final;
 
@@ -33,13 +38,12 @@ struct IrrlichtEngine final : public virtual Engine {
 
     void display() const final;
 
-    const Texture * loadTexture(const char * path) const final;
-
     private:
         irr::IrrlichtDevice *       device       { nullptr };
         irr::scene::ISceneManager * sceneManager { nullptr };
         irr::video::IVideoDriver *  videoDriver  { nullptr };
 
         InputEventReceiver          eventReceiver;
+
 };
 

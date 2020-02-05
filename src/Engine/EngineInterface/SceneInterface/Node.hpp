@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Engine/util/Vector3.hpp>
+#include <glm/glm.hpp>
 
-struct GameNode {
-    virtual ~GameNode() = 0;
+struct Node {
+    virtual ~Node() = default;
     // returns if node is alive
     explicit virtual operator bool() const = 0;
 
@@ -11,19 +11,19 @@ struct GameNode {
     virtual void remove() = 0;
 
     // updates data immediately
-    virtual void update() const = 0;
+    virtual void update() = 0;
     // updates using interpolation based on parameter
-    virtual void update(float) const = 0;
+    virtual void update(float) = 0;
 
     // getters
-    [[nodiscard]] virtual const Vector3f & getPosition() const = 0;
-    [[nodiscard]] virtual const Vector3f & getRotation() const = 0;
-    [[nodiscard]] virtual const Vector3f & getScale   () const = 0;
+    [[nodiscard]] virtual const glm::vec3 & getPosition() const = 0;
+    [[nodiscard]] virtual const glm::vec3 & getRotation() const = 0;
+    [[nodiscard]] virtual const glm::vec3 & getScale   () const = 0;
 
     // setters
-    virtual void setPosition(const Vector3f &) const = 0;
-    virtual void setRotation(const Vector3f &) const = 0;
-    virtual void setScale   (const Vector3f &) const = 0;
+    virtual void setPosition(const glm::vec3 &) const = 0;
+    virtual void setRotation(const glm::vec3 &) const = 0;
+    virtual void setScale   (const glm::vec3 &) const = 0;
 
     // setters using interpolation based on parameter
     virtual void setPosition(float) const = 0;

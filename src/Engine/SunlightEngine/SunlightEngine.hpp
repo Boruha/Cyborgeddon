@@ -1,8 +1,11 @@
 #pragma once
 
 #include <Engine/EngineInterface/Engine.hpp>
+#include <Engine/EngineInterface/SceneInterface/Scene.hpp>
 
 struct SunlightEngine final : public virtual Engine {
+
+    ~SunlightEngine() override = default;
 
     void init(unsigned width, unsigned height, const wchar_t * name) final;
 
@@ -19,6 +22,4 @@ struct SunlightEngine final : public virtual Engine {
     void draw() const final;
 
     void display() const final;
-
-    const Texture * loadTexture(const char * path) const final;
 };

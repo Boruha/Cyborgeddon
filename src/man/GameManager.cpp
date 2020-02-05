@@ -1,5 +1,9 @@
 #include <man/GameManager.hpp>
 #include <sys/Systems.hpp>
+//#include <Engine/EngineInterface/Engine.hpp>
+//#include <Engine/EngineInterface/SceneInterface/Scene.hpp>
+//#include <Engine/EngineInterface/SceneInterface/ObjectNode.hpp>
+//#include <Engine/EngineInterface/SceneInterface/CameraNode.hpp>
 
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
@@ -28,6 +32,9 @@ void GameManager::init()
 	entityManager->init();
 
 	render.init();
+
+//    engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
+//    textureManager.loadTextures(engine.get());
 }
 
 void GameManager::update(const float deltaTime)
@@ -52,6 +59,34 @@ void GameManager::loop()
 	std::chrono::high_resolution_clock ::time_point now;
 
 	std::chrono::duration<float> delta {0};
+/*
+	glm::vec3 pla(0);
+	glm::vec3 rot(0);
+	glm::vec3 sca(1);
+
+	glm::vec3 cam(5);
+
+	std::unique_ptr<Node> player = engine->scene->addObjectNode(&pla, &rot, &sca);
+	std::unique_ptr<Node> camera = engine->scene->addCameraNode(&cam, &rot, &sca, &pla);
+
+	while (engine->run()) {
+        now = std::chrono::high_resolution_clock::now();
+        delta += now - last;
+        last = now;
+
+        while(delta.count() > fixedDelta.count())
+        {
+            update(fixedDelta.count());
+            delta -= fixedDelta;
+        }
+
+         engine->clear(Color(WHITE));
+         engine->draw();
+         engine->display();
+	}
+
+	terminate();
+*/
 
 	while(render.device.isActive())
 	{
@@ -68,4 +103,8 @@ void GameManager::loop()
 		render.updateFPS(delta.count());
 		render.update(entityManager, delta.count() / fixedDelta.count());
   	}
+}
+
+void GameManager::terminate() {
+//    engine->shutdown();
 }

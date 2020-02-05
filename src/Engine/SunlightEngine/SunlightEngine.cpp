@@ -37,7 +37,3 @@ void SunlightEngine::draw() const {
 void SunlightEngine::display() const {
 
 }
-
-const Texture * SunlightEngine::loadTexture(const char * const path) const {
-    return nullptr;
-}
