@@ -46,9 +46,11 @@ private:
 	FMOD::Studio::Bank* strings { nullptr };
 
 
+	enum TipoSonido { ATTACK, CHANGE, DASH };
+
     // TODO : crear enum como clave de este mapa
     Sound backingTrack;
-	std::unordered_map<bool, std::vector<Sound>> sounds; // Ahora mismo key true = attacking, key false = changing
+	std::unordered_map<TipoSonido, std::vector<Sound>> sounds; // Ahora mismo key true = attacking, key false = changing
 
 	const char * const attackEventName[2] {
 		DEMON_SHOOT_EVENT,
@@ -58,5 +60,10 @@ private:
 	const char * const changeEventName[2] {
 		DEMON_CHANGE_EVENT,
 		ANGEL_CHANGE_EVENT
+	};
+
+	const char * const dashEventName[2]{
+	    DASH_PLAYER_EVENT,
+	    DASH_PLAYER_EVENT
 	};
 };

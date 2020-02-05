@@ -37,7 +37,7 @@ C           := $(CCACHE) gcc
 # FLAGS
 CCFLAGS     := -pthread -Wall -pedantic -std=c++17
 CFLAGS      := $(CCFLAGS)
-RELEASEFLAG := -O0
+RELEASEFLAG := -O3
 DEBUGFLAG   := -Og
 
 # MAIN FOLDERS

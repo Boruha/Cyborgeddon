@@ -49,17 +49,22 @@ void SoundSystem::init() {
 		ERRCHECK ( backingTrack.instance->setVolume(0.25f) );
 	}
 
-	sounds[true].reserve(2);		// eventos de ataque
-	sounds[false].reserve(2);	// eventos de cambio
+	sounds[ATTACK].reserve(2);		// eventos de ataque
+	sounds[CHANGE].reserve(2);	// eventos de cambio
+	sounds[DASH].reserve(2);    //Dash para angel y demonio
 
 	for (unsigned i = 0; i < 2; ++i) {
-		sounds[true].emplace_back();
-		ERRCHECK ( system->getEvent(attackEventName[i], &sounds[true][i].event) );
-		ERRCHECK ( sounds[true][i].event->createInstance(&sounds[true][i].instance) );
+		sounds[ATTACK].emplace_back();
+		ERRCHECK ( system->getEvent(attackEventName[i], &sounds[ATTACK][i].event) );
+		ERRCHECK ( sounds[ATTACK][i].event->createInstance(&sounds[ATTACK][i].instance) );
 
-		sounds[false].emplace_back();
-		ERRCHECK ( system->getEvent(changeEventName[i], &sounds[false][i].event) );
-		ERRCHECK ( sounds[false][i].event->createInstance(&sounds[false][i].instance) );
+		sounds[CHANGE].emplace_back();
+		ERRCHECK ( system->getEvent(changeEventName[i], &sounds[CHANGE][i].event) );
+		ERRCHECK ( sounds[CHANGE][i].event->createInstance(&sounds[CHANGE][i].instance) );
+
+        sounds[DASH].emplace_back();
+        ERRCHECK ( system->getEvent(dashEventName[i], &sounds[DASH][i].event) );
+        ERRCHECK ( sounds[DASH][i].event->createInstance(&sounds[DASH][i].instance) );
 	}
 
 	startBackgroundMusic();
@@ -71,22 +76,30 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
 		if (data.mode == DEMON) {
 			if (data.attacking){
-				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[true][0].instance->start();
+				const_cast<std::unordered_map<TipoSonido, std::vector<Sound>>&>(sounds)[ATTACK][0].instance->start();
 				data.attacking = false;
 			}
 			if (data.switchingMode) {
-				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[false][0].instance->start();
+				const_cast<std::unordered_map<TipoSonido, std::vector<Sound>>&>(sounds)[CHANGE][0].instance->start();
 				data.switchingMode = false;
+			}
+			if(data.dashing){
+                const_cast<std::unordered_map<TipoSonido, std::vector<Sound>>&>(sounds)[DASH][0].instance->start();
+                data.dashing = false;
 			}
 		} else if (data.mode == ANGEL) {
 			if (data.attacking) {
-				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[true][1].instance->start();
+				const_cast<std::unordered_map<TipoSonido, std::vector<Sound>>&>(sounds)[ATTACK][1].instance->start();
 				data.attacking = false;
 			}
 			if (data.switchingMode) {
-				const_cast<std::unordered_map<bool, std::vector<Sound>>&>(sounds)[false][1].instance->start();
+				const_cast<std::unordered_map<TipoSonido, std::vector<Sound>>&>(sounds)[CHANGE][1].instance->start();
 				data.switchingMode = false;
 			}
+            if(data.dashing){
+                const_cast<std::unordered_map<TipoSonido, std::vector<Sound>>&>(sounds)[DASH][1].instance->start();
+                data.dashing = false;
+            }
 		}
 
 		// TODO: quitar esto de aqui e intentar llamar al sistema/motor de audio en el momento en que se necesite
@@ -99,7 +112,7 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 }
 
 void SoundSystem::reset() {
-	// TODO: generalizar (cmp, vector, loquesea)
+	// TODO: generalizar (cmp, vector, loqueseas)
 	for (auto& item : sounds)
 		for (auto& sound : item.second)
 			ERRCHECK( sound.instance->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
