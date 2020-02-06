@@ -1,25 +1,25 @@
 #pragma once
 
-#include <Engine/EngineInterface/SceneInterface/Scene.hpp>
+#include <Engine/EngineInterface/SceneInterface/IScene.hpp>
 
 namespace irr::scene {
     struct ISceneManager;
 }
 
-struct IrrlichtScene : Scene {
+struct IrrlichtScene : IScene {
 
     explicit IrrlichtScene(irr::scene::ISceneManager * sceneManager) : sceneManager(sceneManager) { }
     ~IrrlichtScene() override = default;
 
-    std::unique_ptr<ObjectNode> addObjectNode(  const glm::vec3 * pos,
-                                                const glm::vec3 * rot,
-                                                const glm::vec3 * sca)
+    std::unique_ptr<IObjectNode> addObjectNode(const glm::vec3 * pos,
+											   const glm::vec3 * rot,
+											   const glm::vec3 * sca)
                                                 const final;
 
-    std::unique_ptr<CameraNode> addCameraNode(  const glm::vec3 * pos,
-                                                const glm::vec3 * rot,
-                                                const glm::vec3 * sca,
-                                                const glm::vec3 * tar)
+    std::unique_ptr<ICameraNode> addCameraNode(const glm::vec3 * pos,
+											   const glm::vec3 * rot,
+											   const glm::vec3 * sca,
+											   const glm::vec3 * tar)
                                                 const final;
     
     private :

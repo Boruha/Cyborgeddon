@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/EngineInterface/Engine.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
 #include <Engine/IrrlichtEngine/SceneInterface/IrrlichtScene.hpp>
 
@@ -18,7 +18,7 @@ namespace irr {
 	}
 }
 
-struct IrrlichtEngine final : public virtual Engine {
+struct IrrlichtEngine final : public virtual IEngine {
 
     ~IrrlichtEngine() override = default;
 

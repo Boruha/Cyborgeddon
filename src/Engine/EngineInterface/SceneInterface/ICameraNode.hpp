@@ -1,13 +1,9 @@
 #pragma once
 
-#include <Engine/EngineInterface/SceneInterface/Node.hpp>
+#include <Engine/EngineInterface/SceneInterface/INode.hpp>
 
-struct CameraNode : virtual Node {
-    ~CameraNode() override = default;
-
-    void update() override = 0;
-    // updates using interpolation based on parameter
-    void update(float) override = 0;
+struct ICameraNode : INode {
+    ~ICameraNode() override = default;
 
     // getters
     [[nodiscard]] virtual const glm::vec3 &   getTarget()           const = 0;
@@ -16,6 +12,5 @@ struct CameraNode : virtual Node {
 
     // setters
     virtual void setTarget(const glm::vec3 &) const = 0;
-
     virtual void setTarget(float) const = 0;
 };

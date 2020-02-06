@@ -4,7 +4,7 @@
 #include <man/TextureManager.hpp>
 #include <man/EngineManager.hpp>
 #include <sys/RenderSystem.hpp>
-#include <Engine/EngineInterface/Engine.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 #include <chrono>
 
 struct System;
@@ -31,7 +31,7 @@ struct GameManager {
 
 //  TextureManager textureManager;
 //	EngineManager engineManager { IRRLICHT };
-//	std::unique_ptr<Engine> engine = engineManager.getEngine();
+//	std::unique_ptr<IEngine> engine = engineManager.getEngine();
 };
 
 // TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)

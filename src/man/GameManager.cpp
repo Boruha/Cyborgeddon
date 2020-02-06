@@ -1,9 +1,9 @@
 #include <man/GameManager.hpp>
 #include <sys/Systems.hpp>
-//#include <Engine/EngineInterface/Engine.hpp>
-//#include <Engine/EngineInterface/SceneInterface/Scene.hpp>
-//#include <Engine/EngineInterface/SceneInterface/ObjectNode.hpp>
-//#include <Engine/EngineInterface/SceneInterface/CameraNode.hpp>
+//#include <IEngine/EngineInterface/IEngine.hpp>
+//#include <IEngine/EngineInterface/SceneInterface/IScene.hpp>
+//#include <IEngine/EngineInterface/SceneInterface/IObjectNode.hpp>
+//#include <IEngine/EngineInterface/SceneInterface/ICameraNode.hpp>
 
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
@@ -66,8 +66,8 @@ void GameManager::loop()
 
 	glm::vec3 cam(5);
 
-	std::unique_ptr<Node> player = engine->scene->addObjectNode(&pla, &rot, &sca);
-	std::unique_ptr<Node> camera = engine->scene->addCameraNode(&cam, &rot, &sca, &pla);
+	std::unique_ptr<INode> player = engine->scene->addObjectNode(&pla, &rot, &sca);
+	std::unique_ptr<INode> camera = engine->scene->addCameraNode(&cam, &rot, &sca, &pla);
 
 	while (engine->run()) {
         now = std::chrono::high_resolution_clock::now();

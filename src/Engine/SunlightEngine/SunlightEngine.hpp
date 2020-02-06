@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Engine/EngineInterface/Engine.hpp>
-#include <Engine/EngineInterface/SceneInterface/Scene.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
+#include <Engine/EngineInterface/SceneInterface/IScene.hpp>
 
-struct SunlightEngine final : public virtual Engine {
+struct SunlightEngine final : public virtual IEngine {
 
     ~SunlightEngine() override = default;
 

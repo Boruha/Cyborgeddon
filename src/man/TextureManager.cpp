@@ -4,7 +4,7 @@
 
 #include <SunlightEngine/Device.hpp>
 
-#include <Engine/EngineInterface/Engine.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 
 void TextureManager::loadTextures() const {
     device.getInnerDevice()->getVideoDriver()->getTexture(WALL_TEXTURE);
@@ -18,7 +18,7 @@ void TextureManager::loadTextures() const {
 }
 
 /*
-void TextureManager::loadTextures(const Engine * const engine) const {
+void TextureManager::loadTextures(const IEngine * const engine) const {
     engine->loadTexture(WALL_TEXTURE);
     engine->loadTexture(DOOR_TEXTURE);
     engine->loadTexture(KEY_TEXTURE);

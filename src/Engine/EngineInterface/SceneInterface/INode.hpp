@@ -2,8 +2,8 @@
 
 #include <glm/glm.hpp>
 
-struct Node {
-    virtual ~Node() = default;
+struct INode {
+    virtual ~INode() = default;
     // returns if node is alive
     explicit virtual operator bool() const = 0;
 
