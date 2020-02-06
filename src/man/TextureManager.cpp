@@ -7,25 +7,16 @@
 #include <Engine/EngineInterface/IEngine.hpp>
 
 void TextureManager::loadTextures() const {
-    device.getInnerDevice()->getVideoDriver()->getTexture(WALL_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(DOOR_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(KEY_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(DEMON_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(ANGEL_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(ENEMY_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(CONTROLS_TEXTURE);
-    device.getInnerDevice()->getVideoDriver()->getTexture(TIPS_TEXTURE);
+    engine->scene->loadTexture(WALL_TEXTURE);
+    engine->scene->loadTexture(DOOR_TEXTURE);
+    engine->scene->loadTexture(KEY_TEXTURE);
+    engine->scene->loadTexture(DEMON_TEXTURE);
+    engine->scene->loadTexture(ANGEL_TEXTURE);
+    engine->scene->loadTexture(ENEMY_TEXTURE);
+    engine->scene->loadTexture(CONTROLS_TEXTURE);
+    engine->scene->loadTexture(TIPS_TEXTURE);
 }
 
-/*
-void TextureManager::loadTextures(const IEngine * const engine) const {
-    engine->loadTexture(WALL_TEXTURE);
-    engine->loadTexture(DOOR_TEXTURE);
-    engine->loadTexture(KEY_TEXTURE);
-    engine->loadTexture(DEMON_TEXTURE);
-    engine->loadTexture(ANGEL_TEXTURE);
-    engine->loadTexture(ENEMY_TEXTURE);
-    engine->loadTexture(CONTROLS_TEXTURE);
-    engine->loadTexture(TIPS_TEXTURE);
+void TextureManager::unloadTextures() const {
+	engine->scene->unloadTextures();
 }
-*/

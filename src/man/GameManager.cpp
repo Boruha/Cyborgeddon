@@ -1,20 +1,23 @@
 #include <man/GameManager.hpp>
 #include <sys/Systems.hpp>
-//#include <IEngine/EngineInterface/IEngine.hpp>
-//#include <IEngine/EngineInterface/SceneInterface/IScene.hpp>
-//#include <IEngine/EngineInterface/SceneInterface/IObjectNode.hpp>
-//#include <IEngine/EngineInterface/SceneInterface/ICameraNode.hpp>
+#include <util/TexturePaths.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
+#include <Engine/EngineInterface/SceneInterface/IScene.hpp>
+#include <Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
+#include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
 
 void GameManager::init()
 {
-    textureManager.loadTextures();
+//	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
+//	textureManager.loadTextures();
+
 
 	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
 	                                                                            // ORDEN DE EJECUCION
-	systems.emplace_back(std::make_unique<InputSystem>(render.device));      // se detecta input del player
+	systems.emplace_back(std::make_unique<InputSystem>(render.device));         // se detecta input del player
 	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
 	systems.emplace_back(std::make_unique<ActionSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());         // se controla la colision de las balas con enemigos (de momento)
@@ -33,8 +36,6 @@ void GameManager::init()
 
 	render.init();
 
-//    engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
-//    textureManager.loadTextures(engine.get());
 }
 
 void GameManager::update(const float deltaTime)
@@ -56,7 +57,7 @@ void GameManager::update(const float deltaTime)
 void GameManager::loop()
 {
 	std::chrono::high_resolution_clock::time_point last = std::chrono::high_resolution_clock::now();
-	std::chrono::high_resolution_clock ::time_point now;
+	std::chrono::high_resolution_clock::time_point now;
 
 	std::chrono::duration<float> delta {0};
 /*
@@ -67,6 +68,7 @@ void GameManager::loop()
 	glm::vec3 cam(5);
 
 	std::unique_ptr<INode> player = engine->scene->addObjectNode(&pla, &rot, &sca);
+	player->setTexture(DEMON_TEXTURE);
 	std::unique_ptr<INode> camera = engine->scene->addCameraNode(&cam, &rot, &sca, &pla);
 
 	while (engine->run()) {
@@ -76,11 +78,13 @@ void GameManager::loop()
 
         while(delta.count() > fixedDelta.count())
         {
+        	player->update();
+        	camera->update();
             update(fixedDelta.count());
             delta -= fixedDelta;
         }
 
-         engine->clear(Color(WHITE));
+         engine->clear(Color(static_cast<const COLOR>(0x334488FF)));
          engine->draw();
          engine->display();
 	}
@@ -106,5 +110,6 @@ void GameManager::loop()
 }
 
 void GameManager::terminate() {
-//    engine->shutdown();
+	textureManager.unloadTextures();
+    engine->shutdown();
 }

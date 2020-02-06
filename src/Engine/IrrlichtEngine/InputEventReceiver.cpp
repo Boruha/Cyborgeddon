@@ -1,6 +1,6 @@
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
 
-bool InputEventReceiver::OnEvent(const irr::SEvent &event) {
+bool InputEventReceiver::OnEvent(const irr::SEvent & event) {
 
 	switch (event.EventType) {
 		case irr::EET_MOUSE_INPUT_EVENT :

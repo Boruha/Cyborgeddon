@@ -10,7 +10,7 @@ IrrlichtNodeImpl::IrrlichtNodeImpl(
 		const vec3 * const rot,
 		const vec3 * const sca
 ) : node(node), position(pos), rotation(rot), scale(sca) {
-	// hacer lo necesario en el constructor
+	// implementar constructor si es necesario
 }
 
 void IrrlichtNodeImpl::remove() {

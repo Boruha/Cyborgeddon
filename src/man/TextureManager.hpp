@@ -7,9 +7,11 @@ namespace Sun {
 struct IEngine;
 
 struct TextureManager {
-    explicit TextureManager(const Sun::Device& device) : device(device) {  }
-    void loadTextures(/*const IEngine * engine*/) const;
+	explicit TextureManager(const IEngine * const engine) : engine(engine) {  };
 
-    private :
-        const Sun::Device& device;
+    void loadTextures() const;
+    void unloadTextures() const;
+
+	private :
+		const IEngine * const engine { nullptr };
 };

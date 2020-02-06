@@ -12,4 +12,7 @@ struct IScene {
 
     virtual std::unique_ptr<IObjectNode> addObjectNode(const glm::vec3 * , const glm::vec3 * , const glm::vec3 * ) const = 0;
     virtual std::unique_ptr<ICameraNode> addCameraNode(const glm::vec3 * , const glm::vec3 * , const glm::vec3 * , const glm::vec3 * ) const = 0;
+
+    virtual void loadTexture(const char *) const = 0;
+	virtual void unloadTextures() const = 0;
 };

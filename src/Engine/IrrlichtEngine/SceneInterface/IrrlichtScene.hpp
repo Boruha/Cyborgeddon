@@ -21,6 +21,9 @@ struct IrrlichtScene : IScene {
 											   const glm::vec3 * sca,
 											   const glm::vec3 * tar)
                                                 const final;
+
+	void loadTexture(const char * path) const override;
+	void unloadTextures() const override;
     
     private :
         irr::scene::ISceneManager * sceneManager { nullptr };
