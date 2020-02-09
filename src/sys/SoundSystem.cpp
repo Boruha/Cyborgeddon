@@ -17,8 +17,8 @@ void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line)
 SoundSystem::~SoundSystem() {
 	// TODO: generalizar sonidos
 
-	for (auto& item : sounds) {
-		for (auto& sound : item.second) {
+	for (const auto& item : sounds) {
+		for (const auto& sound : item.second) {
 			ERRCHECK( sound.instance->release() );
 			ERRCHECK( sound.event->releaseAllInstances() );
 		}
@@ -159,8 +159,8 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 
 void SoundSystem::reset() {
 	// TODO: generalizar (cmp, vector, loqueseas)
-	for (auto& item : sounds)
-		for (auto& sound : item.second)
+	for (const auto& item : sounds)
+		for (const auto& sound : item.second)
 			ERRCHECK( sound.instance->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
 
 	ERRCHECK( backingTrack.instance->stop(FMOD_STUDIO_STOP_IMMEDIATE) );

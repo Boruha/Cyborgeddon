@@ -32,7 +32,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 			for (int i = 0; i < 3; ++i) {
 				Vector3f& velocity = *movingBox.velocity;
 
-				int numChecks = ceil(abs(velocity[i]) / (movingBox.dim[i] / 2));
+				const int numChecks = ceil(abs(velocity[i]) / (movingBox.dim[i] / 2));
 
 				if (numChecks <= 0)
 					continue;
@@ -75,7 +75,7 @@ void CollisionSystem::dynamicCollision(BoundingBox& movingBox, Vector3f& velocit
 		if (movingBox.getEntityType() == PLAYER && otherBox.type == DYNAMIC) {
 			context->addToDestroy(otherBox.getEntityID());
 			if (otherBox.getEntityType() == KEY) {
-				auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
+				const auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
 				door.collider->type = DYNAMIC;
 			}
 			otherBox.makeUndefined();	// nos ahorramos comprobaciones si hacemos que el sistema ignore la bounding

@@ -36,9 +36,10 @@ struct SoundSystem : public System {
 	void update(const std::unique_ptr<GameContext>& context, float deltaTime) const override;
 	void reset() override;
 
-	void startBackgroundMusic();
 
 private:
+
+	void startBackgroundMusic();
 
     FMOD::System* core { nullptr };
 	FMOD::Studio::System* system { nullptr };

@@ -13,8 +13,8 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 
 			EntityHitData hitData;
 
-			Vector3f lastPos = fastObject.position;
-			Vector3f newPos	 = fastObject.position + fastObject.velocity * deltaTime;
+			const Vector3f lastPos 	= fastObject.position;
+			const Vector3f newPos	= fastObject.position + fastObject.velocity * deltaTime;
 
 			for (const auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
 				checkHit(lastPos, newPos, staticCollider, hitData);
@@ -24,11 +24,12 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 
 			if (!less_e(hitData.lessDistance, 0)) { // si hemos chocado con algo
 				if (hitData.damageEntity) {
-					auto bullet 		= context->getEntityByID(fastObject.getEntityID());
-					auto entityToDamage = context->getEntityByID(hitData.closerEntity);
+					const auto bullet 			= context->getEntityByID(fastObject.getEntityID());
+					const auto entityToDamage 	= context->getEntityByID(hitData.closerEntity);
 
 					damageEntity(*bullet.bulletData, *entityToDamage.characterData); // lo dañamos
 				}
+
 				context->addToDestroy(fastObject.getEntityID());            // y eliminamos el objeto rapido
 			}
 		}
@@ -38,7 +39,7 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 void HighSpeedCollisionSystem::checkHit(const Vector3f& lastPos, const Vector3f& newPos, const BoundingBox& box, EntityHitData& hitData) const {
 	if (box && !box.passable) {
 		if (intersects(lastPos, newPos, box)) {
-			float distance = (((box.min + box.max) / 2) - lastPos).length();
+			const float distance = (((box.min + box.max) / 2) - lastPos).length();
 
 			if (less_e(hitData.lessDistance, 0) || (less_e(distance, hitData.lessDistance))) {
 				hitData.damageEntity = box.getEntityType() == ENEMY;			// de momento matamos enemigos
@@ -80,10 +81,10 @@ int HighSpeedCollisionSystem::segmentOrientation(const Vector3f& a, const Vector
 bool HighSpeedCollisionSystem::intersects(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Vector3f& d) const
 {
 	// orientaciones de la combinacion de los puntos de los dos segmentos
-	int o1 = segmentOrientation(a, b, c);
-	int o2 = segmentOrientation(a, b, d);
-	int o3 = segmentOrientation(c, d, b);
-	int o4 = segmentOrientation(c, d, a);
+	const int o1 = segmentOrientation(a, b, c);
+	const int o2 = segmentOrientation(a, b, d);
+	const int o3 = segmentOrientation(c, d, b);
+	const int o4 = segmentOrientation(c, d, a);
 
 	// caso general
 	if (o1 != o2 && o3 != o4)
