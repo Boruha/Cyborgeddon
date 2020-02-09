@@ -32,27 +32,27 @@ void IrrlichtNodeImpl::update(const float delta) {
 	setScale(delta);
 }
 
-const glm::vec3 & IrrlichtNodeImpl::getPosition() const {
+const vec3 & IrrlichtNodeImpl::getPosition() const {
 	return *position;
 }
 
-const glm::vec3 &IrrlichtNodeImpl::getRotation() const {
+const vec3 &IrrlichtNodeImpl::getRotation() const {
 	return *rotation;
 }
 
-const glm::vec3 &IrrlichtNodeImpl::getScale() const {
+const vec3 &IrrlichtNodeImpl::getScale() const {
 	return *scale;
 }
 
-void IrrlichtNodeImpl::setPosition(const glm::vec3 & pos) const {
+void IrrlichtNodeImpl::setPosition(const vec3 & pos) const {
 	node->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z));
 }
 
-void IrrlichtNodeImpl::setRotation(const glm::vec3 & rot) const {
+void IrrlichtNodeImpl::setRotation(const vec3 & rot) const {
 	node->setRotation(irr::core::vector3df(rot.x, rot.y, rot.z));
 }
 
-void IrrlichtNodeImpl::setScale(const glm::vec3 & sca) const {
+void IrrlichtNodeImpl::setScale(const vec3 & sca) const {
 	node->setScale(irr::core::vector3df(sca.x, sca.y, sca.z));
 }
 

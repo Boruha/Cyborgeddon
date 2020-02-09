@@ -40,6 +40,6 @@ bool InputEventReceiver::IsKeyDown(const KEY_CODE keyCode) const {
 	return keyboard.keys[keyCode];
 }
 
-const Mouse &InputEventReceiver::getMouse() const {
+const Mouse & InputEventReceiver::getMouse() const {
 	return mouse;
 }

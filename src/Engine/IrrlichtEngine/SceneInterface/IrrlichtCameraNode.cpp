@@ -5,10 +5,10 @@
 
 IrrlichtCameraNode::IrrlichtCameraNode (
         irr::scene::ISceneManager * const sceneManager,
-        const glm::vec3 * const pos,
-        const glm::vec3 * const rot,
-        const glm::vec3 * const sca,
-        const glm::vec3 * const tar
+        const vec3 * const pos,
+        const vec3 * const rot,
+        const vec3 * const sca,
+        const vec3 * const tar
 ) : cameraNode(sceneManager->addCameraSceneNode()), target(tar) {
     p_impl = std::make_unique<IrrlichtNodeImpl>(cameraNode, pos, rot, sca);
     p_impl->update();
@@ -36,27 +36,27 @@ void IrrlichtCameraNode::update(const float delta) {
 	setTarget(delta);
 }
 
-const glm::vec3 & IrrlichtCameraNode::getPosition() const {
+const vec3 & IrrlichtCameraNode::getPosition() const {
 	return p_impl->getPosition();
 }
 
-const glm::vec3 & IrrlichtCameraNode::getRotation() const {
+const vec3 & IrrlichtCameraNode::getRotation() const {
 	return p_impl->getRotation();
 }
 
-const glm::vec3 & IrrlichtCameraNode::getScale() const {
+const vec3 & IrrlichtCameraNode::getScale() const {
 	return p_impl->getScale();
 }
 
-void IrrlichtCameraNode::setPosition(const glm::vec3 & pos) const {
+void IrrlichtCameraNode::setPosition(const vec3 & pos) const {
 	p_impl->setPosition(pos);
 }
 
-void IrrlichtCameraNode::setRotation(const glm::vec3 & rot) const {
+void IrrlichtCameraNode::setRotation(const vec3 & rot) const {
 	p_impl->setRotation(rot);
 }
 
-void IrrlichtCameraNode::setScale(const glm::vec3 & sca) const {
+void IrrlichtCameraNode::setScale(const vec3 & sca) const {
 	p_impl->setScale(sca);
 }
 
@@ -81,18 +81,18 @@ void IrrlichtCameraNode::affectedByLight(const bool affected) const {
 }
 
 void IrrlichtCameraNode::preupdate() {
-    auto& pm = cameraNode->getProjectionMatrix();
+    const auto& pm = cameraNode->getProjectionMatrix();
 
-    projectionMatrix = glm::mat4x4 (
+    projectionMatrix = mat4x4 (
             pm [0], pm [1], pm [2], pm [3],
             pm [4], pm [5], pm [6], pm [7],
             pm [8], pm [9], pm[10], pm[11],
             pm[12], pm[13], pm[14], pm[15]
     );
 
-    auto& vm = cameraNode->getViewMatrix();
+    const auto& vm = cameraNode->getViewMatrix();
 
-    viewMatrix = glm::mat4x4 (
+    viewMatrix = mat4x4 (
             vm [0], vm [1], vm [2], vm [3],
             vm [4], vm [5], vm [6], vm [7],
             vm [8], vm [9], vm[10], vm[11],
@@ -100,19 +100,19 @@ void IrrlichtCameraNode::preupdate() {
     );
 }
 
-const glm::vec3 & IrrlichtCameraNode::getTarget() const {
+const vec3 & IrrlichtCameraNode::getTarget() const {
     return *target;
 }
 
-const glm::mat4x4 & IrrlichtCameraNode::getProjectionMatrix() const {
+const mat4x4 & IrrlichtCameraNode::getProjectionMatrix() const {
     return projectionMatrix;
 }
 
-const glm::mat4x4 & IrrlichtCameraNode::getViewMatrix() const {
+const mat4x4 & IrrlichtCameraNode::getViewMatrix() const {
     return viewMatrix;
 }
 
-void IrrlichtCameraNode::setTarget(const glm::vec3 & targ) const {
+void IrrlichtCameraNode::setTarget(const vec3 & targ) const {
     cameraNode->setTarget(irr::core::vector3df(targ.x, targ.y, targ.z));
 }
 

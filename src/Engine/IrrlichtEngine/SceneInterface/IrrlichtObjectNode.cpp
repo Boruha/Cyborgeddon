@@ -5,9 +5,9 @@
 
 IrrlichtObjectNode::IrrlichtObjectNode (
         irr::scene::ISceneManager * const sceneManager,
-        const glm::vec3 * const pos,
-        const glm::vec3 * const rot,
-        const glm::vec3 * const sca
+        const vec3 * const pos,
+        const vec3 * const rot,
+        const vec3 * const sca
 ) : meshNode(sceneManager->addCubeSceneNode(1.f)) {
 	// meshNode contiene el sceneNode, pero la clase padre que implementa las
 	// funcionalidades generales, no lo sabe, asi que creamos al padre
@@ -36,27 +36,27 @@ void IrrlichtObjectNode::update(const float delta) {
 	p_impl->update(delta);
 }
 
-const glm::vec3 & IrrlichtObjectNode::getPosition() const {
+const vec3 & IrrlichtObjectNode::getPosition() const {
 	return p_impl->getPosition();
 }
 
-const glm::vec3 & IrrlichtObjectNode::getRotation() const {
+const vec3 & IrrlichtObjectNode::getRotation() const {
 	return p_impl->getRotation();
 }
 
-const glm::vec3 & IrrlichtObjectNode::getScale() const {
+const vec3 & IrrlichtObjectNode::getScale() const {
 	return p_impl->getScale();
 }
 
-void IrrlichtObjectNode::setPosition(const glm::vec3 & pos) const {
+void IrrlichtObjectNode::setPosition(const vec3 & pos) const {
 	p_impl->setPosition(pos);
 }
 
-void IrrlichtObjectNode::setRotation(const glm::vec3 & rot) const {
+void IrrlichtObjectNode::setRotation(const vec3 & rot) const {
 	p_impl->setRotation(rot);
 }
 
-void IrrlichtObjectNode::setScale(const glm::vec3 & sca) const {
+void IrrlichtObjectNode::setScale(const vec3 & sca) const {
 	p_impl->setScale(sca);
 }
 

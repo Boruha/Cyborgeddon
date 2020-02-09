@@ -15,13 +15,13 @@ struct IrrlichtNodeImpl : INodeImpl {
 	void update() override;
 	void update(float delta) override;
 
-	[[nodiscard]] const glm::vec3 & getPosition() const override;
-	[[nodiscard]] const glm::vec3 & getRotation() const override;
-	[[nodiscard]] const glm::vec3 & getScale   () const override;
+	[[nodiscard]] const vec3 & getPosition() const override;
+	[[nodiscard]] const vec3 & getRotation() const override;
+	[[nodiscard]] const vec3 & getScale   () const override;
 
-	void setPosition(const glm::vec3 &) const override;
-	void setRotation(const glm::vec3 &) const override;
-	void setScale   (const glm::vec3 &) const override;
+	void setPosition(const vec3 &) const override;
+	void setRotation(const vec3 &) const override;
+	void setScale   (const vec3 &) const override;
 
 	void setPosition(float delta) const override;
 	void setRotation(float delta) const override;

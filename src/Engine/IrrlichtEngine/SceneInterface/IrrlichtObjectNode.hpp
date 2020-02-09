@@ -15,9 +15,9 @@ namespace irr::scene {
 struct IrrlichtObjectNode : IObjectNode {
     explicit IrrlichtObjectNode (
             irr::scene::ISceneManager * = nullptr,
-            const glm::vec3 *  = nullptr,
-            const glm::vec3 *  = nullptr,
-            const glm::vec3 *  = nullptr
+            const vec3 *  = nullptr,
+            const vec3 *  = nullptr,
+            const vec3 *  = nullptr
     );
 
     ~IrrlichtObjectNode() override = default;
@@ -33,14 +33,14 @@ struct IrrlichtObjectNode : IObjectNode {
 	void update(float) override;
 
 	// getters
-	[[nodiscard]] const glm::vec3 & getPosition() const override;
-	[[nodiscard]] const glm::vec3 & getRotation() const override;
-	[[nodiscard]] const glm::vec3 & getScale   () const override;
+	[[nodiscard]] const vec3 & getPosition() const override;
+	[[nodiscard]] const vec3 & getRotation() const override;
+	[[nodiscard]] const vec3 & getScale   () const override;
 
 	// setters
-	void setPosition(const glm::vec3 &) const override;
-	void setRotation(const glm::vec3 &) const override;
-	void setScale   (const glm::vec3 &) const override;
+	void setPosition(const vec3 &) const override;
+	void setRotation(const vec3 &) const override;
+	void setScale   (const vec3 &) const override;
 
 	// setters using interpolation based on parameter
 	void setPosition(float) const override;
