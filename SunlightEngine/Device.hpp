@@ -2,14 +2,13 @@
 
 #include <irrlicht/irrlicht.h>
 
-#include <Engine/util/Vector2.hpp>
 #include <Engine/util/Color.hpp>
 #include <SunlightEngine/EventReceiver.hpp>
 
 namespace Sun {
 	struct Device {
 		Device() = default;
-		Device(const Vector2u& dim, const wchar_t * const name) : device(irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(dim.x, dim.y)))
+		Device(const glm::vec2& dim, const wchar_t * const name) : device(irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(dim.x, dim.y)))
 		{
 			device->setWindowCaption(name);
 		}

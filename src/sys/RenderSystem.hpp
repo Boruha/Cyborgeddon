@@ -5,7 +5,7 @@
 #include <util/GameConstants.hpp>
 
 struct RenderSystem : public System {
-	explicit RenderSystem(const Vector2u& dim, const wchar_t * const name) : device(Sun::Device(dim, name)) { }
+	explicit RenderSystem(const glm::vec2& dim, const wchar_t * const name) : device(Sun::Device(dim, name)) { }
 
 	void init() override {  }
 	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;

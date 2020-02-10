@@ -21,7 +21,7 @@ struct GameManager {
 	const std::chrono::duration<float> fixedDelta { FIXED_DELTA_TIME };
 
 	// render first so we use its device for the other systems and/or managers
-	RenderSystem render { Vector2u(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME };
+	RenderSystem render { glm::vec2(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME };
 
 	std::vector<std::unique_ptr<System>> systems;
 

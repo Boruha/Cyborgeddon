@@ -1,4 +1,5 @@
 #include <sys/RenderSystem.hpp>
+#include <Engine/util/Math.hpp>
 
 void RenderSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const
 {

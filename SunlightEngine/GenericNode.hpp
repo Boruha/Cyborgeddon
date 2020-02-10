@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Engine/util/Vector3.hpp>
 #include <glm/glm.hpp>
 #include <irrlicht/irrlicht.h>
 
