@@ -17,6 +17,10 @@ void TextureManager::loadTextures() const {
     engine->scene->loadTexture(TIPS_TEXTURE);
 }
 
+void TextureManager::unloadTexture(const char * const path) const {
+	engine->scene->unloadTexture(path);
+}
+
 void TextureManager::unloadTextures() const {
 	engine->scene->unloadTextures();
 }

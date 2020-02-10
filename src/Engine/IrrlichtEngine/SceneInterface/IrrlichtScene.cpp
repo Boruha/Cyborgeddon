@@ -17,6 +17,10 @@ void IrrlichtScene::loadTexture(const char * const path) const {
 	sceneManager->getVideoDriver()->getTexture(path);
 }
 
+void IrrlichtScene::unloadTexture(const char * const path) const {
+	sceneManager->getVideoDriver()->removeTexture(sceneManager->getVideoDriver()->getTexture(path));
+}
+
 void IrrlichtScene::unloadTextures() const {
 	sceneManager->getVideoDriver()->removeAllTextures();
 }

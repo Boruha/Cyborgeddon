@@ -23,6 +23,7 @@ struct IrrlichtScene : IScene {
 											   const final;
 
 	void loadTexture(const char * path) const override;
+	void unloadTexture(const char * path) const override;
 	void unloadTextures() const override;
     
     private :
