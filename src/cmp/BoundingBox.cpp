@@ -1,10 +1,12 @@
 #include <cmp/BoundingBox.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <iostream>
 
-Vector3f& BoundingBox::operator[](const int index) {
-	return const_cast<Vector3f&>(std::as_const(*this).operator[](index));
+vec3& BoundingBox::operator[](const int index) {
+	return const_cast<vec3&>(std::as_const(*this).operator[](index));
 }
 
-const Vector3f& BoundingBox::operator[](const int index) const {
+const vec3& BoundingBox::operator[](const int index) const {
 	switch(index) {
 		case 0  : return min;
 		case 1  : return max;
@@ -14,10 +16,10 @@ const Vector3f& BoundingBox::operator[](const int index) const {
 
 std::ostream& operator<<(std::ostream& os, const BoundingBox& box) {
 	box.print(os, "BoundingBox")
-		<< "\n\tPos: " 							<< *box.pos
-		<< "\n\tVel: ";		  box.velocity ? os << *box.velocity : os << " nullptr";
-	os 	<< "\n\tMin: " 							<<  box.min
-		<< "\n\tMax: " 							<<  box.max
+		<< "\n\tPos: " 							<< glm::to_string(*box.pos)
+		<< "\n\tVel: ";		  box.velocity ? 	os << glm::to_string(*box.velocity) : os << " nullptr";
+	os 	<< "\n\tMin: "							<< glm::to_string(box.min)
+		<< "\n\tMax: " 							<< glm::to_string(box.max)
 		<< "\n\tPasable: " 	<< std::boolalpha 	<<  box.passable
 		<< "\n\tType: ";
 
@@ -31,12 +33,12 @@ std::ostream& operator<<(std::ostream& os, const BoundingBox& box) {
 	return os;
 }
 
-BoundingBox::BoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, Vector3f& pos, Vector3f& vel, const bool passable, const ColliderType type)
+BoundingBox::BoundingBox(const EntityType e_type, const std::size_t e_ID, const vec3& dim, vec3& pos, vec3& vel, const bool passable, const ColliderType type)
 		: Component(e_type, e_ID), passable(passable), type(type), dim(dim), pos(&pos), velocity(&vel) {
 
 }
 
-BoundingBox::BoundingBox(const EntityType e_type, const std::size_t e_ID, const Vector3f& dim, Vector3f& pos, const bool passable, const ColliderType type)
+BoundingBox::BoundingBox(const EntityType e_type, const std::size_t e_ID, const vec3& dim, vec3& pos, const bool passable, const ColliderType type)
 		: Component(e_type, e_ID), passable(passable), type(type), dim(dim), pos(&pos) {
 
 }

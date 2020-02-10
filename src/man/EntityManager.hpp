@@ -38,11 +38,11 @@ struct EntityManager : GameContext {
 		void initData(int maxEntities, int maxToDelete, int maxComponents);
         void cleanData();
 
-		void createPairPlayerCamera (const Vector3f& pos, const Vector3f& dim, const Vector3f& posCamera);
-		void createEnemy  (const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol);
-		void createWall   (const Vector3f& pos, const Vector3f& dim);
-		void createFloor  (const char* tex, const Vector3f& pos, const Vector3f& dim);
-		void createPairKeyDoor (const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim);
+		void createPairPlayerCamera (const vec3& pos, const vec3& dim, const vec3& posCamera);
+		void createEnemy  (const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
+		void createWall   (const vec3& pos, const vec3& dim);
+		void createFloor  (const char* tex, const vec3& pos, const vec3& dim);
+		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
 
 		void killEntities();
 		void moveDeadEntities();

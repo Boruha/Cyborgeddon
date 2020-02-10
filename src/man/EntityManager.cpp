@@ -8,6 +8,8 @@
 #include <util/ComponentConstants.hpp>
 #include <util/TexturePaths.hpp>
 
+#include <Engine/util/Math.hpp>
+
 /*		Init - Update	*/
 void EntityManager::init() {
 	createLevel();	// de momento se crea asi sin mas, pero habra que utilizar un fichero de texto para generar el nivel
@@ -111,32 +113,32 @@ void EntityManager::cleanData() {
 
 /*		CREATE ENTITIES		*/
 
-void EntityManager::createPairPlayerCamera(const Vector3f& pos, const Vector3f& dim, const Vector3f& posCamera) {
+void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, const vec3& posCamera) {
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
 	player->velocity        = & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
-	player->physics         = & componentStorage.createComponent<Physics>(PHYSICS_TYPE, player->getType(), player->getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f());
-    player->collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
+	player->physics         = & componentStorage.createComponent<Physics>(PHYSICS_TYPE, player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
+	player->collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
 	player->characterData   = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
 	player->node			= & componentStorage.createNode<Sun::SceneNode>(device, player->physics->position, player->physics->rotation, player->collider->dim, nullptr, DEMON_TEXTURE);
 
-	camera->physics			= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, camera->getType(), camera->getID(), posCamera, player->physics->velocity, Vector3f());
+	camera->physics			= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, camera->getType(), camera->getID(), posCamera, player->physics->velocity, vec3());
 	camera->node			= & componentStorage.createNode<Sun::CameraNode>(device, player->physics->position, camera->physics->position);
 }
 
-void EntityManager::createWall(const Vector3f& pos, const Vector3f& dim) {
+void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	Entity& wall 		= entities.emplace_back(WALL);
 
-	wall.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, wall.getType(), wall.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
+	wall.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3());
 	wall.collider		= & componentStorage.createComponent<BoundingBox>(STATIC_BOUNDING_BOX_TYPE, wall.getType(), wall.getID(), dim, wall.transformable->position, false, STATIC);
 	wall.node			= & componentStorage.createNode<Sun::SceneNode>(device, wall.transformable->position, wall.transformable->rotation, wall.collider->dim, nullptr, WALL_TEXTURE);
 }
 
-void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol) {
+void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	Entity& enemy 		= entities.emplace_back(ENEMY);
 
-	enemy.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, enemy.getType(), enemy.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f(), Vector3f());
+	enemy.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
 	enemy.velocity		= & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION);
 	enemy.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC);
 	enemy.ai			= & componentStorage.createComponent<AI>(AI_TYPE, enemy.getType(), enemy.getID(), patrol);
@@ -146,31 +148,31 @@ void EntityManager::createEnemy(const Vector3f& pos, const Vector3f& dim, const 
 	++enemiesLeft;
 }
 
-void EntityManager::createFloor(const char * const tex, const Vector3f& pos, const Vector3f& dim) {
+void EntityManager::createFloor(const char * const tex, const vec3& pos, const vec3& dim) {
 	Entity& floor 		= entities.emplace_back(FLOOR);
 
-	floor.transformable = & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, floor.getType(), floor.getID(), pos + Vector3f(0, dim.y / 2, 0), Vector3f());
+	floor.transformable = & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3());
 	floor.node			= & componentStorage.createNode<Sun::SceneNode>(device, floor.transformable->position, floor.transformable->rotation, dim, nullptr, tex);
 }
 
 void EntityManager::createBullet() {
 	Entity& bullet 		= entities.emplace_back(BULLET);
 
-	bullet.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, bullet.getType(), bullet.getID(), player->physics->position, Vector3f().getXZfromRotationY(player->physics->rotation.y).normalize() * BULLET_SPEED, player->physics->rotation);
-	bullet.bulletData	= & componentStorage.createComponent<BulletData>(BULLET_DATA_TYPE, bullet.getType(), bullet.getID(), bullet.physics->velocity.length(), player->characterData->mode, player->characterData->attackDamage);
-	bullet.node			= & componentStorage.createNode<Sun::SceneNode>(device, bullet.physics->position, bullet.physics->rotation, Vector3f(0.5, 0, player->collider->dim.z), nullptr, player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
+	bullet.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation);
+	bullet.bulletData	= & componentStorage.createComponent<BulletData>(BULLET_DATA_TYPE, bullet.getType(), bullet.getID(), length(bullet.physics->velocity), player->characterData->mode, player->characterData->attackDamage);
+	bullet.node			= & componentStorage.createNode<Sun::SceneNode>(device, bullet.physics->position, bullet.physics->rotation, vec3(0.5, 0, player->collider->dim.z), nullptr, player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
 }
 
-void EntityManager::createPairKeyDoor(const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim) {
+void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
 	Entity& door 		= entities.emplace_back(DOOR);
 
-	door.transformable 	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, door.getType(), door.getID(), doorPos + Vector3f(0, doorDim.y / 2, 0), Vector3f());
+	door.transformable 	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3());
 	door.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, door.getType(), door.getID(), doorDim, door.transformable->position, false, STATIC);
 	door.node			= & componentStorage.createNode<Sun::SceneNode>(device, door.transformable->position, door.transformable->rotation, door.collider->dim, nullptr, DOOR_TEXTURE);
 
 	Entity& key 		= entities.emplace_back(KEY);
 
-	key.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, key.getType(), key.getID(), keyPos + Vector3f(0, keyDim.y / 2, 0), Vector3f());
+	key.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3());
 	key.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, key.getType(), key.getID(), keyDim, key.transformable->position, true, DYNAMIC);
 	key.node			= & componentStorage.createNode<Sun::SceneNode>(device, key.transformable->position, key.transformable->rotation, key.collider->dim, nullptr, KEY_TEXTURE);
 }
@@ -190,104 +192,104 @@ const Entity& EntityManager::getEntityByID(const std::size_t id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(Vector3f(), Vector3f(6.f), Vector3f(10, 90, -30));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 90, -30));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
-	createFloor(CONTROLS_TEXTURE,Vector3f(0,0,5), Vector3f(60,0,35)); //Controls
-	createFloor(TIPS_TEXTURE,Vector3f(-2,0,-27), Vector3f(45,0,15)); //Tips
+	createFloor(CONTROLS_TEXTURE, vec3(0,0,5), vec3(60,0,35)); //Controls
+	createFloor(TIPS_TEXTURE, vec3(-2,0,-27), vec3(45,0,15)); //Tips
 
 	// Doors and keys
 
-	createPairKeyDoor(Vector3f(0,0,60), Vector3f(3),Vector3f(-37,0,90), Vector3f(2,20,10));
-	createPairKeyDoor(Vector3f(-70,0,90), Vector3f(3), Vector3f(37,0,0), Vector3f(2,20,10));
-	createPairKeyDoor(Vector3f(70,0,0), Vector3f(3), Vector3f(-37,0,0), Vector3f(2,20,10));
-	createPairKeyDoor(Vector3f(-70,0,0), Vector3f(3), Vector3f(37,0,190), Vector3f(2,20,10));
-	createPairKeyDoor(Vector3f(70,0,190), Vector3f(3), Vector3f(-37,0,190), Vector3f(2,20,10));
-	createPairKeyDoor(Vector3f(-70,0,190), Vector3f(3), Vector3f(37,0,90), Vector3f(2,20,10));
-	createPairKeyDoor(Vector3f(70,0,90), Vector3f(3), Vector3f(152.5,0,300), Vector3f(45,10,10));
-	createPairKeyDoor(Vector3f(158,0,320), Vector3f(3), Vector3f(-180,0,272.5), Vector3f(10,10,45));
+	createPairKeyDoor(vec3(0,0,60), vec3(3), vec3(-37,0,90), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,90), vec3(3), vec3(37,0,0), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,0), vec3(3), vec3(-37,0,0), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,0), vec3(3), vec3(37,0,190), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,190), vec3(3), vec3(-37,0,190), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,190), vec3(3), vec3(37,0,90), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,90), vec3(3), vec3(152.5,0,300), vec3(45,10,10));
+	createPairKeyDoor(vec3(158,0,320), vec3(3), vec3(-180,0,272.5), vec3(10,10,45));
 
 
 	//Pasillo inicial
 
 	//Derecha
-	createWall(Vector3f(40,0,-27.5), Vector3f(10,10,45));
-	createWall(Vector3f(40,0,45), Vector3f(10,10,80));
-	createWall(Vector3f(40,0,140), Vector3f(10,10,90));
-	createWall(Vector3f(40,0,222.5), Vector3f(10,10,55));
+	createWall(vec3(40,0,-27.5), vec3(10,10,45));
+	createWall(vec3(40,0,45), vec3(10,10,80));
+	createWall(vec3(40,0,140), vec3(10,10,90));
+	createWall(vec3(40,0,222.5), vec3(10,10,55));
 
 	//Izquierda
-	createWall(Vector3f(-40,0,-27.5), Vector3f(10,10,45));
-	createWall(Vector3f(-40,0,45), Vector3f(10,10,80));
-	createWall(Vector3f(-40,0,140), Vector3f(10,10,90));
-	createWall(Vector3f(-40,0,222.5), Vector3f(10,10,55));
+	createWall(vec3(-40,0,-27.5), vec3(10,10,45));
+	createWall(vec3(-40,0,45), vec3(10,10,80));
+	createWall(vec3(-40,0,140), vec3(10,10,90));
+	createWall(vec3(-40,0,222.5), vec3(10,10,55));
 
-	createWall(Vector3f(0,0,-45), Vector3f(70,10,10));      //Cierre inferior
+	createWall(vec3(0,0,-45), vec3(70,10,10));      //Cierre inferior
 
 	//Salas del pasillo
 
 	//Sala 1
-	createWall(Vector3f(75,0,-30), Vector3f(60,10,10));    //Abajo
-	createWall(Vector3f(75,0,30), Vector3f(60,10,10));    //Arriba
-	createWall(Vector3f(100,0,0), Vector3f(10,10,50));    //Cierre
+	createWall(vec3(75,0,-30), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,30), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,0), vec3(10,10,50));    //Cierre
 
 	//Sala 2
-	createWall(Vector3f(-75,0,-30), Vector3f(60,10,10));    //Abajo
-	createWall(Vector3f(-75,0,30), Vector3f(60,10,10));    //Arriba
-	createWall(Vector3f(-100,0,0), Vector3f(10,10,50));    //Cierre
+	createWall(vec3(-75,0,-30), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,30), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,0), vec3(10,10,50));    //Cierre
 
 	//Sala 3
-	createWall(Vector3f(75,0,60), Vector3f(60,10,10));    //Abajo
-	createWall(Vector3f(75,0,120), Vector3f(60,10,10));    //Arriba
-	createWall(Vector3f(100,0,90), Vector3f(10,10,50));    //Cierre
+	createWall(vec3(75,0,60), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,120), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,90), vec3(10,10,50));    //Cierre
 
 	//Sala 4
-	createWall(Vector3f(-75,0,60), Vector3f(60,10,10));    //Abajo
-	createWall(Vector3f(-75,0,120), Vector3f(60,10,10));    //Arriba
-	createWall(Vector3f(-100,0,90), Vector3f(10,10,50));    //Cierre
+	createWall(vec3(-75,0,60), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,120), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,90), vec3(10,10,50));    //Cierre
 
 	//Sala 5
-	createWall(Vector3f(-75,0,160), Vector3f(60,10,10));    //Abajo
-	createWall(Vector3f(-75,0,220), Vector3f(60,10,10));    //Arriba
-	createWall(Vector3f(-100,0,190), Vector3f(10,10,50));    //Cierre
+	createWall(vec3(-75,0,160), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,220), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,190), vec3(10,10,50));    //Cierre
 
 	//Sala 6
-	createWall(Vector3f(75,0,160), Vector3f(60,10,10));    //Abajo
-	createWall(Vector3f(75,0,220), Vector3f(60,10,10));    //Arriba
-	createWall(Vector3f(100,0,190), Vector3f(10,10,50));    //Cierre
+	createWall(vec3(75,0,160), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,220), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,190), vec3(10,10,50));    //Cierre
 
 	//Pasillo Horizontal
-	createWall(Vector3f(-115,0,245), Vector3f(140,10,10));    //Inferior izda
-	createWall(Vector3f(115,0,245), Vector3f(140,10,10));     //Inderior dcha
-	createWall(Vector3f(-27.5,0,300), Vector3f(315,10,10));   //Superior
-	createWall(Vector3f(180,0,277.5), Vector3f(10,10,55));  //Derecha
+	createWall(vec3(-115,0,245), vec3(140,10,10));    //Inferior izda
+	createWall(vec3(115,0,245), vec3(140,10,10));     //Inderior dcha
+	createWall(vec3(-27.5,0,300), vec3(315,10,10));   //Superior
+	createWall(vec3(180,0,277.5), vec3(10,10,55));  //Derecha
 
 	//Sala llave principal
-	createWall(Vector3f(200,0,300), Vector3f(30,10,10));
-	createWall(Vector3f(210,0,345), Vector3f(10,10,80));
-	createWall(Vector3f(100,0,345), Vector3f(10,10,80));
-	createWall(Vector3f(157.5,0,380), Vector3f(105,10,10));
+	createWall(vec3(200,0,300), vec3(30,10,10));
+	createWall(vec3(210,0,345), vec3(10,10,80));
+	createWall(vec3(100,0,345), vec3(10,10,80));
+	createWall(vec3(157.5,0,380), vec3(105,10,10));
 
 	//Zona patrulla
-	createWall(Vector3f(-180,0,227.5), Vector3f(10,10,45)); //Inf der
-	createWall(Vector3f(-180,0,327.5), Vector3f(10,10,45)); //Sup der
-	createWall(Vector3f(-262.5,0,345), Vector3f(160,10,10)); //Sup
-	createWall(Vector3f(-262.5,0,210), Vector3f(160,10,10)); //Inf
-	createWall(Vector3f(-347.5,0,277.5), Vector3f(10,10,145)); //Izq
-	createWall(Vector3f(-265,0,277.5), Vector3f(60,20,55)); //Pilar
+	createWall(vec3(-180,0,227.5), vec3(10,10,45)); //Inf der
+	createWall(vec3(-180,0,327.5), vec3(10,10,45)); //Sup der
+	createWall(vec3(-262.5,0,345), vec3(160,10,10)); //Sup
+	createWall(vec3(-262.5,0,210), vec3(160,10,10)); //Inf
+	createWall(vec3(-347.5,0,277.5), vec3(10,10,145)); //Izq
+	createWall(vec3(-265,0,277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
 
-	std::vector<Vector3f> patrol_1 = { Vector3f(-160, 0, 270) };
-	std::vector<Vector3f> patrol_2 = { Vector3f(   0, 0, 200) };
-	std::vector<Vector3f> patrol_3 = { Vector3f(   0, 0, 100) };
-	std::vector<Vector3f> patrol_4 = { Vector3f( 120, 0, 270) };
-	std::vector<Vector3f> patrol_5 = { Vector3f(-315, 0, 230), Vector3f(-315, 0, 320), Vector3f(-210, 0, 320), Vector3f(-210, 0, 230) };
+	std::vector<vec3> patrol_1 = { vec3(-160, 0, 270) };
+	std::vector<vec3> patrol_2 = { vec3(   0, 0, 200) };
+	std::vector<vec3> patrol_3 = { vec3(   0, 0, 100) };
+	std::vector<vec3> patrol_4 = { vec3( 120, 0, 270) };
+	std::vector<vec3> patrol_5 = { vec3(-315, 0, 230), vec3(-315, 0, 320), vec3(-210, 0, 320), vec3(-210, 0, 230) };
 
 
-	createEnemy(patrol_1[0], Vector3f(8), patrol_1);
-	createEnemy(patrol_2[0], Vector3f(8), patrol_2);
-	createEnemy(patrol_3[0], Vector3f(8), patrol_3);
-	createEnemy(patrol_4[0], Vector3f(8), patrol_4);
-	createEnemy(patrol_5[0], Vector3f(8), patrol_5);
+	createEnemy(patrol_1[0], vec3(8), patrol_1);
+	createEnemy(patrol_2[0], vec3(8), patrol_2);
+	createEnemy(patrol_3[0], vec3(8), patrol_3);
+	createEnemy(patrol_4[0], vec3(8), patrol_4);
+	createEnemy(patrol_5[0], vec3(8), patrol_5);
 }

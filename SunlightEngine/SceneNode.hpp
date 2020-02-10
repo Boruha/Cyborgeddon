@@ -17,7 +17,7 @@ namespace Sun {
 		// Constructors
 		SceneNode(const SceneNode& node) = default;
 
-		explicit SceneNode(const Device& device, const Vector3f& position, const Vector3f& rotation, const Vector3f& dim, const char* mesh = nullptr, const char* texture = nullptr)
+		explicit SceneNode(const Device& device, const vec3& position, const vec3& rotation, const vec3& dim, const char* mesh = nullptr, const char* texture = nullptr)
 			: GenericNode(nullptr, position, rotation), meshNode(device.getInnerDevice()->getSceneManager()->addCubeSceneNode(1))
 		{
 			this->node = meshNode; 									// aqui se inicializa el generic node

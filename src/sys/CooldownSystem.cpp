@@ -1,4 +1,5 @@
 #include <sys/CooldownSystem.hpp>
+#include <Engine/util/Math.hpp>
 
 void CooldownSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
 	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {

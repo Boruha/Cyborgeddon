@@ -10,18 +10,18 @@ struct AI_System : System
 
 	private:
 
-		static void patrolBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
-		static void pursueBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
-		static void attackBehaviour(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
+		static void patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime);
+		static void pursueBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime);
+		static void attackBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime);
 
-		static void basicBehaviour(const Entity& enemy, const Vector3f& target, float deltaTime, bool align);
+		static void basicBehaviour(const Entity& enemy, const vec3& target, float deltaTime, bool align);
 
-		static void targetBehaviour(AI& ai, const Vector3f& target);
-		static void seekBehaviour(const Entity& enemy, const Vector3f& target, float deltaTime);
-		static void alignBehaviour(const Entity& enemy, const Vector3f& target);
+		static void targetBehaviour(AI& ai, const vec3& target);
+		static void seekBehaviour(const Entity& enemy, const vec3& target, float deltaTime);
+		static void alignBehaviour(const Entity& enemy, const vec3& target);
 
 	struct TStateFunction {
-		void (*p_func)(const Entity& enemy, const Vector3f& player_pos, float deltaTime);
+		void (*p_func)(const Entity& enemy, const vec3& player_pos, float deltaTime);
 	};
 
 	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)

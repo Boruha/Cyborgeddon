@@ -1,4 +1,6 @@
 #include <sys/DeathSystem.hpp>
+#include <Engine/util/Math.hpp>
+#include <iostream>
 
 void DeathSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
     // Mueren personajes ?

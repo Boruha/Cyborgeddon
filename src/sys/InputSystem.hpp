@@ -9,6 +9,8 @@ namespace Sun {
     struct Device;
 }
 
+using glm::vec2;
+
 struct InputSystem : System
 {
 	explicit InputSystem(const Sun::Device& device) : device(device) {  }
@@ -54,7 +56,7 @@ struct InputSystem : System
 		{static_cast<KEY_CODE>(0), nullptr }
 	};
 
-    void aim_mouse(Physics& phy, const Vector2u &mouse) const;
+    void aim_mouse(Physics& phy, const vec2 &mouse) const;
 
-    [[nodiscard]] Vector3f cursorCoordToWorldCoord(float x, float y, float far) const;
+    [[nodiscard]] vec3 cursorCoordToWorldCoord(float x, float y, float far) const;
 };

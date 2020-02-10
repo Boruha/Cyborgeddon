@@ -1,4 +1,5 @@
 #include <sys/CollisionSystem.hpp>
+#include <Engine/util/Math.hpp>
 
 // TODO: quiza sea conveniente tener 3 sistemas de colisiones distintos, uno para objetos dinamicos, otro para estaticos y otro para objetos que se muevan muy rapido (ray)
 
@@ -30,7 +31,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	for (auto& movingBox : specialBoundings) {											// recorremos el array de objetos no estaticos
 		if (movingBox && movingBox.velocity) {
 			for (int i = 0; i < 3; ++i) {
-				Vector3f& velocity = *movingBox.velocity;
+				vec3& velocity = *movingBox.velocity;
 
 				const int numChecks = ceil(abs(velocity[i]) / (movingBox.dim[i] / 2));
 
@@ -70,7 +71,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	}
 }
 
-void CollisionSystem::dynamicCollision(BoundingBox& movingBox, Vector3f& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
+void CollisionSystem::dynamicCollision(BoundingBox& movingBox, vec3& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
 	if (intersects(movingBox, otherBox)) {
 		if (movingBox.getEntityType() == PLAYER && otherBox.type == DYNAMIC) {
 			context->addToDestroy(otherBox.getEntityID());
@@ -83,7 +84,7 @@ void CollisionSystem::dynamicCollision(BoundingBox& movingBox, Vector3f& velocit
 	}
 }
 
-void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, const BoundingBox& otherBox, const int coord) const {
+void CollisionSystem::staticCollision(BoundingBox& box, vec3& velocity, const BoundingBox& otherBox, const int coord) const {
 	if (intersects(box, otherBox)) {
 		float offset{0};
 
@@ -102,7 +103,7 @@ void CollisionSystem::staticCollision(BoundingBox& box, Vector3f& velocity, cons
 }
 
 void CollisionSystem::fixCoord(BoundingBox& bounding, const int coord) const {
-	const Vector3f& pos = *bounding.pos;
+	const vec3& pos = *bounding.pos;
 
 	bounding.min[coord] = pos[coord] - (bounding.dim[coord] / 2);
 	bounding.max[coord] = pos[coord] + (bounding.dim[coord] / 2);
@@ -117,17 +118,17 @@ void CollisionSystem::moveCoord(BoundingBox& bounding, float mov, int coord) con
 		bounding[i][coord] += mov;
 }
 
-void CollisionSystem::moveBox(BoundingBox& bounding, const Vector3f& mov) const {
+void CollisionSystem::moveBox(BoundingBox& bounding, const vec3& mov) const {
 	for (int i = 0; i < 2; ++i)
 		bounding[i] += mov;
 }
 
-void CollisionSystem::setBox(BoundingBox& bounding, const Vector3f& pos) const {
+void CollisionSystem::setBox(BoundingBox& bounding, const vec3& pos) const {
 	for (int i = 0; i < 3; ++i)
 		setCoord(bounding, pos, i);
 }
 
-void CollisionSystem::setCoord(BoundingBox& bounding, const Vector3f& pos, const int coord) const {
+void CollisionSystem::setCoord(BoundingBox& bounding, const vec3& pos, const int coord) const {
 	bounding.min[coord] = pos[coord] - (bounding.dim[coord] / 2);
 	bounding.max[coord] = pos[coord] + (bounding.dim[coord] / 2);
 }

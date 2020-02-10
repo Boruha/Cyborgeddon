@@ -16,7 +16,7 @@ namespace Sun {
 		// Constructors
 		CameraNode(const CameraNode& camera) = default;
 
-		explicit CameraNode(const Device& device, const Vector3f& target, const Vector3f& position, const Vector3f& rotation = Vector3f())
+		explicit CameraNode(const Device& device, const vec3& target, const vec3& position, const vec3& rotation = vec3())
 				: GenericNode(nullptr, position, rotation), cameraNode(device.getInnerDevice()->getSceneManager()->addCameraSceneNode()), target(&target)
 				{
 					this->node = cameraNode;		// aqui se inicializa el nodo padre realmente ya que la camara aun no ha sido creada
@@ -35,12 +35,12 @@ namespace Sun {
 
 	private:
 
-		[[nodiscard]] Vector3f getTarget() const { return Vector3f(cameraNode->getTarget().X,cameraNode->getTarget().Y,cameraNode->getTarget().Z); }
+		[[nodiscard]] vec3 getTarget() const { return vec3(cameraNode->getTarget().X,cameraNode->getTarget().Y,cameraNode->getTarget().Z); }
 		void updateTarget(const float deltaTime) const { if(cameraNode) { updateTarget(getTarget() + (*target - getTarget()) * deltaTime); } }
-		void updateTarget(const Vector3f& targ) const { cameraNode->setTarget(irr::core::vector3df(targ.x, targ.y, targ.z)); }
+		void updateTarget(const vec3& targ) const { cameraNode->setTarget(irr::core::vector3df(targ.x, targ.y, targ.z)); }
 
 		irr::scene::ICameraSceneNode* cameraNode { nullptr };
 
-		const Vector3f* target { nullptr };
+		const vec3* target { nullptr };
 	};
 }

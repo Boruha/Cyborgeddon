@@ -1,7 +1,10 @@
 #pragma once
 
 #include <Engine/util/Vector3.hpp>
+#include <glm/glm.hpp>
 #include <irrlicht/irrlicht.h>
+
+using glm::vec3;
 
 namespace Sun {
 	struct GenericNode {
@@ -14,7 +17,7 @@ namespace Sun {
 		// Constructors
 		GenericNode(const GenericNode& node) = default;
 
-		explicit GenericNode(irr::scene::ISceneNode* node, const Vector3f& position, const Vector3f& rotation) :
+		explicit GenericNode(irr::scene::ISceneNode* node, const vec3& position, const vec3& rotation) :
 			node(node), position(&position), rotation(&rotation) {
 		}
 
@@ -25,12 +28,12 @@ namespace Sun {
 		virtual void update(const float deltaTime) const { setPosition(deltaTime); }
         virtual void setTexture(const char* texture) const {  }
 
-		[[nodiscard]] Vector3f getPosition() const { return Vector3f(node->getPosition().X, node->getPosition().Y, node->getPosition().Z); }
- 		[[nodiscard]] Vector3f getRotation() const { return Vector3f(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
- 		[[nodiscard]] Vector3f getScale() 	 const { return Vector3f(node->getScale().X, node->getScale().Y, node->getScale().Z); }
+		[[nodiscard]] vec3 getPosition() const { return vec3(node->getPosition().X, node->getPosition().Y, node->getPosition().Z); }
+ 		[[nodiscard]] vec3 getRotation() const { return vec3(node->getRotation().X, node->getRotation().Y, node->getRotation().Z); }
+ 		[[nodiscard]] vec3 getScale() 	 const { return vec3(node->getScale().X, node->getScale().Y, node->getScale().Z); }
 
-        void setPos(const Vector3f& pos) const { if(node) node->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z)); }
-		void setRot(const Vector3f& rot) const { if(node) node->setRotation(irr::core::vector3df(rot.x, rot.y, rot.z)); }
+        void setPos(const vec3& pos) const { if(node) node->setPosition(irr::core::vector3df(pos.x, pos.y, pos.z)); }
+		void setRot(const vec3& rot) const { if(node) node->setRotation(irr::core::vector3df(rot.x, rot.y, rot.z)); }
 
         void removeFromScene() { if(node) node->remove(); node = nullptr; }
 
@@ -43,11 +46,11 @@ namespace Sun {
 			void setPosition(const float deltaTime) const { if(node) setPos(getPosition() + (*position - getPosition()) * deltaTime); }
 	        void setRotation(const float deltaTime) const { if(node) setRot(getRotation() + (*rotation - getRotation()) * deltaTime); }
 
-	        void setScale(const Vector3f& dim) const { node->setScale(irr::core::vector3df(dim.x, dim.y, dim.z)); }
+	        void setScale(const vec3& dim) const { node->setScale(irr::core::vector3df(dim.x, dim.y, dim.z)); }
 
 		private:
 
-			const Vector3f* position { nullptr };
-			const Vector3f* rotation { nullptr };
+			const vec3* position { nullptr };
+			const vec3* rotation { nullptr };
 	};
 }

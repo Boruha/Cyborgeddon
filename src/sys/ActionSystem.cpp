@@ -1,4 +1,5 @@
 #include <sys/ActionSystem.hpp>
+#include <iostream>
 
 void ActionSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
     for (const auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {

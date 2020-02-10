@@ -1,4 +1,5 @@
 #include <cmp/BulletData.hpp>
+#include <iostream>
 
 std::ostream& operator<<(std::ostream& os, const BulletData& data) {
 	data.print(os, "BulletData")

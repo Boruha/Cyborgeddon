@@ -4,6 +4,7 @@
 
 #include <unordered_map>
 #include <util/ComponentType.hpp>
+#include <iostream>
 
 struct Storage {
 	explicit Storage() = default;

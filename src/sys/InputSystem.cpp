@@ -2,7 +2,6 @@
 #include <util/TexturePaths.hpp>
 #include <ent/Entity.hpp>
 #include <SunlightEngine/Device.hpp>
-#include <glm/glm.hpp>
 #include <cassert>
 #include <Engine/util/MathIntersection.hpp>
 
@@ -15,7 +14,7 @@ void InputSystem::init() {
 void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
 	auto& player = context->getPlayer();
 
-	player.velocity->direction = 0;
+	player.velocity->direction = vec3();
 
 	const auto * next = keyMapping;
 
@@ -34,7 +33,7 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
 		}
 	}
 
-	player.physics->velocity = player.velocity->direction.normalize() * player.velocity->currentSpeed * deltaTime;
+	player.physics->velocity = normalize(player.velocity->direction) * player.velocity->currentSpeed * deltaTime;
 }
 
 void InputSystem::w_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.z; }
@@ -43,7 +42,7 @@ void InputSystem::s_pressed(Entity& player, const float deltaTime) { --player.ve
 void InputSystem::d_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.x; }
 // Dash
 void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
-    if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && player.velocity->direction != 0) {
+    if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && length(player.velocity->direction) != 0) {
         player.characterData->dashing = true;
         player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
         player.velocity->currentSpeed = player.characterData->dashSpeed;
@@ -70,19 +69,19 @@ void InputSystem::m_pressed(Entity& player, const float deltaTime) {
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-void InputSystem::aim_mouse(Physics& phy, const Vector2u& mouse) const
+void InputSystem::aim_mouse(Physics& phy, const vec2& mouse) const
 {
-    const Plane shootingPlane(Vector3f(0,1,0), phy.position.y);
+    const Plane shootingPlane(vec3(0,1,0), phy.position.y);
     const Line  ray(cursorCoordToWorldCoord(mouse.x, mouse.y, 0), cursorCoordToWorldCoord(mouse.x, mouse.y, 1));
 
-    const Vector3f intersectPoint = intersectionPoint(shootingPlane, ray);
+    const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
-    phy.rotation.y = (intersectPoint - phy.position).getRotationYfromXZ();
+    phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-Vector3f InputSystem::cursorCoordToWorldCoord(float x, float y, float far) const {
+vec3 InputSystem::cursorCoordToWorldCoord(float x, float y, float far) const {
     const auto proj = device.getInnerDevice()->getSceneManager()->getActiveCamera()->getProjectionMatrix();
 
     glm::mat4x4 projectionMatrix = glm::mat4x4(
@@ -114,5 +113,5 @@ Vector3f InputSystem::cursorCoordToWorldCoord(float x, float y, float far) const
     const glm::vec4 worldPos(unprojectMatrix * viewportPos);
     assert(worldPos.w != 0.0); // Avoid a division by zero
 
-    return Vector3(worldPos.x, worldPos.y, worldPos.z) / worldPos.w;
+    return vec3(worldPos.x, worldPos.y, worldPos.z) / worldPos.w;
 }
