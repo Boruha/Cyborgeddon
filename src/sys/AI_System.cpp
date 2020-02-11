@@ -1,6 +1,8 @@
 #include <sys/AI_System.hpp>
 #include <Engine/util/Math.hpp>
 #include <util/SystemConstants.hpp>
+#include <ent/Graph.hpp>
+
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -30,7 +32,8 @@ void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, flo
 	if (greater_e(length(distance), ARRIVED_MIN_DISTANCE)) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
 	} else {
-		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index; // sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
+		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index;
+		// sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
 
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], 0, false);
 	}
@@ -39,17 +42,22 @@ void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, flo
 
 void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, deltaTime, true);
-//	std::cout << &entity << " esta persiguiendo al player\n";
+
+	//std::cout << &entity << " esta persiguiendo al player\n";
 }
 
 void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, 0, true);
+<<<<<<< HEAD
 
     if(!greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
         enemy.characterData->attacking = true;
         enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
     }
 //	std::cout << &entity << " esta atacando al player\n";
+=======
+	std::cout << &enemy << " esta atacando al player\n";
+>>>>>>> Pathfinding
 }
 
 void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const float deltaTime, const bool align) {

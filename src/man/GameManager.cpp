@@ -12,6 +12,7 @@ void GameManager::init()
 	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
 	textureManager.loadTextures();
 
+<<<<<<< HEAD
 
 	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
 	                                                                            // ORDEN DE EJECUCION
@@ -25,6 +26,19 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<CooldownSystem>());                   // se actualizan los cooldowns
     systems.emplace_back(std::make_unique<DeathSystem>());                      // se comprueba si algo tiene que morir y ser eliminado
 	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+=======
+	systems.emplace_back(std::make_unique<VelocitySystem>()); // de momento lo ponemos aqui para que input y AI utilicen la velocidad
+	systems.emplace_back(std::make_unique<InputSystem>(render.device));
+	systems.emplace_back(std::make_unique<AI_System>());
+	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());
+	systems.emplace_back(std::make_unique<CollisionSystem>());
+	systems.emplace_back(std::make_unique<MovementSystem>());
+	systems.emplace_back(std::make_unique<CooldownSystem>());
+	systems.emplace_back(std::make_unique<BulletSystem>());
+	systems.emplace_back(std::make_unique<CharacterDataSystem>());
+	systems.emplace_back(std::make_unique<SoundSystem>());
+	systems.emplace_back(std::make_unique<Path_System>());
+>>>>>>> Pathfinding
 
 	for(auto& sys : systems)
 		sys->init();

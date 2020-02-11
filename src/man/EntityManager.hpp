@@ -2,6 +2,7 @@
 
 #include <util/GameContext.hpp>
 #include <src/cmp/Storage.hpp>
+#include <ent/Graph.hpp>
 
 
 struct IEngine;

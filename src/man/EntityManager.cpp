@@ -78,7 +78,7 @@ void EntityManager::killEntities() {
 void EntityManager::moveDeadEntities() {
 	for (auto e = entities.rbegin(); e != entities.rend(); ++e)				// recorremos el vector de entidades inversamente (asi evitamos que se nos queden elementos descolgados
 		if ((e + 1) != entities.rend() && (e + 1)->getType() == UNDEFINED)	// si la proxima entidad es valida y esta "muerta" (type == undefined)
-			std::iter_swap(e,(e + 1));									// entonces la cambiamos con la entidad actual
+			std::iter_swap(e,(e + 1));										// entonces la cambiamos con la entidad actual
 
 	// Con esto conseguimos que las entidades muertas avancen en el array con un coste muy bajo (un swap) en cada iteracion
 	// permitiendo a otra funcion eliminar los elementos que se encuentren al final.
@@ -205,6 +205,7 @@ void EntityManager::createLevel() {
 	createFloor(TIPS_TEXTURE, vec3(-2,0,-27), vec3(45,0,15)); //Tips
 
 	// Doors and keys
+<<<<<<< HEAD
 
 	createPairKeyDoor(vec3(0,0,60), vec3(3), vec3(-37,0,90), vec3(2,20,10));
 	createPairKeyDoor(vec3(-70,0,90), vec3(3), vec3(37,0,0), vec3(2,20,10));
@@ -215,6 +216,18 @@ void EntityManager::createLevel() {
 	createPairKeyDoor(vec3(70,0,90), vec3(3), vec3(152.5,0,300), vec3(45,10,10));
 	createPairKeyDoor(vec3(158,0,320), vec3(3), vec3(-180,0,272.5), vec3(10,10,45));
 
+=======
+/*
+	createPairKeyDoor(Vector3f(0,0,60), Vector3f(3),Vector3f(-37,0,90), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(-70,0,90), Vector3f(3), Vector3f(37,0,0), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(70,0,0), Vector3f(3), Vector3f(-37,0,0), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(-70,0,0), Vector3f(3), Vector3f(37,0,190), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(70,0,190), Vector3f(3), Vector3f(-37,0,190), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(-70,0,190), Vector3f(3), Vector3f(37,0,90), Vector3f(2,20,10));
+	createPairKeyDoor(Vector3f(70,0,90), Vector3f(3), Vector3f(152.5,0,300), Vector3f(45,10,10));
+	createPairKeyDoor(Vector3f(158,0,320), Vector3f(3), Vector3f(-180,0,272.5), Vector3f(10,10,45));
+*/
+>>>>>>> Pathfinding
 
 	//Pasillo inicial
 
@@ -285,6 +298,14 @@ void EntityManager::createLevel() {
 	createWall(vec3(-265,0,277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
+	//-------REMOVE IN FUTURE--------------
+	/*createMapNode(Vector3f(0,0,250), Vector3f(10));
+	createMapNode(Vector3f(0,0,50), Vector3f(10));
+	createMapNode(Vector3f(0,0,100), Vector3f(10));
+	createMapNode(Vector3f(0,0,150), Vector3f(10));
+	createMapNode(Vector3f(0,0,200), Vector3f(10));*/
+	//-------REMOVE IN FUTURE--------------
+
 
 	std::vector<vec3> patrol_1 = { vec3(-160, 0, 270) };
 	std::vector<vec3> patrol_2 = { vec3(   0, 0, 200) };
@@ -292,6 +313,7 @@ void EntityManager::createLevel() {
 	std::vector<vec3> patrol_4 = { vec3( 120, 0, 270) };
 	std::vector<vec3> patrol_5 = { vec3(-315, 0, 230), vec3(-315, 0, 320), vec3(-210, 0, 320), vec3(-210, 0, 230) };
 
+<<<<<<< HEAD
 
 	createEnemy(patrol_1[0], vec3(8), patrol_1);
 	createEnemy(patrol_2[0], vec3(8), patrol_2);
@@ -299,3 +321,18 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
 }
+=======
+/*
+	createEnemy(patrol_1[0], Vector3f(8), patrol_1);
+	createEnemy(patrol_2[0], Vector3f(8), patrol_2);
+	createEnemy(patrol_3[0], Vector3f(8), patrol_3);
+	createEnemy(patrol_4[0], Vector3f(8), patrol_4);
+*/
+	createEnemy(patrol_5[0], Vector3f(8), patrol_5);
+
+}
+
+bool EntityManager::checkVictory() {
+	return enemiesLeft <= 0;
+}
+>>>>>>> Pathfinding
