@@ -16,8 +16,8 @@ struct MapNode
     explicit    MapNode(float x, float y);
                 ~MapNode() = default;
 
-    bool                            operator!= (const MapNode&) const;
-    bool                            operator== (const MapNode&) const;
+    bool                      operator!= (const MapNode&) const;
+    bool                      operator== (const MapNode&) const;
     std::vector<Connection>&  getConns();
 
     Vector2f                coord { 0,0 };

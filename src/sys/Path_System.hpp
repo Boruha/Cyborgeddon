@@ -11,7 +11,8 @@ struct Path_System : System
     void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
 	void reset() override {  }
 
-    void calculePath(int, int);
+    std::vector<int> calculePath(int, int);
+    void nearestNode(Vector3f&);
 
     std::vector<MapNode> graph;
 
