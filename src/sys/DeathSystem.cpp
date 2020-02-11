@@ -19,6 +19,7 @@ void DeathSystem::update(const std::unique_ptr<GameContext> &context, const floa
         if (bullet) {
             if (!greater_e((bullet.distance_left -= bullet.speed * deltaTime), 0)) {
                 context->addToDestroy(bullet.getEntityID());
+                std::cout << "Se elimina la bala\n";
             }
         }
     }

@@ -1,27 +1,26 @@
 #pragma once
 
 #include <SunlightEngine/EventReceiver.hpp>
+
 #include <Engine/util/KeyCodes.hpp>
 
-#include <sys/System.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 
-namespace Sun {
-    struct Device;
-}
+#include <sys/System.hpp>
 
 using glm::vec2;
 
 struct InputSystem : System
 {
-	explicit InputSystem(const Sun::Device& device) : device(device) {  }
+	explicit InputSystem(const IEngine * const engine) : engine(engine) { }
 
 	void init() override;
 	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
 	void reset() override {  }
 
 	private:
-		const Sun::Device& device;
-		Sun::EventReceiver eventReceiver;
+		const IEngine * const engine { nullptr };
+
 		// Movement
 		static void w_pressed(Entity& player, float deltaTime);
 		static void a_pressed(Entity& player, float deltaTime);

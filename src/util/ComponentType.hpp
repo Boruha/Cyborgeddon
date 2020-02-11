@@ -4,7 +4,7 @@
 
 enum ComponentType : uint16_t 	{
 									AI_TYPE,
-									NODE_TYPE,
+									INODE_TYPE,
 									VELOCITY_TYPE,
 									TRANSFORMABLE_TYPE,
 									PHYSICS_TYPE,

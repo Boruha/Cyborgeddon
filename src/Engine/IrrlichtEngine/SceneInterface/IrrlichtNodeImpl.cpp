@@ -3,6 +3,7 @@
 #include <irrlicht/ISceneNode.h>
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IVideoDriver.h>
+#include <iostream>
 
 IrrlichtNodeImpl::IrrlichtNodeImpl(
 		irr::scene::ISceneNode * node,

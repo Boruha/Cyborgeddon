@@ -1,5 +1,7 @@
 #include <sys/CollisionSystem.hpp>
 #include <Engine/util/Math.hpp>
+#include <cmath>
+#include <iostream>
 
 // TODO: quiza sea conveniente tener 3 sistemas de colisiones distintos, uno para objetos dinamicos, otro para estaticos y otro para objetos que se muevan muy rapido (ray)
 
@@ -33,7 +35,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 			for (int i = 0; i < 3; ++i) {
 				vec3& velocity = *movingBox.velocity;
 
-				const int numChecks = ceil(abs(velocity[i]) / (movingBox.dim[i] / 2));
+				const int numChecks = std::ceil(std::abs(velocity[i]) / (movingBox.dim[i] / 2));
 
 				if (numChecks <= 0)
 					continue;

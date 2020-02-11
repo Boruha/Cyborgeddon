@@ -2,8 +2,6 @@
 
 #include <util/TexturePaths.hpp>
 
-#include <SunlightEngine/Device.hpp>
-
 #include <Engine/EngineInterface/IEngine.hpp>
 
 void TextureManager::loadTextures() const {

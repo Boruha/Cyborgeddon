@@ -5,9 +5,12 @@
 #include <unordered_map>
 #include <util/ComponentType.hpp>
 #include <iostream>
+#include <src/Engine/EngineInterface/IEngine.hpp>
+
+struct IEngine;
 
 struct Storage {
-	explicit Storage() = default;
+	explicit Storage(const IEngine * const engine) : engine(engine) {  }
 	~Storage();
 
 	Storage(const Storage& ) = delete;
@@ -22,7 +25,7 @@ struct Storage {
 	template <typename T, typename ... Args>
 	const T& createComponent(const ComponentType type, Args&& ... args) const {
         std::cout << "\n\nComponent\n";
-        printVecInfo(std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]));
+        printVecInfo(std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type]));
 
         for (auto& item : std::get<vector<T>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[type])) {
             if (!item) {
@@ -39,22 +42,41 @@ struct Storage {
     }
 
 	template <typename T, typename ... Args>
-	const Node_ptr& createNode(Args&& ... args) const {
-		std::cout << "\n\nNode_ptr\n";
-		printVecInfo(std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]));
+	const std::unique_ptr<INode>& createIObjectNode(Args&& ... args) const {
+		std::cout << "\n\nINode\n";
+		printVecInfo(std::get<vector<std::unique_ptr<INode>>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[INODE_TYPE]));
 
-		for (auto& item : std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE])) {
+		for (auto& item : std::get<vector<std::unique_ptr<INode>>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[INODE_TYPE])) {
 			if (!(*item)) {
-				return item = std::make_unique<T>(args...);
+				return item = engine->scene->addObjectNode(args...);
 			}
 		}
 
-		return std::get<vector<Node_ptr>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[NODE_TYPE]).emplace_back(std::make_unique<T>(args...));
+		return std::get<vector<std::unique_ptr<INode>>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[INODE_TYPE]).emplace_back(engine->scene->addObjectNode(args...));
 	}
 
 	template <typename T, typename ... Args>
-	Node_ptr& createNode(Args&& ... args) {
-		return const_cast<Node_ptr&>(std::as_const(*this).createNode<T>(args...));
+	std::unique_ptr<INode>& createIObjectNode(Args&& ... args) {
+		return const_cast<std::unique_ptr<INode>&>(std::as_const(*this).createIObjectNode<T>(args...));
+	}
+
+	template <typename T, typename ... Args>
+	const std::unique_ptr<INode>& createICameraNode(Args&& ... args) const {
+		std::cout << "\n\nINode\n";
+		printVecInfo(std::get<vector<std::unique_ptr<INode>>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[INODE_TYPE]));
+
+		for (auto& item : std::get<vector<std::unique_ptr<INode>>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[INODE_TYPE])) {
+			if (!(*item)) {
+				return item = engine->scene->addCameraNode(args...);
+			}
+		}
+
+		return std::get<vector<std::unique_ptr<INode>>>(const_cast<std::unordered_map<ComponentType,variantComponentVectorTypes>&>(map)[INODE_TYPE]).emplace_back(engine->scene->addCameraNode(args...));
+	}
+
+	template <typename T, typename ... Args>
+	std::unique_ptr<INode>& createICameraNode(Args&& ... args) {
+		return const_cast<std::unique_ptr<INode>&>(std::as_const(*this).createICameraNode<T>(args...));
 	}
 
 	void initData(int maxComponents);
@@ -67,6 +89,8 @@ private:
 		std::cout 	<< "Capacity: " << vec.capacity() 	<< "\n"
 					<< "Size: " 	<< vec.size() 		<< "\n";
 	}
+
+	const IEngine * engine { nullptr };
 
 	std::unordered_map <ComponentType, variantComponentVectorTypes> map;
 };

@@ -3,12 +3,11 @@
 #include <util/GameContext.hpp>
 #include <src/cmp/Storage.hpp>
 
-namespace Sun {
-    struct Device;
-}
+
+struct IEngine;
 
 struct EntityManager : GameContext {
-	explicit EntityManager(const Sun::Device& device) : device(device) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
+	explicit EntityManager(const IEngine * const engine) : engine(engine), componentStorage(engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override { cleanData(); }
 
 	void init() override;
@@ -53,7 +52,7 @@ struct EntityManager : GameContext {
 		Entity* player { nullptr };
 		Entity* camera { nullptr };
 
-	    const Sun::Device& device;
+	    const IEngine * const engine { nullptr };
 
 	    std::vector<std::size_t> toDelete;
 	    std::vector<Entity> entities;

@@ -7,6 +7,7 @@
 
 struct Mouse;
 struct Color;
+struct Rect;
 
 struct IEngine {
     virtual ~IEngine() = default;

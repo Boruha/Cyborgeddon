@@ -1,6 +1,7 @@
 #pragma once
 
 #include <util/Alias.hpp>
+#include <Engine/EngineInterface/SceneInterface/INode.hpp>
 
 struct Component;
 
@@ -35,7 +36,7 @@ struct Entity
 	BoundingBox*	collider		{ nullptr };
 	AI*				ai				{ nullptr };
 
-	Node_ptr* 		node			{ nullptr };
+	std::unique_ptr<INode>* inode 	{ nullptr };
 
 	private:
 

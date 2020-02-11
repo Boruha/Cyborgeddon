@@ -1,7 +1,5 @@
 #include <man/GameManager.hpp>
 #include <sys/Systems.hpp>
-#include <util/TexturePaths.hpp>
-#include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/EngineInterface/SceneInterface/IScene.hpp>
 #include <Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
@@ -11,13 +9,13 @@
 
 void GameManager::init()
 {
-//	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
-//	textureManager.loadTextures();
+	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
+	textureManager.loadTextures();
 
 
 	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
 	                                                                            // ORDEN DE EJECUCION
-	systems.emplace_back(std::make_unique<InputSystem>(render.device));         // se detecta input del player
+	systems.emplace_back(std::make_unique<InputSystem>(engine.get())); // se detecta input del player
 	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
 	systems.emplace_back(std::make_unique<ActionSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());         // se controla la colision de las balas con enemigos (de momento)
@@ -60,16 +58,6 @@ void GameManager::loop()
 	std::chrono::high_resolution_clock::time_point now;
 
 	std::chrono::duration<float> delta {0};
-/*
-	glm::vec3 pla(0);
-	glm::vec3 rot(0);
-	glm::vec3 sca(1);
-
-	glm::vec3 cam(5);
-
-	std::unique_ptr<INode> player = engine->scene->addObjectNode(&pla, &rot, &sca);
-	player->setTexture(DEMON_TEXTURE);
-	std::unique_ptr<INode> camera = engine->scene->addCameraNode(&cam, &rot, &sca, &pla);
 
 	while (engine->run()) {
         now = std::chrono::high_resolution_clock::now();
@@ -78,35 +66,14 @@ void GameManager::loop()
 
         while(delta.count() > fixedDelta.count())
         {
-        	player->update();
-        	camera->update();
             update(fixedDelta.count());
             delta -= fixedDelta;
         }
 
-         engine->clear(Color(static_cast<const COLOR>(0x334488FF)));
-         engine->draw();
-         engine->display();
+        render.update(entityManager, delta.count() / fixedDelta.count());
 	}
 
-	terminate();
-*/
-
-	while(render.device.isActive())
-	{
-		now = std::chrono::high_resolution_clock::now();
-		delta += now - last;
-		last = now;
-
-		while(delta.count() > fixedDelta.count())
-		{
-			update(fixedDelta.count());
-			delta -= fixedDelta;
-		}
-
-		render.updateFPS(delta.count());
-		render.update(entityManager, delta.count() / fixedDelta.count());
-  	}
+//	terminate();
 }
 
 void GameManager::terminate() {

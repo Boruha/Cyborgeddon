@@ -20,7 +20,7 @@ struct IrrlichtScene : IScene {
 											   const vec3 * rot,
 											   const vec3 * sca,
 											   const vec3 * tar)
-											   const final;
+											   final;
 
 	void loadTexture(const char * path) const override;
 	void unloadTexture(const char * path) const override;

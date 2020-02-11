@@ -1,9 +1,5 @@
 #pragma once
 
-namespace Sun {
-    struct Device;
-}
-
 struct IEngine;
 
 struct TextureManager {

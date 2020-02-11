@@ -7,7 +7,7 @@
 
 #include <irrlicht/irrlicht.h>
 
-void IrrlichtEngine::init(unsigned width, unsigned height, const wchar_t *name) {
+void IrrlichtEngine::init(unsigned width, unsigned height, const wchar_t * const name) {
 	device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(width, height));
 	device->setWindowCaption(name);
 	device->setEventReceiver(&eventReceiver);

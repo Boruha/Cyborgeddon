@@ -9,12 +9,13 @@
 #include <cmp/CharacterData.hpp>
 #include <vector>
 #include <variant>
+#include <Engine/EngineInterface/SceneInterface/INode.hpp>
 
 using std::vector;
 
 using variantComponentVectorTypes = std::variant<
                                                    vector<AI>,
-                                                   vector<Node_ptr>,
+												   vector<std::unique_ptr<INode>>,
                                                    vector<Transformable>,
                                                    vector<Velocity>,
                                                    vector<BoundingBox>,
