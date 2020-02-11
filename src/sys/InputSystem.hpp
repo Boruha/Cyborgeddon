@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SunlightEngine/EventReceiver.hpp>
-
 #include <Engine/util/KeyCodes.hpp>
 
 #include <Engine/EngineInterface/IEngine.hpp>
