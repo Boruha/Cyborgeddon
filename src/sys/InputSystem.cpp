@@ -6,6 +6,7 @@
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <util/GameConstants.hpp>
 
+
 void InputSystem::init() {
 
 }

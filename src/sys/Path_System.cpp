@@ -1,5 +1,5 @@
 #include <sys/Path_System.hpp>
-#include <array>
+#include <iostream>
 
 void Path_System::init()
 { 
@@ -16,9 +16,9 @@ void Path_System::init()
 	node_1.connections.emplace_back(1, 2, 10);
 	
 	node_2.connections.emplace_back(2, 0, 16);
-    
+
 //TEST PATH
-/*
+
     std::vector<int> path = calculePath(2, 1);
 
     if(path.empty())
@@ -30,16 +30,16 @@ void Path_System::init()
             std::cout << "NODO: (" <<graph.at(node).coord.x << ", " << graph.at(node).coord.y << ")\n";
         }
     }
-*/
+
 
 //TEST NEAREST
-/*
+
     std::cout << "\nNEAREST NODE\n";
-    Vector3f ye = Vector3f(0,0,76);
+    vec3 ye = vec3(0,0,76);
     auto index = nearestNode(ye);
 
     std::cout << "NODO: (" <<graph.at(index).coord.x << ", " << graph.at(index).coord.y << ")\n";
-*/
+
 }
 
 
@@ -128,10 +128,10 @@ std::vector<int> Path_System::calculePath(int start, int end)
 }
 
 
-int Path_System::nearestNode(Vector3f& point)
+int Path_System::nearestNode(vec3& point)
 {
     //vector diff the player position and each node in the graph
-    Vector2f nearest     = Vector2f(graph.front().coord.x - point.x, graph.front().coord.y - point.z);
+    vec2 nearest     = vec2(graph.front().coord.x - point.x, graph.front().coord.y - point.z);
     //decision value
     float    small_dist  = nearest.length();
     //index of the nearest node

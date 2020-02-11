@@ -48,16 +48,12 @@ void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, con
 
 void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime) {
 	basicBehaviour(enemy, player_pos, 0, true);
-<<<<<<< HEAD
-
+	
     if(!greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
         enemy.characterData->attacking = true;
         enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
     }
 //	std::cout << &entity << " esta atacando al player\n";
-=======
-	std::cout << &enemy << " esta atacando al player\n";
->>>>>>> Pathfinding
 }
 
 void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const float deltaTime, const bool align) {

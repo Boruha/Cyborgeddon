@@ -12,7 +12,7 @@ struct Path_System : System
 	void reset() override {  }
 
     std::vector<int> calculePath(int, int);
-    int nearestNode(Vector3f&);
+    int nearestNode(vec3&);
 
     std::vector<MapNode> graph;
 };

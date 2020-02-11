@@ -2,12 +2,12 @@
 
 #include <vector>
 #include <algorithm>
-#include <SunlightEngine/Vector2.hpp>
 
-using Sun::Vector2f;
+#include <glm/glm.hpp>
+
+using glm::vec2; 
 
 struct Connection;
-
 
 #define SIZE_CONNECTIONS 5
 
@@ -20,7 +20,7 @@ struct MapNode
     bool                      operator== (const MapNode&) const;
     std::vector<Connection>&  getConns();
 
-    Vector2f                coord { 0,0 };
+    vec2                coord { 0,0 };
     std::vector<Connection> connections;
 };
 
