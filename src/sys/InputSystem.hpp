@@ -6,7 +6,6 @@
 
 #include <sys/System.hpp>
 
-struct Mouse;
 using glm::vec2;
 
 struct InputSystem : System
