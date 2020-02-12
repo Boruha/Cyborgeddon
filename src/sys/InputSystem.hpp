@@ -2,9 +2,9 @@
 
 #include <Engine/util/KeyCodes.hpp>
 
-#include <Engine/EngineInterface/IEngine.hpp>
-
 #include <sys/System.hpp>
+
+struct IEngine;
 
 using glm::vec2;
 

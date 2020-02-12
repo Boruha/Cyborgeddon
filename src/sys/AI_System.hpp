@@ -2,7 +2,6 @@
 
 #include <sys/System.hpp>
 
-
 struct AI_System : System
 {
 	void init() override {  }

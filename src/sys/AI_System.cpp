@@ -1,7 +1,6 @@
 #include <sys/AI_System.hpp>
 #include <Engine/util/Math.hpp>
 #include <util/SystemConstants.hpp>
-#include <ent/Graph.hpp>
 
 
 // TODO: considerar los estados de la IA como punteros a funcion
@@ -10,24 +9,22 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 
 	for (const auto& enemy : context->getEntities()) {
 		if (enemy && enemy.ai) {
-			vec3 v_distance = enemy.physics->position - player_pos;
-			v_distance.y = 0;
+			const vec3 v_distance(enemy.physics->position.x - player_pos.x, 0, enemy.physics->position.z - player_pos.z);
 
-			float distance = length(v_distance);
+	const float distance = length(v_distance);
 
-			if (greater_e(distance, PATROL_MIN_DISTANCE))
-				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (greater_e(distance, PURSUE_MIN_DISTANCE))
-				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
-			else if (greater_e(distance, ATTACK_MIN_DISTANCE))
-				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
-		}
-	}
+	if (greater_e(distance, PATROL_MIN_DISTANCE))
+		stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime);
+	else if (greater_e(distance, PURSUE_MIN_DISTANCE))
+		stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime);
+	else if (greater_e(distance, ATTACK_MIN_DISTANCE))
+		stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime);
+}
+}
 }
 
 void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime) {
-	vec3 distance = enemy.physics->position - enemy.ai->target_position;
-	distance.y = 0;
+	const vec3 distance(enemy.physics->position.x - enemy.ai->target_position.x, 0, enemy.physics->position.z - enemy.ai->target_position.z);
 
 	if (greater_e(length(distance), ARRIVED_MIN_DISTANCE)) {
 		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);

@@ -1,7 +1,7 @@
 #include <sys/InputSystem.hpp>
 #include <util/TexturePaths.hpp>
-#include <ent/Entity.hpp>
 #include <cassert>
+#include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/MathIntersection.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <util/GameConstants.hpp>
