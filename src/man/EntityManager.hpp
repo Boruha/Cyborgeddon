@@ -9,7 +9,7 @@ struct IEngine;
 
 struct EntityManager : GameContext {
 	explicit EntityManager(const IEngine * const engine) : engine(engine), componentStorage(engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
-	~EntityManager() override { cleanData(); }
+	~EntityManager() override = default;
 
 	void init() override;
 	bool update() override;

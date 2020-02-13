@@ -35,16 +35,16 @@ struct Connection
 
 struct NodeRecord
 {
-     NodeRecord() = default;;
+     NodeRecord() = default;
 	~NodeRecord() = default;
 
     bool operator<(const NodeRecord&) const;
 
-    void sortNodeRecord 	(std::vector<NodeRecord>&) 	  	const;
-    bool contains       	(const std::vector<NodeRecord>&, int) const;
+                  void sortNodeRecord 	(std::vector<NodeRecord>&) 	  	        const;
+    [[nodiscard]] bool contains       	(const std::vector<NodeRecord>&, int)   const;
 
-    const NodeRecord * find (const std::vector<NodeRecord>&, int) const;
-		  NodeRecord * find (const std::vector<NodeRecord>&, int);
+    [[nodiscard]] const NodeRecord * find (const std::vector<NodeRecord>&, int) const;
+		                NodeRecord * find (const std::vector<NodeRecord>&, int);
 
 	int         node            { -1 };  //path node.
     int         fromNode        { -1 };  //bond to the node we came from.

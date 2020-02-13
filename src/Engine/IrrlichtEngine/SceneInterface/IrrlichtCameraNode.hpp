@@ -1,8 +1,8 @@
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 
-#include <memory>
+#include <Engine/IrrlichtEngine/SceneInterface/IrrlichtNodeImpl.hpp>
 
-struct IrrlichtNodeImpl;
+#include <memory>
 
 namespace irr::scene {
     struct ICameraSceneNode;
