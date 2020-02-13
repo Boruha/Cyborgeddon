@@ -15,6 +15,26 @@ std::unique_ptr<ICameraNode> IrrlichtScene::addCameraNode(const vec3 * pos, cons
 	return std::move(u_camera);
 }
 
+vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far) const {
+	const glm::mat4x4 projectionMatrix = camera->getProjectionMatrix();
+	const glm::mat4x4 viewMatrix = camera->getViewMatrix();
+
+	// Deshacemos [projection * view] obteniendo su inversa (para pasar de coordenadas del mundo a la pantalla, hay que hacer projection * view)
+	const glm::mat4x4 unprojectMatrix = glm::inverse(projectionMatrix * viewMatrix);
+
+	const float VIEWPORT_HEIGHT = sceneManager->getVideoDriver()->getViewPort().getHeight();
+	const float VIEWPORT_WIDTH  = sceneManager->getVideoDriver()->getViewPort().getWidth();
+
+	// Por algun motivo OpenGL lee la Y de la pantalla de abajo a arriba, asi que invertimos la y
+	// Hay que normalizar las coordenadas entre -1 (izquierda/abajo) y +1 (derecha/arriba)
+	const glm::vec4 viewportPos ((2.0 * x / VIEWPORT_WIDTH) - 1, (2.0 * (VIEWPORT_HEIGHT - y) / VIEWPORT_HEIGHT) - 1.0, 2.0 * far - 1.0, 1.0);
+
+	// Obtenemos las coordenadas del mundo en funcion de la distancia "far" calculada en viewportPos (profundidad desde el punto de vista de la camara)
+	const glm::vec4 worldPos(unprojectMatrix * viewportPos);
+
+	return worldPos.w == 0 ? vec3() : vec3(worldPos.x, worldPos.y, worldPos.z) / worldPos.w;
+}
+
 void IrrlichtScene::loadTexture(const char * const path) const {
 	sceneManager->getVideoDriver()->getTexture(path);
 }

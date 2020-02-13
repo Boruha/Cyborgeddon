@@ -3,8 +3,6 @@
 #include <sys/System.hpp>
 #include <ent/Graph.hpp>
 
-#define SIZE_GRAPH 5
-
 struct Path_System : System
 {
     void init() override;

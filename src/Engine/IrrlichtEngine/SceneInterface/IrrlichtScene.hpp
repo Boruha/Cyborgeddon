@@ -14,13 +14,15 @@ struct IrrlichtScene : IScene {
     std::unique_ptr<IObjectNode> addObjectNode(const vec3 * pos,
 											   const vec3 * rot,
 											   const vec3 * sca)
-											   const final;
+											   const override;
 
     std::unique_ptr<ICameraNode> addCameraNode(const vec3 * pos,
 											   const vec3 * rot,
 											   const vec3 * sca,
 											   const vec3 * tar)
-											   final;
+											   override;
+
+    [[nodiscard]] vec3 cursorToWorld(float x, float y, float far) const override;
 
 	void loadTexture(const char * path) const override;
 	void unloadTexture(const char * path) const override;

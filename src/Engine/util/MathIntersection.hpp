@@ -20,7 +20,7 @@ enum LinePointOrientation { ALIGNED, CLOCKWISE, ANTICLOCKWISE };
 
 inline LinePointOrientation linePointOrientationXZ(const Line& r, const vec3& p)
 {
-	float o = (r.b.z - r.a.z) * (p.x - r.b.x) - (r.b.x - r.a.x) * (p.z - r.b.z);
+	const float o = (r.b.z - r.a.z) * (p.x - r.b.x) - (r.b.x - r.a.x) * (p.z - r.b.z);
 
 	return (o == 0) ? ALIGNED : ((o > 0) ? CLOCKWISE : ANTICLOCKWISE);
 }

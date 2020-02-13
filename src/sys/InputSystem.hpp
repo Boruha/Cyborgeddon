@@ -54,6 +54,4 @@ struct InputSystem : System
 	};
 
     void aim_mouse(Physics& phy, const vec2 &mouse) const;
-
-    [[nodiscard]] vec3 cursorCoordToWorldCoord(float x, float y, float far) const;
 };

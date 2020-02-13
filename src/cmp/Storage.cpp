@@ -16,11 +16,6 @@ void Storage::initData(const int maxComponents) {
 void Storage::cleanData() {
 	Component::resetIDManagementValue();	// ID de los componentes a 0
 
-	if (!map.empty())
-		for (auto& node : std::get<vector<std::unique_ptr<INode>>>(map[INODE_TYPE]))
-			if (node && *node)				// si existe un nodo y el contenido de ese nodo es accesible
-				node->remove();
-
 	map.clear();							// limpiamos todos los vectores
 }
 

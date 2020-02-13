@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <algorithm>
 
 #include <glm/glm.hpp>
 
@@ -9,7 +8,7 @@ using glm::vec2;
 
 struct Connection;
 
-#define SIZE_CONNECTIONS 5
+constexpr unsigned SIZE_CONNECTIONS = 5;
 
 struct MapNode
 {
@@ -36,16 +35,18 @@ struct Connection
 
 struct NodeRecord
 {
-    explicit    NodeRecord() {};
-                ~NodeRecord() = default;
+     NodeRecord() = default;;
+	~NodeRecord() = default;
 
-    bool        operator<      (const NodeRecord&) const;
+    bool operator<(const NodeRecord&) const;
 
-    void         sortNodeRecord (std::vector<NodeRecord>&);
-    bool         contains       (std::vector<NodeRecord>&, int); 
-    NodeRecord*  find           (std::vector<NodeRecord>&, int); 
+    void sortNodeRecord 	(std::vector<NodeRecord>&) 	  	const;
+    bool contains       	(const std::vector<NodeRecord>&, int) const;
 
-    int         node            { -1 };  //path node.
+    const NodeRecord * find (const std::vector<NodeRecord>&, int) const;
+		  NodeRecord * find (const std::vector<NodeRecord>&, int);
+
+	int         node            { -1 };  //path node.
     int         fromNode        { -1 };  //bond to the node we came from.
     int         toNode          { -1 };  //bond to the node we came from.
     float       const_so_far    { 0 };   //Cost from this node to the start of the path.

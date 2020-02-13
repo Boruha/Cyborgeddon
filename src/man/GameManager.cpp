@@ -72,7 +72,7 @@ void GameManager::loop()
         render.update(entityManager, delta.count() / fixedDelta.count());
 	}
 
-//	terminate();
+	terminate();
 }
 
 void GameManager::terminate() {

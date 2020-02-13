@@ -1,44 +1,50 @@
 #include <ent/Graph.hpp>
 
+#include <algorithm>
+
 //MAPNODE FUNCTIONS
-MapNode::MapNode(float x, float y) : coord(x,y) { connections.reserve(SIZE_CONNECTIONS); }
+MapNode::MapNode(float x, float y) : coord(x,y) {
+	connections.reserve(SIZE_CONNECTIONS);
+}
 
-bool MapNode::operator!= (const MapNode& m) const { return this->coord != m.coord; }
+bool MapNode::operator!=(const MapNode& m) const {
+	return coord != m.coord;
+}
 
-bool MapNode::operator== (const MapNode& m) const { return this->coord == m.coord; }
+bool MapNode::operator==(const MapNode& m) const {
+	return coord == m.coord;
+}
 
-std::vector<Connection>&  MapNode::getConns() { return connections; }
+std::vector<Connection>& MapNode::getConns() {
+	return connections;
+}
 
 
 //NODE RECORD FUNCTIONS
-bool NodeRecord::operator< (const NodeRecord& c) const { return this->const_so_far < c.const_so_far; }
+bool NodeRecord::operator<(const NodeRecord& c) const {
+	return const_so_far < c.const_so_far;
+}
 
-void NodeRecord::sortNodeRecord(std::vector<NodeRecord>& records) { std::sort(records.begin(), records.end()); }
+void NodeRecord::sortNodeRecord(std::vector<NodeRecord>& records) const {
+	std::sort(records.begin(), records.end());
+}
 
-bool NodeRecord::contains(std::vector<NodeRecord>& records, int node)
-{
-    bool result = false;
+bool NodeRecord::contains(const std::vector<NodeRecord>& records, const int node) const {
+    for (const auto& rec : records)
+        if(rec.node == node)
+            return true;
 
-    for(auto& rec : records)
-    {
-        if(rec.node == node){
-            result = true;
-            break;
-        }
-    }
-    return result;
+    return false;
 } 
 
-NodeRecord* NodeRecord::find(std::vector<NodeRecord>& records, int node)
-{
-    NodeRecord* result = nullptr;
+const NodeRecord * NodeRecord::find(const std::vector<NodeRecord>& records, const int node) const {
+    for (const auto& rec : records)
+        if(rec.node == node)
+            return &rec;
 
-    for(auto& rec : records)
-    {
-        if(rec.node == node){
-            result = &rec;
-            break;
-        }
-    }
-    return result;
+    return nullptr;
+}
+
+NodeRecord * NodeRecord::find(const std::vector<NodeRecord>& records, const int node) {
+	return const_cast<NodeRecord *>(std::as_const(*this).find(records, node));
 }

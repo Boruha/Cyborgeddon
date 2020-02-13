@@ -35,6 +35,11 @@ bool EntityManager::update(){
 }
 
 bool EntityManager::checkVictory() {
+	if (!greater_e(player->characterData->health, 0)) {
+		std::cout << "\n\nFin de partida\n\n";
+		exit(-1);
+	}
+
 	return enemiesLeft <= 0;
 }
 

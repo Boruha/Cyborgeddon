@@ -9,7 +9,7 @@ void ActionSystem::update(const std::unique_ptr<GameContext>& context, const flo
         if (data && data.attacking) {
 			switch (data.getEntityType()) {
 				case ENEMY :
-					enemyDamage += data.attackDamage;
+					enemyDamage += data.attackDamage; // vamos acumulando el daño que recibe el player
 					break;
 				case PLAYER :
 					playerShoots = true;
@@ -21,7 +21,7 @@ void ActionSystem::update(const std::unique_ptr<GameContext>& context, const flo
 		}
     }
 
-	context->getPlayer().characterData->health -= enemyDamage;
+	context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context
 
 	if (playerShoots)
 		context->createBullet();

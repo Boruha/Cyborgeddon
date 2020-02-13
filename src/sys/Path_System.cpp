@@ -43,10 +43,11 @@ void Path_System::init()
 }
 
 
-void Path_System::update(const std::unique_ptr<GameContext> &context, float deltaTime) const {}
+void Path_System::update(const std::unique_ptr<GameContext> &context, float deltaTime) const {
 
+}
 
-std::vector<int> Path_System::calculePath(int start, int end)
+std::vector<int> Path_System::calculePath(const int start, const int end)
 {
     //index of nodes in graph
     NodeRecord startRecord = NodeRecord();
@@ -79,13 +80,14 @@ std::vector<int> Path_System::calculePath(int start, int end)
         if(currentRecord->node == end) { break; }
         currentConn = graph.at(currentRecord->node).connections;
 
-        for(auto& conn : currentConn)
+        for(const auto& conn : currentConn)
         {
             nextNode = conn.nodeTo;
             nextCost = conn.cost + currentRecord->const_so_far;
 
             //pasamos a la siguiente conn si esta el nodo en 'close'
-            if(currentRecord->contains(close, nextNode)) { continue; }
+            if(currentRecord->contains(close, nextNode))
+            	continue;
 
             //comprobamos si esta en la 'open'
             if(currentRecord->contains(open, nextNode))
@@ -93,10 +95,9 @@ std::vector<int> Path_System::calculePath(int start, int end)
                 nextRecPtr = currentRecord->find(open, nextNode);
 
                 //si el coste existente es menor al actual, pasamos
-                if(nextRecPtr->const_so_far <= nextCost) { continue; }
-            }
-            else
-            {
+                if(nextRecPtr->const_so_far <= nextCost)
+                	continue;
+            } else {
                 //no esta en ninguna lista so creamos record
                 nextRecPtr = &open.emplace_back();
                 nextRecPtr->node = nextNode;
@@ -120,8 +121,8 @@ std::vector<int> Path_System::calculePath(int start, int end)
             path.insert(path.begin(), currentRecord->node);
             currentRecord = currentRecord->find(close, currentRecord->fromNode);
         }
-        path.insert(path.begin(), currentRecord->node);
 
+        path.insert(path.begin(), currentRecord->node);
     }
 
     return path;

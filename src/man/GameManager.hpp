@@ -11,7 +11,7 @@ struct System;
 
 struct GameManager {
 	GameManager() = default;
-	~GameManager() { terminate(); };
+	~GameManager() = default;
 
 	void init();
 	void update(float deltaTime);
