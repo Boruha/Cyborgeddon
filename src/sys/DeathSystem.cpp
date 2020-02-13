@@ -1,7 +1,7 @@
 #include <sys/DeathSystem.hpp>
 #include <Engine/util/Math.hpp>
 
-void DeathSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
+void DeathSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
 	std::array<EntityID, 16> entitiesToDestroy { }; // suponemos que como mucho pueden morir en una iteracion 16 entidades (que creo que ya es mucho y no habra problema)
 	unsigned numToDestroy = 0;
 

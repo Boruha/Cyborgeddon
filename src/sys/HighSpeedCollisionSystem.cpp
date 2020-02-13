@@ -1,7 +1,6 @@
 #include <sys/HighSpeedCollisionSystem.hpp>
 #include <util/ComponentConstants.hpp>
 #include <Engine/util/MathIntersection.hpp>
-#include <iostream>
 
 struct EntityHitData {
 	float lessDistance { -1 };		// sabremos si la bala choca con algo porque la distancia siempre es positiva
@@ -9,7 +8,7 @@ struct EntityHitData {
 	bool damageEntity { false };
 };
 
-void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
+void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
 	std::array<EntityID, 8> bulletsToDestroy { }; // suponemos que como mucho pueden morir en una iteracion 8 bullets (que creo que ya es mucho y no habra problema)
 	unsigned numToDestroy = 0;
 

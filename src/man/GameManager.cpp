@@ -16,7 +16,7 @@ void GameManager::init()
 	                                                                            // ORDEN DE EJECUCION
 	systems.emplace_back(std::make_unique<InputSystem>(engine.get())); // se detecta input del player
 	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
-	systems.emplace_back(std::make_unique<ActionSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
+	systems.emplace_back(std::make_unique<AttackSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());         // se controla la colision de las balas con enemigos (de momento)
 	systems.emplace_back(std::make_unique<CollisionSystem>());                  // se controla colision de cosas - paredes, cosas - cosas (dividir en 2 en el futuro)
 	systems.emplace_back(std::make_unique<MovementSystem>());                   // se ejecuta el movimiento (unificar este sistema y el de abajo uniendo velocidad y fisicas)

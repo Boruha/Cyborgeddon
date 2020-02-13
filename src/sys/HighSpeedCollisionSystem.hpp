@@ -7,7 +7,7 @@ struct Line;
 
 struct HighSpeedCollisionSystem : System {
 	void init() override {  }
-	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
+	void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
 	void reset() override {  }
 
 	void checkHit(const Line& bulletRay, const BoundingBox& box, EntityHitData& hitData) const;

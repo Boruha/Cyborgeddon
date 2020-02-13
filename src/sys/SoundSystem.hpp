@@ -24,7 +24,11 @@ using EngineSystem = FMOD::Studio::System;
 struct Sound {
 	Event* 		event 		{  nullptr  };
 	Instance* 	instance 	{  nullptr  };
-	ModeType	mode		{  NEUTRAL  };
+};
+
+struct NewSound {
+	Event* event { nullptr };
+	std::vector<Instance*> instances;
 };
 
 struct SoundSystem : public System {
@@ -33,13 +37,15 @@ struct SoundSystem : public System {
 	~SoundSystem();
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext>& context, float deltaTime) const override;
+	void update(const std::unique_ptr<GameContext>& context, float deltaTime) override;
 	void reset() override;
 
 
 private:
 
 	void startBackgroundMusic();
+
+	void createSoundEvent(const char *, unsigned);
 
     FMOD::System* core { nullptr };
 	FMOD::Studio::System* system { nullptr };
@@ -52,6 +58,7 @@ private:
     // TODO : crear enum como clave de este mapa
     Sound backingTrack;
 	std::unordered_map<TipoSonido, std::vector<Sound>> sounds; // Ahora mismo key true = attacking, key false = changing
+	std::unordered_map<const char *, NewSound> soundEvents;
 
 	//PERSONAJE
 	const char * const attackEventName[2] {

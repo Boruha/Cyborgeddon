@@ -4,7 +4,6 @@
 #include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/MathIntersection.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
-#include <util/GameConstants.hpp>
 #include <Engine/util/Mouse.hpp>
 
 void InputSystem::init() {
@@ -13,7 +12,7 @@ void InputSystem::init() {
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
-void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
+void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
 	auto& player = context->getPlayer();
 
 	player.velocity->direction = vec3();

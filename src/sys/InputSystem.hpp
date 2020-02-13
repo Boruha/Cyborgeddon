@@ -13,7 +13,7 @@ struct InputSystem : System
 	explicit InputSystem(const IEngine * const engine) : engine(engine) { }
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext> &context, float deltaTime) const override;
+	void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
 	void reset() override {  }
 
 	private:

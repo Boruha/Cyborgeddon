@@ -43,7 +43,7 @@ void Path_System::init()
 }
 
 
-void Path_System::update(const std::unique_ptr<GameContext> &context, float deltaTime) const {
+void Path_System::update(const std::unique_ptr<GameContext> &context, float deltaTime) {
 
 }
 

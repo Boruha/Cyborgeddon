@@ -4,7 +4,7 @@
 
 
 // TODO: considerar los estados de la IA como punteros a funcion
-void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
+void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
 	const vec3 player_pos = context->getPlayer().physics->position;
 
 	for (const auto& enemy : context->getEntities()) {
