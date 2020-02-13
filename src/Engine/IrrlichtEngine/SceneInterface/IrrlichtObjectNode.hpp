@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
-#include <Engine/IrrlichtEngine/SceneInterface/IrrlichtNodeImpl.hpp>
 
 #include <memory>
 

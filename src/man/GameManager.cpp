@@ -25,7 +25,7 @@ void GameManager::init()
     systems.emplace_back(std::make_unique<DeathSystem>());                      // se comprueba si algo tiene que morir y ser eliminado
 	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
-	for(auto& sys : systems)
+	for(const auto& sys : systems)
 		sys->init();
 
 
@@ -38,13 +38,13 @@ void GameManager::init()
 void GameManager::update(const float deltaTime)
 {
     // Ejecucion de los sistemas
-	for(auto& sys : systems)
+	for(const auto& sys : systems)
 		sys->update(entityManager, deltaTime);
 
 	// reseteo de nivel al ganar (esto es momentaneo)
 	// entity manager crea y destruye entidades en funcion de lo que hagan los sistemas
 	if(entityManager->update()) {			// TODO : hacer maquina de estados para permitir estado inicio, pausa, en juego...
-		for (auto& sys : systems)
+		for (const auto& sys : systems)
 			sys->reset();
 		entityManager->createLevel();
 	}

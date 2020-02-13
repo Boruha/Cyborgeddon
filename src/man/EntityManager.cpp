@@ -189,7 +189,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 }
 
 const Entity& EntityManager::getEntityByID(const std::size_t id) const {
-	for (auto& ent : entities)
+	for (const auto& ent : entities)
 		if (ent.getID() == id)
 			return ent;
 	std::cerr << "Entity not found?!?!\n";

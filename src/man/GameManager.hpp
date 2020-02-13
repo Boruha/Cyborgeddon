@@ -20,14 +20,14 @@ struct GameManager {
 
 	const std::chrono::duration<float> fixedDelta { FIXED_DELTA_TIME };
 
-	// render first so we use its device for the other systems and/or managers
-
+	// esto seguramente pertenezca al motor y haya que hacer algo tipo "registrar sistema" y que sea el motor el que los gestione
 	std::vector<std::unique_ptr<System>> systems;
 
 	EngineManager engineManager { IRRLICHT };
 	std::unique_ptr<IEngine> engine = engineManager.getEngine();
     TextureManager textureManager { engine.get() };
 
+    // quiza el sistema de render deba mantenerse al margen porque es algo "especial" en el sentido de cuando tiene que ser llamado
 	RenderSystem render { glm::vec2(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME, engine.get() };
 	std::unique_ptr<GameContext> entityManager = std::make_unique<EntityManager>(engine.get());
 };
