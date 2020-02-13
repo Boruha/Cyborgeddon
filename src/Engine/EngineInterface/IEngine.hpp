@@ -2,13 +2,11 @@
 
 #include <Engine/util/Enum.hpp>
 #include <Engine/EngineInterface/SceneInterface/IScene.hpp>
-#include <Engine/util/Mouse.hpp>
 
 #include <memory>
 
 struct Mouse;
 struct Color;
-struct Rect;
 
 struct IEngine {
     virtual ~IEngine() = default;

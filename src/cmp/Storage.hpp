@@ -90,7 +90,7 @@ private:
 					<< "Size: " 	<< vec.size() 		<< "\n";
 	}
 
-	const IEngine * engine { nullptr };
+	const IEngine * const engine { nullptr };
 
 	std::unordered_map <ComponentType, variantComponentVectorTypes> map;
 };

@@ -25,7 +25,7 @@ struct MapNode
 
 struct Connection
 {
-    explicit Connection(int from, int to, float weight) : nodeFrom(from), nodeTo(to), cost(weight) {};
+    explicit Connection(const int from, const int to, const float weight) : nodeFrom(from), nodeTo(to), cost(weight) { };
     ~Connection() = default;
 
     int     nodeFrom    { -1 };

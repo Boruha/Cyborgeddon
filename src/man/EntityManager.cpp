@@ -196,7 +196,7 @@ const Entity& EntityManager::getEntityByID(const std::size_t id) const {
 	exit(-1);
 }
 
-const Entity& EntityManager::getEntityByID(const std::size_t id) {
+Entity& EntityManager::getEntityByID(const std::size_t id) {
 	return const_cast<Entity&>(std::as_const(*this).getEntityByID(id));
 }
 

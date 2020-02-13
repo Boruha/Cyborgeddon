@@ -5,6 +5,7 @@
 #include <Engine/util/MathIntersection.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <util/GameConstants.hpp>
+#include <Engine/util/Mouse.hpp>
 
 void InputSystem::init() {
 
