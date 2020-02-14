@@ -1,5 +1,4 @@
 #include <sys/AttackSystem.hpp>
-#include <util/SoundPaths.hpp>
 #include <iostream>
 
 void AttackSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
@@ -11,11 +10,9 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 			switch (data.getEntityType()) {
 				case ENEMY :
 					enemyDamage += data.attackDamage; // vamos acumulando el daño que recibe el player
-					soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
 					break;
 				case PLAYER :
 					playerShoots = true;
-					soundMessages.emplace_back(data.mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 					break;
 				default :
 					std::cout << "\n\nComo vainas ataca algo que no es ni enemy ni player weon!\n\n";
@@ -26,7 +23,7 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 		}
     }
 
-	context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context
+	context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
 
 	if (playerShoots)
 		context->createBullet();

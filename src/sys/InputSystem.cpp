@@ -1,13 +1,39 @@
 #include <sys/InputSystem.hpp>
 #include <util/TexturePaths.hpp>
-#include <cassert>
+#include <util/SoundPaths.hpp>
 #include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/MathIntersection.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <Engine/util/Mouse.hpp>
+#include <iostream>
 
 void InputSystem::init() {
-
+    for (auto * next = keyMap; next->key != static_cast<KEY_CODE>(0); ++next) {
+        switch (next->key) {
+            case KEY_W:
+                next->p_func = &InputSystem::w_pressed;
+                break;
+            case KEY_A:
+                next->p_func = &InputSystem::a_pressed;
+                break;
+            case KEY_S:
+                next->p_func = &InputSystem::s_pressed;
+                break;
+            case KEY_D:
+                next->p_func = &InputSystem::d_pressed;
+                break;
+            case KEY_LSHIFT:
+                next->p_func = &InputSystem::shift_pressed;
+                break;
+            case KEY_SPACE:
+                next->p_func = &InputSystem::space_pressed;
+                break;
+            case KEY_M:
+                next->p_func = &InputSystem::m_pressed;
+                break;
+            default : ;
+        }
+    }
 }
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
@@ -17,53 +43,61 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
 
 	player.velocity->direction = vec3();
 
-	for (const auto * next = keyMapping; next->p_func; ++next)
+	for (const auto * next = keyMap; next->p_func; ++next)
 		if (engine->isKeyPressed(next->key))
-			next->p_func(player, deltaTime);
+            (this->*(next->p_func))(player, deltaTime);
 
-	const Mouse& mouse = engine->getMouse();
+    const Mouse& mouse = engine->getMouse();
 
 	aim_mouse(*player.physics, mouse.position);
+
+	std::cout << *player.characterData << std::endl;
 
 	if (mouse.leftPressed) {
 		if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 			player.characterData->attacking = true;
 			player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+
+            soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 		}
 	}
 
 	player.physics->velocity = normalize(player.velocity->direction) * player.velocity->currentSpeed * deltaTime;
 }
 
-void InputSystem::w_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.z; }
-void InputSystem::a_pressed(Entity& player, const float deltaTime) { --player.velocity->direction.x; }
-void InputSystem::s_pressed(Entity& player, const float deltaTime) { --player.velocity->direction.z; }
-void InputSystem::d_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.x; }
+void InputSystem::w_pressed(Entity& player, const float deltaTime) const { ++player.velocity->direction.z; }
+void InputSystem::a_pressed(Entity& player, const float deltaTime) const { --player.velocity->direction.x; }
+void InputSystem::s_pressed(Entity& player, const float deltaTime) const { --player.velocity->direction.z; }
+void InputSystem::d_pressed(Entity& player, const float deltaTime) const { ++player.velocity->direction.x; }
 // Dash
-void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
+void InputSystem::shift_pressed(Entity& player, const float deltaTime) const {
     if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && length(player.velocity->direction) != 0) {
-        player.characterData->dashing = true;
+        player.characterData->dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
         player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
         player.velocity->currentSpeed = player.characterData->dashSpeed;
+
+        soundMessages.emplace_back(DASH_PLAYER_EVENT);
     }
 }
 // Shoot
-void InputSystem::space_pressed(Entity& player, const float deltaTime) {
+void InputSystem::space_pressed(Entity& player, const float deltaTime) const {
 	if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 		player.characterData->attacking = true;
 		player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+
+		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 	}
 }
-// Aim
-void InputSystem::left_pressed  (Entity& player, const float deltaTime) { player.physics->rotation.y -= PLAYER_ROTATION_SPEED * deltaTime; }
-void InputSystem::right_pressed (Entity& player, const float deltaTime) { player.physics->rotation.y += PLAYER_ROTATION_SPEED * deltaTime; }
+
 // Switch Mode
-void InputSystem::m_pressed(Entity& player, const float deltaTime) {
+void InputSystem::m_pressed(Entity& player, const float deltaTime) const {
 	if (!greater_e(player.characterData->currentSwitchingCooldown, 0)) {
-		player.characterData->switchingMode = true;
+		player.characterData->switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;
 		player.characterData->mode == DEMON ? player.inode->get()->setTexture(DEMON_TEXTURE) : player.inode->get()->setTexture(ANGEL_TEXTURE);
 		player.characterData->currentSwitchingCooldown = player.characterData->switchingCooldown;
+
+		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
 	}
 }
 

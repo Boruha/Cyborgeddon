@@ -20,15 +20,16 @@ namespace FMOD {
 using Event = FMOD::Studio::EventDescription;
 using Instance = FMOD::Studio::EventInstance;
 using EngineSystem = FMOD::Studio::System;
+using Bank = FMOD::Studio::Bank;
 
 struct Sound {
-	Event* 		event 		{  nullptr  };
-	Instance* 	instance 	{  nullptr  };
+	Event* event { nullptr };
+	std::array<Instance*, 16> instances;
 };
 
-struct NewSound {
-	Event* event { nullptr };
-	std::vector<Instance*> instances;
+struct Music {
+    Event * event { nullptr };
+    Instance * instance { nullptr };
 };
 
 struct SoundSystem : public System {
@@ -40,49 +41,21 @@ struct SoundSystem : public System {
 	void update(const std::unique_ptr<GameContext>& context, float deltaTime) override;
 	void reset() override;
 
-
 private:
 
 	void startBackgroundMusic();
 
-	void createSoundEvent(const char *, unsigned);
+	void createSoundEvent(const char *, float = 1.f);
+	void createMusicEvent(const char *, Music *, float = 1.f);
+
+    void createInstance(const Event *, Instance *&, float) const;
 
     FMOD::System* core { nullptr };
-	FMOD::Studio::System* system { nullptr };
-	FMOD::Studio::Bank* master { nullptr };
-	FMOD::Studio::Bank* strings { nullptr };
+	EngineSystem * system { nullptr };
+	Bank * master { nullptr };
+	Bank * strings { nullptr };
 
-	                  //PERSONAJE           //ENSAMBLADO    //DEMONIOS   //ANGELES
-	enum TipoSonido { ATTACK, CHANGE, DASH , ENEMY_ASSEMBLED, ENEMY_DEMON, ENEMY_ANGEL};
+    Music backingTrack;
 
-    // TODO : crear enum como clave de este mapa
-    Sound backingTrack;
-	std::unordered_map<TipoSonido, std::vector<Sound>> sounds; // Ahora mismo key true = attacking, key false = changing
-	std::unordered_map<const char *, NewSound> soundEvents;
-
-	//PERSONAJE
-	const char * const attackEventName[2] {
-		DEMON_SHOOT_EVENT,
-		ANGEL_SHOOT_EVENT
-	};
-
-	const char * const changeEventName[2] {
-		DEMON_CHANGE_EVENT,
-		ANGEL_CHANGE_EVENT
-	};
-
-	const char * const dashEventName[2]{
-	    DASH_PLAYER_EVENT,
-	    DASH_PLAYER_EVENT
-	};
-
-	//ENEMIGO ASSEMBLED
-    const char * const NeutralAttackEventName[2]{
-        ASSEMBLED_ATTACK_EVENT,
-        ASSEMBLED_ATTACK_EVENT
-    };
-
-	//ENEMIGO DEMONIO
-
-	//ENEMIGO ANGEL
+	std::unordered_map<const char *, Sound> soundEvents;
 };

@@ -1,6 +1,7 @@
 #include <sys/AI_System.hpp>
 #include <Engine/util/Math.hpp>
 #include <util/SystemConstants.hpp>
+#include <util/SoundPaths.hpp>
 
 
 // TODO: considerar los estados de la IA como punteros a funcion
@@ -49,8 +50,9 @@ void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, con
     if(!greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
         enemy.characterData->attacking = true;
         enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
+
+        soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
     }
-//	std::cout << &entity << " esta atacando al player\n";
 }
 
 void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const float deltaTime, const bool align) {

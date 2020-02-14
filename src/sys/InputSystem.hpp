@@ -20,38 +20,32 @@ struct InputSystem : System
 		const IEngine * const engine { nullptr };
 
 		// Movement
-		static void w_pressed(Entity& player, float deltaTime);
-		static void a_pressed(Entity& player, float deltaTime);
-		static void s_pressed(Entity& player, float deltaTime);
-		static void d_pressed(Entity& player, float deltaTime);
+		void w_pressed(Entity& player, float deltaTime) const;
+		void a_pressed(Entity& player, float deltaTime) const;
+		void s_pressed(Entity& player, float deltaTime) const;
+		void d_pressed(Entity& player, float deltaTime) const;
 		// Dash
-        static void shift_pressed(Entity& player, float deltaTime);
+		void shift_pressed(Entity& player, float deltaTime) const;
 		// Shoot
-		static void space_pressed(Entity& player, float deltaTime);
-		// Aim
-		static void left_pressed  (Entity& player, float deltaTime);
-		static void right_pressed (Entity& player, float deltaTime);
+		void space_pressed(Entity& player, float deltaTime) const;
 		// Switch Mode
-		static void m_pressed(Entity& player, float deltaTime);
+		void m_pressed(Entity& player, float deltaTime) const;
 
 	struct TKey2func {
 		KEY_CODE key;
-		void (*p_func)(Entity& player, float deltaTime);
+		void (InputSystem::*p_func)(Entity& player, float deltaTime) const;
 	};
 
-	const TKey2func keyMapping[KEY_CODE_COUNT] // KEY::KODE::COUNT tiene la cantidad de teclas que usamos
-	{
-		{KEY_W,                    w_pressed 		},
-		{KEY_A,                    a_pressed 		},
-		{KEY_S,                    s_pressed 		},
-		{KEY_D,                    d_pressed 		},
-        {KEY_LSHIFT,               shift_pressed 	},
-		{KEY_SPACE,                space_pressed 	},
-		{KEY_LEFT,                 left_pressed    },
-		{KEY_RIGHT,                right_pressed   },
-		{KEY_M,                    m_pressed       },
-		{static_cast<KEY_CODE>(0), nullptr }
-	};
+	TKey2func keyMap[KEY_CODE_COUNT] {
+        {KEY_W,                    nullptr },
+        {KEY_A,                    nullptr },
+        {KEY_S,                    nullptr },
+        {KEY_D,                    nullptr },
+        {KEY_LSHIFT,               nullptr },
+        {KEY_SPACE,                nullptr },
+        {KEY_M,                    nullptr },
+        {static_cast<KEY_CODE>(0), nullptr }
+    };
 
     void aim_mouse(Physics& phy, const vec2 &mouse) const;
 };
