@@ -11,6 +11,5 @@ enum ComponentType : uint16_t 	{
 									CHARACTER_DATA_TYPE,
 									BULLET_DATA_TYPE,
 									SPECIAL_BOUNDING_BOX_TYPE,
-									STATIC_BOUNDING_BOX_TYPE,
-									RAY_BOUNDING_BOX_TYPE
+									STATIC_BOUNDING_BOX_TYPE
 								};
