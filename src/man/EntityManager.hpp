@@ -2,7 +2,6 @@
 
 #include <util/GameContext.hpp>
 #include <src/cmp/Storage.hpp>
-#include <ent/Graph.hpp>
 
 
 struct IEngine;
@@ -15,6 +14,7 @@ struct EntityManager : GameContext {
 	bool update() override;
 
 	void createLevel() override;
+	void createGraph() override;
 	void createBullet () override;
 
 	void addToDestroy(std::size_t ID) override;
@@ -26,6 +26,13 @@ struct EntityManager : GameContext {
 
 	[[nodiscard]] const std::vector<Entity>& getEntities() const override { return entities; }
 	[[nodiscard]] 		std::vector<Entity>& getEntities() 	  	 override { return entities; }
+
+	[[nodiscard]] const std::vector<MapNode>& getGraph() const override { return graph; }
+	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
+
+	[[nodiscard]]       std::vector<int>& getPath(EntityID eid) 		  override { return paths.at(eid); }
+	[[nodiscard]]       void deletePath(EntityID eid) 			          override { paths.erase(eid); }
+	[[nodiscard]]  		void setPath(EntityID eid, std::vector<int> path) override { paths[eid] = path; }
 
 	[[nodiscard]] const Entity& getEntityByID(std::size_t id) const override;
 	[[nodiscard]] 		Entity& getEntityByID(std::size_t id) 		override;
@@ -52,6 +59,9 @@ struct EntityManager : GameContext {
 
 		Entity* player { nullptr };
 		Entity* camera { nullptr };
+
+    	std::vector<MapNode> graph;
+		std::map<EntityID, std::vector<int>> paths;
 
 	    const IEngine * const engine { nullptr };
 

@@ -3,22 +3,8 @@
 
 void Path_System::init()
 { 
-    graph.reserve(5);
-
-    auto& node_0 = graph.emplace_back(MapNode(0, 0));
-	auto& node_1 = graph.emplace_back(MapNode(0, 50));
-	auto& node_2 = graph.emplace_back(MapNode(0, 100));
-
-	node_0.connections.emplace_back(0, 1, 5);
-	node_0.connections.emplace_back(0, 2, 16);
-
-	node_1.connections.emplace_back(1, 0, 5);
-	node_1.connections.emplace_back(1, 2, 10);
-	
-	node_2.connections.emplace_back(2, 0, 16);
-
 //TEST PATH
-
+/*
     std::vector<int> path = calculePath(2, 1);
 
     if(path.empty())
@@ -30,24 +16,22 @@ void Path_System::init()
             std::cout << "NODO: (" <<graph.at(node).coord.x << ", " << graph.at(node).coord.y << ")\n";
         }
     }
-
+*/
 
 //TEST NEAREST
-
+/*
     std::cout << "\nNEAREST NODE\n";
     vec3 ye = vec3(0,0,76);
     auto index = nearestNode(ye);
 
     std::cout << "NODO: (" <<graph.at(index).coord.x << ", " << graph.at(index).coord.y << ")\n";
-
+*/
 }
 
 
-void Path_System::update(const std::unique_ptr<GameContext> &context, float deltaTime) const {
+void Path_System::update(const std::unique_ptr<GameContext> &context, float deltaTime) const {}
 
-}
-
-std::vector<int> Path_System::calculePath(const int start, const int end)
+std::vector<int> Path_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph)
 {
     //index of nodes in graph
     NodeRecord startRecord = NodeRecord();
@@ -129,7 +113,7 @@ std::vector<int> Path_System::calculePath(const int start, const int end)
 }
 
 
-int Path_System::nearestNode(vec3& point)
+int Path_System::nearestNode(vec3& point, const std::vector<MapNode>& graph)
 {
     //vector diff the player position and each node in the graph
     vec2 nearest     = vec2(graph.front().coord.x - point.x, graph.front().coord.y - point.z);

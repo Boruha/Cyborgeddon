@@ -19,6 +19,7 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 	entities.reserve(maxEntities);				// reservamos memoria para la cantidad maxima de entidades esperada
 	toDelete.reserve(maxToDelete);				// lo mismo para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
 	componentStorage.initData(maxComponents);	// reservamos (de momento la misma) memoria para los vectores que tendran los componentes
+	graph.reserve(20);
 }
 
 bool EntityManager::update(){
@@ -288,14 +289,7 @@ void EntityManager::createLevel() {
 	createWall(vec3(-265,0,277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
-	//-------REMOVE IN FUTURE--------------
-	/*createMapNode(Vector3f(0,0,250), Vector3f(10));
-	createMapNode(Vector3f(0,0,50), Vector3f(10));
-	createMapNode(Vector3f(0,0,100), Vector3f(10));
-	createMapNode(Vector3f(0,0,150), Vector3f(10));
-	createMapNode(Vector3f(0,0,200), Vector3f(10));*/
-	//-------REMOVE IN FUTURE--------------
-
+	createGraph();
 
 	std::vector<vec3> patrol_1 = { vec3(-160, 0, 270) };
 	std::vector<vec3> patrol_2 = { vec3(   0, 0, 200) };
@@ -310,3 +304,17 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
 }
 
+void EntityManager::createGraph()
+{
+	auto& node_0 = graph.emplace_back(MapNode(0, 0));
+	auto& node_1 = graph.emplace_back(MapNode(0, 50));
+	auto& node_2 = graph.emplace_back(MapNode(0, 100));
+
+	node_0.connections.emplace_back(0, 1, 5);
+	node_0.connections.emplace_back(0, 2, 16);
+
+	node_1.connections.emplace_back(1, 0, 5);
+	node_1.connections.emplace_back(1, 2, 10);
+	
+	node_2.connections.emplace_back(2, 0, 16);
+}
