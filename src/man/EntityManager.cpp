@@ -204,7 +204,7 @@ Entity& EntityManager::getEntityByID(const std::size_t id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 90, -30));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, -90));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,5), vec3(60,0,35)); //Controls
@@ -290,12 +290,12 @@ void EntityManager::createLevel() {
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
 	createGraph();
-
-	std::vector<vec3> patrol_1 = { vec3(-160, 0, 270) };
-	std::vector<vec3> patrol_2 = { vec3(   0, 0, 200) };
-	std::vector<vec3> patrol_3 = { vec3(   0, 0, 100) };
-	std::vector<vec3> patrol_4 = { vec3( 120, 0, 270) };
-	std::vector<vec3> patrol_5 = { vec3(-315, 0, 230), vec3(-315, 0, 320), vec3(-210, 0, 320), vec3(-210, 0, 230) };
+	//puntero a vec3? Mejor?
+	std::vector<vec3> patrol_1 = { graph[9].coord };
+	std::vector<vec3> patrol_2 = { graph[4].coord };
+	std::vector<vec3> patrol_3 = { graph[5].coord };
+	std::vector<vec3> patrol_4 = { graph[7].coord };
+	std::vector<vec3> patrol_5 = { graph[13].coord, graph[14].coord, graph[11].coord, graph[12].coord };
 
 	createEnemy(patrol_1[0], vec3(8), patrol_1);
 	createEnemy(patrol_2[0], vec3(8), patrol_2);
@@ -306,15 +306,70 @@ void EntityManager::createLevel() {
 
 void EntityManager::createGraph()
 {
-	auto& node_0 = graph.emplace_back(MapNode(0, 0));
-	auto& node_1 = graph.emplace_back(MapNode(0, 50));
-	auto& node_2 = graph.emplace_back(MapNode(0, 100));
+	//hall
+	auto& node_0  = graph.emplace_back(MapNode(0, 0));
+	auto& node_1  = graph.emplace_back(MapNode(0, 50));
+	auto& node_2  = graph.emplace_back(MapNode(0, 100));
+	auto& node_3  = graph.emplace_back(MapNode(0, 150));
+	auto& node_4  = graph.emplace_back(MapNode(0, 200));
+	auto& node_5  = graph.emplace_back(MapNode(0, 260));
+	//right
+	auto& node_6  = graph.emplace_back(MapNode(60, 270));
+	auto& node_7  = graph.emplace_back(MapNode(130, 270));
+	//left
+	auto& node_8  = graph.emplace_back(MapNode(-80, 270));
+	auto& node_9  = graph.emplace_back(MapNode(-160, 270));
+	//square
+	auto& node_10 = graph.emplace_back(MapNode(-200, 275));
+	auto& node_11 = graph.emplace_back(MapNode(-210, 320));
+	auto& node_12 = graph.emplace_back(MapNode(-210, 230));
+	auto& node_13 = graph.emplace_back(MapNode(-315, 230));
+	auto& node_14 = graph.emplace_back(MapNode(-315, 320));
 
 	node_0.connections.emplace_back(0, 1, 5);
-	node_0.connections.emplace_back(0, 2, 16);
 
 	node_1.connections.emplace_back(1, 0, 5);
-	node_1.connections.emplace_back(1, 2, 10);
+	node_1.connections.emplace_back(1, 2, 5);
 	
-	node_2.connections.emplace_back(2, 0, 16);
+	node_2.connections.emplace_back(2, 1, 5);
+	node_2.connections.emplace_back(2, 3, 5);
+
+	node_3.connections.emplace_back(3, 2, 5);
+	node_3.connections.emplace_back(3, 4, 5);
+
+	node_4.connections.emplace_back(4, 3, 5);
+	node_4.connections.emplace_back(4, 5, 5);
+
+
+	node_5.connections.emplace_back(5, 4, 5);
+	node_5.connections.emplace_back(5, 6, 7);
+	node_5.connections.emplace_back(5, 8, 7);
+
+	node_6.connections.emplace_back(6, 5, 7);
+	node_6.connections.emplace_back(6, 7, 6);
+
+	node_7.connections.emplace_back(7, 6, 6);
+
+	node_8.connections.emplace_back(8, 5, 7);
+	node_8.connections.emplace_back(8, 9, 6);
+
+	node_9.connections.emplace_back(9, 8, 6);
+	node_9.connections.emplace_back(9, 10, 8);
+
+	node_10.connections.emplace_back(10, 9, 8);
+	node_10.connections.emplace_back(10, 11, 6);
+	node_10.connections.emplace_back(10, 12, 6);
+
+	node_11.connections.emplace_back(11, 10, 6);
+	node_11.connections.emplace_back(11, 14, 9);
+
+	node_12.connections.emplace_back(12, 10, 6);
+	node_12.connections.emplace_back(12, 13, 9);
+
+	node_13.connections.emplace_back(13, 12, 9);
+	node_13.connections.emplace_back(13, 14, 9);
+
+	node_14.connections.emplace_back(14, 11, 9);
+	node_14.connections.emplace_back(14, 13, 9);
+
 }

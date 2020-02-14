@@ -1,7 +1,7 @@
 #include <sys/AI_System.hpp>
 #include <Engine/util/Math.hpp>
 #include <util/SystemConstants.hpp>
-
+#include <iostream>
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
@@ -37,13 +37,42 @@ void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, flo
 
 void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) {
 
-	if(enemy.ai->path_node < 0)
+    std::cout << "ENTRO EN PURSE\n";
+    std::vector<MapNode>& ref_graph = context->getGraph();
+    std::cout << "GRAPH CHARGED\n";
+	if(enemy.ai->path_index < 0)
 	{
-		nearestNode(player_pos, context->getGraph()); //index -> mapnode + cercano a player
+        std::cout << "INDEX -1\n";
+		int final_path       = nearestNode(player_pos, ref_graph); //index -> mapnode + cercano a player
+        std::cout << "NEAREST NO\n";
+		int ini_path         = nearestNode(enemy.transformable->position, ref_graph); //index -> mapnode + cercano a player
+        std::cout << "NEAREST NO2\n";
+
+        enemy.ai->path_node  = ini_path;
+        enemy.ai->path_index = 0;
+        std::cout << "INDEX NO\n";
+        //guardamos el path generado, usamos el ID para identificarlo despues.
+        context->setPath(enemy.getID(), calculePath(ini_path, final_path, ref_graph));
+        std::cout << "SET PATH NO\n";
 	}
+    else
+    {
+        std::cout << "INDEX > 0\n";
+        std::vector<int>& ref_path = context->getPath(enemy.getID());
+        std::cout << "GET PATH NO\n";
+        if(++enemy.ai->path_index < ref_path.size())
+        {
+            std::cout << "INDEX: " << enemy.ai->path_index << " SIZE: " << ref_path.size() << "\n";
+            enemy.ai->path_node  = ref_path[enemy.ai->path_index];
+        }
+        else
+        {
+            enemy.ai->path_index = -1;
+            context->deletePath(enemy.getID());
+        }
+    }
 
-
-	basicBehaviour(enemy, player_pos, deltaTime, true);
+	basicBehaviour(enemy, ref_graph[enemy.ai->path_node].coord, deltaTime, true);
 }
 
 void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) {
