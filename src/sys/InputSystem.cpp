@@ -5,7 +5,6 @@
 #include <Engine/util/MathIntersection.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <Engine/util/Mouse.hpp>
-#include <iostream>
 
 void InputSystem::init() {
     for (auto * next = keyMap; next->key != static_cast<KEY_CODE>(0); ++next) {
@@ -45,13 +44,11 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
 
 	for (const auto * next = keyMap; next->p_func; ++next)
 		if (engine->isKeyPressed(next->key))
-            (this->*(next->p_func))(player, deltaTime);
+            (this->*(next->p_func))(player);
 
     const Mouse& mouse = engine->getMouse();
 
 	aim_mouse(*player.physics, mouse.position);
-
-	std::cout << *player.characterData << std::endl;
 
 	if (mouse.leftPressed) {
 		if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
@@ -65,12 +62,12 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
 	player.physics->velocity = normalize(player.velocity->direction) * player.velocity->currentSpeed * deltaTime;
 }
 
-void InputSystem::w_pressed(Entity& player, const float deltaTime) const { ++player.velocity->direction.z; }
-void InputSystem::a_pressed(Entity& player, const float deltaTime) const { --player.velocity->direction.x; }
-void InputSystem::s_pressed(Entity& player, const float deltaTime) const { --player.velocity->direction.z; }
-void InputSystem::d_pressed(Entity& player, const float deltaTime) const { ++player.velocity->direction.x; }
+void InputSystem::w_pressed(Entity& player) const { ++player.velocity->direction.z; }
+void InputSystem::a_pressed(Entity& player) const { --player.velocity->direction.x; }
+void InputSystem::s_pressed(Entity& player) const { --player.velocity->direction.z; }
+void InputSystem::d_pressed(Entity& player) const { ++player.velocity->direction.x; }
 // Dash
-void InputSystem::shift_pressed(Entity& player, const float deltaTime) const {
+void InputSystem::shift_pressed(Entity& player) const {
     if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && length(player.velocity->direction) != 0) {
         player.characterData->dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
         player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
@@ -80,7 +77,7 @@ void InputSystem::shift_pressed(Entity& player, const float deltaTime) const {
     }
 }
 // Shoot
-void InputSystem::space_pressed(Entity& player, const float deltaTime) const {
+void InputSystem::space_pressed(Entity& player) const {
 	if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 		player.characterData->attacking = true;
 		player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
@@ -90,7 +87,7 @@ void InputSystem::space_pressed(Entity& player, const float deltaTime) const {
 }
 
 // Switch Mode
-void InputSystem::m_pressed(Entity& player, const float deltaTime) const {
+void InputSystem::m_pressed(Entity& player) const {
 	if (!greater_e(player.characterData->currentSwitchingCooldown, 0)) {
 		player.characterData->switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;

@@ -20,32 +20,32 @@ struct InputSystem : System
 		const IEngine * const engine { nullptr };
 
 		// Movement
-		void w_pressed(Entity& player, float deltaTime) const;
-		void a_pressed(Entity& player, float deltaTime) const;
-		void s_pressed(Entity& player, float deltaTime) const;
-		void d_pressed(Entity& player, float deltaTime) const;
+		void w_pressed(Entity& player) const;
+		void a_pressed(Entity& player) const;
+		void s_pressed(Entity& player) const;
+		void d_pressed(Entity& player) const;
 		// Dash
-		void shift_pressed(Entity& player, float deltaTime) const;
+		void shift_pressed(Entity& player) const;
 		// Shoot
-		void space_pressed(Entity& player, float deltaTime) const;
+		void space_pressed(Entity& player) const;
 		// Switch Mode
-		void m_pressed(Entity& player, float deltaTime) const;
+		void m_pressed(Entity& player) const;
 
-	struct TKey2func {
-		KEY_CODE key;
-		void (InputSystem::*p_func)(Entity& player, float deltaTime) const;
-	};
+        void aim_mouse(Physics& phy, const vec2 &mouse) const;
 
-	TKey2func keyMap[KEY_CODE_COUNT] {
-        {KEY_W,                    nullptr },
-        {KEY_A,                    nullptr },
-        {KEY_S,                    nullptr },
-        {KEY_D,                    nullptr },
-        {KEY_LSHIFT,               nullptr },
-        {KEY_SPACE,                nullptr },
-        {KEY_M,                    nullptr },
-        {static_cast<KEY_CODE>(0), nullptr }
-    };
+        struct TKey2func {
+            KEY_CODE key;
+            void (InputSystem::*p_func)(Entity& player) const;
+        };
 
-    void aim_mouse(Physics& phy, const vec2 &mouse) const;
+        TKey2func keyMap[KEY_CODE_COUNT] {
+            {KEY_W,                    nullptr },
+            {KEY_A,                    nullptr },
+            {KEY_S,                    nullptr },
+            {KEY_D,                    nullptr },
+            {KEY_LSHIFT,               nullptr },
+            {KEY_SPACE,                nullptr },
+            {KEY_M,                    nullptr },
+            {static_cast<KEY_CODE>(0), nullptr }
+        };
 };
