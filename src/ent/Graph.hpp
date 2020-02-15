@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 
-using glm::vec2; 
+using glm::vec3; 
 
 struct Connection;
 
@@ -19,7 +19,7 @@ struct MapNode
     bool                      operator== (const MapNode&) const;
     std::vector<Connection>&  getConns();
 
-    vec2                coord { 0,0 };
+    vec3                coord { 0 };
     std::vector<Connection> connections;
 };
 

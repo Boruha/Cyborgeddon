@@ -10,9 +10,9 @@ struct AI_System : System
 
 	private:
 
-		static void patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime);
-		static void pursueBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime);
-		static void attackBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime);
+		static void patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&);
+		static void pursueBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&);
+		static void attackBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&);
 
 		static void basicBehaviour(const Entity& enemy, const vec3& target, float deltaTime, bool align);
 
@@ -20,8 +20,12 @@ struct AI_System : System
 		static void seekBehaviour(const Entity& enemy, const vec3& target, float deltaTime);
 		static void alignBehaviour(const Entity& enemy, const vec3& target);
 
+		//PATHING
+		static std::vector<int> calculePath(const int, const int, const std::vector<MapNode>&);
+    	static int nearestNode(const vec3&, const std::vector<MapNode>&);
+
 	struct TStateFunction {
-		void (*p_func)(const Entity& enemy, const vec3& player_pos, float deltaTime);
+		void (*p_func)(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&);
 	};
 
 	// IMPORTANTE : para acceder a este array hay que : stateFunctions[STATE DEL ENEMY].p_func(parametros)

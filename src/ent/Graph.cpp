@@ -3,7 +3,7 @@
 #include <algorithm>
 
 //MAPNODE FUNCTIONS
-MapNode::MapNode(const float x, const float y) : coord(x,y) {
+MapNode::MapNode(const float x, const float y) : coord(x, 0, y) {
 	connections.reserve(SIZE_CONNECTIONS);
 }
 
