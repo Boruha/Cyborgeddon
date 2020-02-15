@@ -3,6 +3,11 @@
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
 
+void AI_System::init() {
+    stateFunctions[PATROL_STATE].p_func = &AI_System::patrolBehaviour;
+    stateFunctions[PURSUE_STATE].p_func = &AI_System::pursueBehaviour;
+    stateFunctions[ATTACK_STATE].p_func = &AI_System::attackBehaviour;
+}
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
@@ -14,16 +19,18 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 			const float distance = length(v_distance);
 
 			if (greater_e(distance, PATROL_MIN_DISTANCE))
-				stateFunctions[enemy.ai->state = PATROL_STATE].p_func(enemy, player_pos, deltaTime, context);
+                enemy.ai->state = PATROL_STATE;
 			else if (greater_e(distance, PURSUE_MIN_DISTANCE))
-				stateFunctions[enemy.ai->state = PURSUE_STATE].p_func(enemy, player_pos, deltaTime, context);
+                enemy.ai->state = PURSUE_STATE;
 			else if (greater_e(distance, ATTACK_MIN_DISTANCE))
-				stateFunctions[enemy.ai->state = ATTACK_STATE].p_func(enemy, player_pos, deltaTime, context);
+                enemy.ai->state = ATTACK_STATE;
+
+            (this->*(stateFunctions[enemy.ai->state].p_func))(enemy, player_pos, deltaTime, context);
 		}
 	}
 }
 
-void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) {
+void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) const {
 	const vec3 distance(enemy.physics->position.x - enemy.ai->target_position.x, 0, enemy.physics->position.z - enemy.ai->target_position.z);
 
 	if (greater_e(length(distance), ARRIVED_MIN_DISTANCE)) {
@@ -36,7 +43,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, flo
 	}
 }
 
-void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) {
+void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) const {
     
     const vec3 distance(enemy.physics->position.x - player_pos.x, 0, enemy.physics->position.z - player_pos.z);
     const std::vector<MapNode>& ref_graph = context->getGraph();
@@ -57,7 +64,7 @@ void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, con
         
         if (!greater_e(length(distance_path), ARRIVED_MIN_DISTANCE))
         {
-            if(++enemy.ai->path_index < ref_path.size())
+            if(unsigned(++enemy.ai->path_index) < ref_path.size())
                 enemy.ai->path_node  = ref_path[enemy.ai->path_index];
             else
                 enemy.ai->path_index = -1;
@@ -65,14 +72,12 @@ void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, con
     }
 
     if (greater_e(length(distance), CHASE_MIN_DISTANCE))
-    {
         basicBehaviour(enemy, ref_graph[enemy.ai->path_node].coord, deltaTime, true);
-    }
     else
         basicBehaviour(enemy, player_pos, deltaTime, true);
 }
 
-void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) {
+void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) const {
 	
     //if we find enemy before end the pathing.
     if(enemy.ai->path_index > -1)
@@ -91,7 +96,7 @@ void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, con
     }
 }
 
-void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const float deltaTime, const bool align) {
+void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const float deltaTime, const bool align) const {
 	targetBehaviour(*enemy.ai, target);
 
 	seekBehaviour(enemy, target, deltaTime);
@@ -100,25 +105,24 @@ void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const fl
 		alignBehaviour(enemy, target);
 }
 
-void AI_System::targetBehaviour(AI& ai, const vec3& target) {
+void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
 	ai.target_position = target;
 }
 
-void AI_System::seekBehaviour(const Entity& enemy, const vec3& target, const float deltaTime) {
+void AI_System::seekBehaviour(const Entity& enemy, const vec3& target, const float deltaTime) const {
 	enemy.velocity->direction = target - enemy.physics->position;
 	enemy.velocity->direction.y = 0;
 
 	enemy.physics->velocity = normalize(enemy.velocity->direction) * enemy.velocity->currentSpeed * deltaTime;
 }
 
-void AI_System::alignBehaviour(const Entity& enemy, const vec3& target) {
+void AI_System::alignBehaviour(const Entity& enemy, const vec3& target) const {
 	enemy.physics->rotation.y = nearestAngle(enemy.physics->rotation.y, getRotationYfromXZ(enemy.physics->position - target));
 }
 
 
 //PATHING
-std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph)
-{
+std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph) const {
     //index of nodes in graph
     NodeRecord startRecord = NodeRecord();
     NodeRecord* currentRecord = nullptr;
@@ -198,8 +202,7 @@ std::vector<int> AI_System::calculePath(const int start, const int end, const st
     return path;
 }
 
-int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
-{
+int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph) const {
     //vector diff the player position and each node in the graph
     vec3 nearest     = vec3(graph.front().coord.x - point.x, 0,graph.front().coord.z - point.z);
     //decision value
@@ -209,7 +212,7 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
     //counter
     int      i           = -1;
 
-    for(auto& node : graph)
+    for(const auto& node : graph)
     {
         ++i;
         nearest.x = node.coord.x - point.x;
@@ -219,7 +222,7 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
             small_dist  = length(nearest);
             small_index = i;
         }
-
     }
+
     return small_index;
 }

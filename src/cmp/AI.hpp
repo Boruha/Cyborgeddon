@@ -12,10 +12,10 @@ struct AI : public Component {
 	AI_State state { PATROL_STATE };
 
 	//patrol var
-	vec3 patrol_position[MAX_PATROL_POSITIONS]; // intentar hacer const
+	vec3 patrol_position[MAX_PATROL_POSITIONS] { }; // intentar hacer const
 
-  	unsigned int patrol_index { 0 };
-  	unsigned int max_index 	  { 0 };
+  	unsigned patrol_index { 0 };
+  	unsigned max_index 	  { 0 };
 	//pathing var
 	int   path_index 	      { -1 };	   //vector<int> index (map).
   	int   path_node           { -1 };	   //graph index.	   

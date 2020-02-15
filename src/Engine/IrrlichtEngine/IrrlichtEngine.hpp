@@ -44,6 +44,4 @@ struct IrrlichtEngine final : public virtual IEngine {
         irr::video::IVideoDriver *  videoDriver  { nullptr };
 
         InputEventReceiver          eventReceiver;
-
 };
-

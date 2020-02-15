@@ -31,7 +31,7 @@ struct EntityManager : GameContext {
 	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
 
 	[[nodiscard]]       std::vector<int>& getPath(EntityID eid) 		  override { return paths[eid]; }
-				        void deletePath(EntityID eid) 			          override { paths.erase(eid); }
+				        void deletePath(EntityID eid) 			          override { paths.erase(eid);  }
 				  		void setPath(EntityID eid, std::vector<int> path) override { paths[eid] = path; }
 
 	[[nodiscard]] const Entity& getEntityByID(std::size_t id) const override;
