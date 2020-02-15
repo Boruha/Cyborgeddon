@@ -3,7 +3,7 @@
 #include <Engine/util/Color.hpp>
 #include <Engine/util/Mouse.hpp>
 
-void SunlightEngine::init(unsigned width, unsigned height, const wchar_t *name) {
+void SunlightEngine::init(const unsigned width, const unsigned height, const wchar_t * const name) {
 
 }
 
@@ -19,7 +19,7 @@ bool SunlightEngine::isKeyPressed(const KEY_CODE code) const {
 	return false;
 }
 
-const Mouse &SunlightEngine::getMouse() const {
+const Mouse & SunlightEngine::getMouse() const {
 	// TODO : 	CAMBIAR EL VALOR DE RETORNO
 	//  			vamos a hacer que el juego acabe para evitar que se nos pase actualizar este metodo
 	exit(-1);
