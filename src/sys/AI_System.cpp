@@ -36,48 +36,52 @@ void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, flo
 }
 
 void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) {
+    
+    const vec3 distance(enemy.physics->position.x - player_pos.x, 0, enemy.physics->position.z - player_pos.z);
+    const std::vector<MapNode>& ref_graph = context->getGraph();
 
-    std::cout << "ENTRO EN PURSE\n";
-    std::vector<MapNode>& ref_graph = context->getGraph();
-    std::cout << "GRAPH CHARGED\n";
-	if(enemy.ai->path_index < 0)
-	{
-        std::cout << "INDEX -1\n";
-		int final_path       = nearestNode(player_pos, ref_graph); //index -> mapnode + cercano a player
-        std::cout << "NEAREST NO\n";
-		int ini_path         = nearestNode(enemy.transformable->position, ref_graph); //index -> mapnode + cercano a player
-        std::cout << "NEAREST NO2\n";
-
+    if(enemy.ai->path_index < 0)
+    {
+        int final_path       = nearestNode(player_pos, ref_graph); //index -> mapnode + cercano a player
+        int ini_path         = nearestNode(enemy.physics->position, ref_graph); //index -> mapnode + cercano a player
         enemy.ai->path_node  = ini_path;
         enemy.ai->path_index = 0;
-        std::cout << "INDEX NO\n";
         //guardamos el path generado, usamos el ID para identificarlo despues.
         context->setPath(enemy.getID(), calculePath(ini_path, final_path, ref_graph));
-        std::cout << "SET PATH NO\n";
-	}
+    }
     else
     {
-        std::cout << "INDEX > 0\n";
         std::vector<int>& ref_path = context->getPath(enemy.getID());
-        std::cout << "GET PATH NO\n";
-        if(++enemy.ai->path_index < ref_path.size())
+	    const vec3 distance_path(enemy.physics->position.x - enemy.ai->target_position.x, 0, enemy.physics->position.z - enemy.ai->target_position.z);
+        
+        if (!greater_e(length(distance_path), ARRIVED_MIN_DISTANCE))
         {
-            std::cout << "INDEX: " << enemy.ai->path_index << " SIZE: " << ref_path.size() << "\n";
-            enemy.ai->path_node  = ref_path[enemy.ai->path_index];
-        }
-        else
-        {
-            enemy.ai->path_index = -1;
-            context->deletePath(enemy.getID());
+            if(++enemy.ai->path_index < ref_path.size())
+                enemy.ai->path_node  = ref_path[enemy.ai->path_index];
+            else
+                enemy.ai->path_index = -1;
         }
     }
 
-	basicBehaviour(enemy, ref_graph[enemy.ai->path_node].coord, deltaTime, true);
+    if (greater_e(length(distance), CHASE_MIN_DISTANCE))
+    {
+        basicBehaviour(enemy, ref_graph[enemy.ai->path_node].coord, deltaTime, true);
+    }
+    else
+        basicBehaviour(enemy, player_pos, deltaTime, true);
 }
 
 void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) {
-	basicBehaviour(enemy, player_pos, 0, true);
 	
+    //if we find enemy before end the pathing.
+    if(enemy.ai->path_index > -1)
+    {
+        enemy.ai->path_index = -1;
+        context->deletePath(enemy.getID());
+    }
+
+    basicBehaviour(enemy, player_pos, 0, true);
+    
     if(!greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
         enemy.characterData->attacking = true;
         enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
@@ -207,7 +211,7 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
         ++i;
         nearest.x = node.coord.x - point.x;
         nearest.z = node.coord.z - point.z;
-        if(nearest.length() < small_dist)
+        if(length(nearest) < small_dist)
         {
             small_dist  = length(nearest);
             small_index = i;
