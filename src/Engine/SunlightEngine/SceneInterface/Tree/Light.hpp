@@ -11,5 +11,6 @@ struct Light : IEntity {
     [[nodiscard]] const vec3& getValue() const { return value; }
 
     private:
+
         vec3 value { };
 };
