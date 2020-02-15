@@ -1,12 +1,8 @@
 #include <sys/AI_System.hpp>
 #include <Engine/util/Math.hpp>
 #include <util/SystemConstants.hpp>
-<<<<<<< HEAD
 #include <util/SoundPaths.hpp>
 
-=======
-#include <iostream>
->>>>>>> Pathfinding_v02
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
