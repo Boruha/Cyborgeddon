@@ -13,6 +13,10 @@ IrrlichtNodeImpl::IrrlichtNodeImpl(
 	// implementar constructor si es necesario
 }
 
+IrrlichtNodeImpl::operator bool() const {
+    return node != nullptr;
+}
+
 void IrrlichtNodeImpl::remove() {
 	if (node) {
 		node->remove();

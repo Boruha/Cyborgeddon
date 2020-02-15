@@ -1,14 +1,16 @@
 #pragma once
 
-#include <Engine/EngineInterface/SceneInterface/INodeImpl.hpp>
+#include <Engine/EngineInterface/SceneInterface/INode.hpp>
 
 namespace irr::scene {
 	struct ISceneNode;
 }
 
-struct IrrlichtNodeImpl : INodeImpl {
+struct IrrlichtNodeImpl : INode {
 	explicit IrrlichtNodeImpl(irr::scene::ISceneNode *, const vec3 *, const vec3 *, const vec3 *);
 	~IrrlichtNodeImpl() override = default;
+
+    explicit operator bool() const override;
 
 	void remove() override;
 

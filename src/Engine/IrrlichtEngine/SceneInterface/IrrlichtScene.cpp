@@ -16,11 +16,11 @@ std::unique_ptr<ICameraNode> IrrlichtScene::addCameraNode(const vec3 * pos, cons
 }
 
 vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far) const {
-	const glm::mat4x4 projectionMatrix = camera->getProjectionMatrix();
-	const glm::mat4x4 viewMatrix = camera->getViewMatrix();
+	const glm::mat4x4& projectionMatrix = camera->getProjectionMatrix();
+	const glm::mat4x4& viewMatrix = camera->getViewMatrix();
 
 	// Deshacemos [projection * view] obteniendo su inversa (para pasar de coordenadas del mundo a la pantalla, hay que hacer projection * view)
-	const glm::mat4x4 unprojectMatrix = glm::inverse(projectionMatrix * viewMatrix);
+	const glm::mat4x4& unprojectMatrix = glm::inverse(projectionMatrix * viewMatrix);
 
 	const float VIEWPORT_HEIGHT = sceneManager->getVideoDriver()->getViewPort().getHeight();
 	const float VIEWPORT_WIDTH  = sceneManager->getVideoDriver()->getViewPort().getWidth();
