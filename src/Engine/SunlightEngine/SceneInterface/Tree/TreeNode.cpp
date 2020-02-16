@@ -2,27 +2,27 @@
 
 void TreeNode::addChildren(TreeNode * const child) {
     children.emplace_back(child);
-};
+}
 
 void TreeNode::removeChildren(TreeNode * const child) {
     children.erase(std::remove(children.begin(), children.end(), child), children.end());
-};
+}
 
 void TreeNode::setEntity(IEntity * const ent) {
     entity = ent;
-};
+}
 
 void TreeNode::setParent(TreeNode * const p) {
     parent = p;
-};
+}
 
 IEntity * TreeNode::getEntity() const {
     return entity;
-};
+}
 
 TreeNode * TreeNode::getParent() const {
     return parent;
-};
+}
 
 void TreeNode::render(const mat4x4& m) const {
     const mat4x4 newMatrix = m * calculateMatrix();
