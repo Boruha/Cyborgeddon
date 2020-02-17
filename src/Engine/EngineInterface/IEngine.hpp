@@ -15,7 +15,7 @@ struct IEngine {
     virtual void shutdown()                           const = 0;
 
     [[nodiscard]] virtual bool isKeyPressed(KEY_CODE) const = 0;
-    [[nodiscard]] virtual const Mouse & getMouse()    const = 0;
+    [[nodiscard]] virtual const Mouse & getMouse()     	    = 0;
 
     virtual void clear(Color)                         const = 0;
     virtual void draw()                               const = 0;

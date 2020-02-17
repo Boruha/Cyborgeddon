@@ -30,7 +30,7 @@ bool IrrlichtEngine::isKeyPressed(const KEY_CODE code) const {
 	return eventReceiver.IsKeyDown(code);
 }
 
-const Mouse & IrrlichtEngine::getMouse() const {
+const Mouse & IrrlichtEngine::getMouse() {
 	return eventReceiver.getMouse();
 }
 

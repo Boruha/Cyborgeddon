@@ -30,7 +30,7 @@ struct IrrlichtEngine final : public virtual IEngine {
 
     [[nodiscard]] bool isKeyPressed(KEY_CODE code) const override;
 
-    [[nodiscard]] const Mouse & getMouse() const override;
+    [[nodiscard]] const Mouse & getMouse() override;
 
     void clear(Color color) const override;
 

@@ -10,14 +10,14 @@ using glm::vec2;
 
 struct InputSystem : System
 {
-	explicit InputSystem(const IEngine * const engine) : engine(engine) { }
+	explicit InputSystem(IEngine * const engine) : engine(engine) { }
 
 	void init() override;
 	void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
 	void reset() override {  }
 
 	private:
-		const IEngine * const engine { nullptr };
+		IEngine * const engine {nullptr };
 
 		// Movement
 		void w_pressed(Entity& player) const;
@@ -43,7 +43,8 @@ struct InputSystem : System
             {KEY_A,                    nullptr },
             {KEY_S,                    nullptr },
             {KEY_D,                    nullptr },
-            {KEY_LSHIFT,               nullptr },
+            {KEY_LSHIFTIRR,            nullptr },
+			{KEY_LSHIFTGL,             nullptr },
             {KEY_SPACE,                nullptr },
             {KEY_M,                    nullptr },
             {static_cast<KEY_CODE>(0), nullptr }

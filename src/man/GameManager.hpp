@@ -23,7 +23,7 @@ struct GameManager {
 	// esto seguramente pertenezca al motor y haya que hacer algo tipo "registrar sistema" y que sea el motor el que los gestione
 	std::vector<std::unique_ptr<System>> systems;
 
-	EngineManager engineManager { IRRLICHT };
+	EngineManager engineManager { SUNLIGHT };
 	std::unique_ptr<IEngine> engine = engineManager.getEngine();
     TextureManager textureManager { engine.get() };
 

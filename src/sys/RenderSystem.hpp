@@ -12,11 +12,6 @@ struct RenderSystem : public System {
 	void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
 	void reset() override {  }
 
-	void updateFPS(float deltaTime);
-
 	const IEngine * const engine { nullptr };
-	Color background { static_cast<const COLOR>( BACKGROUND_COLOR ) };
-
-	float timeForFPS {0};
-	unsigned int FPS_counter {0};
+	const Color background { static_cast<const COLOR>( BACKGROUND_COLOR ) };
 };

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <src/Engine/SunlightEngine/SceneInterface/Tree/IEntity.hpp>
+#include <Engine/SunlightEngine/SceneInterface/Tree/IEntity.hpp>
+#include <Engine/SunlightEngine/SceneInterface/Resource/RMesh.hpp>
 
 struct Mesh : IEntity {
     ~Mesh() override = default;
@@ -14,5 +15,5 @@ struct Mesh : IEntity {
     }
 
     private :
-        const void * mesh { nullptr };
+        const RMesh * mesh { nullptr };
 };
