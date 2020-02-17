@@ -16,6 +16,7 @@ constexpr char const * PICKUP_KEY_EVENT         = "event:/player/pickup_key";
 
 //MUSIC
 constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
+constexpr char const * BACKGROUND_MUSIC_EVENT_4 = "event:/music/main_music_4";
 
 //ENEMY
 constexpr char const * ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled_attack";

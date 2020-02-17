@@ -49,7 +49,7 @@ void SoundSystem::init() {
 	createSoundEvent(DEMON_CHANGE_EVENT);
     createSoundEvent(PICKUP_KEY_EVENT);
 
-	createMusicEvent(BACKGROUND_MUSIC_EVENT, &backingTrack, .2f);
+	createMusicEvent(BACKGROUND_MUSIC_EVENT_4, &backingTrack, .2f);
 
 	startBackgroundMusic();
 }
