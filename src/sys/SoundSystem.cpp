@@ -39,52 +39,6 @@ void SoundSystem::init() {
 	ERRCHECK ( system->loadBankFile(MASTER_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
 	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
 
-<<<<<<< HEAD
-	{
-		ERRCHECK ( system->getEvent(BACKGROUND_MUSIC_EVENT, &backingTrack.event) );
-		ERRCHECK ( backingTrack.event->createInstance(&backingTrack.instance) );
-		ERRCHECK ( backingTrack.instance->setVolume(0.25f) );
-	}
-
-	//PERSONAJE
-	sounds[ATTACK].reserve(2);		// eventos de ataque
-	sounds[CHANGE].reserve(2);	// eventos de cambio
-	sounds[DASH].reserve(2);    //Dash para angel y demonio
-
-	//ENEMIGO ASSEMBLED
-	sounds[ENEMY_ASSEMBLED].reserve(2);
-
-	//ENEMIGO DEMONIO
-	    //...
-	//ENEMIGO ANGEL
-	    //...
-
-
-	for (unsigned i = 0; i < 2; ++i) {
-	    //PERSONAJE
-		sounds[ATTACK].emplace_back();
-		ERRCHECK ( system->getEvent(attackEventName[i], &sounds[ATTACK][i].event) );
-		ERRCHECK ( sounds[ATTACK][i].event->createInstance(&sounds[ATTACK][i].instance) );
-
-		sounds[CHANGE].emplace_back();
-		ERRCHECK ( system->getEvent(changeEventName[i], &sounds[CHANGE][i].event) );
-		ERRCHECK ( sounds[CHANGE][i].event->createInstance(&sounds[CHANGE][i].instance) );
-
-        sounds[DASH].emplace_back();
-        ERRCHECK ( system->getEvent(dashEventName[i], &sounds[DASH][i].event) );
-        ERRCHECK ( sounds[DASH][i].event->createInstance(&sounds[DASH][i].instance) );
-
-        //ENEMIGO ASSEMBLED
-        sounds[ENEMY_ASSEMBLED].emplace_back();
-        ERRCHECK ( system->getEvent(NeutralAttackEventName[i], &sounds[ENEMY_ASSEMBLED][i].event) );
-        ERRCHECK ( sounds[ENEMY_ASSEMBLED][i].event->createInstance(&sounds[ENEMY_ASSEMBLED][i].instance) );
-
-        //ENEMIGO DEMONIO
-        //...
-        //ENEMIGO ANGEL
-        //...
-	}
-=======
 	soundMessages.reserve(16);
 
 	createSoundEvent(DEMON_SHOOT_EVENT);
@@ -93,69 +47,15 @@ void SoundSystem::init() {
 	createSoundEvent(DASH_PLAYER_EVENT);
 	createSoundEvent(ANGEL_CHANGE_EVENT);
 	createSoundEvent(DEMON_CHANGE_EVENT);
+    createSoundEvent(PICKUP_KEY_EVENT);
 
 	createMusicEvent(BACKGROUND_MUSIC_EVENT, &backingTrack, .2f);
->>>>>>> master
 
 	startBackgroundMusic();
 }
 
 void SoundSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
 
-<<<<<<< HEAD
-	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
-
-	    //EVENTOS PARA LOS ENEMIGOS
-	    if(data.getEntityType()==ENEMY){
-
-	        if(data.mode == NEUTRAL){
-	            if(data.attacking){
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[ENEMY_ASSEMBLED][0].instance->start();
-                    data.attacking = false;
-	            }
-	        }
-
-	        if(data.mode == DEMON){
-	            //...
-	        }
-
-	        if(data.mode == ANGEL){
-	            //...
-	        }
-
-	    }
-
-	    //EVENTOS PARA PLAYER
-        if(data.getEntityType()==PLAYER) {
-            if (data.mode == DEMON) {
-                if (data.attacking) {
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[ATTACK][0].instance->start();
-                    data.attacking = false;
-                }
-                if (data.switchingMode) {
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[CHANGE][0].instance->start();
-                    data.switchingMode = false;
-                }
-                if (data.dashing) {
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[DASH][0].instance->start();
-                    data.dashing = false;
-                }
-            } else if (data.mode == ANGEL) {
-                if (data.attacking) {
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[ATTACK][1].instance->start();
-                    data.attacking = false;
-                }
-                if (data.switchingMode) {
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[CHANGE][1].instance->start();
-                    data.switchingMode = false;
-                }
-                if (data.dashing) {
-                    const_cast<std::unordered_map<TipoSonido, std::vector<Sound>> &>(sounds)[DASH][1].instance->start();
-                    data.dashing = false;
-                }
-            }
-        }
-=======
 	while (!soundMessages.empty()) {
 		const auto& message = soundMessages.back(); // leo el mensaje
 
@@ -169,7 +69,6 @@ void SoundSystem::update(const std::unique_ptr<GameContext>& context, const floa
 				break;                                                                  // corto el bucle
 			}
 		}
->>>>>>> master
 
 		soundMessages.pop_back();                                                       // elimino el mensaje del vector
 	}

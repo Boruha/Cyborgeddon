@@ -43,54 +43,19 @@ struct SoundSystem : public System {
 
 private:
 
-<<<<<<< HEAD
-    FMOD::System* core { nullptr };
-	FMOD::Studio::System* system { nullptr };
-	FMOD::Studio::Bank* master { nullptr };
-	FMOD::Studio::Bank* strings { nullptr };
-
-	                  //PERSONAJE           //ENSAMBLADO    //DEMONIOS   //ANGELES
-	enum TipoSonido { ATTACK, CHANGE, DASH , ENEMY_ASSEMBLED, ENEMY_DEMON, ENEMY_ANGEL};
-=======
 	void startBackgroundMusic();
 
 	void createSoundEvent(const char *, float = 1.f);
 	void createMusicEvent(const char *, Music *, float = 1.f);
->>>>>>> master
 
     void createInstance(const Event *, Instance *&, float) const;
 
-<<<<<<< HEAD
-	//PERSONAJE
-	const char * const attackEventName[2] {
-		DEMON_SHOOT_EVENT,
-		ANGEL_SHOOT_EVENT
-	};
-=======
     FMOD::System* core { nullptr };
 	EngineSystem * system { nullptr };
 	Bank * master { nullptr };
 	Bank * strings { nullptr };
->>>>>>> master
 
     Music backingTrack;
 
-<<<<<<< HEAD
-	const char * const dashEventName[2]{
-	    DASH_PLAYER_EVENT,
-	    DASH_PLAYER_EVENT
-	};
-
-	//ENEMIGO ASSEMBLED
-    const char * const NeutralAttackEventName[2]{
-        ASSEMBLED_ATTACK_EVENT,
-        ASSEMBLED_ATTACK_EVENT
-    };
-
-	//ENEMIGO DEMONIO
-
-	//ENEMIGO ANGEL
-=======
 	std::unordered_map<const char *, Sound> soundEvents;
->>>>>>> master
 };

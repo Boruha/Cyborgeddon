@@ -1,5 +1,6 @@
 #include <sys/CollisionSystem.hpp>
 #include <Engine/util/Math.hpp>
+#include <util/SoundPaths.hpp>
 
 // TODO: quiza sea conveniente tener 3 sistemas de colisiones distintos, uno para objetos dinamicos, otro para estaticos y otro para objetos que se muevan muy rapido (ray)
 
@@ -78,6 +79,8 @@ void CollisionSystem::dynamicCollision(BoundingBox& movingBox, vec3& velocity, B
 			if (otherBox.getEntityType() == KEY) {
 				const auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
 				door.collider->type = DYNAMIC;
+
+                soundMessages.emplace_back(PICKUP_KEY_EVENT);   //Creo el SoundMessage de coger una llave
 			}
 			otherBox.makeUndefined();	// nos ahorramos comprobaciones si hacemos que el sistema ignore la bounding
 		}
