@@ -35,7 +35,7 @@ CC          := $(CCACHE) g++
 C           := $(CCACHE) gcc
 
 # FLAGS
-CCFLAGS     := -pthread -Wall -pedantic -std=c++17
+CCFLAGS     := -pthread -Wall -pedantic -std=c++17 -fno-exceptions
 CFLAGS      := $(CCFLAGS)
 RELEASEFLAG := -O3
 DEBUGFLAG   := -Og
