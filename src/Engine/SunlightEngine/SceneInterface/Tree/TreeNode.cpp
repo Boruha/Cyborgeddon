@@ -80,5 +80,5 @@ const mat4x4& TreeNode::getTransform() const {
 }
 
 mat4x4 TreeNode::calculateMatrix() const {
-    return glm::scale(transform, scale) * glm::rotate(transform, 0.f, rotation) * glm::translate(transform, translation);
+    return glm::scale(transform, scale) * glm::rotate(transform, glm::radians(0.f), rotation) * glm::translate(transform, translation);
 }
