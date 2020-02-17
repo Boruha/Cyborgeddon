@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Engine/util/Vector2.hpp>
+#include <glm/glm.hpp>
 
 struct Mouse {
-    Vector2u position;
+    glm::vec2 position;
     bool leftPressed  { false };
     bool rightPressed { false };
 };

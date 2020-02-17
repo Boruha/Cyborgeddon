@@ -36,5 +36,5 @@ void Entity::makeUndefined() {
     collider		= { nullptr };
     ai				= { nullptr };
 
-    node	        = { nullptr };
+    inode			= { nullptr };
 }

@@ -4,7 +4,7 @@
 #include <man/TextureManager.hpp>
 #include <man/EngineManager.hpp>
 #include <sys/RenderSystem.hpp>
-#include <Engine/EngineInterface/Engine.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 #include <chrono>
 
 struct System;
@@ -18,20 +18,18 @@ struct GameManager {
 	void loop();
 	void terminate();
 
-	static constexpr std::chrono::duration<float> fixedDelta { FIXED_DELTA_TIME };
+	const std::chrono::duration<float> fixedDelta { FIXED_DELTA_TIME };
 
-	// render first so we use its device for the other systems and/or managers
-	RenderSystem render { Vector2u(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME };
-
+	// esto seguramente pertenezca al motor y haya que hacer algo tipo "registrar sistema" y que sea el motor el que los gestione
 	std::vector<std::unique_ptr<System>> systems;
 
-	std::unique_ptr<GameContext> entityManager = std::make_unique<EntityManager>(render.device);
+	EngineManager engineManager { IRRLICHT };
+	std::unique_ptr<IEngine> engine = engineManager.getEngine();
+    TextureManager textureManager { engine.get() };
 
-	TextureManager textureManager { render.device };
-
-//  TextureManager textureManager;
-//	EngineManager engineManager { IRRLICHT };
-//	std::unique_ptr<Engine> engine = engineManager.getEngine();
+    // quiza el sistema de render deba mantenerse al margen porque es algo "especial" en el sentido de cuando tiene que ser llamado
+	RenderSystem render { glm::vec2(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME, engine.get() };
+	std::unique_ptr<GameContext> entityManager = std::make_unique<EntityManager>(engine.get());
 };
 
 // TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)

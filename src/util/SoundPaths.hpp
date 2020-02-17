@@ -10,9 +10,13 @@ constexpr char const * ANGEL_SHOOT_EVENT		= "event:/player/disparo_angel";
 constexpr char const * DEMON_CHANGE_EVENT		= "event:/player/change_demon";
 constexpr char const * ANGEL_CHANGE_EVENT		= "event:/player/change_angel";
 
+<<<<<<< HEAD
 constexpr char const * DASH_PLAYER_EVENT        = "event:/player/dash_player";
 
 constexpr char const * PICKUP_KEY_EVENT         = "event:/player/pickup_key";
+=======
+constexpr char const * DASH_PLAYER_EVENT        = "event:/dash_player";
+>>>>>>> master
 
 //MUSIC
 constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
@@ -21,8 +25,4 @@ constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
 constexpr char const * ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled_attack";
 
 //AMBIENT
-
-
-
-
 

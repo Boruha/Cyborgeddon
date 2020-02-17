@@ -35,7 +35,7 @@ CC          := $(CCACHE) g++
 C           := $(CCACHE) gcc
 
 # FLAGS
-CCFLAGS     := -pthread -Wall -pedantic -std=c++17
+CCFLAGS     := -pthread -Wall -pedantic -std=c++17 -fno-exceptions
 CFLAGS      := $(CCFLAGS)
 RELEASEFLAG := -O3
 DEBUGFLAG   := -Og
@@ -73,7 +73,7 @@ ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
 INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I.
-LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -Wl,-rpath,$(LIBDIR)
+LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -Wl,-rpath,$(LIBDIR)
 GOLD_OPTION	:= -fuse-ld=gold
 
 # CLEAN

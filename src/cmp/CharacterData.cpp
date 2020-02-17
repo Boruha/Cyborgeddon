@@ -1,4 +1,5 @@
 #include <cmp/CharacterData.hpp>
+#include <iostream>
 
 CharacterData::CharacterData(   const EntityType type,          const std::size_t e_ID,         const ModeType mode,
                                 const float health,             const float switchCD,           const float attackDamage,

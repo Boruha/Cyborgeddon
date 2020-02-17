@@ -7,7 +7,7 @@
 
 EngineManager::EngineManager(const EngineType engineType) : type(engineType) {  }
 
-std::unique_ptr<Engine> EngineManager::getEngine() const {
+std::unique_ptr<IEngine> EngineManager::getEngine() const {
     switch (type) {
         case IRRLICHT : return std::make_unique<IrrlichtEngine>();
         case SUNLIGHT : return std::make_unique<SunlightEngine>();

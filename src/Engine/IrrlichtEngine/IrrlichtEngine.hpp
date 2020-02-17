@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/EngineInterface/Engine.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
 #include <Engine/IrrlichtEngine/SceneInterface/IrrlichtScene.hpp>
 
@@ -18,25 +18,25 @@ namespace irr {
 	}
 }
 
-struct IrrlichtEngine final : public virtual Engine {
+struct IrrlichtEngine final : public virtual IEngine {
 
     ~IrrlichtEngine() override = default;
 
-    void init(unsigned width, unsigned height, const wchar_t * name) final;
+    void init(unsigned width, unsigned height, const wchar_t * name) override;
 
-    [[nodiscard]] bool run() const final;
+    [[nodiscard]] bool run() const override;
 
-    void shutdown() const final;
+    void shutdown() const override;
 
-    [[nodiscard]] bool isKeyPressed(KEY_CODE code) const final;
+    [[nodiscard]] bool isKeyPressed(KEY_CODE code) const override;
 
-    [[nodiscard]] const Mouse & getMouse() const final;
+    [[nodiscard]] const Mouse & getMouse() override;
 
-    void clear(Color color) const final;
+    void clear(Color color) const override;
 
-    void draw() const final;
+    void draw() const override;
 
-    void display() const final;
+    void display() const override;
 
     private:
         irr::IrrlichtDevice *       device       { nullptr };
@@ -44,6 +44,4 @@ struct IrrlichtEngine final : public virtual Engine {
         irr::video::IVideoDriver *  videoDriver  { nullptr };
 
         InputEventReceiver          eventReceiver;
-
 };
-

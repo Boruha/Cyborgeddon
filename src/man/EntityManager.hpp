@@ -3,18 +3,18 @@
 #include <util/GameContext.hpp>
 #include <src/cmp/Storage.hpp>
 
-namespace Sun {
-    struct Device;
-}
+
+struct IEngine;
 
 struct EntityManager : GameContext {
-	explicit EntityManager(const Sun::Device& device) : device(device) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
-	~EntityManager() override { cleanData(); }
+	explicit EntityManager(const IEngine * const engine) : engine(engine), componentStorage(engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
+	~EntityManager() override = default;
 
 	void init() override;
 	bool update() override;
 
 	void createLevel() override;
+	void createGraph() override;
 	void createBullet () override;
 
 	void addToDestroy(std::size_t ID) override;
@@ -27,8 +27,15 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const std::vector<Entity>& getEntities() const override { return entities; }
 	[[nodiscard]] 		std::vector<Entity>& getEntities() 	  	 override { return entities; }
 
+	[[nodiscard]] const std::vector<MapNode>& getGraph() const override { return graph; }
+	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
+
+	[[nodiscard]]       std::vector<int>& getPath(EntityID eid) 		  override { return paths[eid]; }
+				        void deletePath(EntityID eid) 			          override { paths.erase(eid);  }
+				  		void setPath(EntityID eid, std::vector<int> path) override { paths[eid] = path; }
+
 	[[nodiscard]] const Entity& getEntityByID(std::size_t id) const override;
-	[[nodiscard]] const Entity& getEntityByID(std::size_t id) 		override;
+	[[nodiscard]] 		Entity& getEntityByID(std::size_t id) 		override;
 
 	[[nodiscard]] const variantComponentVectorTypes& getComponents(ComponentType type) const override { return componentStorage.getComponents(type); }
 	[[nodiscard]] 		variantComponentVectorTypes& getComponents(ComponentType type) 		 override { return componentStorage.getComponents(type); }
@@ -38,11 +45,11 @@ struct EntityManager : GameContext {
 		void initData(int maxEntities, int maxToDelete, int maxComponents);
         void cleanData();
 
-		void createPairPlayerCamera (const Vector3f& pos, const Vector3f& dim, const Vector3f& posCamera);
-		void createEnemy  (const Vector3f& pos, const Vector3f& dim, const std::vector<Vector3f>& patrol);
-		void createWall   (const Vector3f& pos, const Vector3f& dim);
-		void createFloor  (const char* tex, const Vector3f& pos, const Vector3f& dim);
-		void createPairKeyDoor (const Vector3f& keyPos, const Vector3f& keyDim, const Vector3f& doorPos, const Vector3f& doorDim);
+		void createPairPlayerCamera (const vec3& pos, const vec3& dim, const vec3& posCamera);
+		void createEnemy  (const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
+		void createWall   (const vec3& pos, const vec3& dim);
+		void createFloor  (const char* tex, const vec3& pos, const vec3& dim);
+		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
 
 		void killEntities();
 		void moveDeadEntities();
@@ -53,7 +60,10 @@ struct EntityManager : GameContext {
 		Entity* player { nullptr };
 		Entity* camera { nullptr };
 
-	    const Sun::Device& device;
+    	std::vector<MapNode> graph;
+		std::map<EntityID, std::vector<int>> paths;
+
+	    const IEngine * const engine { nullptr };
 
 	    std::vector<std::size_t> toDelete;
 	    std::vector<Entity> entities;

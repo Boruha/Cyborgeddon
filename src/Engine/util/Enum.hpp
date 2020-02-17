@@ -7,15 +7,13 @@ enum KEY_CODE : unsigned
     KEY_SPACE 		= irr::KEY_SPACE,
     KEY_A 			= irr::KEY_KEY_A,
     KEY_D 			= irr::KEY_KEY_D,
-    KEY_LSHIFT   	= irr::KEY_LSHIFT,
+    KEY_LSHIFTIRR   = irr::KEY_LSHIFT,
+    KEY_LSHIFTGL	= 340,
     KEY_M			= irr::KEY_KEY_M,
     KEY_S 			= irr::KEY_KEY_S,
     KEY_W 			= irr::KEY_KEY_W,
-    KEY_LEFT		= irr::KEY_LEFT,
-    KEY_RIGHT		= irr::KEY_RIGHT,
     KEY_CODE_COUNT 	= irr::KEY_KEY_CODES_COUNT
 };
-
 
 enum COLOR : unsigned
 {

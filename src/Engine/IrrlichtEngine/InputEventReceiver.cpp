@@ -1,6 +1,6 @@
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
 
-bool InputEventReceiver::OnEvent(const irr::SEvent &event) {
+bool InputEventReceiver::OnEvent(const irr::SEvent & event) {
 
 	switch (event.EventType) {
 		case irr::EET_MOUSE_INPUT_EVENT :
@@ -40,6 +40,6 @@ bool InputEventReceiver::IsKeyDown(const KEY_CODE keyCode) const {
 	return keyboard.keys[keyCode];
 }
 
-const Mouse &InputEventReceiver::getMouse() const {
+const Mouse & InputEventReceiver::getMouse() const {
 	return mouse;
 }

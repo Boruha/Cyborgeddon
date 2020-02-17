@@ -7,7 +7,7 @@
 
 struct InputEventReceiver : irr::IEventReceiver {
 
-    bool OnEvent(const irr::SEvent& event) final;
+    bool OnEvent(const irr::SEvent& event) override;
 
     [[nodiscard]] bool IsKeyDown(KEY_CODE keyCode) const;
 

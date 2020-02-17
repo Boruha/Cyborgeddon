@@ -1,4 +1,5 @@
 #include <cmp/Component.hpp>
+#include <iostream>
 
 std::ostream& Component::print(std::ostream& os, const std::string& name) const {
 	return 	os	<< "\n\n"		<< name

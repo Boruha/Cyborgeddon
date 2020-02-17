@@ -1,6 +1,6 @@
 #include <sys/MovementSystem.hpp>
 
-void MovementSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) const {
+void MovementSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
 	// A la camara hay que darle la velocidad en funcion de la del jugador tras ser modificada por otros sistemas
 	context->getCamera().physics->velocity = context->getPlayer().physics->velocity;
 

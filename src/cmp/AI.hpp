@@ -5,16 +5,20 @@
 #include <vector>
 
 struct AI : public Component {
-	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<Vector3f>& patrol);
+	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<vec3>& patrol);
 
 	friend std::ostream& operator<<(std::ostream& os, const AI& ai);
 
 	AI_State state { PATROL_STATE };
 
-	Vector3f patrol_position[MAX_PATROL_POSITIONS]; // intentar hacer const
+	//patrol var
+	vec3 patrol_position[MAX_PATROL_POSITIONS] { }; // intentar hacer const
 
-  	unsigned short patrol_index { 0 };
-  	unsigned short max_index 	{ 0 };
+  	unsigned patrol_index { 0 };
+  	unsigned max_index 	  { 0 };
+	//pathing var
+	int   path_index 	      { -1 };	   //vector<int> index (map).
+  	int   path_node           { -1 };	   //graph index.	   
 
-	Vector3f target_position {0};
+	vec3 target_position      { 0 };
 };

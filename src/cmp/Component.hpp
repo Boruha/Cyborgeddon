@@ -2,6 +2,10 @@
 
 #include <util/Alias.hpp>
 
+#include <glm/glm.hpp>
+
+using glm::vec3; // Component no lo usa pero casi todos los componentes si
+
 struct Component {
 	explicit Component(const EntityType type, const EntityID e_ID) : entityID(e_ID), entityType(type) {  }
 

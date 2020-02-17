@@ -1,15 +1,14 @@
 #pragma once
 
-namespace Sun {
-    struct Device;
-}
-
-struct Engine;
+struct IEngine;
 
 struct TextureManager {
-    explicit TextureManager(const Sun::Device& device) : device(device) {  }
-    void loadTextures(/*const Engine * engine*/) const;
+	explicit TextureManager(const IEngine * const engine) : engine(engine) {  };
 
-    private :
-        const Sun::Device& device;
+    void loadTextures() const;
+    void unloadTexture(const char * path) const;
+    void unloadTextures() const;
+
+	private :
+		const IEngine * const engine { nullptr };
 };

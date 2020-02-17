@@ -3,6 +3,9 @@
 #include <util/ComponentType.hpp>
 #include <cmp/ComponentVariant.hpp>
 #include <ent/Entity.hpp>
+#include <ent/Graph.hpp>
+#include <map>
+
 
 struct GameContext {
 	GameContext() = default;
@@ -13,7 +16,7 @@ struct GameContext {
 	virtual bool update() = 0;
 
 	virtual void createLevel() = 0;
-
+	virtual void createGraph()  = 0;
 	virtual void createBullet() = 0;
 
 	[[nodiscard]] virtual const Entity& getPlayer() const = 0;
@@ -24,6 +27,13 @@ struct GameContext {
 
 	[[nodiscard]] virtual const std::vector<Entity>& getEntities() const = 0;
 	[[nodiscard]] virtual 		std::vector<Entity>& getEntities() 	  	 = 0;
+
+	[[nodiscard]] virtual const std::vector<MapNode>& getGraph() const = 0;
+	[[nodiscard]] virtual 		std::vector<MapNode>& getGraph()	   = 0;
+
+	[[nodiscard]] virtual       std::vector<int>& getPath(EntityID eid)  = 0;
+				  virtual       void deletePath(EntityID eid)            = 0;
+				  virtual 		void setPath(EntityID, std::vector<int>) = 0;
 
 	[[nodiscard]] virtual const Entity& getEntityByID(std::size_t id) const = 0;
 	[[nodiscard]] virtual const Entity& getEntityByID(std::size_t id) 	    = 0;

@@ -1,118 +1,128 @@
 #include <sys/InputSystem.hpp>
 #include <util/TexturePaths.hpp>
-#include <ent/Entity.hpp>
-#include <SunlightEngine/Device.hpp>
-#include <glm/glm.hpp>
-#include <cassert>
+#include <util/SoundPaths.hpp>
+#include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/MathIntersection.hpp>
+#include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
+#include <Engine/util/Mouse.hpp>
+#include <iostream>
 
 void InputSystem::init() {
-	device.setEventReceiver(&eventReceiver);
+    for (auto * next = keyMap; next->key != static_cast<KEY_CODE>(0); ++next) {
+        switch (next->key) {
+            case KEY_W:
+                next->p_func = &InputSystem::w_pressed;
+                break;
+            case KEY_A:
+                next->p_func = &InputSystem::a_pressed;
+                break;
+            case KEY_S:
+                next->p_func = &InputSystem::s_pressed;
+                break;
+            case KEY_D:
+                next->p_func = &InputSystem::d_pressed;
+                break;
+            case KEY_SPACE:
+                next->p_func = &InputSystem::space_pressed;
+                break;
+            case KEY_M:
+                next->p_func = &InputSystem::m_pressed;
+                break;
+            case KEY_LSHIFTIRR :
+                next->p_func = &InputSystem::shift_pressed;
+                break;
+/*			case KEY_LSHIFTGL:
+				next->p_func = &InputSystem::shift_pressed;
+				break;*/
+            default : ;
+        }
+    }
 }
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
-void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) const {
+void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
+
 	auto& player = context->getPlayer();
 
-	player.velocity->direction = 0;
+	player.velocity->direction = vec3();
 
-	auto * next = keyMapping;
+	for (const auto * next = keyMap; next->p_func; ++next)
+		if (engine->isKeyPressed(next->key))
+            (this->*(next->p_func))(player);
 
-	while (next->p_func) {
-		if (eventReceiver.IsKeyDown(next->key))
-			next->p_func(player, deltaTime);
-		++next;
-	}
+    const Mouse& mouse = engine->getMouse();
+    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;
 
-    aim_mouse(*player.physics, eventReceiver.getMouse().position);
+	aim_mouse(*player.physics, mouse.position);
 
-	if (eventReceiver.getMouse().leftPressed) {
-		if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
+	if (mouse.leftPressed) {
+		if(!player.characterData->dashing && !greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 			player.characterData->attacking = true;
 			player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+
+            soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 		}
+
+	std::cout << "Click izquierdo\n";
 	}
 
-	player.physics->velocity = player.velocity->direction.normalize() * player.velocity->currentSpeed * deltaTime;
+	if (mouse.rightPressed) {
+		std::cout << "Click derecho\n";
+	}
+
+	player.physics->velocity = normalize(player.velocity->direction) * player.velocity->currentSpeed * deltaTime;
+
+	if (player.velocity->currentSpeed == player.velocity->defaultSpeed)
+		player.characterData->dashing = false;
 }
 
-void InputSystem::w_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.z; }
-void InputSystem::a_pressed(Entity& player, const float deltaTime) { --player.velocity->direction.x; }
-void InputSystem::s_pressed(Entity& player, const float deltaTime) { --player.velocity->direction.z; }
-void InputSystem::d_pressed(Entity& player, const float deltaTime) { ++player.velocity->direction.x; }
+void InputSystem::w_pressed(Entity& player) const { ++player.velocity->direction.z; std::cout << "W\n"; }
+void InputSystem::a_pressed(Entity& player) const { --player.velocity->direction.x; std::cout << "A\n"; }
+void InputSystem::s_pressed(Entity& player) const { --player.velocity->direction.z; std::cout << "S\n"; }
+void InputSystem::d_pressed(Entity& player) const { ++player.velocity->direction.x; std::cout << "D\n"; }
 // Dash
-void InputSystem::shift_pressed(Entity& player, const float deltaTime) {
-    if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && player.velocity->direction != 0) {
-        player.characterData->dashing = true;
+void InputSystem::shift_pressed(Entity& player) const {
+    if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && length(player.velocity->direction) != 0) {
+        player.characterData->dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
         player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
         player.velocity->currentSpeed = player.characterData->dashSpeed;
+
+        soundMessages.emplace_back(DASH_PLAYER_EVENT);
     }
+ std::cout << "Shift\n";
 }
 // Shoot
-void InputSystem::space_pressed(Entity& player, const float deltaTime) {
-	if(!greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
+void InputSystem::space_pressed(Entity& player) const {
+	if(!player.characterData->dashing && !greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
 		player.characterData->attacking = true;
 		player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+
+		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 	}
+	std::cout << "Space\n";
 }
-// Aim
-void InputSystem::left_pressed  (Entity& player, const float deltaTime) { player.physics->rotation.y -= PLAYER_ROTATION_SPEED * deltaTime; }
-void InputSystem::right_pressed (Entity& player, const float deltaTime) { player.physics->rotation.y += PLAYER_ROTATION_SPEED * deltaTime; }
+
 // Switch Mode
-void InputSystem::m_pressed(Entity& player, const float deltaTime) {
+void InputSystem::m_pressed(Entity& player) const {
 	if (!greater_e(player.characterData->currentSwitchingCooldown, 0)) {
-		player.characterData->switchingMode = true;
+		player.characterData->switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;
-		player.characterData->mode == DEMON ? player.node->get()->setTexture(DEMON_TEXTURE) : player.node->get()->setTexture(ANGEL_TEXTURE);
+		player.characterData->mode == DEMON ? player.inode->get()->setTexture(DEMON_TEXTURE) : player.inode->get()->setTexture(ANGEL_TEXTURE);
 		player.characterData->currentSwitchingCooldown = player.characterData->switchingCooldown;
+
+		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
 	}
+std::cout << "M\n";
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-void InputSystem::aim_mouse(Physics& phy, const Vector2u& mouse) const
-{
-    const Plane shootingPlane(Vector3f(0,1,0), phy.position.y);
-    const Line  ray(cursorCoordToWorldCoord(mouse.x, mouse.y, 0), cursorCoordToWorldCoord(mouse.x, mouse.y, 1));
+void InputSystem::aim_mouse(Physics& phy, const vec2& mouse) const {
+    const Plane shootingPlane(vec3(0,1,0), phy.position.y);
+    const Line  ray(engine->scene->cursorToWorld(mouse.x, mouse.y, 0), engine->scene->cursorToWorld(mouse.x, mouse.y, 1));
 
-    const Vector3f intersectPoint = intersectionPoint(shootingPlane, ray);
+    const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
-    phy.rotation.y = (intersectPoint - phy.position).getRotationYfromXZ();
-}
-
-// TODO : llevar cada parte de este codigo a su lugar correspondiente
-Vector3f InputSystem::cursorCoordToWorldCoord(float x, float y, float far) const {
-    auto proj = device.getInnerDevice()->getSceneManager()->getActiveCamera()->getProjectionMatrix();
-
-    glm::mat4x4 projectionMatrix = glm::mat4x4(
-            proj[0], proj[1], proj[2], proj[3],
-            proj[4], proj[5], proj[6], proj[7],
-            proj[8], proj[9], proj[10], proj[11],
-            proj[12], proj[13], proj[14], proj[15]);
-
-    auto mview = device.getInnerDevice()->getSceneManager()->getActiveCamera()->getViewMatrix();
-
-    glm::mat4x4 viewMatrix = glm::mat4x4(
-            mview[0], mview[1], mview[2], mview[3],
-            mview[4], mview[5], mview[6], mview[7],
-            mview[8], mview[9], mview[10], mview[11],
-            mview[12], mview[13], mview[14], mview[15]);
-
-    // Deshacemos [projection * view] obteniendo su inversa (para pasar de coordenadas del mundo a la pantalla, hay que hacer projection * view)
-    glm::mat4x4 unprojectMatrix = glm::inverse(projectionMatrix * viewMatrix);
-
-    auto viewport = device.getInnerDevice()->getVideoDriver()->getViewPort();
-
-    // Por algun motivo OpenGL lee la Y de la pantalla de abajo a arriba, asi que invertimos la y
-    y = viewport.getHeight() - y;
-
-    // Hay que normalizar las coordenadas entre -1 (izquierda/abajo) y +1 (derecha/arriba)
-    glm::vec4 viewportPos (x / viewport.getWidth() * 2.0 - 1, y / viewport.getHeight() * 2.0 - 1.0, far * 2.0 - 1.0, 1.0);
-
-    // Obtenemos las coordenadas del mundo en funcion de la distancia "far" calculada en viewportPos (profundidad desde el punto de vista de la camara)
-    glm::vec4 worldPos(unprojectMatrix * viewportPos);
-    assert(worldPos.w != 0.0); // Avoid a division by zero
-
-    return Vector3(worldPos.x, worldPos.y, worldPos.z) / worldPos.w;
+    phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);
 }

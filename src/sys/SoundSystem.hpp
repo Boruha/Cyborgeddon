@@ -20,11 +20,16 @@ namespace FMOD {
 using Event = FMOD::Studio::EventDescription;
 using Instance = FMOD::Studio::EventInstance;
 using EngineSystem = FMOD::Studio::System;
+using Bank = FMOD::Studio::Bank;
 
 struct Sound {
-	Event* 		event 		{  nullptr  };
-	Instance* 	instance 	{  nullptr  };
-	ModeType	mode		{  NEUTRAL  };
+	Event* event { nullptr };
+	std::array<Instance*, 16> instances;
+};
+
+struct Music {
+    Event * event { nullptr };
+    Instance * instance { nullptr };
 };
 
 struct SoundSystem : public System {
@@ -33,13 +38,12 @@ struct SoundSystem : public System {
 	~SoundSystem();
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext>& context, float deltaTime) const override;
+	void update(const std::unique_ptr<GameContext>& context, float deltaTime) override;
 	void reset() override;
-
-	void startBackgroundMusic();
 
 private:
 
+<<<<<<< HEAD
     FMOD::System* core { nullptr };
 	FMOD::Studio::System* system { nullptr };
 	FMOD::Studio::Bank* master { nullptr };
@@ -47,22 +51,31 @@ private:
 
 	                  //PERSONAJE           //ENSAMBLADO    //DEMONIOS   //ANGELES
 	enum TipoSonido { ATTACK, CHANGE, DASH , ENEMY_ASSEMBLED, ENEMY_DEMON, ENEMY_ANGEL};
+=======
+	void startBackgroundMusic();
 
-    // TODO : crear enum como clave de este mapa
-    Sound backingTrack;
-	std::unordered_map<TipoSonido, std::vector<Sound>> sounds; // Ahora mismo key true = attacking, key false = changing
+	void createSoundEvent(const char *, float = 1.f);
+	void createMusicEvent(const char *, Music *, float = 1.f);
+>>>>>>> master
 
+    void createInstance(const Event *, Instance *&, float) const;
+
+<<<<<<< HEAD
 	//PERSONAJE
 	const char * const attackEventName[2] {
 		DEMON_SHOOT_EVENT,
 		ANGEL_SHOOT_EVENT
 	};
+=======
+    FMOD::System* core { nullptr };
+	EngineSystem * system { nullptr };
+	Bank * master { nullptr };
+	Bank * strings { nullptr };
+>>>>>>> master
 
-	const char * const changeEventName[2] {
-		DEMON_CHANGE_EVENT,
-		ANGEL_CHANGE_EVENT
-	};
+    Music backingTrack;
 
+<<<<<<< HEAD
 	const char * const dashEventName[2]{
 	    DASH_PLAYER_EVENT,
 	    DASH_PLAYER_EVENT
@@ -77,4 +90,7 @@ private:
 	//ENEMIGO DEMONIO
 
 	//ENEMIGO ANGEL
+=======
+	std::unordered_map<const char *, Sound> soundEvents;
+>>>>>>> master
 };
