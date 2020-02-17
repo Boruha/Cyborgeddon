@@ -43,10 +43,10 @@ struct InputSystem : System
             {KEY_A,                    nullptr },
             {KEY_S,                    nullptr },
             {KEY_D,                    nullptr },
-            {KEY_LSHIFTIRR,            nullptr },
-			{KEY_LSHIFTGL,             nullptr },
             {KEY_SPACE,                nullptr },
             {KEY_M,                    nullptr },
+            {KEY_LSHIFTIRR,            nullptr },
+			{KEY_LSHIFTGL,             nullptr },
             {static_cast<KEY_CODE>(0), nullptr }
         };
 };

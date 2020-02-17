@@ -10,12 +10,12 @@
 void GameManager::init()
 {
 	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
-/*	textureManager.loadTextures();
+	textureManager.loadTextures();
 
 	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
-*/	                                                                            // ORDEN DE EJECUCION
+	                                                                            // ORDEN DE EJECUCION
 	systems.emplace_back(std::make_unique<InputSystem>(engine.get())); // se detecta input del player
-/*	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
+	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
 	systems.emplace_back(std::make_unique<AttackSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());         // se controla la colision de las balas con enemigos (de momento)
 	systems.emplace_back(std::make_unique<CollisionSystem>());                  // se controla colision de cosas - paredes, cosas - cosas (dividir en 2 en el futuro)
@@ -24,13 +24,13 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<CooldownSystem>());                   // se actualizan los cooldowns
     systems.emplace_back(std::make_unique<DeathSystem>());                      // se comprueba si algo tiene que morir y ser eliminado
 	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
-*/
+
 	for(const auto& sys : systems)
 		sys->init();
-/*
+
 
 	entityManager->init();
-*/
+
 	render.init();
 }
 
@@ -39,14 +39,14 @@ void GameManager::update(const float deltaTime)
     // Ejecucion de los sistemas
 	for(const auto& sys : systems)
 		sys->update(entityManager, deltaTime);
-/*
+
 	// reseteo de nivel al ganar (esto es momentaneo)
 	// entity manager crea y destruye entidades en funcion de lo que hagan los sistemas
 	if(entityManager->update()) {			// TODO : hacer maquina de estados para permitir estado inicio, pausa, en juego...
 		for (const auto& sys : systems)
 			sys->reset();
 		entityManager->createLevel();
-	}*/
+	}
 }
 
 // TODO: bucle del juego
@@ -75,6 +75,6 @@ void GameManager::loop()
 }
 
 void GameManager::terminate() {
-//	textureManager.unloadTextures();
+	textureManager.unloadTextures();
     engine->shutdown();
 }
