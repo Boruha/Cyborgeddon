@@ -10,11 +10,11 @@
 
 using std::vector;
 using glm::vec3;
-using glm::mat4x4;
+using glm::mat4;
 
 struct TreeNode {
 
-    void render(const mat4x4& m) const;
+    void render(const mat4& m) const;
 
     void toTranslate(const vec3& v);
     void toRotate(const vec3& v);
@@ -30,7 +30,7 @@ struct TreeNode {
     void setRotation(const vec3& rot);
     void setScale(const vec3& sca);
 
-    void setTransform(const mat4x4& m);
+    void setTransform(const mat4& m);
 
     [[nodiscard]] IEntity * getEntity() const;
     [[nodiscard]] TreeNode * getParent() const;
@@ -40,10 +40,13 @@ struct TreeNode {
     [[nodiscard]] const vec3& getRotation() const;
     [[nodiscard]] const vec3& getScale() const;
 
-    [[nodiscard]] const mat4x4& getTransform() const;
+    [[nodiscard]] const mat4& getTransform() const;
 
     private :
-        [[nodiscard]] mat4x4 calculateMatrix() const;
+
+		const std::size_t ID { nextID++ };
+
+        [[nodiscard]] mat4 calculateMatrix() const;
 
         IEntity * entity { nullptr };
 
@@ -55,5 +58,7 @@ struct TreeNode {
         vec3 rotation { };
         vec3 scale { };
 
-        mat4x4 transform { };
+        mat4 transform { };
+
+        inline static std::size_t nextID { 0 };
 };

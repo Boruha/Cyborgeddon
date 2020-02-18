@@ -1,7 +1,9 @@
 #include <Engine/SunlightEngine/SceneInterface/Tree/TreeNode.hpp>
+#include <iostream>
 
 void TreeNode::addChildren(TreeNode * const child) {
     children.emplace_back(child);
+    child->setParent(this);
 }
 
 void TreeNode::removeChildren(TreeNode * const child) {
@@ -24,8 +26,14 @@ TreeNode * TreeNode::getParent() const {
     return parent;
 }
 
-void TreeNode::render(const mat4x4& m) const {
-    const mat4x4 newMatrix = m * calculateMatrix();
+void TreeNode::render(const mat4& m) const {
+
+	std::cout << "Soy el nodo " << ID;
+	if (parent)
+		std::cout << ", y mi padre es " << parent->ID;
+	std::cout << std::endl;
+
+    const mat4 newMatrix = m * calculateMatrix();
 
     if (entity)
         entity->render(newMatrix);
@@ -71,14 +79,14 @@ const vec3& TreeNode::getScale() const {
     return scale;
 }
 
-void TreeNode::setTransform(const mat4x4& m) {
+void TreeNode::setTransform(const mat4& m) {
     transform = m;
 }
 
-const mat4x4& TreeNode::getTransform() const {
+const mat4& TreeNode::getTransform() const {
     return transform;
 }
 
-mat4x4 TreeNode::calculateMatrix() const {
+mat4 TreeNode::calculateMatrix() const {
     return glm::scale(transform, scale) * glm::rotate(transform, glm::radians(0.f), rotation) * glm::translate(transform, translation);
 }
