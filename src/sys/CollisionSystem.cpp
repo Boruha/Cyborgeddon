@@ -1,6 +1,7 @@
 #include <sys/CollisionSystem.hpp>
 #include <Engine/util/Math.hpp>
 #include <util/SoundPaths.hpp>
+#include <iostream>
 
 // TODO: quiza sea conveniente tener 3 sistemas de colisiones distintos, uno para objetos dinamicos, otro para estaticos y otro para objetos que se muevan muy rapido (ray)
 
@@ -59,6 +60,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 								staticCollision(movingBox, velocity, dynamicCollider, i);
 							else
 								dynamicCollision(movingBox, velocity, dynamicCollider, context);
+
 						}
 
 						if (equal_e(velocity[i], 0))
@@ -82,6 +84,11 @@ void CollisionSystem::dynamicCollision(BoundingBox& movingBox, vec3& velocity, B
 
                 soundMessages.emplace_back(PICKUP_KEY_EVENT);   //Creo el SoundMessage de coger una llave
 			}
+
+			if(otherBox.getEntityType() == DOOR){
+                soundMessages.emplace_back(OPEN_DOOR_EVENT); //Creo el SoundMessage de Abrir Puerta
+			}
+
 			otherBox.makeUndefined();	// nos ahorramos comprobaciones si hacemos que el sistema ignore la bounding
 		}
 	}

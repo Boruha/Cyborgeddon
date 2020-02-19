@@ -1,6 +1,8 @@
 #include <sys/HighSpeedCollisionSystem.hpp>
 #include <util/ComponentConstants.hpp>
 #include <Engine/util/MathIntersection.hpp>
+#include <util/SoundPaths.hpp>
+#include <iostream>
 
 struct EntityHitData {
 	float lessDistance { -1 };		// sabremos si la bala choca con algo porque la distancia siempre es positiva
@@ -31,6 +33,7 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 					const auto entityToDamage 	= context->getEntityByID(hitData.closerEntity);
 
 					damageEntity(*bullet.bulletData, *entityToDamage.characterData); // lo dañamos
+                    soundMessages.emplace_back(HITMARKER_EVENT); //Creo el SoundMessage de Hitmarker (Enemigo alcanzado)
 				}
 
 				bulletsToDestroy[numToDestroy++] = fastObject.getEntityID();

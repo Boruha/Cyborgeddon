@@ -1,5 +1,6 @@
 #include <sys/AttackSystem.hpp>
 #include <iostream>
+#include <util/SoundPaths.hpp>
 
 void AttackSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
 	float enemyDamage = 0.f;	// daño total que recibira el jugador despues de procesar todos los ataques
@@ -10,6 +11,7 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 			switch (data.getEntityType()) {
 				case ENEMY :
 					enemyDamage += data.attackDamage; // vamos acumulando el daño que recibe el player
+                    soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); //Creo el SoundMessage de Player herido
 					break;
 				case PLAYER :
 					playerShoots = true;
