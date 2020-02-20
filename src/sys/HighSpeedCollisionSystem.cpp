@@ -33,7 +33,7 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 					const auto entityToDamage 	= context->getEntityByID(hitData.closerEntity);
 
 					damageEntity(*bullet.bulletData, *entityToDamage.characterData); // lo dañamos
-                    soundMessages.emplace_back(HITMARKER_EVENT); //Creo el SoundMessage de Hitmarker (Enemigo alcanzado)
+                    soundMessages.emplace_back(HITMARKER_EVENT); // Creo el SoundMessage de Hitmarker (Enemigo alcanzado)
 				}
 
 				bulletsToDestroy[numToDestroy++] = fastObject.getEntityID();

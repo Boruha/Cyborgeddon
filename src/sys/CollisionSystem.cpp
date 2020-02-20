@@ -78,6 +78,7 @@ void CollisionSystem::dynamicCollision(BoundingBox& movingBox, vec3& velocity, B
 	if (intersects(movingBox, otherBox)) {
 		if (movingBox.getEntityType() == PLAYER && otherBox.type == DYNAMIC) {
 			context->addToDestroy(otherBox.getEntityID());
+
 			if (otherBox.getEntityType() == KEY) {
 				const auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
 				door.collider->type = DYNAMIC;

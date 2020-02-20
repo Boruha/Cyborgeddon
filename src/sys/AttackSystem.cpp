@@ -11,7 +11,6 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 			switch (data.getEntityType()) {
 				case ENEMY :
 					enemyDamage += data.attackDamage; // vamos acumulando el daño que recibe el player
-                    soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); //Creo el SoundMessage de Player herido
 					break;
 				case PLAYER :
 					playerShoots = true;
@@ -25,7 +24,10 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 		}
     }
 
-	context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
+	if (enemyDamage != 0) {
+		context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
+		soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); // Creo el SoundMessage de Player herido
+	}
 
 	if (playerShoots)
 		context->createBullet();
