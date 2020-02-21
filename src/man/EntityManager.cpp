@@ -65,7 +65,7 @@ void EntityManager::killEntities() {
 		if (e->getID() != *d)
 			continue;									// si la entidad que queremos eliminar tiene nodo
 		if (e->inode) {
-			e->inode->get()->remove();
+			e->inode->remove();
 			e->inode = nullptr;
 		}
 
@@ -122,36 +122,36 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity        = & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
-	player->physics         = & componentStorage.createComponent<Physics>(PHYSICS_TYPE, player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
-	player->collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
-	player->characterData   = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
-	player->inode			= &componentStorage.createIObjectNode<IObjectNode>(&player->physics->position, &player->physics->rotation, &player->collider->dim);
-	player->inode->get()->setTexture(DEMON_TEXTURE);
+	player->velocity        = & componentStorage.createComponent<Velocity>(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
+	player->physics         = & componentStorage.createComponent<Physics>(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
+	player->collider		= & componentStorage.createComponent<BoundingBox>(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
+	player->characterData   = & componentStorage.createComponent<CharacterData>(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
+	player->inode			=   componentStorage.createIObjectNode(&player->physics->position, &player->physics->rotation, &player->collider->dim);
+	player->inode->setTexture(DEMON_TEXTURE);
 
-	camera->physics			= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, camera->getType(), camera->getID(), posCamera, player->physics->velocity, vec3());
-	camera->inode			= & componentStorage.createICameraNode<ICameraNode>(&camera->physics->position, &camera->physics->rotation, &camera->physics->scale, &player->physics->position);
+	camera->physics			= & componentStorage.createComponent<Physics>(camera->getType(), camera->getID(), posCamera, player->physics->velocity, vec3());
+	camera->inode			=   componentStorage.createICameraNode(&camera->physics->position, &camera->physics->rotation, &camera->physics->scale, &player->physics->position);
 }
 
 void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	Entity& wall 		= entities.emplace_back(WALL);
 
-	wall.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3());
-	wall.collider		= & componentStorage.createComponent<BoundingBox>(STATIC_BOUNDING_BOX_TYPE, wall.getType(), wall.getID(), dim, wall.transformable->position, false, STATIC);
-	wall.inode			= & componentStorage.createIObjectNode<IObjectNode>(&wall.transformable->position, &wall.transformable->rotation, &wall.collider->dim);
-	wall.inode->get()->setTexture(WALL_TEXTURE);
+	wall.transformable	= & componentStorage.createComponent<Transformable>(wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3());
+	wall.collider		= & componentStorage.createComponent<BoundingBox>(wall.getType(), wall.getID(), dim, wall.transformable->position, false, STATIC);
+	wall.inode			=   componentStorage.createIObjectNode(&wall.transformable->position, &wall.transformable->rotation, &wall.collider->dim);
+	wall.inode->setTexture(WALL_TEXTURE);
 }
 
 void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	Entity& enemy 		= entities.emplace_back(ENEMY);
 
-	enemy.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
-	enemy.velocity		= & componentStorage.createComponent<Velocity>(VELOCITY_TYPE, enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION);
-	enemy.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC);
-	enemy.ai			= & componentStorage.createComponent<AI>(AI_TYPE, enemy.getType(), enemy.getID(), patrol);
-	enemy.characterData = & componentStorage.createComponent<CharacterData>(CHARACTER_DATA_TYPE, enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN);
-	enemy.inode			= & componentStorage.createIObjectNode<IObjectNode>(&enemy.physics->position, &enemy.physics->rotation, &enemy.collider->dim);
-	enemy.inode->get()->setTexture(ENEMY_TEXTURE);
+	enemy.physics		= & componentStorage.createComponent<Physics>(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
+	enemy.velocity		= & componentStorage.createComponent<Velocity>(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION);
+	enemy.collider		= & componentStorage.createComponent<BoundingBox>(enemy.getType(), enemy.getID(), dim, enemy.physics->position, enemy.physics->velocity, false, STATIC);
+	enemy.ai			= & componentStorage.createComponent<AI>(enemy.getType(), enemy.getID(), patrol);
+	enemy.characterData = & componentStorage.createComponent<CharacterData>(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN);
+	enemy.inode			=   componentStorage.createIObjectNode(&enemy.physics->position, &enemy.physics->rotation, &enemy.collider->dim);
+	enemy.inode->setTexture(ENEMY_TEXTURE);
 
 	++enemiesLeft;
 }
@@ -159,34 +159,34 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 void EntityManager::createFloor(const char * const tex, const vec3& pos, const vec3& dim) {
 	Entity& floor 		= entities.emplace_back(FLOOR);
 
-	floor.transformable = & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim);
-	floor.inode			= & componentStorage.createIObjectNode<IObjectNode>(&floor.transformable->position, &floor.transformable->rotation, &floor.transformable->scale);
-	floor.inode->get()->setTexture(tex);
+	floor.transformable = & componentStorage.createComponent<Transformable>(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim);
+	floor.inode			=   componentStorage.createIObjectNode(&floor.transformable->position, &floor.transformable->rotation, &floor.transformable->scale);
+	floor.inode->setTexture(tex);
 }
 
 void EntityManager::createBullet() {
 	Entity& bullet 		= entities.emplace_back(BULLET);
 
-	bullet.physics		= & componentStorage.createComponent<Physics>(PHYSICS_TYPE, bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->collider->dim.z));
-	bullet.bulletData	= & componentStorage.createComponent<BulletData>(BULLET_DATA_TYPE, bullet.getType(), bullet.getID(), length(bullet.physics->velocity), player->characterData->mode, player->characterData->attackDamage);
-	bullet.inode		= & componentStorage.createIObjectNode<IObjectNode>(&bullet.physics->position, &bullet.physics->rotation, &bullet.physics->scale);
-	bullet.inode->get()->setTexture(player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
+	bullet.physics		= & componentStorage.createComponent<Physics>(bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->collider->dim.z));
+	bullet.bulletData	= & componentStorage.createComponent<BulletData>(bullet.getType(), bullet.getID(), length(bullet.physics->velocity), player->characterData->mode, player->characterData->attackDamage);
+	bullet.inode		=   componentStorage.createIObjectNode(&bullet.physics->position, &bullet.physics->rotation, &bullet.physics->scale);
+	bullet.inode->setTexture(player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
 }
 
 void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
 	Entity& door 		= entities.emplace_back(DOOR);
 
-	door.transformable 	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
-	door.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, door.getType(), door.getID(), door.transformable->scale, door.transformable->position, false, STATIC);
-	door.inode			= & componentStorage.createIObjectNode<IObjectNode>(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
-	door.inode->get()->setTexture(DOOR_TEXTURE);
+	door.transformable 	= & componentStorage.createComponent<Transformable>(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
+	door.collider		= & componentStorage.createComponent<BoundingBox>(door.getType(), door.getID(), door.transformable->scale, door.transformable->position, false, STATIC);
+	door.inode			=   componentStorage.createIObjectNode(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
+	door.inode->setTexture(DOOR_TEXTURE);
 
 	Entity& key 		= entities.emplace_back(KEY);
 
-	key.transformable	= & componentStorage.createComponent<Transformable>(TRANSFORMABLE_TYPE, key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim);
-	key.collider		= & componentStorage.createComponent<BoundingBox>(SPECIAL_BOUNDING_BOX_TYPE, key.getType(), key.getID(), key.transformable->scale, key.transformable->position, true, DYNAMIC);
-	key.inode			= & componentStorage.createIObjectNode<IObjectNode>(&key.transformable->position, &key.transformable->rotation, &key.transformable->scale);
-	key.inode->get()->setTexture(KEY_TEXTURE);
+	key.transformable	= & componentStorage.createComponent<Transformable>(key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim);
+	key.collider		= & componentStorage.createComponent<BoundingBox>(key.getType(), key.getID(), key.transformable->scale, key.transformable->position, true, DYNAMIC);
+	key.inode			=   componentStorage.createIObjectNode(&key.transformable->position, &key.transformable->rotation, &key.transformable->scale);
+	key.inode->setTexture(KEY_TEXTURE);
 }
 
 const Entity& EntityManager::getEntityByID(const std::size_t id) const {
@@ -198,7 +198,7 @@ const Entity& EntityManager::getEntityByID(const std::size_t id) const {
 }
 
 Entity& EntityManager::getEntityByID(const std::size_t id) {
-	return const_cast<Entity&>(std::as_const(*this).getEntityByID(id));
+	return const_cast<Entity &>(std::as_const(*this).getEntityByID(id));
 }
 
 void EntityManager::createLevel() {

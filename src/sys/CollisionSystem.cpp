@@ -19,8 +19,8 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	// 			alguna modificación. CUALQUIER metodo estatico al final debe SÍ O SÍ hacer un fix de todos los colliders
 	// 			que haya tocado
 
-	auto& specialBoundings 	= std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE));
-	auto& staticBoundings	= std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE));
+	auto& specialBoundings 	= context->getComponents().get<BoundingBox>();
+	auto& staticBoundings	= context->getComponents().get<BoundingBox>();
 
 	for (auto& collider : specialBoundings)
 		if (collider)					// ignoramos los componentes que no pertenecen a ninguna entidad

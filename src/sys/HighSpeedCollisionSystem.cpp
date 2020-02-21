@@ -14,17 +14,17 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
 	std::array<EntityID, 8> bulletsToDestroy { }; // suponemos que como mucho pueden morir en una iteracion 8 bullets (que creo que ya es mucho y no habra problema)
 	unsigned numToDestroy = 0;
 
-	for (const auto& fastObject : std::get<vector<Physics>>(context->getComponents(PHYSICS_TYPE))) {
+	for (const auto& fastObject : context->getComponents().get<Physics>()) {
 		if (fastObject.getEntityType() == BULLET) {
 
 			EntityHitData hitData;
 
 			const Line bulletRay(fastObject.position, fastObject.position + fastObject.velocity * deltaTime);
 
-			for (const auto& staticCollider : std::get<vector<BoundingBox>>(context->getComponents(STATIC_BOUNDING_BOX_TYPE)))
+			for (const auto& staticCollider : context->getComponents().get<BoundingBox>())
 				checkHit(bulletRay, staticCollider, hitData);
 
-			for (const auto& otherCollider : std::get<vector<BoundingBox>>(context->getComponents(SPECIAL_BOUNDING_BOX_TYPE)))
+			for (const auto& otherCollider : context->getComponents().get<BoundingBox>())
 				checkHit(bulletRay, otherCollider, hitData);
 
 			if (!less_e(hitData.lessDistance, 0)) { // si hemos chocado con algo
@@ -54,6 +54,7 @@ void HighSpeedCollisionSystem::checkHit(const Line& bulletRay, const BoundingBox
 				hitData.damageEntity = box.getEntityType() == ENEMY;			// de momento matamos enemigos
 				hitData.lessDistance = distance;								// si son lo mas cercano
 				hitData.closerEntity = box.getEntityID();						// aqui guardamos el id por si necesitamos borrar
+				std::cout << "Choca con " << hitData.closerEntity<<std::endl;
 			}
 		}
 	}

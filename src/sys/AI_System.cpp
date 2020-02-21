@@ -1,7 +1,14 @@
 #include <sys/AI_System.hpp>
+
 #include <Engine/util/Math.hpp>
+
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
+
+#include <cmp/Physics.hpp>
+#include <cmp/AI.hpp>
+#include <cmp/Velocity.hpp>
+#include <cmp/CharacterData.hpp>
 
 void AI_System::init() {
     stateFunctions[PATROL_STATE].p_func = &AI_System::patrolBehaviour;

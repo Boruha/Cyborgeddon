@@ -6,12 +6,12 @@ void DeathSystem::update(const std::unique_ptr<GameContext> &context, const floa
 	unsigned numToDestroy = 0;
 
     // Mueren personajes ?
-    for (const auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE)))
+    for (const auto& data : context->getComponents().get<CharacterData>())
         if (data && !greater_e(data.health, 0))
         	entitiesToDestroy[numToDestroy++] = data.getEntityID();
 
     // Mueren balas ?
-    for (auto& bullet : std::get<vector<BulletData>>(context->getComponents(BULLET_DATA_TYPE)))
+    for (auto& bullet : context->getComponents().get<BulletData>())
         if (bullet && !greater_e((bullet.distance_left -= bullet.speed * deltaTime), 0))
 				entitiesToDestroy[numToDestroy++] = bullet.getEntityID();
 

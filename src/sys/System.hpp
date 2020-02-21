@@ -3,6 +3,7 @@
 #include <util/GameContext.hpp>
 #include <memory>
 #include <util/Message.hpp>
+#include <cmp/ComponentPool.hpp>
 
 struct System {
 	virtual void init() = 0;

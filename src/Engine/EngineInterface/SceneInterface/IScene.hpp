@@ -6,14 +6,15 @@
 
 struct IObjectNode;
 struct ICameraNode;
+struct INode;
 
 using glm::vec3;
 
 struct IScene {
     virtual ~IScene() = default;
 
-    virtual std::unique_ptr<IObjectNode> addObjectNode(const vec3 * , const vec3 * , const vec3 * ) const = 0;
-    virtual std::unique_ptr<ICameraNode> addCameraNode(const vec3 * , const vec3 * , const vec3 * , const vec3 * ) = 0;
+    virtual std::unique_ptr<INode> addObjectNode(const vec3 * , const vec3 * , const vec3 * ) = 0;
+    virtual std::unique_ptr<INode> addCameraNode(const vec3 * , const vec3 * , const vec3 * , const vec3 * ) = 0;
 
     [[nodiscard]] virtual vec3 cursorToWorld(float, float, float) const = 0;
 
