@@ -1,6 +1,7 @@
 #include <sys/AttackSystem.hpp>
 #include <iostream>
 #include <util/SoundPaths.hpp>
+#include <Engine/util/Math.hpp>
 
 void AttackSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
 	float enemyDamage = 0.f;	// daño total que recibira el jugador despues de procesar todos los ataques
@@ -27,7 +28,12 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 	if (enemyDamage != 0) {
 		context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
 		soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); // Creo el SoundMessage de Player herido
+
+		if(!greater_e(context->getPlayer().characterData->health, 0))
+		    deathMessages.emplace_back(context->getPlayer().getID());
 	}
+
+
 
 	if (playerShoots)
 		context->createBullet();

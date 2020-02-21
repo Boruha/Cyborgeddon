@@ -11,4 +11,5 @@ struct System {
 
 	protected :
 		inline static std::vector<SoundMessage> soundMessages;
+	    inline static std::vector<DeathMessage> deathMessages;
 };

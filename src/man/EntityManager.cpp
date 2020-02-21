@@ -47,7 +47,7 @@ bool EntityManager::checkVictory() {
 /*		DESTROY ENTITIES	*/
 
 // aqui recibimos los IDS de las entidades que queremos destruir
-void EntityManager::addToDestroy(std::size_t ID) {
+void EntityManager::addToDestroy(EntityID ID) {
 	for (const auto& id : toDelete)
 		if (id == ID)
 			return;

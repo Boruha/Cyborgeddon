@@ -41,7 +41,7 @@ struct GameContext {
 	[[nodiscard]] virtual const variantComponentVectorTypes& getComponents(ComponentType type) const = 0;
 	[[nodiscard]] virtual 		variantComponentVectorTypes& getComponents(ComponentType type) 		 = 0;
 
-	virtual void addToDestroy(std::size_t ID) = 0;
+	virtual void addToDestroy(EntityID ID) = 0;
 };
 
 // TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan

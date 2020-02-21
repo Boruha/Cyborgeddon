@@ -17,7 +17,7 @@ struct EntityManager : GameContext {
 	void createGraph() override;
 	void createBullet () override;
 
-	void addToDestroy(std::size_t ID) override;
+	void addToDestroy(EntityID ID) override;
 
 	[[nodiscard]] const Entity& getPlayer() const override { return *player; }
 	[[nodiscard]] 		Entity& getPlayer() 	  override { return *player; }
@@ -65,7 +65,7 @@ struct EntityManager : GameContext {
 
 	    const IEngine * const engine { nullptr };
 
-	    std::vector<std::size_t> toDelete;
+	    std::vector<EntityID> toDelete;
 	    std::vector<Entity> entities;
 		unsigned int entitiesLeftToDelete { 0 };
 

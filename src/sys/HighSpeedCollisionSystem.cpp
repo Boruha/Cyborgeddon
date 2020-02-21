@@ -11,9 +11,6 @@ struct EntityHitData {
 };
 
 void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
-	std::array<EntityID, 8> bulletsToDestroy { }; // suponemos que como mucho pueden morir en una iteracion 8 bullets (que creo que ya es mucho y no habra problema)
-	unsigned numToDestroy = 0;
-
 	for (const auto& fastObject : std::get<vector<Physics>>(context->getComponents(PHYSICS_TYPE))) {
 		if (fastObject.getEntityType() == BULLET) {
 
@@ -36,13 +33,10 @@ void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &contex
                     soundMessages.emplace_back(HITMARKER_EVENT); // Creo el SoundMessage de Hitmarker (Enemigo alcanzado)
 				}
 
-				bulletsToDestroy[numToDestroy++] = fastObject.getEntityID();
+				deathMessages.emplace_back(fastObject.getEntityID());
 			}
 		}
 	}
-
-	for (unsigned i = 0; i < numToDestroy; ++i)
-		context->addToDestroy(bulletsToDestroy[i]);
 }
 
 void HighSpeedCollisionSystem::checkHit(const Line& bulletRay, const BoundingBox& box, EntityHitData& hitData) const {
@@ -68,4 +62,7 @@ void HighSpeedCollisionSystem::damageEntity(const BulletData& bullet, CharacterD
 		else
 			character.health -= (bullet.damage * FACTOR_SAME_MODE);
 	}
+
+	if (!greater_e(character.health, 0))
+	    deathMessages.emplace_back(character.getEntityID());
 }

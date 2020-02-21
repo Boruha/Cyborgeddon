@@ -8,6 +8,7 @@
 #include <sys/HighSpeedCollisionSystem.hpp>
 #include <sys/CollisionSystem.hpp>
 #include <sys/CooldownSystem.hpp>
+#include <sys/BulletDataSystem.hpp>
 #include <sys/DeathSystem.hpp>
 #include <sys/SoundSystem.hpp>
 #include <sys/RenderSystem.hpp>

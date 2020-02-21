@@ -6,3 +6,10 @@ struct SoundMessage {
 
 	const char * const soundEventName { nullptr };
 };
+
+struct DeathMessage {
+    explicit DeathMessage(const EntityID _ID)
+        : ID(_ID){ }
+
+    const EntityID ID {0};
+};
