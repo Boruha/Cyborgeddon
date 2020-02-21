@@ -77,13 +77,15 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 void CollisionSystem::dynamicCollision(BoundingBox& movingBox, vec3& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {
 	if (intersects(movingBox, otherBox)) {
 		if (movingBox.getEntityType() == PLAYER && otherBox.type == DYNAMIC) {
-			context->addToDestroy(otherBox.getEntityID());
+			//context->addToDestroy(otherBox.getEntityID());
+            deathMessages.emplace_back(otherBox.getEntityID());
 
 			if (otherBox.getEntityType() == KEY) {
 				const auto& door = context->getEntityByID(otherBox.getEntityID() - 1);	// como la llave y su puerta se crean consecutivamente, la puerta siempre es (llave.ID - 1)
 				door.collider->type = DYNAMIC;
 
                 soundMessages.emplace_back(PICKUP_KEY_EVENT);   //Creo el SoundMessage de coger una llave
+
 			}
 
 			if(otherBox.getEntityType() == DOOR){
