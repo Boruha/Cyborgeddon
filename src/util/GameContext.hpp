@@ -1,15 +1,12 @@
 #pragma once
 
-#include <util/ComponentType.hpp>
-#include <cmp/ComponentVariant.hpp>
 #include <ent/Entity.hpp>
 #include <ent/Graph.hpp>
-#include <map>
+#include <src/cmp/ComponentVariant.hpp>
 
+struct ComponentPool;
 
 struct GameContext {
-	GameContext() = default;
-
 	virtual ~GameContext() = default;
 
 	virtual void init() = 0;
@@ -36,10 +33,13 @@ struct GameContext {
 				  virtual 		void setPath(EntityID, std::vector<int>) = 0;
 
 	[[nodiscard]] virtual const Entity& getEntityByID(std::size_t id) const = 0;
-	[[nodiscard]] virtual const Entity& getEntityByID(std::size_t id) 	    = 0;
+	[[nodiscard]] virtual  		Entity& getEntityByID(std::size_t id) 	    = 0;
 
-	[[nodiscard]] virtual const variantComponentVectorTypes& getComponents(ComponentType type) const = 0;
-	[[nodiscard]] virtual 		variantComponentVectorTypes& getComponents(ComponentType type) 		 = 0;
+	[[nodiscard]] virtual const ComponentPool& getComponents() const = 0;
+	[[nodiscard]] virtual 		ComponentPool& getComponents() 	     = 0;
+
+	[[nodiscard]] virtual const vector<Node_ptr>& getNodes()   const = 0;
+	[[nodiscard]] virtual 		vector<Node_ptr>& getNodes()         = 0;
 
 	virtual void addToDestroy(EntityID ID) = 0;
 };

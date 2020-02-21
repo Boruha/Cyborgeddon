@@ -52,7 +52,7 @@ void InputSystem::update(const std::unique_ptr<GameContext>& context, const floa
             (this->*(next->p_func))(player);
 
     const Mouse& mouse = engine->getMouse();
-    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;
+//    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;
 
 	aim_mouse(*player.physics, mouse.position);
 
@@ -108,12 +108,12 @@ void InputSystem::m_pressed(Entity& player) const {
 	if (!greater_e(player.characterData->currentSwitchingCooldown, 0)) {
 		player.characterData->switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;
-		player.characterData->mode == DEMON ? player.inode->get()->setTexture(DEMON_TEXTURE) : player.inode->get()->setTexture(ANGEL_TEXTURE);
+		player.characterData->mode == DEMON ? player.inode->setTexture(DEMON_TEXTURE) : player.inode->setTexture(ANGEL_TEXTURE);
 		player.characterData->currentSwitchingCooldown = player.characterData->switchingCooldown;
 
 		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
 	}
-std::cout << "M\n";
+	std::cout << "M\n";
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente

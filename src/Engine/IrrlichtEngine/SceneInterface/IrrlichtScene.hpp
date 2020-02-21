@@ -11,12 +11,12 @@ struct IrrlichtScene : IScene {
     explicit IrrlichtScene(irr::scene::ISceneManager * sceneManager) : sceneManager(sceneManager) { }
     ~IrrlichtScene() override = default;
 
-    std::unique_ptr<IObjectNode> addObjectNode(const vec3 * pos,
+    std::unique_ptr<INode> addObjectNode(const vec3 * pos,
 											   const vec3 * rot,
 											   const vec3 * sca)
-											   const override;
+											   override;
 
-    std::unique_ptr<ICameraNode> addCameraNode(const vec3 * pos,
+    std::unique_ptr<INode> addCameraNode(const vec3 * pos,
 											   const vec3 * rot,
 											   const vec3 * sca,
 											   const vec3 * tar)

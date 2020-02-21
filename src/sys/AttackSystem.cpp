@@ -7,7 +7,7 @@ void AttackSystem::update(const std::unique_ptr<GameContext>& context, const flo
 	float enemyDamage = 0.f;	// daño total que recibira el jugador despues de procesar todos los ataques
 	bool  playerShoots = false;
 
-	for (auto& data : std::get<vector<CharacterData>>(context->getComponents(CHARACTER_DATA_TYPE))) {
+	for (auto& data : context->getComponents().get<CharacterData>()) {
         if (data && data.attacking) {
 			switch (data.getEntityType()) {
 				case ENEMY :

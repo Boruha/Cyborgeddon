@@ -12,10 +12,10 @@
 #include <Engine/EngineInterface/SceneInterface/INode.hpp>
 
 using std::vector;
+using Node_ptr = std::unique_ptr<INode>;
 
 using variantComponentVectorTypes = std::variant<
                                                    vector<AI>,
-												   vector<std::unique_ptr<INode>>,
                                                    vector<Transformable>,
                                                    vector<Velocity>,
                                                    vector<BoundingBox>,

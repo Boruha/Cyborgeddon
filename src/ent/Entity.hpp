@@ -36,7 +36,7 @@ struct Entity
 	BoundingBox*	collider		{ nullptr };
 	AI*				ai				{ nullptr };
 
-	std::unique_ptr<INode>* inode 	{ nullptr };
+	INode* 			inode 			{ nullptr };
 
 	private:
 

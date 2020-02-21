@@ -2,12 +2,12 @@
 
 #include <util/GameContext.hpp>
 #include <src/cmp/Storage.hpp>
-
+#include <map>
 
 struct IEngine;
 
 struct EntityManager : GameContext {
-	explicit EntityManager(const IEngine * const engine) : engine(engine), componentStorage(engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
+	explicit EntityManager(const IEngine * const _engine) : engine(_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override = default;
 
 	void init() override;
@@ -37,8 +37,11 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const Entity& getEntityByID(std::size_t id) const override;
 	[[nodiscard]] 		Entity& getEntityByID(std::size_t id) 		override;
 
-	[[nodiscard]] const variantComponentVectorTypes& getComponents(ComponentType type) const override { return componentStorage.getComponents(type); }
-	[[nodiscard]] 		variantComponentVectorTypes& getComponents(ComponentType type) 		 override { return componentStorage.getComponents(type); }
+	[[nodiscard]] const ComponentPool& getComponents() const override { return componentStorage.getComponents(); }
+	[[nodiscard]] 		ComponentPool& getComponents() 	     override { return componentStorage.getComponents(); }
+
+	[[nodiscard]] const vector<Node_ptr>& getNodes()   const override { return componentStorage.getNodes(); }
+	[[nodiscard]]       vector<Node_ptr>& getNodes()         override { return componentStorage.getNodes(); }
 
 	private:
 
