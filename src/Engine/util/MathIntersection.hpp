@@ -49,3 +49,12 @@ inline bool lineAABBIntersectionXZ(const Line& r, const vec3& aabbMin, const vec
 		   lineIntersection(r, Line(aabbMax, vec3(aabbMax.x, 0, aabbMin.z))) ||
 		   lineIntersection(r, Line(vec3(aabbMax.x, 0, aabbMin.z), aabbMin));
 }
+
+inline bool intersectionAABB(const vec3& min1,  const vec3& max1, const vec3& min2,  const vec3& max2) {
+
+    for(unsigned i = 0; i < 3; ++i)
+        if (!(greater_e(max1[i], min2[i]) && less_e(min1[i], max2[i])))
+           return false;
+
+    return true;
+}
