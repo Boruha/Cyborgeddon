@@ -1,7 +1,7 @@
 #include <cmp/CharacterData.hpp>
 #include <iostream>
 
-CharacterData::CharacterData(   const EntityType type,          const std::size_t e_ID,         const ModeType mode,
+CharacterData::CharacterData(   const EntityType type,          const EntityID e_ID,	        const ModeType mode,
                                 const float health,             const float switchCD,           const float attackDamage,
                                 const float attackingCD,        const float dashSpeed,          const float dashCD
                             )

@@ -3,7 +3,7 @@
 #include <cmp/Component.hpp>
 
 struct CharacterData : Component {
-	explicit CharacterData(EntityType, std::size_t, ModeType, float hp, float sw_cd, float dmg, float dmg_cd, float dsh, float dsh_cd);
+	explicit CharacterData(EntityType, EntityID, ModeType, float hp, float sw_cd, float dmg, float dmg_cd, float dsh, float dsh_cd);
 
 	friend std::ostream& operator<<(std::ostream& os, const CharacterData& data);
 

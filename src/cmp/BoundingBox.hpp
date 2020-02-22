@@ -4,8 +4,8 @@
 
 struct BoundingBox : Component
 {
-	explicit BoundingBox(EntityType e_type, std::size_t e_ID, const vec3& dim, vec3& pos, vec3& vel, bool passable, ColliderType type);
-	explicit BoundingBox(EntityType e_type, std::size_t e_ID, const vec3& dim, vec3& pos, bool passable, ColliderType type);
+	explicit BoundingBox(EntityType e_type, EntityID e_ID, const vec3& dim, vec3& pos, vec3& vel, bool passable, ColliderType type);
+	explicit BoundingBox(EntityType e_type, EntityID e_ID, const vec3& dim, vec3& pos, bool passable, ColliderType type);
 
 	[[nodiscard]] vec3& operator[](int index);
 

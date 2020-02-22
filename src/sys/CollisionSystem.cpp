@@ -29,7 +29,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 	for (auto& staticCollider : staticBoundings)
 		if (staticCollider)				// ignoramos los componentes que no pertenecen a ninguna entidad
 			fixBox(staticCollider);
-
+/*
 	for (auto& movingBox : specialBoundings) {											// recorremos el array de objetos no estaticos
 		if (movingBox && movingBox.velocity) {
 			for (int i = 0; i < 3; ++i) {
@@ -71,7 +71,7 @@ void CollisionSystem::update(const std::unique_ptr<GameContext> &context, const 
 				velocity[i] *= static_cast<float>(numChecks);
 			}
 		}
-	}
+	}*/
 }
 
 void CollisionSystem::dynamicCollision(BoundingBox& movingBox, vec3& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const {

@@ -5,7 +5,7 @@
 #include <vector>
 
 struct AI : public Component {
-	explicit AI(EntityType e_type, std::size_t e_ID, const std::vector<vec3>& patrol);
+	explicit AI(EntityType e_type, EntityID e_ID, const std::vector<vec3>& patrol);
 
 	friend std::ostream& operator<<(std::ostream& os, const AI& ai);
 
