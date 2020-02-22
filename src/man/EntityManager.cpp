@@ -185,6 +185,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 
 	key.transformable	= & componentStorage.createComponent<Transformable>(key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim);
 	key.collider		= & componentStorage.createComponent<BoundingBox>(key.getType(), key.getID(), key.transformable->scale, key.transformable->position, true, DYNAMIC);
+	key.triggStaticAABB = & componentStorage.createComponent<TriggerStaticAABB>(key.getType(), key.getID(), key.transformable->position, key.transformable->scale, true);
 	key.inode			=   componentStorage.createIObjectNode(&key.transformable->position, &key.transformable->rotation, &key.transformable->scale);
 	key.inode->setTexture(KEY_TEXTURE);
 }

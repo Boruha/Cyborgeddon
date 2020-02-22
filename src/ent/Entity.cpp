@@ -27,6 +27,10 @@ void Entity::makeUndefined() {
         collider->makeUndefined();
     if (ai)
         ai->makeUndefined();
+	if (triggStaticAABB)
+		triggStaticAABB->makeUndefined();
+	if (rigidMovSphere)
+		rigidMovSphere->makeUndefined();
 
     transformable 	= { nullptr };
     velocity 		= { nullptr };
@@ -35,6 +39,8 @@ void Entity::makeUndefined() {
     characterData	= { nullptr };
     collider		= { nullptr };
     ai				= { nullptr };
+    triggStaticAABB = { nullptr };
+	rigidMovSphere  = { nullptr };
 
     inode			= { nullptr };
 }

@@ -2,6 +2,8 @@
 
 #include <util/Alias.hpp>
 #include <Engine/EngineInterface/SceneInterface/INode.hpp>
+#include <src/cmp/TriggerStaticAABB.hpp>
+#include <src/cmp/RigidMovSphere.hpp>
 
 struct Component;
 
@@ -28,15 +30,17 @@ struct Entity
 	[[nodiscard]] const EntityType& getType() 	const { return  type; }
 	[[nodiscard]] const EntityID&  	getID() 	const { return 	  ID; }
 
-	Transformable* 	transformable 	{ nullptr };
-	Velocity* 		velocity 		{ nullptr };
-	Physics*		physics			{ nullptr };
-	BulletData*		bulletData		{ nullptr };
-	CharacterData*	characterData	{ nullptr };
-	BoundingBox*	collider		{ nullptr };
-	AI*				ai				{ nullptr };
+	Transformable* 		transformable 	{ nullptr };
+	Velocity* 			velocity 		{ nullptr };
+	Physics*			physics			{ nullptr };
+	BulletData*			bulletData		{ nullptr };
+	CharacterData*		characterData	{ nullptr };
+	BoundingBox*		collider		{ nullptr };
+	AI*					ai				{ nullptr };
+	TriggerStaticAABB*	triggStaticAABB { nullptr };
+	RigidMovSphere*		rigidMovSphere	{ nullptr };
 
-	INode* 			inode 			{ nullptr };
+	INode* 				inode 			{ nullptr };
 
 	private:
 
