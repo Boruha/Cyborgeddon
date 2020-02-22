@@ -7,6 +7,8 @@
 #include <cmp/Physics.hpp>
 #include <cmp/BulletData.hpp>
 #include <cmp/CharacterData.hpp>
+#include <cmp/RigidMovSphere.hpp>
+#include <cmp/TriggerStaticAABB.hpp>
 #include <vector>
 #include <variant>
 #include <Engine/EngineInterface/SceneInterface/INode.hpp>
@@ -21,5 +23,7 @@ using variantComponentVectorTypes = std::variant<
                                                    vector<BoundingBox>,
                                                    vector<Physics>,
                                                    vector<BulletData>,
-                                                   vector<CharacterData>
+                                                   vector<CharacterData>,
+                                                   vector<RigidMovSphere>,
+                                                   vector<TriggerStaticAABB>
                                                  >;
