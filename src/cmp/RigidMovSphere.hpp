@@ -1,0 +1,14 @@
+#pragma once
+
+#include <cmp/Component.hpp>
+
+struct RigidMovSphere : Component {
+    explicit RigidMovSphere(const EntityType e_type, const EntityID e_ID, const vec3& pos, const float rad, vec3& vel)
+            : Component(e_type, e_ID), position(pos), radius(rad), velocity(&vel) {  }
+
+    friend std::ostream& operator<<(std::ostream& os, const RigidMovSphere& cmp);
+
+    vec3   	position { 0 };				// posicion del bounding
+    float	radius { 0 };					// radio de la esfera/circulo
+    vec3 * 	velocity { nullptr }; 	// puntero a velocity del physics cmp
+};
