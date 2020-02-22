@@ -12,13 +12,15 @@ void GameManager::init()
 	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
 	textureManager.loadTextures();
 
-	systems.reserve(10); // TODO cambiar este valor al anadir un nuevo sistema
+	systems.reserve(13); // TODO cambiar este valor al anadir un nuevo sistema
 	                                                                            // ORDEN DE EJECUCION
 	systems.emplace_back(std::make_unique<InputSystem>(engine.get())); // se detecta input del player
 	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
 	systems.emplace_back(std::make_unique<AttackSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());         // se controla la colision de las balas con enemigos (de momento)
 	systems.emplace_back(std::make_unique<CollisionSystem>());                  // se controla colision de cosas - paredes, cosas - cosas (dividir en 2 en el futuro)
+    systems.emplace_back(std::make_unique<TriggerCollisionSystem>());
+    systems.emplace_back(std::make_unique<TriggerResolutionSystem>());
 	systems.emplace_back(std::make_unique<MovementSystem>());                   // se ejecuta el movimiento (unificar este sistema y el de abajo uniendo velocidad y fisicas)
 	systems.emplace_back(std::make_unique<VelocitySystem>());                   // se actualiza la velocidad en funcion de la aceleracion (unificar este sistema con el de arriba pasando atributos de velocidad al cmp de fisicas)
 	systems.emplace_back(std::make_unique<CooldownSystem>());                   // se actualizan los cooldowns

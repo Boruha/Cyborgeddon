@@ -15,20 +15,28 @@ void Entity::makeUndefined() {
 
 	if (transformable)
 	    transformable->makeUndefined();
-    if (velocity)
+
+	if (velocity)
         velocity->makeUndefined();
-    if (physics)
+
+	if (physics)
         physics->makeUndefined();
-    if (bulletData)
+
+	if (bulletData)
         bulletData->makeUndefined();
-    if (characterData)
+
+	if (characterData)
         characterData->makeUndefined();
-    if (collider)
+
+	if (collider)
         collider->makeUndefined();
-    if (ai)
+
+	if (ai)
         ai->makeUndefined();
+
 	if (triggStaticAABB)
 		triggStaticAABB->makeUndefined();
+
 	if (rigidMovSphere)
 		rigidMovSphere->makeUndefined();
 

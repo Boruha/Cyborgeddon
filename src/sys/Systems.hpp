@@ -7,6 +7,8 @@
 #include <sys/AttackSystem.hpp>
 #include <sys/HighSpeedCollisionSystem.hpp>
 #include <sys/CollisionSystem.hpp>
+#include <sys/TriggerCollisionSystem.hpp>
+#include <sys/TriggerResolutionSystem.hpp>
 #include <sys/CooldownSystem.hpp>
 #include <sys/BulletDataSystem.hpp>
 #include <sys/DeathSystem.hpp>

@@ -174,17 +174,16 @@ void EntityManager::createBullet() {
 }
 
 void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
-	Entity& door 		= entities.emplace_back(DOOR);
+	Entity& door 		 = entities.emplace_back(DOOR);
 
-	door.transformable 	= & componentStorage.createComponent<Transformable>(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
-	door.collider		= & componentStorage.createComponent<BoundingBox>(door.getType(), door.getID(), door.transformable->scale, door.transformable->position, false, STATIC);
-	door.inode			=   componentStorage.createIObjectNode(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
+	door.transformable 	 = & componentStorage.createComponent<Transformable>(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
+    door.triggStaticAABB = & componentStorage.createComponent<TriggerStaticAABB>(door.getType(), door.getID(), door.transformable->position, door.transformable->scale, false);
+	door.inode			 =   componentStorage.createIObjectNode(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
 	door.inode->setTexture(DOOR_TEXTURE);
 
 	Entity& key 		= entities.emplace_back(KEY);
 
 	key.transformable	= & componentStorage.createComponent<Transformable>(key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim);
-	key.collider		= & componentStorage.createComponent<BoundingBox>(key.getType(), key.getID(), key.transformable->scale, key.transformable->position, true, DYNAMIC);
 	key.triggStaticAABB = & componentStorage.createComponent<TriggerStaticAABB>(key.getType(), key.getID(), key.transformable->position, key.transformable->scale, true);
 	key.inode			=   componentStorage.createIObjectNode(&key.transformable->position, &key.transformable->rotation, &key.transformable->scale);
 	key.inode->setTexture(KEY_TEXTURE);

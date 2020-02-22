@@ -7,4 +7,6 @@ std::ostream &operator<<(std::ostream &os, const TriggerStaticAABB &cmp) {
 	<< "\n\tPassable: " << std::boolalpha 	<< cmp.passable
 	<< "\n\tMin: "							<< glm::to_string(cmp.min)
 	<< "\n\tMax: "							<< glm::to_string(cmp.max);
+
+	return os;
 }
