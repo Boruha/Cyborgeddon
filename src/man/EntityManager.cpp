@@ -123,10 +123,11 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	camera = & entities.emplace_back(CAMERA);
 
 	player->velocity        = & componentStorage.createComponent<Velocity>(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
-	player->physics         = & componentStorage.createComponent<Physics>(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3());
-	player->collider		= & componentStorage.createComponent<BoundingBox>(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
+	player->physics         = & componentStorage.createComponent<Physics>(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), vec3(dim));
+//	player->collider		= & componentStorage.createComponent<BoundingBox>(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
+	player->rigidMovSphere  = & componentStorage.createComponent<RigidMovSphere>(player->getType(), player->getID(), player->physics->position, dim.x - 2, player->physics->velocity);
 	player->characterData   = & componentStorage.createComponent<CharacterData>(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
-	player->inode			=   componentStorage.createIObjectNode(&player->physics->position, &player->physics->rotation, &player->collider->dim);
+	player->inode			=   componentStorage.createIObjectNode(&player->physics->position, &player->physics->rotation, &player->physics->scale);
 	player->inode->setTexture(DEMON_TEXTURE);
 
 	camera->physics			= & componentStorage.createComponent<Physics>(camera->getType(), camera->getID(), posCamera, player->physics->velocity, vec3());
@@ -167,7 +168,7 @@ void EntityManager::createFloor(const char * const tex, const vec3& pos, const v
 void EntityManager::createBullet() {
 	Entity& bullet 		= entities.emplace_back(BULLET);
 
-	bullet.physics		= & componentStorage.createComponent<Physics>(bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->collider->dim.z));
+	bullet.physics		= & componentStorage.createComponent<Physics>(bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->rigidMovSphere->radius));
 	bullet.bulletData	= & componentStorage.createComponent<BulletData>(bullet.getType(), bullet.getID(), length(bullet.physics->velocity), player->characterData->mode, player->characterData->attackDamage);
 	bullet.inode		=   componentStorage.createIObjectNode(&bullet.physics->position, &bullet.physics->rotation, &bullet.physics->scale);
 	bullet.inode->setTexture(player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);

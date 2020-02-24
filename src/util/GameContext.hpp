@@ -46,3 +46,4 @@ struct GameContext {
 
 // TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan
 
+using Context = std::unique_ptr<GameContext>;

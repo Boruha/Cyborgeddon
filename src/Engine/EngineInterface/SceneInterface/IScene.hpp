@@ -18,8 +18,8 @@ struct IScene {
 
     [[nodiscard]] virtual vec3 cursorToWorld(float, float, float) const = 0;
 
-    virtual void loadTexture(const char *) const = 0;
-    virtual void unloadTexture(const char *) const = 0; // TODO : debe ser un puntero a clase textura (que hay que hcer en util/Texture)
+    virtual void loadTexture(const std::string&) const = 0;
+    virtual void unloadTexture(const std::string&) const = 0; // TODO : debe ser un puntero a clase textura (que hay que hcer en util/Texture)
 	virtual void unloadTextures() const = 0;
 
 	const ICameraNode * camera { nullptr };

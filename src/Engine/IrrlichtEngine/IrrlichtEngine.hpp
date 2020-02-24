@@ -22,7 +22,7 @@ struct IrrlichtEngine final : public virtual IEngine {
 
     ~IrrlichtEngine() override = default;
 
-    void init(unsigned width, unsigned height, const wchar_t * name) override;
+    void init(unsigned width, unsigned height, const std::wstring& name) override;
 
     [[nodiscard]] bool run() const override;
 

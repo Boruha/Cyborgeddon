@@ -41,7 +41,7 @@ void InputSystem::init() {
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
-void InputSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
+void InputSystem::update(const Context& context, const float deltaTime) {
 
 	auto& player = context->getPlayer();
 
@@ -117,7 +117,7 @@ void InputSystem::m_pressed(Entity& player) const {
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-void InputSystem::aim_mouse(Physics& phy, const vec2& mouse) const {
+void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
     const Plane shootingPlane(vec3(0,1,0), phy.position.y);
     const Line  ray(engine->scene->cursorToWorld(mouse.x, mouse.y, 0), engine->scene->cursorToWorld(mouse.x, mouse.y, 1));
 

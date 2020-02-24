@@ -5,12 +5,12 @@
 struct CollisionSystem : System
 {
 	void init() override {  }
-    void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
+    void update(const Context &context, float deltaTime) override;
 	void reset() override {  }
 
 private:
 
-	void dynamicCollision(BoundingBox& movingBox, vec3& velocity, BoundingBox& otherBox, const std::unique_ptr<GameContext>& context) const;
+	void dynamicCollision(BoundingBox& movingBox, vec3& velocity, BoundingBox& otherBox, const Context& context) const;
 	void staticCollision(BoundingBox& movingBox, vec3& velocity, const BoundingBox& otherBox, int coord) const;
 
 	void fixCoord(BoundingBox& bounding, int coord) const;

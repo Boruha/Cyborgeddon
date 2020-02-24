@@ -57,7 +57,7 @@ void SoundSystem::init() {
 	startBackgroundMusic();
 }
 
-void SoundSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
+void SoundSystem::update(const Context& context, const float deltaTime) {
 
 	while (!soundMessages.empty()) {
 		const auto& message = soundMessages.back(); // leo el mensaje

@@ -1,7 +1,7 @@
 #include <sys/VelocitySystem.hpp>
 #include <Engine/util/Math.hpp>
 
-void VelocitySystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
+void VelocitySystem::update(const Context &context, const float deltaTime) {
 	for (auto& velocity : context->getComponents().get<Velocity>())
 		if (velocity && velocity.currentSpeed != velocity.defaultSpeed)
 			less_e(velocity.currentSpeed, velocity.defaultSpeed) ? accelerate(velocity, deltaTime) : decelerate(velocity, deltaTime);

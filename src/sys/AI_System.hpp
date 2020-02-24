@@ -5,7 +5,7 @@
 struct AI_System : System
 {
 	void init() override;
-    void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
+    void update(const Context &context, float deltaTime) override;
 	void reset() override {  }
 
 	private:

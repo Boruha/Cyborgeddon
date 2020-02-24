@@ -29,7 +29,7 @@ struct GameManager {
 
     // quiza el sistema de render deba mantenerse al margen porque es algo "especial" en el sentido de cuando tiene que ser llamado
 	RenderSystem render { glm::vec2(VIEWPORT_WIDTH, VIEWPORT_HEIGHT), GAME_NAME, engine.get() };
-	std::unique_ptr<GameContext> entityManager = std::make_unique<EntityManager>(engine.get());
+	Context entityManager = std::make_unique<EntityManager>(engine.get());
 };
 
 // TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)

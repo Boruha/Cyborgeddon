@@ -3,7 +3,7 @@
 #include <util/SoundPaths.hpp>
 #include <Engine/util/Math.hpp>
 
-void AttackSystem::update(const std::unique_ptr<GameContext>& context, const float deltaTime) {
+void AttackSystem::update(const Context& context, const float deltaTime) {
 	float enemyDamage = 0.f;	// daño total que recibira el jugador despues de procesar todos los ataques
 	bool  playerShoots = false;
 

@@ -2,9 +2,8 @@
 
 #include <sys/System.hpp>
 
-struct MovementSystem : System
-{
+struct RigidBodySystem : System {
 	void init() override {  }
-	void update(const Context &context, float deltaTime) override;
+	void update(const Context& context, float deltaTime);
 	void reset() override {  }
 };

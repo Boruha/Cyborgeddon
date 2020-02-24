@@ -5,7 +5,7 @@ void TriggerCollisionSystem::init() {
     triggerMessages.reserve(16);
 }
 
-void TriggerCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
+void TriggerCollisionSystem::update(const Context &context, const float deltaTime) {
     for (const auto & trigger : context->getComponents().get<TriggerStaticAABB>())
         for(const auto & boundingbox : context->getComponents().get<BoundingBox>())
             if(intersectionAABB(trigger.min, trigger.max, boundingbox.min, boundingbox.max))

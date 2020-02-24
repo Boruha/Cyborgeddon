@@ -6,14 +6,12 @@
 
 struct IEngine;
 
-using glm::vec2;
-
 struct InputSystem : System
 {
 	explicit InputSystem(IEngine * const engine) : engine(engine) { }
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext> &context, float deltaTime) override;
+	void update(const Context &context, float deltaTime) override;
 	void reset() override {  }
 
 	private:
@@ -31,7 +29,7 @@ struct InputSystem : System
 		// Switch Mode
 		void m_pressed(Entity& player) const;
 
-        void aim_mouse(Physics& phy, const vec2 &mouse) const;
+        void aim_mouse(Physics& phy, const glm::vec2 &mouse) const;
 
         struct TKey2func {
             KEY_CODE key;

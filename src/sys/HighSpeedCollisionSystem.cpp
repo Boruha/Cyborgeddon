@@ -10,7 +10,7 @@ struct EntityHitData {
 	bool damageEntity { false };
 };
 
-void HighSpeedCollisionSystem::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
+void HighSpeedCollisionSystem::update(const Context &context, const float deltaTime) {
 	for (const auto& fastObject : context->getComponents().get<Physics>()) {
 		if (fastObject.getEntityType() == BULLET) {
 

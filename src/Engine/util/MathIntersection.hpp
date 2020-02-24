@@ -51,10 +51,35 @@ inline bool lineAABBIntersectionXZ(const Line& r, const vec3& aabbMin, const vec
 }
 
 inline bool intersectionAABB(const vec3& min1,  const vec3& max1, const vec3& min2,  const vec3& max2) {
-
     for(unsigned i = 0; i < 3; ++i)
         if (!(greater_e(max1[i], min2[i]) && less_e(min1[i], max2[i])))
            return false;
 
     return true;
+}
+
+inline float squareDistancePointToAABB(vec3& p, vec3& min, vec3& max) {
+	float squareDistance = 0.0f;
+
+	for( int i = 0; i < 3; i++ ){
+		if( p[i] < min[i] )
+			squareDistance += (min[i] - p[i]) * (min[i] - p[i]);
+		if( p[i] > max[i] )
+			squareDistance += (p[i] - max[i]) * (p[i] - max[i]);
+	}
+
+	return squareDistance;
+}
+
+inline bool intersectionSphereAABB(const vec3& pos, const float radius, const vec3& min, const vec3& max) {
+	float squareDistance = 0.0f;
+
+	for( int i = 0; i < 3; i++ ){
+		if( pos[i] < min[i] )
+			squareDistance += (min[i] - pos[i]) * (min[i] - pos[i]);
+		if( pos[i] > max[i] )
+			squareDistance += (pos[i] - max[i]) * (pos[i] - max[i]);
+	}
+
+	return greater_e(radius * radius, squareDistance);
 }

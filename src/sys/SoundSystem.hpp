@@ -32,13 +32,11 @@ struct Music {
     Instance * instance { nullptr };
 };
 
-struct SoundSystem : public System {
-
-	SoundSystem() = default;
+struct SoundSystem : System {
 	~SoundSystem();
 
 	void init() override;
-	void update(const std::unique_ptr<GameContext>& context, float deltaTime) override;
+	void update(const Context& context, float deltaTime) override;
 	void reset() override;
 
 private:

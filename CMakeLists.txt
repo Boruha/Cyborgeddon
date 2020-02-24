@@ -36,7 +36,7 @@ file(GLOB SOURCES
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.c"
         )
 
-add_executable(cyborgeddon ${SOURCES} src/cmp/TriggerStaticAABB.hpp src/cmp/TriggerStaticAABB.cpp)
+add_executable(cyborgeddon ${SOURCES} src/cmp/TriggerStaticAABB.hpp src/cmp/TriggerStaticAABB.cpp src/sys/RigidBodySystem.hpp src/sys/RigidBodySystem.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 

@@ -1,7 +1,7 @@
 #include <sys/TriggerResolutionSystem.hpp>
 #include <util/SoundPaths.hpp>
 
-void TriggerResolutionSystem::update(const std::unique_ptr<GameContext> &context, float deltaTime) {
+void TriggerResolutionSystem::update(const Context &context, float deltaTime) {
     for (const auto & message : triggerMessages) {
         if (message.type2 == PLAYER) {
             if (message.type1 == KEY) {

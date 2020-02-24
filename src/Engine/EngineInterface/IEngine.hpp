@@ -10,7 +10,7 @@ struct Color;
 
 struct IEngine {
     virtual ~IEngine() = default;
-    virtual void init(unsigned, unsigned, const wchar_t *)  = 0;
+    virtual void init(unsigned, unsigned, const std::wstring&)  = 0;
     [[nodiscard]] virtual bool run()                  const = 0;
     virtual void shutdown()                           const = 0;
 

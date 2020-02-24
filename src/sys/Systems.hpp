@@ -7,6 +7,7 @@
 #include <sys/AttackSystem.hpp>
 #include <sys/HighSpeedCollisionSystem.hpp>
 #include <sys/CollisionSystem.hpp>
+#include <sys/RigidBodySystem.hpp>
 #include <sys/TriggerCollisionSystem.hpp>
 #include <sys/TriggerResolutionSystem.hpp>
 #include <sys/CooldownSystem.hpp>

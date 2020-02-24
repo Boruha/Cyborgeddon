@@ -17,7 +17,7 @@ void AI_System::init() {
 }
 
 // TODO: considerar los estados de la IA como punteros a funcion
-void AI_System::update(const std::unique_ptr<GameContext> &context, const float deltaTime) {
+void AI_System::update(const Context &context, const float deltaTime) {
 	const vec3 player_pos = context->getPlayer().physics->position;
 
 	for (const auto& enemy : context->getEntities()) {
@@ -37,7 +37,7 @@ void AI_System::update(const std::unique_ptr<GameContext> &context, const float 
 	}
 }
 
-void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) const {
+void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const Context& context) const {
 	const vec3 distance(enemy.physics->position.x - enemy.ai->target_position.x, 0, enemy.physics->position.z - enemy.ai->target_position.z);
 
 	if (greater_e(length(distance), ARRIVED_MIN_DISTANCE)) {
@@ -50,7 +50,7 @@ void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, flo
 	}
 }
 
-void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) const {
+void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const Context& context) const {
     
     const vec3 distance(enemy.physics->position.x - player_pos.x, 0, enemy.physics->position.z - player_pos.z);
     const std::vector<MapNode>& ref_graph = context->getGraph();
@@ -84,7 +84,7 @@ void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, con
         basicBehaviour(enemy, player_pos, deltaTime, true);
 }
 
-void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const std::unique_ptr<GameContext>& context) const {
+void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const Context& context) const {
 	
     //if we find enemy before end the pathing.
     if(enemy.ai->path_index > -1)

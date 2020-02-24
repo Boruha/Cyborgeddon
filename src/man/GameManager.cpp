@@ -19,6 +19,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<AttackSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	systems.emplace_back(std::make_unique<HighSpeedCollisionSystem>());         // se controla la colision de las balas con enemigos (de momento)
 	systems.emplace_back(std::make_unique<CollisionSystem>());                  // se controla colision de cosas - paredes, cosas - cosas (dividir en 2 en el futuro)
+	systems.emplace_back(std::make_unique<RigidBodySystem>());
     systems.emplace_back(std::make_unique<TriggerCollisionSystem>());
     systems.emplace_back(std::make_unique<TriggerResolutionSystem>());
 	systems.emplace_back(std::make_unique<MovementSystem>());                   // se ejecuta el movimiento (unificar este sistema y el de abajo uniendo velocidad y fisicas)

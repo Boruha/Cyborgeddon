@@ -7,7 +7,7 @@
 
 struct System {
 	virtual void init() = 0;
-	virtual void update(const std::unique_ptr<GameContext> &context, float deltaTime) = 0;
+	virtual void update(const Context &context, float deltaTime) = 0;
 	virtual	void reset() = 0;
 
 	protected :
