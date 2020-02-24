@@ -1,54 +1,29 @@
 #include <ent/Entity.hpp>
 
-#include <cmp/Transformable.hpp>
-#include <cmp/Velocity.hpp>
-#include <cmp/BoundingBox.hpp>
-#include <cmp/AI.hpp>
-#include <cmp/Physics.hpp>
-#include <cmp/BulletData.hpp>
-#include <cmp/CharacterData.hpp>
+#include <cmp/Components.hpp>
 
 Entity::Entity(EntityType type) : type(type), ID(++nextID) {  }
+
+void undefine(Component * cmp) {
+	if (cmp) {
+		cmp->makeUndefined();
+		cmp = nullptr;
+	}
+}
 
 void Entity::makeUndefined() {
 	type = UNDEFINED;
 
-	if (transformable)
-	    transformable->makeUndefined();
+	undefine(transformable);
+	undefine(velocity);
+	undefine(physics);
+	undefine(bulletData);
+	undefine(characterData);
+	undefine(collider);
+	undefine(ai);
+	undefine(triggStaticAABB);
+	undefine(triggerMovSphere);
+	undefine(rigidStaticAABB);
 
-	if (velocity)
-        velocity->makeUndefined();
-
-	if (physics)
-        physics->makeUndefined();
-
-	if (bulletData)
-        bulletData->makeUndefined();
-
-	if (characterData)
-        characterData->makeUndefined();
-
-	if (collider)
-        collider->makeUndefined();
-
-	if (ai)
-        ai->makeUndefined();
-
-	if (triggStaticAABB)
-		triggStaticAABB->makeUndefined();
-
-	if (rigidMovSphere)
-		rigidMovSphere->makeUndefined();
-
-    transformable 	= { nullptr };
-    velocity 		= { nullptr };
-    physics			= { nullptr };
-    bulletData		= { nullptr };
-    characterData	= { nullptr };
-    collider		= { nullptr };
-    ai				= { nullptr };
-    triggStaticAABB = { nullptr };
-	rigidMovSphere  = { nullptr };
-
-    inode			= { nullptr };
+    inode = nullptr;
 }

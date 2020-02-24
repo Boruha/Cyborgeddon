@@ -8,8 +8,9 @@ void ComponentPool::initData(const unsigned size) {
 	initVector<Physics>(size);
 	initVector<BulletData>(size);
 	initVector<CharacterData>(size);
-	initVector<RigidMovSphere>(size);
+	initVector<TriggerMovSphere>(size);
 	initVector<TriggerStaticAABB>(size);
+	initVector<RigidStaticAABB>(size);
 }
 
 void ComponentPool::cleanData() {

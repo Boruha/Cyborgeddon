@@ -2,7 +2,6 @@
 
 void Storage::initData(const unsigned maxComponents) {
 	pool.initData(maxComponents);
-
 }
 
 void Storage::cleanData() {

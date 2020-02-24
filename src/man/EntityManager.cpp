@@ -122,12 +122,11 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	player = & entities.emplace_back(PLAYER);
 	camera = & entities.emplace_back(CAMERA);
 
-	player->velocity        = & componentStorage.createComponent<Velocity>(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
-	player->physics         = & componentStorage.createComponent<Physics>(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), vec3(dim));
-//	player->collider		= & componentStorage.createComponent<BoundingBox>(player->getType(), player->getID(), dim, player->physics->position, player->physics->velocity, true, DYNAMIC);
-	player->rigidMovSphere  = & componentStorage.createComponent<RigidMovSphere>(player->getType(), player->getID(), player->physics->position, dim.x - 2, player->physics->velocity);
-	player->characterData   = & componentStorage.createComponent<CharacterData>(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
-	player->inode			=   componentStorage.createIObjectNode(&player->physics->position, &player->physics->rotation, &player->physics->scale);
+	player->velocity        	= & componentStorage.createComponent<Velocity>(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
+	player->physics         	= & componentStorage.createComponent<Physics>(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), vec3(dim));
+	player->triggerMovSphere  	= & componentStorage.createComponent<TriggerMovSphere>(player->getType(), player->getID(), player->physics->position, dim.x - 2, player->physics->velocity);
+	player->characterData   	= & componentStorage.createComponent<CharacterData>(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
+	player->inode				=   componentStorage.createIObjectNode(&player->physics->position, &player->physics->rotation, &player->physics->scale);
 	player->inode->setTexture(DEMON_TEXTURE);
 
 	camera->physics			= & componentStorage.createComponent<Physics>(camera->getType(), camera->getID(), posCamera, player->physics->velocity, vec3());
@@ -135,11 +134,11 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 }
 
 void EntityManager::createWall(const vec3& pos, const vec3& dim) {
-	Entity& wall 		= entities.emplace_back(WALL);
+	Entity& wall 			= entities.emplace_back(WALL);
 
-	wall.transformable	= & componentStorage.createComponent<Transformable>(wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3());
-	wall.collider		= & componentStorage.createComponent<BoundingBox>(wall.getType(), wall.getID(), dim, wall.transformable->position, false, STATIC);
-	wall.inode			=   componentStorage.createIObjectNode(&wall.transformable->position, &wall.transformable->rotation, &wall.collider->dim);
+	wall.transformable		= & componentStorage.createComponent<Transformable>(wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim);
+	wall.rigidStaticAABB	= & componentStorage.createComponent<RigidStaticAABB>(wall.getType(), wall.getID(), wall.transformable->position, wall.transformable->scale);
+	wall.inode				=   componentStorage.createIObjectNode(&wall.transformable->position, &wall.transformable->rotation, &wall.transformable->scale);
 	wall.inode->setTexture(WALL_TEXTURE);
 }
 
@@ -168,7 +167,7 @@ void EntityManager::createFloor(const char * const tex, const vec3& pos, const v
 void EntityManager::createBullet() {
 	Entity& bullet 		= entities.emplace_back(BULLET);
 
-	bullet.physics		= & componentStorage.createComponent<Physics>(bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->rigidMovSphere->radius));
+	bullet.physics		= & componentStorage.createComponent<Physics>(bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->triggerMovSphere->radius));
 	bullet.bulletData	= & componentStorage.createComponent<BulletData>(bullet.getType(), bullet.getID(), length(bullet.physics->velocity), player->characterData->mode, player->characterData->attackDamage);
 	bullet.inode		=   componentStorage.createIObjectNode(&bullet.physics->position, &bullet.physics->rotation, &bullet.physics->scale);
 	bullet.inode->setTexture(player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
@@ -177,9 +176,10 @@ void EntityManager::createBullet() {
 void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
 	Entity& door 		 = entities.emplace_back(DOOR);
 
-	door.transformable 	 = & componentStorage.createComponent<Transformable>(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
-    door.triggStaticAABB = & componentStorage.createComponent<TriggerStaticAABB>(door.getType(), door.getID(), door.transformable->position, door.transformable->scale, false);
-	door.inode			 =   componentStorage.createIObjectNode(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
+	door.transformable 	 	= & componentStorage.createComponent<Transformable>(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
+    door.triggStaticAABB 	= & componentStorage.createComponent<TriggerStaticAABB>(door.getType(), door.getID(), door.transformable->position, door.transformable->scale, false);
+	door.rigidStaticAABB	= & componentStorage.createComponent<RigidStaticAABB>(door.getType(), door.getID(), door.transformable->position, door.transformable->scale);
+    door.inode			 	=   componentStorage.createIObjectNode(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
 	door.inode->setTexture(DOOR_TEXTURE);
 
 	Entity& key 		= entities.emplace_back(KEY);

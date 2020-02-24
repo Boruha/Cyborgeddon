@@ -6,12 +6,12 @@ void TriggerCollisionSystem::init() {
 }
 
 void TriggerCollisionSystem::update(const Context &context, const float deltaTime) {
-    for (const auto & trigger : context->getComponents().get<TriggerStaticAABB>())
-    	if (trigger)
-	        for(const auto & boundingbox : context->getComponents().get<BoundingBox>())
-	        	if (boundingbox)
-	                if(intersectionAABB(trigger.min, trigger.max, boundingbox.min, boundingbox.max))
-                        triggerMessages.emplace_back(trigger.getEntityType(), trigger.getEntityID(), boundingbox.getEntityType(), boundingbox.getEntityID());
+	for (const auto & sphere : context->getComponents().get<TriggerMovSphere>())
+		if (sphere)
+			for (const auto & aabb : context->getComponents().get<TriggerStaticAABB>())
+				if (aabb)
+					if (intersectionSphereAABB(sphere.position, sphere.radius, aabb.min, aabb.max))
+						triggerMessages.emplace_back(sphere.getEntityType(), sphere.getEntityID(), aabb.getEntityType(), aabb.getEntityID());
 }
 
 void TriggerCollisionSystem::reset() {
