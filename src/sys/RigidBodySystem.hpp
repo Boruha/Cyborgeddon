@@ -4,6 +4,6 @@
 
 struct RigidBodySystem : System {
 	void init() override {  }
-	void update(const Context& context, float deltaTime);
+	void update(const Context& context, float deltaTime) override;
 	void reset() override {  }
 };
