@@ -12,3 +12,8 @@ void DeathSystem::update(const Context &context, const float deltaTime) {
     deathMessages.clear();
 }
 
+void DeathSystem::reset() {
+	deathMessages.clear();
+	deathMessages.reserve(16);
+}
+

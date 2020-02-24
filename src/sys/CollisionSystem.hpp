@@ -2,8 +2,7 @@
 
 #include <sys/System.hpp>
 
-struct CollisionSystem : System
-{
+struct CollisionSystem : System {
 	void init() override {  }
     void update(const Context &context, float deltaTime) override;
 	void reset() override {  }

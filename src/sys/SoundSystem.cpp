@@ -87,6 +87,9 @@ void SoundSystem::reset() {
 
 	ERRCHECK( backingTrack.instance->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
 
+	soundMessages.clear();
+	soundMessages.reserve(16);
+
 	startBackgroundMusic();
 }
 
