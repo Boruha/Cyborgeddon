@@ -17,14 +17,14 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<InputSystem>(engine.get())); // se detecta input del player
 	systems.emplace_back(std::make_unique<AI_System>());                        // se detecta input de los enemigos
 	systems.emplace_back(std::make_unique<AttackSystem>());                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
-	systems.emplace_back(std::make_unique<TriggerFastCollisionSystem>());
-	systems.emplace_back(std::make_unique<RigidBodySystem>());
-    systems.emplace_back(std::make_unique<TriggerCollisionSystem>());
-    systems.emplace_back(std::make_unique<TriggerResolutionSystem>());
+	systems.emplace_back(std::make_unique<TriggerFastCollisionSystem>());       // se ejecutan las comprobaciones de colision entre balas y resto de cosas relevantes
+	systems.emplace_back(std::make_unique<BulletDataSystem>());                 // se actualizan los datos de las balas comprobadas anteriormente
+	systems.emplace_back(std::make_unique<RigidBodySystem>());                  // se comprueba colision de los triggers con rigidBodies
+    systems.emplace_back(std::make_unique<TriggerCollisionSystem>());           // se comprueba colision de los triggers entre ellos
+    systems.emplace_back(std::make_unique<TriggerResolutionSystem>());          // se resuelve las colisiones de los triggers
 	systems.emplace_back(std::make_unique<MovementSystem>());                   // se ejecuta el movimiento (unificar este sistema y el de abajo uniendo velocidad y fisicas)
 	systems.emplace_back(std::make_unique<VelocitySystem>());                   // se actualiza la velocidad en funcion de la aceleracion (unificar este sistema con el de arriba pasando atributos de velocidad al cmp de fisicas)
 	systems.emplace_back(std::make_unique<CooldownSystem>());                   // se actualizan los cooldowns
-	systems.emplace_back(std::make_unique<BulletDataSystem>());
     systems.emplace_back(std::make_unique<DeathSystem>());                      // se comprueba si algo tiene que morir y ser eliminado
 	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
