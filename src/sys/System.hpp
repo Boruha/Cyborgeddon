@@ -14,4 +14,5 @@ struct System {
 		inline static std::vector<SoundMessage> 	  soundMessages;
 	    inline static std::vector<DeathMessage> 	  deathMessages;
 	    inline static std::vector<TriggerMessage>	triggerMessages;
+	    inline static std::vector<DamageMessage>     damageMessages;
 };

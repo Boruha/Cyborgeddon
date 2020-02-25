@@ -4,13 +4,13 @@ void ComponentPool::initData(const unsigned size) {
 	initVector<AI>(size);
 	initVector<Transformable>(size);
 	initVector<Velocity>(size);
-	initVector<BoundingBox>(size);	// TODO : remplazar este bounding por rigids y triggers
 	initVector<Physics>(size);
 	initVector<BulletData>(size);
 	initVector<CharacterData>(size);
 	initVector<TriggerMovSphere>(size);
 	initVector<TriggerStaticAABB>(size);
 	initVector<RigidStaticAABB>(size);
+	initVector<TriggerFastMov>(size);
 }
 
 void ComponentPool::cleanData() {

@@ -12,11 +12,11 @@ using variantComponentVectorTypes = std::variant<
                                                    vector<AI>,
                                                    vector<Transformable>,
                                                    vector<Velocity>,
-                                                   vector<BoundingBox>,
                                                    vector<Physics>,
                                                    vector<BulletData>,
                                                    vector<CharacterData>,
                                                    vector<TriggerMovSphere>,
                                                    vector<TriggerStaticAABB>,
+                                                   vector<TriggerFastMov>,
 												   vector<RigidStaticAABB>
                                                  >;

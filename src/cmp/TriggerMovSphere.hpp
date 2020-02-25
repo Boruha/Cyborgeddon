@@ -8,7 +8,7 @@ struct TriggerMovSphere : Component {
 
     friend std::ostream& operator<<(std::ostream& os, const TriggerMovSphere& cmp);
 
-    vec3   	position { 0 };				// posicion del bounding
+    vec3   	position { 0 };			// posicion del bounding
     float	radius { 0 };					// radio de la esfera/circulo
-    vec3 * 	velocity { nullptr }; 	// puntero a velocity del physics cmp
+    vec3 * 	velocity { nullptr }; 	        // puntero a velocity del physics cmp
 };

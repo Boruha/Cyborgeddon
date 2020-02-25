@@ -70,3 +70,14 @@ inline bool intersectionSphereAABB(const vec3& pos, const float radius, const ve
 
 	return greater_e(radius * radius, squareDistance);
 }
+
+inline bool intersectionLineSphereXZ(const Line& line, const vec3& center, const float radius) {
+	const glm::vec2 direction (line.b.x - line.a.x, line.b.z - line.a.z); // v director de la recta
+	const glm::vec2 center2origin (line.a.x - center.x, line.a.z - center.z); // v centro esfera a un punto origen de la recta
+
+	const float a = dot(direction, direction);
+	const float b = 2 * dot(center2origin, direction);
+	const float c = dot(center2origin, center2origin) - radius * radius;
+
+	return (b * b) - (4 * a * c) >= 0; // si el discriminante de la ecuacion es menor que 0 NO hay colision
+}

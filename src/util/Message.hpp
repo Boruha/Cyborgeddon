@@ -24,3 +24,10 @@ struct TriggerMessage {
 	const EntityType type2 { UNDEFINED };
 	const EntityID ID2 { 0 };
 };
+
+struct DamageMessage {
+	explicit DamageMessage(const EntityID _ID, const float dmg) : ID(_ID), damage(dmg) { }
+
+	const EntityID ID  {0};
+	const float damage {0};
+};

@@ -64,11 +64,11 @@ void InputSystem::update(const Context& context, const float deltaTime) {
             soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 		}
 
-	std::cout << "Click izquierdo\n";
+//	std::cout << "Click izquierdo\n";
 	}
 
 	if (mouse.rightPressed) {
-		std::cout << "Click derecho\n";
+//		std::cout << "Click derecho\n";
 	}
 
 	player.physics->velocity = normalize(player.velocity->direction) * player.velocity->currentSpeed * deltaTime;
@@ -77,10 +77,10 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 		player.characterData->dashing = false;
 }
 
-void InputSystem::w_pressed(Entity& player) const { ++player.velocity->direction.z; std::cout << "W\n"; }
-void InputSystem::a_pressed(Entity& player) const { --player.velocity->direction.x; std::cout << "A\n"; }
-void InputSystem::s_pressed(Entity& player) const { --player.velocity->direction.z; std::cout << "S\n"; }
-void InputSystem::d_pressed(Entity& player) const { ++player.velocity->direction.x; std::cout << "D\n"; }
+void InputSystem::w_pressed(Entity& player) const { ++player.velocity->direction.z; /*std::cout << "W\n";*/ }
+void InputSystem::a_pressed(Entity& player) const { --player.velocity->direction.x; /*std::cout << "A\n";*/ }
+void InputSystem::s_pressed(Entity& player) const { --player.velocity->direction.z; /*std::cout << "S\n";*/ }
+void InputSystem::d_pressed(Entity& player) const { ++player.velocity->direction.x; /*std::cout << "D\n";*/ }
 // Dash
 void InputSystem::shift_pressed(Entity& player) const {
     if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && length(player.velocity->direction) != 0) {
@@ -90,7 +90,7 @@ void InputSystem::shift_pressed(Entity& player) const {
 
         soundMessages.emplace_back(DASH_PLAYER_EVENT);
     }
- std::cout << "Shift\n";
+ //std::cout << "Shift\n";
 }
 // Shoot
 void InputSystem::space_pressed(Entity& player) const {
@@ -100,7 +100,7 @@ void InputSystem::space_pressed(Entity& player) const {
 
 		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 	}
-	std::cout << "Space\n";
+//	std::cout << "Space\n";
 }
 
 // Switch Mode
@@ -113,7 +113,7 @@ void InputSystem::m_pressed(Entity& player) const {
 
 		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
 	}
-	std::cout << "M\n";
+//	std::cout << "M\n";
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente

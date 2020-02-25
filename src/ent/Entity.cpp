@@ -19,10 +19,10 @@ void Entity::makeUndefined() {
 	undefine(physics);
 	undefine(bulletData);
 	undefine(characterData);
-	undefine(collider);
 	undefine(ai);
 	undefine(triggStaticAABB);
 	undefine(triggerMovSphere);
+	undefine(triggerFastMov);
 	undefine(rigidStaticAABB);
 
     inode = nullptr;

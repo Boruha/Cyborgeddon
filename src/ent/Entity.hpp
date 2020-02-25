@@ -8,11 +8,11 @@ struct Velocity;
 struct Physics;
 struct BulletData;
 struct CharacterData;
-struct BoundingBox;
 struct AI;
 struct TriggerMovSphere;
 struct TriggerStaticAABB;
 struct RigidStaticAABB;
+struct TriggerFastMov;
 
 struct Entity
 {
@@ -34,10 +34,10 @@ struct Entity
 	Physics			  	* physics			{ nullptr };
 	BulletData		  	* bulletData		{ nullptr };
 	CharacterData	  	* characterData		{ nullptr };
-	BoundingBox		  	* collider			{ nullptr };
 	AI				  	* ai				{ nullptr };
 	TriggerStaticAABB 	* triggStaticAABB 	{ nullptr };
 	TriggerMovSphere  	* triggerMovSphere	{ nullptr };
+	TriggerFastMov      * triggerFastMov    { nullptr };
 	RigidStaticAABB   	* rigidStaticAABB	{ nullptr };
 
 	INode				* inode 			{ nullptr };

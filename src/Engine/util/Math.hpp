@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+using glm::vec2;
 using glm::vec3;
 
 constexpr double PI = 3.141592653589793238463;
@@ -33,6 +34,10 @@ inline vec3& normalize(vec3& v) {
 
 inline float dot(const vec3& v1, const vec3& v2) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+inline float dot(const vec2& v1, const vec2& v2) {
+	return v1.x * v2.x + v1.y * v2.y;
 }
 
 inline float getRotationYfromXZ(const vec3& v) {
