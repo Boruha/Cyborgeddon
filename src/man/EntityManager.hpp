@@ -7,7 +7,7 @@
 struct IEngine;
 
 struct EntityManager : GameContext {
-	explicit EntityManager(const IEngine * const _engine) : engine(_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
+	explicit EntityManager(const IEngine * const _engine) : engine(*_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override = default;
 
 	void init() override;
@@ -24,9 +24,6 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const Entity& getCamera() const override { return *camera; }
 	[[nodiscard]] 		Entity& getCamera() 	  override { return *camera; }
 
-	[[nodiscard]] const std::vector<Entity>& getEntities() const override { return entities; }
-	[[nodiscard]] 		std::vector<Entity>& getEntities() 	  	 override { return entities; }
-
 	[[nodiscard]] const std::vector<MapNode>& getGraph() const override { return graph; }
 	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
 
@@ -34,8 +31,8 @@ struct EntityManager : GameContext {
 				        void deletePath(EntityID eid) 			          override { paths.erase(eid);  }
 				  		void setPath(EntityID eid, std::vector<int> path) override { paths[eid] = path; }
 
-	[[nodiscard]] const Entity& getEntityByID(std::size_t id) const override;
-	[[nodiscard]] 		Entity& getEntityByID(std::size_t id) 		override;
+	[[nodiscard]] const Entity& getEntityByID(EntityID id) const override;
+	[[nodiscard]] 		Entity& getEntityByID(EntityID id) 		 override;
 
 	[[nodiscard]] const ComponentPool& getComponents() const override { return componentStorage.getComponents(); }
 	[[nodiscard]] 		ComponentPool& getComponents() 	     override { return componentStorage.getComponents(); }
@@ -48,6 +45,8 @@ struct EntityManager : GameContext {
 		void initData(int maxEntities, int maxToDelete, int maxComponents);
         void cleanData();
 
+        Entity& createEntity(EntityType type);
+
 		void createPairPlayerCamera (const vec3& pos, const vec3& dim, const vec3& posCamera);
 		void createEnemy  (const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
 		void createWall   (const vec3& pos, const vec3& dim);
@@ -55,21 +54,20 @@ struct EntityManager : GameContext {
 		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
 
 		void killEntities();
-		void moveDeadEntities();
-		void removeEntities();
 
 		bool checkVictory();
 
-		Entity* player { nullptr };
-		Entity* camera { nullptr };
+		Entity * player { nullptr };
+		Entity * camera { nullptr };
 
     	std::vector<MapNode> graph;
 		std::map<EntityID, std::vector<int>> paths;
 
-	    const IEngine * const engine { nullptr };
+	    const IEngine& engine;
 
 	    std::vector<EntityID> toDelete;
-	    std::vector<Entity> entities;
+	    std::unordered_map<EntityID, Entity> map_entities;
+
 		unsigned int entitiesLeftToDelete { 0 };
 
 		unsigned int enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel

@@ -43,75 +43,85 @@ void InputSystem::init() {
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
 void InputSystem::update(const Context& context, const float deltaTime) {
 
-	auto& player = context->getPlayer();
+	auto& player    = context->getPlayer();
 
-	player.velocity->direction = vec3();
+	auto* velocity  = player.getComponent<Velocity>();
+	auto* physics = player.getComponent<Physics>();
 
-	for (const auto * next = keyMap; next->p_func; ++next)
-		if (engine->isKeyPressed(next->key))
-            (this->*(next->p_func))(player);
+	if (velocity->currentSpeed == velocity->defaultSpeed) {
 
-    const Mouse& mouse = engine->getMouse();
+		velocity->direction = vec3();
+
+		auto* data = player.getComponent<CharacterData>();
+
+		for (const auto * next = keyMap; next->p_func; ++next)
+			if (engine->isKeyPressed(next->key))
+				(this->*(next->p_func))(*velocity, *data);
+
+		if (data->switchingMode)
+			data->mode == DEMON ? player.inode->setTexture(DEMON_TEXTURE) : player.inode->setTexture(ANGEL_TEXTURE);
+
+		const Mouse& mouse = engine->getMouse();
 //    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;
 
-	aim_mouse(*player.physics, mouse.position);
+		aim_mouse(*physics, mouse.position);
 
-	if (mouse.leftPressed) {
-		if(!player.characterData->dashing && !greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
-			player.characterData->attacking = true;
-			player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+		if (mouse.leftPressed) {
+			if(!data->dashing && !greater_e(data->currentAttackingCooldown, 0.f)) {
+				data->attacking = true;
+				data->currentAttackingCooldown = data->attackingCooldown;
 
-            soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
-		}
+				soundMessages.emplace_back(data->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
+			}
 
 //	std::cout << "Click izquierdo\n";
-	}
+		}
 
-	if (mouse.rightPressed) {
+		if (mouse.rightPressed) {
 //		std::cout << "Click derecho\n";
+		}
+
+		if (velocity->currentSpeed == velocity->defaultSpeed)
+			data->dashing = false;
 	}
 
-	player.physics->velocity = normalize(player.velocity->direction) * player.velocity->currentSpeed * deltaTime;
-
-	if (player.velocity->currentSpeed == player.velocity->defaultSpeed)
-		player.characterData->dashing = false;
+	physics->velocity = normalize(velocity->direction) * velocity->currentSpeed * deltaTime;
 }
 
-void InputSystem::w_pressed(Entity& player) const { ++player.velocity->direction.z; /*std::cout << "W\n";*/ }
-void InputSystem::a_pressed(Entity& player) const { --player.velocity->direction.x; /*std::cout << "A\n";*/ }
-void InputSystem::s_pressed(Entity& player) const { --player.velocity->direction.z; /*std::cout << "S\n";*/ }
-void InputSystem::d_pressed(Entity& player) const { ++player.velocity->direction.x; /*std::cout << "D\n";*/ }
+void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
+void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
+void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "S\n";*/ }
+void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
 // Dash
-void InputSystem::shift_pressed(Entity& player) const {
-    if(!greater_e(player.characterData->currentDashingCooldown, 0.f) && length(player.velocity->direction) != 0) {
-        player.characterData->dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
-        player.characterData->currentDashingCooldown = player.characterData->dashingCooldown;
-        player.velocity->currentSpeed = player.characterData->dashSpeed;
+void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
+    if(!greater_e(data.currentDashingCooldown, 0.f) && length(velocity.direction) != 0) {
+        data.dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
+        data.currentDashingCooldown = data.dashingCooldown;
+        velocity.currentSpeed = data.dashSpeed;
 
         soundMessages.emplace_back(DASH_PLAYER_EVENT);
     }
  //std::cout << "Shift\n";
 }
 // Shoot
-void InputSystem::space_pressed(Entity& player) const {
-	if(!player.characterData->dashing && !greater_e(player.characterData->currentAttackingCooldown, 0.f)) {
-		player.characterData->attacking = true;
-		player.characterData->currentAttackingCooldown = player.characterData->attackingCooldown;
+void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
+	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f)) {
+		data.attacking = true;
+		data.currentAttackingCooldown = data.attackingCooldown;
 
-		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
+		soundMessages.emplace_back(data.mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 	}
 //	std::cout << "Space\n";
 }
 
 // Switch Mode
-void InputSystem::m_pressed(Entity& player) const {
-	if (!greater_e(player.characterData->currentSwitchingCooldown, 0)) {
-		player.characterData->switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
-		player.characterData->mode == DEMON ? player.characterData->mode = ANGEL : player.characterData->mode = DEMON;
-		player.characterData->mode == DEMON ? player.inode->setTexture(DEMON_TEXTURE) : player.inode->setTexture(ANGEL_TEXTURE);
-		player.characterData->currentSwitchingCooldown = player.characterData->switchingCooldown;
+void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
+	if (!greater_e(data.currentSwitchingCooldown, 0)) {
+		data.switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
+		data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
+		data.currentSwitchingCooldown = data.switchingCooldown;
 
-		soundMessages.emplace_back(player.characterData->mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
+		soundMessages.emplace_back(data.mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
 	}
 //	std::cout << "M\n";
 }

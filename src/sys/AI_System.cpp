@@ -13,113 +13,121 @@ void AI_System::init() {
 
 // TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const Context &context, const float deltaTime) {
-	const vec3 player_pos = context->getPlayer().physics->position;
+	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
 
-	for (const auto& enemy : context->getEntities()) {
-		if (enemy && enemy.ai) {
-			const vec3 v_distance(enemy.physics->position.x - player_pos.x, 0, enemy.physics->position.z - player_pos.z);
+	for (auto & ai : context->getComponents().get<AI>()) {
+		if (ai) {
+			auto& enemy = context->getEntityByID(ai.getEntityID());
+
+			auto * physics = enemy.getComponent<Physics>();
+
+			const vec3 v_distance(physics->position.x - player_pos.x, 0, physics->position.z - player_pos.z);
 			const float distance = length(v_distance);
 
 			if (greater_e(distance, PATROL_MIN_DISTANCE))
-                enemy.ai->state = PATROL_STATE;
+				ai.state = PATROL_STATE;
 			else if (greater_e(distance, PURSUE_MIN_DISTANCE))
-                enemy.ai->state = PURSUE_STATE;
+				ai.state = PURSUE_STATE;
 			else if (greater_e(distance, ATTACK_MIN_DISTANCE))
-                enemy.ai->state = ATTACK_STATE;
+				ai.state = ATTACK_STATE;
 
-            (this->*(stateFunctions[enemy.ai->state].p_func))(enemy, player_pos, deltaTime, context);
+			auto * data = enemy.getComponent<CharacterData>();
+			auto * velocity = enemy.getComponent<Velocity>();
+
+			(this->*(stateFunctions[ai.state].p_func))(ai, *physics, *data, *velocity, player_pos, deltaTime, context);
 		}
 	}
 }
 
-void AI_System::patrolBehaviour(const Entity& enemy, const vec3& player_pos, float deltaTime, const Context& context) const {
-	const vec3 distance(enemy.physics->position.x - enemy.ai->target_position.x, 0, enemy.physics->position.z - enemy.ai->target_position.z);
+void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& velocity, const vec3& player_pos, float deltaTime, const Context& context) const {
+
+	const vec3 distance(physics.position.x - ai.target_position.x, 0, physics.position.z - ai.target_position.z);
 
 	if (greater_e(length(distance), ARRIVED_MIN_DISTANCE)) {
-		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], deltaTime, true);
+		basicBehaviour(ai, physics, velocity, ai.patrol_position[ai.patrol_index], deltaTime, true);
 	} else {
-		enemy.ai->patrol_index = (enemy.ai->patrol_index + 1) % enemy.ai->max_index;
+		ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
 		// sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
 
-		basicBehaviour(enemy, enemy.ai->patrol_position[enemy.ai->patrol_index], 0, false);
+		basicBehaviour(ai, physics, velocity, ai.patrol_position[ai.patrol_index], 0, false);
 	}
 }
 
-void AI_System::pursueBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const Context& context) const {
+void AI_System::pursueBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
     
-    const vec3 distance(enemy.physics->position.x - player_pos.x, 0, enemy.physics->position.z - player_pos.z);
+    const vec3 distance(physics.position.x - player_pos.x, 0, physics.position.z - player_pos.z);
     const std::vector<MapNode>& ref_graph = context->getGraph();
 
-    if(enemy.ai->path_index < 0)
+    if(ai.path_index < 0)
     {
         int final_path       = nearestNode(player_pos, ref_graph); //index -> mapnode + cercano a player
-        int ini_path         = nearestNode(enemy.physics->position, ref_graph); //index -> mapnode + cercano a player
-        enemy.ai->path_node  = ini_path;
-        enemy.ai->path_index = 0;
+        int ini_path         = nearestNode(physics.position, ref_graph); //index -> mapnode + cercano a player
+        ai.path_node  = ini_path;
+        ai.path_index = 0;
         //guardamos el path generado, usamos el ID para identificarlo despues.
-        context->setPath(enemy.getID(), calculePath(ini_path, final_path, ref_graph));
+        context->setPath(ai.getEntityID(), calculePath(ini_path, final_path, ref_graph));
     }
     else
     {
-        std::vector<int>& ref_path = context->getPath(enemy.getID());
-	    const vec3 distance_path(enemy.physics->position.x - enemy.ai->target_position.x, 0, enemy.physics->position.z - enemy.ai->target_position.z);
+        std::vector<int>& ref_path = context->getPath(ai.getEntityID());
+	    const vec3 distance_path(physics.position.x - ai.target_position.x, 0, physics.position.z - ai.target_position.z);
         
         if (!greater_e(length(distance_path), ARRIVED_MIN_DISTANCE))
         {
-            if(unsigned(++enemy.ai->path_index) < ref_path.size())
-                enemy.ai->path_node  = ref_path[enemy.ai->path_index];
+            if(unsigned(++ai.path_index) < ref_path.size())
+                ai.path_node  = ref_path[ai.path_index];
             else
-                enemy.ai->path_index = -1;
+                ai.path_index = -1;
         }
     }
 
     if (greater_e(length(distance), CHASE_MIN_DISTANCE))
-        basicBehaviour(enemy, ref_graph[enemy.ai->path_node].coord, deltaTime, true);
+        basicBehaviour(ai, physics, vel, ref_graph[ai.path_node].coord, deltaTime, true);
     else
-        basicBehaviour(enemy, player_pos, deltaTime, true);
+        basicBehaviour(ai, physics, vel, player_pos, deltaTime, true);
 }
 
-void AI_System::attackBehaviour(const Entity& enemy, const vec3& player_pos, const float deltaTime, const Context& context) const {
+void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
 	
     //if we find enemy before end the pathing.
-    if(enemy.ai->path_index > -1)
+    if(ai.path_index > -1)
     {
-        enemy.ai->path_index = -1;
-        context->deletePath(enemy.getID());
+        ai.path_index = -1;
+        context->deletePath(ai.getEntityID());
     }
 
-    basicBehaviour(enemy, player_pos, 0, true);
+    basicBehaviour(ai, phy, vel, player_pos, 0, true);
     
-    if(!greater_e(enemy.characterData->currentAttackingCooldown, 0.f)) {
-        enemy.characterData->attacking = true;
-        enemy.characterData->currentAttackingCooldown = enemy.characterData->attackingCooldown;
+    if(!greater_e(data.currentAttackingCooldown, 0.f)) {
+        data.attacking = true;
+        data.currentAttackingCooldown = data.attackingCooldown;
 
         soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
     }
 }
 
-void AI_System::basicBehaviour(const Entity& enemy, const vec3& target, const float deltaTime, const bool align) const {
-	targetBehaviour(*enemy.ai, target);
+void AI_System::basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& target, const float deltaTime, const bool align) const {
+	targetBehaviour(ai, target);
 
-	seekBehaviour(enemy, target, deltaTime);
+	seekBehaviour(phy, vel, target, deltaTime);
 
 	if (align)
-		alignBehaviour(enemy, target);
+		alignBehaviour(phy, target);
 }
 
 void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
 	ai.target_position = target;
 }
 
-void AI_System::seekBehaviour(const Entity& enemy, const vec3& target, const float deltaTime) const {
-	enemy.velocity->direction = target - enemy.physics->position;
-	enemy.velocity->direction.y = 0;
+void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, const vec3& target, const float deltaTime) const {
+	velocity.direction = target - physics.position;
+	velocity.direction.y = 0;
 
-	enemy.physics->velocity = normalize(enemy.velocity->direction) * enemy.velocity->currentSpeed * deltaTime;
+	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
-void AI_System::alignBehaviour(const Entity& enemy, const vec3& target) const {
-	enemy.physics->rotation.y = nearestAngle(enemy.physics->rotation.y, getRotationYfromXZ(enemy.physics->position - target));
+void AI_System::alignBehaviour(Physics& physics, const vec3& target) const {
+	physics.rotation.y = nearestAngle(physics.rotation.y, getRotationYfromXZ(physics.position - target));
 }
 
 

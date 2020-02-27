@@ -18,22 +18,22 @@ struct InputSystem : System
 		IEngine * const engine {nullptr };
 
 		// Movement
-		void w_pressed(Entity& player) const;
-		void a_pressed(Entity& player) const;
-		void s_pressed(Entity& player) const;
-		void d_pressed(Entity& player) const;
+		void w_pressed(Velocity& velocity, CharacterData& data) const;
+		void a_pressed(Velocity& velocity, CharacterData& data) const;
+		void s_pressed(Velocity& velocity, CharacterData& data) const;
+		void d_pressed(Velocity& velocity, CharacterData& data) const;
 		// Dash
-		void shift_pressed(Entity& player) const;
+		void shift_pressed(Velocity& velocity, CharacterData& data) const;
 		// Shoot
-		void space_pressed(Entity& player) const;
+		void space_pressed(Velocity& velocity, CharacterData& data) const;
 		// Switch Mode
-		void m_pressed(Entity& player) const;
+		void m_pressed(Velocity& velocity, CharacterData& data) const;
 
         void aim_mouse(Physics& phy, const glm::vec2 &mouse) const;
 
         struct TKey2func {
             KEY_CODE key;
-            void (InputSystem::*p_func)(Entity& player) const;
+            void (InputSystem::*p_func)(Velocity& velocity, CharacterData& data) const;
         };
 
         TKey2func keyMap[KEY_CODE_COUNT] {

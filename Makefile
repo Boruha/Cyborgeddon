@@ -38,7 +38,7 @@ C           := $(CCACHE) gcc
 CCFLAGS     := -pthread -Wall -pedantic -std=c++17 -fno-exceptions
 CFLAGS      := $(CCFLAGS)
 RELEASEFLAG := -O3
-DEBUGFLAG   := -Og
+DEBUGFLAG   := -ggdb
 
 # MAIN FOLDERS
 APPDIR      :=
