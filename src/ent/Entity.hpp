@@ -63,8 +63,6 @@ struct Entity
 
 	std::unordered_map<std::size_t, Component*> components;
 
-	INode				* inode 			{ nullptr };
-
 	private:
 
 		inline static EntityID nextID { 0 };

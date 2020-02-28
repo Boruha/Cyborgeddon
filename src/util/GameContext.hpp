@@ -35,9 +35,6 @@ struct GameContext {
 	[[nodiscard]] virtual const ComponentPool& getComponents() const = 0;
 	[[nodiscard]] virtual 		ComponentPool& getComponents() 	     = 0;
 
-	[[nodiscard]] virtual const vector<Node_ptr>& getNodes()   const = 0;
-	[[nodiscard]] virtual 		vector<Node_ptr>& getNodes()         = 0;
-
 	virtual void addToDestroy(EntityID ID) = 0;
 };
 

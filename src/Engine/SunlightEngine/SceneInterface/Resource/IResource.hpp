@@ -1,18 +1,22 @@
 #pragma once
 
+#include <string_view>
+#include <string>
+
 struct IResource {
     virtual ~IResource() = default;
 
-    [[nodiscard]] const char * getName() const {
+    [[nodiscard]] std::string_view getName() const {
         return name;
     };
-    void setName(char * const _name) {
+
+    void setName(const std::string& _name) {
         name = _name;
     };
 
-    virtual void loadResource(const char *) = 0;
+    virtual void loadResource(std::string_view) = 0;
 
     private:
 
-        char * name { nullptr };
+        std::string name { };
 };

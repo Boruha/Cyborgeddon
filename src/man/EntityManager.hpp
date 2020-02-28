@@ -37,9 +37,6 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const ComponentPool& getComponents() const override { return componentStorage.getComponents(); }
 	[[nodiscard]] 		ComponentPool& getComponents() 	     override { return componentStorage.getComponents(); }
 
-	[[nodiscard]] const vector<Node_ptr>& getNodes()   const override { return componentStorage.getNodes(); }
-	[[nodiscard]]       vector<Node_ptr>& getNodes()         override { return componentStorage.getNodes(); }
-
 	private:
 
 		void initData(int maxEntities, int maxToDelete, int maxComponents);
@@ -50,7 +47,7 @@ struct EntityManager : GameContext {
 		void createPairPlayerCamera (const vec3& pos, const vec3& dim, const vec3& posCamera);
 		void createEnemy  (const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
 		void createWall   (const vec3& pos, const vec3& dim);
-		void createFloor  (const char* tex, const vec3& pos, const vec3& dim);
+		void createFloor  (std::string_view tex, const vec3& pos, const vec3& dim);
 		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
 
 		void killEntities();
@@ -68,9 +65,9 @@ struct EntityManager : GameContext {
 	    std::vector<EntityID> toDelete;
 	    std::unordered_map<EntityID, Entity> map_entities;
 
-		unsigned int entitiesLeftToDelete { 0 };
+		unsigned entitiesLeftToDelete { 0 };
 
-		unsigned int enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
+		unsigned enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
 
 		Storage componentStorage;
 };

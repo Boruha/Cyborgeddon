@@ -36,7 +36,7 @@ file(GLOB SOURCES
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.c"
         )
 
-add_executable(cyborgeddon ${SOURCES})
+add_executable(cyborgeddon ${SOURCES} src/cmp/Render.hpp src/cmp/Render.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 
