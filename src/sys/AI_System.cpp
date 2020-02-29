@@ -11,39 +11,39 @@ void AI_System::init() {
     stateFunctions[ATTACK_STATE].p_func = &AI_System::attackBehaviour;
 }
 
-// TODO: considerar los estados de la IA como punteros a funcion
 void AI_System::update(const Context &context, const float deltaTime) {
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
 
 	for (auto & ai : context->getComponents().get<AI>()) {
 		if (ai) {
-			auto& enemy = context->getEntityByID(ai.getEntityID());
+			auto & enemy = context->getEntityByID(ai.getEntityID());
 
-			auto * physics = enemy.getComponent<Physics>();
+			// si tiene ai, tambien tiene physics
+			auto & physics = *enemy.getComponent<Physics>();
 
-			const vec3 v_distance(physics->position.x - player_pos.x, 0, physics->position.z - player_pos.z);
-			const float distance = length(v_distance);
+			const float distance2 = length2 ( { physics.position.x - player_pos.x, physics.position.z - player_pos.z } );
 
-			if (greater_e(distance, PATROL_MIN_DISTANCE))
+			if (greater_e(distance2, PATROL_MIN_DISTANCE2))
 				ai.state = PATROL_STATE;
-			else if (greater_e(distance, PURSUE_MIN_DISTANCE))
+			else if (greater_e(distance2, PURSUE_MIN_DISTANCE2))
 				ai.state = PURSUE_STATE;
-			else if (greater_e(distance, ATTACK_MIN_DISTANCE))
+			else if (greater_e(distance2, ATTACK_MIN_DISTANCE2))
 				ai.state = ATTACK_STATE;
 
-			auto * data = enemy.getComponent<CharacterData>();
-			auto * velocity = enemy.getComponent<Velocity>();
+			// si tiene ai, tambien tiene data y velocity
+			auto & data     = *enemy.getComponent<CharacterData>();
+			auto & velocity = *enemy.getComponent<Velocity>();
 
-			(this->*(stateFunctions[ai.state].p_func))(ai, *physics, *data, *velocity, player_pos, deltaTime, context);
+			(this->*(stateFunctions[ai.state].p_func))(ai, physics, data, velocity, player_pos, deltaTime, context);
 		}
 	}
 }
 
 void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& velocity, const vec3& player_pos, float deltaTime, const Context& context) const {
 
-	const vec3 distance(physics.position.x - ai.target_position.x, 0, physics.position.z - ai.target_position.z);
+	const float distance2 ( length2 ( { physics.position.x - ai.target_position.x, physics.position.z - ai.target_position.z } ) );
 
-	if (greater_e(length(distance), ARRIVED_MIN_DISTANCE)) {
+	if (greater_e(distance2, ARRIVED_MIN_DISTANCE2)) {
 		basicBehaviour(ai, physics, velocity, ai.patrol_position[ai.patrol_index], deltaTime, true);
 	} else {
 		ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
@@ -54,8 +54,7 @@ void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, V
 }
 
 void AI_System::pursueBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
-    
-    const vec3 distance(physics.position.x - player_pos.x, 0, physics.position.z - player_pos.z);
+
     const std::vector<MapNode>& ref_graph = context->getGraph();
 
     if(ai.path_index < 0)
@@ -70,9 +69,10 @@ void AI_System::pursueBehaviour(AI& ai, Physics& physics, CharacterData& data, V
     else
     {
         std::vector<int>& ref_path = context->getPath(ai.getEntityID());
-	    const vec3 distance_path(physics.position.x - ai.target_position.x, 0, physics.position.z - ai.target_position.z);
+
+	    const float distance2 ( length2 ( { physics.position.x - ai.target_position.x, physics.position.z - ai.target_position.z } ) );
         
-        if (!greater_e(length(distance_path), ARRIVED_MIN_DISTANCE))
+        if (!greater_e(distance2, ARRIVED_MIN_DISTANCE2))
         {
             if(unsigned(++ai.path_index) < ref_path.size())
                 ai.path_node  = ref_path[ai.path_index];
@@ -81,7 +81,9 @@ void AI_System::pursueBehaviour(AI& ai, Physics& physics, CharacterData& data, V
         }
     }
 
-    if (greater_e(length(distance), CHASE_MIN_DISTANCE))
+	const float distance2 ( length2 ( { physics.position.x - player_pos.x, physics.position.z - player_pos.z } ) );
+
+    if (greater_e(distance2, CHASE_MIN_DISTANCE2))
         basicBehaviour(ai, physics, vel, ref_graph[ai.path_node].coord, deltaTime, true);
     else
         basicBehaviour(ai, physics, vel, player_pos, deltaTime, true);
@@ -120,8 +122,7 @@ void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
 }
 
 void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, const vec3& target, const float deltaTime) const {
-	velocity.direction = target - physics.position;
-	velocity.direction.y = 0;
+	velocity.direction = vec3(target.x - physics.position.x, 0, target.z - physics.position.z);
 
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
@@ -216,7 +217,7 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
     //vector diff the player position and each node in the graph
     vec3 nearest     = vec3(graph.front().coord.x - point.x, 0,graph.front().coord.z - point.z);
     //decision value
-    float    small_dist  = length(nearest);
+    float    small_dist2  = length2(nearest);
     //index of the nearest node
     int      small_index = 0;
     //counter
@@ -227,9 +228,12 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
         ++i;
         nearest.x = node.coord.x - point.x;
         nearest.z = node.coord.z - point.z;
-        if(length(nearest) < small_dist)
+
+        const float len2near = length2(nearest);
+
+        if(len2near < small_dist2)
         {
-            small_dist  = length(nearest);
+            small_dist2  = len2near;
             small_index = i;
         }
     }

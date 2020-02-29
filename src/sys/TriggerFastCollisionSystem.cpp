@@ -41,7 +41,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 			auto[id, type, sqDist] = std::tuple<EntityID, EntityType, float>(0, UNDEFINED, -1.f);
 
 			// primero vamos a recorrer los componentes rigidos y estaticos
-			for (const auto &rigid : context->getComponents().get<RigidStaticAABB>()) {
+			for (const auto & rigid : context->getComponents().get<RigidStaticAABB>()) {
 				// si estan operativos e interseccionan en el plano XZ (ignorando la y)
 				// entonces vemos si hay que almacenar sus datos
 

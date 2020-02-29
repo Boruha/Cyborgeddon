@@ -35,8 +35,6 @@ void AttackSystem::update(const Context& context, const float deltaTime) {
 		    deathMessages.emplace_back(context->getPlayer().getID());
 	}
 
-
-
 	if (playerShoots)
 		context->createBullet();
 }

@@ -43,37 +43,40 @@ void InputSystem::init() {
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
 void InputSystem::update(const Context& context, const float deltaTime) {
 
-	auto& player    = context->getPlayer();
+	auto & player    = context->getPlayer();
 
-	auto* velocity  = player.getComponent<Velocity>();
-	auto* physics = player.getComponent<Physics>();
+	// player siempre tiene velocity y physics
+	auto & velocity  = *player.getComponent<Velocity>();
+	auto & physics   = *player.getComponent<Physics>();
 
-	if (velocity->currentSpeed == velocity->defaultSpeed) {
+	if (velocity.currentSpeed == velocity.defaultSpeed) {
 
-		velocity->direction = vec3();
+		velocity.direction = vec3();
 
-		auto* data = player.getComponent<CharacterData>();
+		// player siempre tiene character data
+		auto & data = *player.getComponent<CharacterData>();
 
 		for (const auto * next = keyMap; next->p_func; ++next)
 			if (engine->isKeyPressed(next->key))
-				(this->*(next->p_func))(*velocity, *data);
+				(this->*(next->p_func))(velocity, data);
 
-		auto * render = player.getComponent<Render>();
+		// player siempre tiene render
+		auto & render = *player.getComponent<Render>();
 
-		if (data->switchingMode)
-			data->mode == DEMON ? render->node->setTexture(DEMON_TEXTURE) : render->node->setTexture(ANGEL_TEXTURE);
+		if (data.switchingMode)
+			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
 
 		const Mouse& mouse = engine->getMouse();
 //    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
 
-		aim_mouse(*physics, mouse.position);
+		aim_mouse(physics, mouse.position);
 
 		if (mouse.leftPressed) {
-			if(!data->dashing && !greater_e(data->currentAttackingCooldown, 0.f)) {
-				data->attacking = true;
-				data->currentAttackingCooldown = data->attackingCooldown;
+			if(!greater_e(data.currentAttackingCooldown, 0.f)) {
+				data.attacking = true;
+				data.currentAttackingCooldown = data.attackingCooldown;
 
-				soundMessages.emplace_back(data->mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
+				soundMessages.emplace_back(data.mode == ANGEL ? ANGEL_SHOOT_EVENT : DEMON_SHOOT_EVENT);
 			}
 
 //	std::cout << "Click izquierdo\n";
@@ -83,11 +86,11 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 //		std::cout << "Click derecho\n";
 		}
 
-		if (velocity->currentSpeed == velocity->defaultSpeed)
-			data->dashing = false;
+		if (velocity.currentSpeed == velocity.defaultSpeed)
+			data.dashing = false;
 	}
 
-	physics->velocity = normalize(velocity->direction) * velocity->currentSpeed * deltaTime;
+	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
 void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
