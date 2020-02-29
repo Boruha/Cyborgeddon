@@ -19,5 +19,6 @@ using variantComponentVectorTypes = std::variant<
                                                    vector<TriggerStaticAABB>,
                                                    vector<TriggerFastMov>,
 												   vector<RigidStaticAABB>,
-										           vector<Graph>
+										           vector<Graph>,
+												   vector<Render>
                                                  >;

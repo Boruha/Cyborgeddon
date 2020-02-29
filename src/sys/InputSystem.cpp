@@ -58,8 +58,10 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 			if (engine->isKeyPressed(next->key))
 				(this->*(next->p_func))(*velocity, *data);
 
+		auto * render = player.getComponent<Render>();
+
 		if (data->switchingMode)
-			data->mode == DEMON ? player.inode->setTexture(DEMON_TEXTURE) : player.inode->setTexture(ANGEL_TEXTURE);
+			data->mode == DEMON ? render->node->setTexture(DEMON_TEXTURE) : render->node->setTexture(ANGEL_TEXTURE);
 
 		const Mouse& mouse = engine->getMouse();
 //    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;

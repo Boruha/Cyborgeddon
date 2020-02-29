@@ -12,6 +12,7 @@ void ComponentPool::initData(const unsigned size) {
 	initVector<RigidStaticAABB>(48);
 	initVector<TriggerFastMov>(4);
 	initVector<Graph>(1);
+	initVector<Render>(size);
 }
 
 void ComponentPool::cleanData() {

@@ -5,7 +5,7 @@
 struct RMesh : IResource {
     ~RMesh() override = default;
 
-    void loadResource(const char * const path) override {
+    void loadResource(const std::string_view path) override {
 
     }
 

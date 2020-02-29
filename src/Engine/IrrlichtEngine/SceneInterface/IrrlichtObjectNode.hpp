@@ -13,10 +13,7 @@ namespace irr::scene {
 
 struct IrrlichtObjectNode : IObjectNode {
     explicit IrrlichtObjectNode (
-            irr::scene::ISceneManager * = nullptr,
-            const vec3 *  = nullptr,
-            const vec3 *  = nullptr,
-            const vec3 *  = nullptr
+            irr::scene::ISceneManager * = nullptr
     );
 
     ~IrrlichtObjectNode() override = default;
@@ -26,33 +23,26 @@ struct IrrlichtObjectNode : IObjectNode {
 	// removes node from scene
 	void remove() override;
 
-	// updates data immediately
-	void update() override;
-	// updates using interpolation based on parameter
-	void update(float) override;
-
 	// getters
 	[[nodiscard]] const vec3 & getPosition() const override;
 	[[nodiscard]] const vec3 & getRotation() const override;
 	[[nodiscard]] const vec3 & getScale   () const override;
+	[[nodiscard]] const vec3 & getTarget  () const override {  }
+
 
 	// setters
-	void setPosition(const vec3 &) const override;
-	void setRotation(const vec3 &) const override;
-	void setScale   (const vec3 &) const override;
-
-	// setters using interpolation based on parameter
-	void setPosition(float) const override;
-	void setRotation(float) const override;
-	void setScale   (float) const override;
+	void setPosition(const vec3 &) override;
+	void setRotation(const vec3 &) override;
+	void setScale   (const vec3 &) override;
+	void setTarget	(const vec3 &) override { }
 
 	// set texture
-	void setTexture(const char *) const override;
+	void setTexture(std::string_view) const override;
 
 	// sets if light should affect a node
 	void affectedByLight(bool) const override;
 
-    void setMesh(const char *) override;
+    void setMesh(std::string_view) override;
 
     protected :
         irr::scene::IMeshSceneNode * meshNode { nullptr };

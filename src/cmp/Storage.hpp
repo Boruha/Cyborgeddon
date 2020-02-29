@@ -21,14 +21,6 @@ struct Storage {
 		return const_cast<ComponentPool &>(std::as_const(*this).getComponents());
 	}
 
-	const vector<Node_ptr>& getNodes() const {
-		return nodes;
-	}
-
-	vector<Node_ptr>& getNodes() {
-		return const_cast<vector<Node_ptr> &>(std::as_const(*this).getNodes());
-	}
-
 	template <typename T>
 	const T& createComponent(T&& cmp) const {
 		return pool.createComponent(std::forward<T>(cmp));
@@ -39,28 +31,26 @@ struct Storage {
         return const_cast<T&>(std::as_const(*this).createComponent(std::forward<T>(cmp)));
     }
 
-	template <typename ... Args>
-	INode* createIObjectNode(Args&& ... args) {
+	INode* createIObjectNode() {
 	//	std::cout << "\n\nINode\n";
 	//	printVecInfo(nodes);
 
 		for (auto& item : nodes)
 			if (!(*item))
-				return (item = std::move(engine.scene->addObjectNode(args...))).get();
+				return (item = std::move(engine.scene->addObjectNode())).get();
 
-		return nodes.emplace_back(engine.scene->addObjectNode(args...)).get();
+		return nodes.emplace_back(engine.scene->addObjectNode()).get();
 	}
 
-	template <typename ... Args>
-	INode* createICameraNode(Args&& ... args) {
+	INode* createICameraNode() {
 	//	std::cout << "\n\nINode\n";
 	//	printVecInfo(nodes);
 
 		for (auto& item : nodes)
 			if (!(*item))
-				return (item = std::move(engine.scene->addCameraNode(args...))).get();
+				return (item = std::move(engine.scene->addCameraNode())).get();
 
-		return nodes.emplace_back(engine.scene->addCameraNode(args...)).get();
+		return nodes.emplace_back(engine.scene->addCameraNode()).get();
 	}
 
 	void initData(unsigned maxComponents);

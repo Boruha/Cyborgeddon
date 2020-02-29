@@ -7,29 +7,24 @@ namespace irr::scene {
 }
 
 struct IrrlichtNodeImpl : INode {
-	explicit IrrlichtNodeImpl(irr::scene::ISceneNode *, const vec3 *, const vec3 *, const vec3 *);
+	explicit IrrlichtNodeImpl(irr::scene::ISceneNode *);
 	~IrrlichtNodeImpl() override = default;
 
     explicit operator bool() const override;
 
 	void remove() override;
 
-	void update() override;
-	void update(float delta) override;
-
 	[[nodiscard]] const vec3 & getPosition() const override;
 	[[nodiscard]] const vec3 & getRotation() const override;
 	[[nodiscard]] const vec3 & getScale   () const override;
+	[[nodiscard]] const vec3 & getTarget  () const override { }
 
-	void setPosition(const vec3 &) const override;
-	void setRotation(const vec3 &) const override;
-	void setScale   (const vec3 &) const override;
+	void setPosition(const vec3 &) override;
+	void setRotation(const vec3 &) override;
+	void setScale   (const vec3 &) override;
+	void setTarget	(const vec3 &) override { }
 
-	void setPosition(float delta) const override;
-	void setRotation(float delta) const override;
-	void setScale   (float delta) const override;
-
-	void setTexture(const char *) const override;
+	void setTexture(std::string_view) const override;
 
 	void affectedByLight(bool) const override;
 
@@ -37,7 +32,7 @@ struct IrrlichtNodeImpl : INode {
 
 		irr::scene::ISceneNode * node { nullptr };
 
-		const vec3 * const position { nullptr };
-		const vec3 * const rotation { nullptr };
-		const vec3 * const    scale { nullptr };
+		vec3 pos {0};
+		vec3 rot {0};
+		vec3 sca {0};
 };

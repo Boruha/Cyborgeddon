@@ -7,7 +7,7 @@
 
 #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 
-void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line) {
+void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int line) {
 	if (res != FMOD_OK)
 	{
 		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << std::endl;
@@ -97,15 +97,15 @@ void SoundSystem::startBackgroundMusic() {
 	ERRCHECK( backingTrack.instance->start() );
 }
 
-void SoundSystem::createSoundEvent(const char * const name, const float volume) {
-	ERRCHECK( system->getEvent(name, &soundEvents[name].event) ); // creo el Sound e inicializo su parametro event
+void SoundSystem::createSoundEvent(const std::string_view name, const float volume) {
+	ERRCHECK( system->getEvent(name.data(), &soundEvents[name.data()].event) ); // creo el Sound e inicializo su parametro event
 
-	for (unsigned i = 0; i < soundEvents[name].instances.size(); ++i)
-	    createInstance(soundEvents[name].event, soundEvents[name].instances[i], volume);
+	for (unsigned i = 0; i < soundEvents[name.data()].instances.size(); ++i)
+	    createInstance(soundEvents[name.data()].event, soundEvents[name.data()].instances[i], volume);
 }
 
-void SoundSystem::createMusicEvent(const char * const name, Music * music, const float volume) {
-    ERRCHECK ( system->getEvent(name, &music->event) );
+void SoundSystem::createMusicEvent(const std::string_view name, Music * music, const float volume) {
+    ERRCHECK ( system->getEvent(name.data(), &music->event) );
     createInstance(music->event, music->instance, volume);
 }
 

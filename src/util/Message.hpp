@@ -1,10 +1,10 @@
 #pragma once
 
 struct SoundMessage {
-	explicit SoundMessage(const char * const eventName)
+	explicit SoundMessage(const std::string_view eventName)
 		: soundEventName(eventName) { }
 
-	const char * const soundEventName { nullptr };
+	std::string soundEventName { };
 };
 
 struct DeathMessage {

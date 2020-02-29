@@ -5,5 +5,5 @@
 struct IObjectNode : INode {
     ~IObjectNode() override = default;
 
-    virtual void setMesh(const char *) = 0;
+    virtual void setMesh(std::string_view) = 0;
 };
