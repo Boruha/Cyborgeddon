@@ -49,6 +49,8 @@ struct EntityManager : GameContext {
 		void createWall   (const vec3& pos, const vec3& dim);
 		void createFloor  (std::string_view tex, const vec3& pos, const vec3& dim);
 		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
+		void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
+		void createNavigation();
 
 		void killEntities();
 
@@ -56,6 +58,7 @@ struct EntityManager : GameContext {
 
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
+		Entity * nav    { nullptr };
 
     	std::vector<MapNode> graph;
 		std::map<EntityID, std::vector<int>> paths;

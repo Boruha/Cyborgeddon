@@ -117,7 +117,6 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	player->addComponent(render);
 
 
-
 	camera = & createEntity(CAMERA);
 
 	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3()));
@@ -264,6 +263,106 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	key.addComponent(keyTransformable);
 	key.addComponent(keyTrigger);
 	key.addComponent(keyRender);
+}
+
+void EntityManager::setNavConnections(const GraphNode & node, const std::vector<const GraphNode *> & conns) const {
+	// MAX_GRAPH_CONN especifica cuantas conexiones puede haber como maximo
+	// si se necesita añadir mas conexiones, ir a util/ComponentConstants.hpp
+	// y cambiar el valor
+
+	// esta linea significa "asegurate de que MAX_GRAPH_CONN es >= al size de
+	// conns, de lo contrario aborta la ejecución"
+	// assert avisara de lo que esta pasando con un mensaje de error por consola
+	assert(MAX_GRAPH_CONN >= conns.size());
+
+	// set devuelve iteradores const, asi que para modificarlos tenemos que usar
+	// const_cast (siempre que haya uno tratando GraphNode es por eso)
+	// PERO CUIDADO no modificar lo que set utilice para ordenar (position en este caso)
+	auto & n = const_cast<GraphNode &>(node);
+
+	// guardamos en cada conexion, la distancia al nodo y un puntero a dicho nodo
+	// los valores que no rellenemos quedaran a <INFINITY, nullptr>
+	for (n.numConns = 0; n.numConns < conns.size(); ++n.numConns) {
+		n.conns[n.numConns] = {
+				distance(n.position, conns[n.numConns]->position),
+				const_cast<GraphNode *>(conns[n.numConns])
+		};
+	}
+
+	// ordenamos las conexiones por distancia, que es lo que guarda el primer valor del pair
+	std::sort( n.conns, n.conns + n.numConns, ComparePairLessThan() );
+}
+
+
+void EntityManager::createNavigation() {
+	nav = & createEntity(NAV);
+
+	auto & nav_graph = componentStorage.createComponent(Graph(nav->getType(), nav->getID()));
+
+	// hall
+	GraphNode  gn0 ( {    0,  0 } );
+	GraphNode  gn1 ( {    0, 50 } );
+	GraphNode  gn2 ( {    0,100 } );
+	GraphNode  gn3 ( {    0,150 } );
+	GraphNode  gn4 ( {    0,200 } );
+	GraphNode  gn5 ( {    0,260 } );
+
+	// right
+	GraphNode  gn6 ( {   60,270 } );
+	GraphNode  gn7 ( {  130,270 } );
+
+	// left
+	GraphNode  gn8 ( {  -80,270 } );
+	GraphNode  gn9 ( { -160,270 } );
+
+	// square
+	GraphNode gn10 ( { -200,275 } );
+	GraphNode gn11 ( { -210,320 } );
+	GraphNode gn12 ( { -210,230 } );
+	GraphNode gn13 ( { -315,230 } );
+	GraphNode gn14 ( { -315,320 } );
+
+	nav_graph.nodes.insert( {
+		 gn0,  gn1,  gn2,  gn3,  gn4,
+		 gn5,  gn6,  gn7,  gn8,  gn9,
+		gn10, gn11, gn12, gn13, gn14
+	} );
+
+	auto &  i0 = * nav_graph.nodes.find  (gn0);
+	auto &  i1 = * nav_graph.nodes.find  (gn1);
+	auto &  i2 = * nav_graph.nodes.find  (gn2);
+	auto &  i3 = * nav_graph.nodes.find  (gn3);
+	auto &  i4 = * nav_graph.nodes.find  (gn4);
+	auto &  i5 = * nav_graph.nodes.find  (gn5);
+
+	auto &  i6 = * nav_graph.nodes.find  (gn6);
+	auto &  i7 = * nav_graph.nodes.find  (gn7);
+
+	auto &  i8 = * nav_graph.nodes.find  (gn8);
+	auto &  i9 = * nav_graph.nodes.find  (gn9);
+
+	auto & i10 = * nav_graph.nodes.find (gn10);
+	auto & i11 = * nav_graph.nodes.find (gn11);
+	auto & i12 = * nav_graph.nodes.find (gn12);
+	auto & i13 = * nav_graph.nodes.find (gn13);
+	auto & i14 = * nav_graph.nodes.find (gn14);
+
+	setNavConnections(  i0, {             &i1 } );
+	setNavConnections(  i1, {       &i0,  &i2 } );
+	setNavConnections(  i2, {       &i1,  &i3 } );
+	setNavConnections(  i3, {       &i2,  &i4 } );
+	setNavConnections(  i4, {       &i3,  &i5 } );
+	setNavConnections(  i5, { &i4,  &i6,  &i8 } );
+	setNavConnections(  i6, {       &i5,  &i7 } );
+	setNavConnections(  i7, {             &i6 } );
+	setNavConnections(  i8, {       &i5,  &i9 } );
+	setNavConnections(  i9, {       &i8, &i10 } );
+	setNavConnections( i10, { &i9, &i11, &i12 } );
+	setNavConnections( i11, {      &i10, &i14 } );
+	setNavConnections( i12, {      &i10, &i13 } );
+	setNavConnections( i13, {      &i12, &i14 } );
+	setNavConnections( i14, {      &i11, &i13 } );
+
 }
 
 const Entity& EntityManager::getEntityByID(const EntityID id) const {

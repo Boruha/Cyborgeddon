@@ -1,11 +1,10 @@
 #pragma once
 
 #include <cmp/Component.hpp>
+#include <util/ComponentConstants.hpp>
 #include <set>
 
 using glm::vec2;
-
-constexpr unsigned C = 6;
 
 struct GraphNode {
 
@@ -13,12 +12,12 @@ struct GraphNode {
 
 	explicit GraphNode(const vec2& p, char c = '0');
 
-	vec2 position           {         };
-	char id                 {         };
-	bool alreadyVisited[C]  {         };
-	pair conns[C]           {         };
-	unsigned numConnections {    0    };
-	GraphNode* parent       { nullptr };
+	vec2 position            {         };
+	GraphNode* parent        { nullptr };
+	unsigned numConns        {    0    };
+	char id                  {         };
+	bool alreadyVisited [MAX_GRAPH_CONN];
+	pair conns          [MAX_GRAPH_CONN];
 };
 
 inline bool operator < (const GraphNode& a, const GraphNode& b) {
