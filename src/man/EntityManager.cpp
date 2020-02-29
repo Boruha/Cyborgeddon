@@ -56,8 +56,8 @@ void EntityManager::addToDestroy(EntityID ID) {
 void EntityManager::killEntities() {
 
 	for (const auto & d : toDelete) {
-		map_entities.at(d).destroy();
-		map_entities.erase(d);
+		entities.at(d).destroy();
+		entities.erase(d);
 	}
 
 	toDelete.clear();							// al acabar de matar las entidades, limpipamos el vector toDelete
@@ -66,7 +66,7 @@ void EntityManager::killEntities() {
 void EntityManager::cleanData() {
 	Entity::resetIDManagementValue();		// reiniciamos ID
 
-	map_entities.clear();					// limpiamos entidades
+	entities.clear();					// limpiamos entidades
 	toDelete.clear();						// limpiamos vector de entidades a borrar
 
 	entitiesLeftToDelete = 0;				// reiniciamos valor
@@ -85,9 +85,9 @@ void EntityManager::cleanData() {
 Entity & EntityManager::createEntity(const EntityType type) {
 	auto nextEntityID = Entity::getNextID();
 
-	map_entities.emplace(nextEntityID, type);
+	entities.emplace(nextEntityID, type);
 
-	return map_entities.at(nextEntityID);
+	return entities.at(nextEntityID);
 }
 
 
@@ -206,7 +206,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 }
 
 const Entity& EntityManager::getEntityByID(const EntityID id) const {
-	return map_entities.find(id)->second;
+	return entities.find(id)->second;
 }
 
 Entity& EntityManager::getEntityByID(const EntityID id) {
@@ -314,6 +314,19 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_3[0], vec3(8), patrol_3);
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
+
+	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Physics>()[0].getName()           << " " << componentStorage.getComponents().get<Physics>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<RigidStaticAABB>()[0].getName()   << " " << componentStorage.getComponents().get<RigidStaticAABB>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<TriggerMovSphere>()[0].getName()  << " " << componentStorage.getComponents().get<TriggerMovSphere>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<AI>()[0].getName()                << " " << componentStorage.getComponents().get<AI>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<TriggerStaticAABB>()[0].getName() << " " << componentStorage.getComponents().get<TriggerStaticAABB>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Render>()[0].getName()     << " " << componentStorage.getComponents().get<Render>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
+
 }
 
 void EntityManager::createGraph()
@@ -383,5 +396,4 @@ void EntityManager::createGraph()
 
 	node_14.connections.emplace_back(14, 11, 9);
 	node_14.connections.emplace_back(14, 13, 9);
-
 }

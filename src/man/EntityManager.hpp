@@ -66,7 +66,7 @@ struct EntityManager : GameContext {
 	    const IEngine& engine;
 
 	    std::vector<EntityID> toDelete;
-	    std::unordered_map<EntityID, Entity> map_entities;
+	    std::unordered_map<EntityID, Entity> entities;
 
 		unsigned int entitiesLeftToDelete { 0 };
 

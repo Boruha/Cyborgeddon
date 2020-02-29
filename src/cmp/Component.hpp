@@ -16,6 +16,7 @@ struct Component {
 	[[nodiscard]] const ComponentID& getID() const { return ID; }
 	[[nodiscard]] const EntityID& getEntityID() const { return entityID; }
 	[[nodiscard]] const EntityType& getEntityType() const { return entityType; }
+	[[nodiscard]] virtual std::string_view getName() const = 0;
 
 	template <typename T>
 	static std::size_t getCmpTypeID() {
@@ -25,7 +26,7 @@ struct Component {
 
 	void destroy() { entityType = UNDEFINED; } // si el tipo de entidad de un componente es undefined lo ignoramos
 
-	~Component() = default;
+	virtual ~Component() = default;
 
 	private:
 		ComponentID ID { nextID++ };	// intentar hacer const
