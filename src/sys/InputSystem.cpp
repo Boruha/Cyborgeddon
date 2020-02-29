@@ -64,7 +64,7 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 			data->mode == DEMON ? render->node->setTexture(DEMON_TEXTURE) : render->node->setTexture(ANGEL_TEXTURE);
 
 		const Mouse& mouse = engine->getMouse();
-//    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;
+//    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
 
 		aim_mouse(*physics, mouse.position);
 

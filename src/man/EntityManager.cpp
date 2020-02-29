@@ -60,7 +60,7 @@ void EntityManager::killEntities() {
 		entities.erase(d);
 	}
 
-	std::cout << entities.size() << std::endl;
+	std::cout << entities.size() << "\n";
 
 	toDelete.clear();							// al acabar de matar las entidades, limpipamos el vector toDelete
 }
@@ -382,12 +382,9 @@ void EntityManager::createLevel() {
 	std::cout << componentStorage.getComponents().get<TriggerMovSphere>()[0].getName()  << " " << componentStorage.getComponents().get<TriggerMovSphere>().size() << "\n";
 	std::cout << componentStorage.getComponents().get<AI>()[0].getName()                << " " << componentStorage.getComponents().get<AI>().size() << "\n";
 	std::cout << componentStorage.getComponents().get<TriggerStaticAABB>()[0].getName() << " " << componentStorage.getComponents().get<TriggerStaticAABB>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Render>()[0].getName()     << " " << componentStorage.getComponents().get<Render>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
-
+	std::cout << componentStorage.getComponents().get<Render>()[0].getName()            << " " << componentStorage.getComponents().get<Render>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Velocity>()[0].getName()          << " " << componentStorage.getComponents().get<Velocity>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<CharacterData>()[0].getName()     << " " << componentStorage.getComponents().get<CharacterData>().size() << "\n";
 }
 
 void EntityManager::createGraph()
