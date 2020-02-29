@@ -363,6 +363,7 @@ void EntityManager::createNavigation() {
 	setNavConnections( i13, {      &i12, &i14 } );
 	setNavConnections( i14, {      &i11, &i13 } );
 
+	nav->addComponent<Graph>(nav_graph);
 }
 
 const Entity& EntityManager::getEntityByID(const EntityID id) const {
