@@ -2,6 +2,7 @@
 
 #include <sys/System.hpp>
 
+
 struct AI_System : System
 {
 	void init() override;
@@ -39,4 +40,63 @@ struct AI_System : System
 		nullptr,
 		nullptr
 	};
+
+	//Behaviour Tree struct_defs
+	struct BehaviourNode
+	{
+		virtual bool run() = 0;
+	};
+
+	struct CompoundNode : BehaviourNode
+	{
+		CompoundNode()  { childs.reserve(5); }
+		~CompoundNode() { childs.clear(); }
+
+		/* FUNCTIONS */
+		void addChild(std::unique_ptr<BehaviourNode>& p_BeNode) { childs.push_back(p_BeNode); }
+		std::vector<std::unique_ptr<BehaviourNode>>& const getChilds() { return childs; } const;
+
+		/* DATA */
+		std::vector<std::unique_ptr<BehaviourNode>> childs;
+	};
+	
+	struct Sequence : CompoundNode
+	{
+		/* FUNCTIONS */
+		void run() override 
+		{
+			for(auto& ref_child : getChilds())
+			{
+				if(!ref_child.get()->run())
+					return false;
+			}
+			return true;
+		}
+	};
+
+	struct Selector : CompoundNode
+	{
+		/* FUNCTIONS */
+		void run() override 
+		{
+			for(auto& ref_child : getChilds())
+			{
+				if(ref_child.get()->run())
+					return true;
+			}
+			return false;
+		}
+	};
+
+	struct setTargetBehaviour : BehaviourNode
+	{
+		bool run() override 
+		{
+
+		}
+	};
+	
+	
+
+
 };
