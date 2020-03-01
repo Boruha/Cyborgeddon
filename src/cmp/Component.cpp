@@ -1,7 +1,7 @@
 #include <cmp/Component.hpp>
-#include <iostream>
+#include <ostream>
 
-std::ostream& Component::print(std::ostream& os, const std::string& name) const {
+std::ostream& Component::print(std::ostream& os, const std::string_view name) const {
 	return 	os	<< "\n\n"		<< name
 				<< " ( e_ID = " << static_cast<uint32_t>(entityID)
 				<< " c_ID = " 	<< static_cast<uint32_t>(ID)

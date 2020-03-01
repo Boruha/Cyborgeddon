@@ -36,7 +36,8 @@ enum EntityType : uint16_t
 	DOOR,
 	BULLET,
 	FLOOR,
-	WALL
+	WALL,
+	NAV
 };
 
 using EntityID = uint16_t;

@@ -12,14 +12,14 @@ struct ComponentPool {
 
 	template <typename T>
 	void initVector(const unsigned size) {
-		std::get<vector<T>>(map[typeid(T).hash_code()] = std::move(vector<T>())).reserve(size);
+		std::get<vector<T>>(map[Component::getCmpTypeID<T>()] = std::move(vector<T>())).reserve(size);
 	}
 
 	void cleanData();
 
 	template <typename T>
 	const vector<T>& get() const {
-		return std::get<vector<T>>(const_cast<ComponentMap &>(map)[typeid(T).hash_code()]);
+		return std::get<vector<T>>(const_cast<ComponentMap &>(map)[Component::getCmpTypeID<T>()]);
 	}
 
 	template <typename T>
@@ -27,21 +27,21 @@ struct ComponentPool {
 		return const_cast<vector<T> &>(std::as_const(*this).get<T>());
   	}
 
-	template <typename T, typename ... Args>
-	const T& createComponent(Args&& ... args) const {
-	//	std::cout << "\n\nComponent\n";
-	//	printVecInfo(std::get<vector<T>>(const_cast<ComponentMap &>(map)[typeid(T).hash_code()]));
+	template <typename T>
+	const T& createComponent(T&& cmp) const {
+			std::cout << "\n\n" << cmp.getName() << "\n";
+			printVecInfo(std::get<vector<T>>(const_cast<ComponentMap &>(map)[Component::getCmpTypeID<T>()]));
 
-		for (auto& item : std::get<vector<T>>(const_cast<ComponentMap &>(map)[typeid(T).hash_code()]))
+		for (auto& item : std::get<vector<T>>(const_cast<ComponentMap &>(map)[Component::getCmpTypeID<T>()]))
 			if (!item)
-				return item = T(args...);
+				return item = cmp;
 
-		return std::get<vector<T>>(const_cast<ComponentMap &>(map)[typeid(T).hash_code()]).emplace_back(args...);
+		return std::get<vector<T>>(const_cast<ComponentMap &>(map)[Component::getCmpTypeID<T>()]).emplace_back(cmp);
 	}
 
-	template <typename T, typename ... Args>
-	T& createComponent(Args&& ... args) {
-		return const_cast<T&>(std::as_const(*this).createComponent(args ...));
+	template <typename T>
+	T& createComponent(T&& cmp) {
+		return const_cast<T&>(std::as_const(*this).createComponent(std::forward<T>(cmp)));
 	}
 
 private:

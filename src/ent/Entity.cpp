@@ -2,28 +2,22 @@
 
 #include <cmp/Components.hpp>
 
-Entity::Entity(EntityType type) : type(type), ID(++nextID) {  }
+Entity::Entity(EntityType type) : type(type), ID(nextID++) {
 
-void undefine(Component * cmp) {
-	if (cmp) {
-		cmp->makeUndefined();
-		cmp = nullptr;
-	}
 }
 
-void Entity::makeUndefined() {
+Entity::~Entity() = default;
+
+void Entity::destroy() {
 	type = UNDEFINED;
 
-	undefine(transformable);
-	undefine(velocity);
-	undefine(physics);
-	undefine(bulletData);
-	undefine(characterData);
-	undefine(ai);
-	undefine(triggStaticAABB);
-	undefine(triggerMovSphere);
-	undefine(triggerFastMov);
-	undefine(rigidStaticAABB);
+	auto * render = getComponent<Render>();
 
-    inode = nullptr;
+	if (render)
+		render->node->remove();
+
+	for (const auto & pair : components)
+		pair.second->destroy();
+
+	components.clear();
 }

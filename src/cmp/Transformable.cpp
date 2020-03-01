@@ -1,9 +1,9 @@
 #include <cmp/Transformable.hpp>
-#include <iostream>
+#include <ostream>
 #include <glm/gtx/string_cast.hpp>
 
 std::ostream& operator<<(std::ostream& os, const Transformable& trans) {
-	trans.print(os, "Transformable")
+	trans.print(os, trans.getName())
 	<< "\n\tPosition: " << glm::to_string(trans.position)
 	<< "\n\tRotation: "	<< glm::to_string(trans.rotation)
 	<< "\n\tScale: "	<< glm::to_string(trans.scale);

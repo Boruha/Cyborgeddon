@@ -16,8 +16,7 @@ void EntityManager::init() {
 
 void EntityManager::initData(const int maxEntities, const int maxToDelete, const int maxComponents) {
 	cleanData();								// si no es la primera vez que llamamos a esta funcion, hay que limpiar vectores, reiniciar variables...
-	entities.reserve(maxEntities);				// reservamos memoria para la cantidad maxima de entidades esperada
-	toDelete.reserve(maxToDelete);				// lo mismo para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
+	toDelete.reserve(maxToDelete);				// reservamos para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
 	componentStorage.initData(maxComponents);	// reservamos (de momento la misma) memoria para los vectores que tendran los componentes
 	graph.reserve(20);
 }
@@ -27,16 +26,11 @@ bool EntityManager::update(){
 	if (!toDelete.empty())			// si hay entidades que "matar"
 		killEntities();				// las matamos
 
-	if (entitiesLeftToDelete > 0) {
-		moveDeadEntities();				// las entidades muertas se van moviendo hacia el final
-		removeEntities();				// las entidades que estan al final son eliminadas del vector
-	}
-
 	return checkVictory();
 }
 
 bool EntityManager::checkVictory() {
-	if (!greater_e(player->characterData->health, 0)) {
+	if (!greater_e(player->getComponent<CharacterData>()->health, 0)) {
 		std::cout << "\n\nFin de partida\n\n";
 		exit(-1);
 	}
@@ -60,51 +54,21 @@ void EntityManager::addToDestroy(EntityID ID) {
 }
 
 void EntityManager::killEntities() {
-	// recorremos el array de entidades en orden ascendente
-	for (auto [e, d] = std::tuple{entities.begin(), toDelete.begin()}; e != entities.end() && d != toDelete.end(); ++e) {
-		if (e->getID() != *d)
-			continue;									// si la entidad que queremos eliminar tiene nodo
-		if (e->inode) {
-			e->inode->remove();
-			e->inode = nullptr;
-		}
 
-		if (e->getType() == ENEMY)				// si era un enemigo
-			--enemiesLeft;						// nos queda uno menos por matar
-
-		e->makeUndefined();						// "matamos" a la entidad haciendo que su tipo y el de sus componentes sea UNDEFINED
-		++d;									// actualizamos la posicion del vector toDelete (antes no se actualiza, pues no habiamos encontrado la entidad)
+	for (const auto & d : toDelete) {
+		entities.find(d)->second.destroy();
+		entities.erase(d);
 	}
-	// no hay que hacer nada mas para comprobar si toDelete alcanza todas las entidades porque tanto "entities" como "toDelete" estan ordenados ascendentemente
+
+	std::cout << entities.size() << "\n";
 
 	toDelete.clear();							// al acabar de matar las entidades, limpipamos el vector toDelete
-}
-
-
-void EntityManager::moveDeadEntities() {
-	for (auto e = entities.rbegin(); e != entities.rend(); ++e)				// recorremos el vector de entidades inversamente (asi evitamos que se nos queden elementos descolgados
-		if ((e + 1) != entities.rend() && (e + 1)->getType() == UNDEFINED)	// si la proxima entidad es valida y esta "muerta" (type == undefined)
-			std::iter_swap(e,(e + 1));										// entonces la cambiamos con la entidad actual
-
-	// Con esto conseguimos que las entidades muertas avancen en el array con un coste muy bajo (un swap) en cada iteracion
-	// permitiendo a otra funcion eliminar los elementos que se encuentren al final.
-	// Si solo eliminamos los elementos del final nos ahorramos tener que mover los elementos que hay detras.
-	// De esta manera, en lugar de eliminar el elemento numero 10 de un vector de 100, teniendo que mover los elementos
-	// 11 - 100 una posicion atras en una sola iteracion, repartimos esa carga en todas las iteraciones moviendo los
-	// elementos correspondientes una unica posicion. Cuando lleguen al final seran eliminados sin mover nada
-}
-
-void EntityManager::removeEntities() {
-	while(entities.at(entities.size() - 1).getType() == UNDEFINED) {
-		entities.erase(entities.end() - 1);
-		--entitiesLeftToDelete;							// una entidad menos que borrar
-	}
 }
 
 void EntityManager::cleanData() {
 	Entity::resetIDManagementValue();		// reiniciamos ID
 
-	entities.clear();						// limpiamos entidades
+	entities.clear();					    // limpiamos entidades
 	toDelete.clear();						// limpiamos vector de entidades a borrar
 
 	entitiesLeftToDelete = 0;				// reiniciamos valor
@@ -118,88 +82,295 @@ void EntityManager::cleanData() {
 
 /*		CREATE ENTITIES		*/
 
+
+
+Entity & EntityManager::createEntity(const EntityType type) {
+	auto nextEntityID = Entity::getNextID();
+
+	entities.emplace(nextEntityID, type);
+
+	return entities.find(nextEntityID)->second;
+}
+
+
 void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, const vec3& posCamera) {
-	player = & entities.emplace_back(PLAYER);
-	camera = & entities.emplace_back(CAMERA);
+	player = & createEntity(PLAYER);
 
-	player->velocity        	= & componentStorage.createComponent<Velocity>(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION);
-	player->physics         	= & componentStorage.createComponent<Physics>(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim);
-	player->triggerMovSphere  	= & componentStorage.createComponent<TriggerMovSphere>(player->getType(), player->getID(), player->physics->position, 4, player->physics->velocity);
-	player->characterData   	= & componentStorage.createComponent<CharacterData>(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN);
-	player->inode				=   componentStorage.createIObjectNode(&player->physics->position, &player->physics->rotation, &player->physics->scale);
-	player->inode->setTexture(DEMON_TEXTURE);
+	auto& velocity 	= componentStorage.createComponent(Velocity(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION));
+	auto& physics  	= componentStorage.createComponent(Physics(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
+	auto& trigger  	= componentStorage.createComponent(TriggerMovSphere(player->getType(), player->getID(), physics.position, 4, physics.velocity));
+	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
+	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	camera->physics			= & componentStorage.createComponent<Physics>(camera->getType(), camera->getID(), posCamera, player->physics->velocity, vec3());
-	camera->inode			=   componentStorage.createICameraNode(&camera->physics->position, &camera->physics->rotation, &camera->physics->scale, &player->physics->position);
+	render.node = componentStorage.createIObjectNode();
+
+	render.node->setPosition(physics.position);
+	render.node->setRotation(physics.rotation);
+	render.node->setScale(physics.scale);
+
+	render.node->setTexture(DEMON_TEXTURE);
+
+	player->addComponent(velocity);
+	player->addComponent(physics);
+	player->addComponent(trigger);
+	player->addComponent(data);
+	player->addComponent(render);
+
+
+	camera = & createEntity(CAMERA);
+
+	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3()));
+	auto& cameraRender	= componentStorage.createComponent(Render(camera->getType(), camera->getID(), &cameraPhysics.position, &cameraPhysics.rotation, &cameraPhysics.scale, true));
+
+	cameraRender.node = componentStorage.createICameraNode();
+
+	cameraRender.node->setPosition(cameraPhysics.position);
+	cameraRender.node->setRotation(cameraPhysics.rotation);
+	cameraRender.node->setScale(cameraPhysics.scale);
+	cameraRender.node->setTarget(pos);
+
+	camera->addComponent(cameraPhysics);
+	camera->addComponent(cameraRender);
 }
 
 void EntityManager::createWall(const vec3& pos, const vec3& dim) {
-	Entity& wall 			= entities.emplace_back(WALL);
+	auto& wall = createEntity(WALL);
 
-	wall.transformable		= & componentStorage.createComponent<Transformable>(wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim);
-	wall.rigidStaticAABB	= & componentStorage.createComponent<RigidStaticAABB>(wall.getType(), wall.getID(), wall.transformable->position, wall.transformable->scale);
-	wall.inode				=   componentStorage.createIObjectNode(&wall.transformable->position, &wall.transformable->rotation, &wall.transformable->scale);
-	wall.inode->setTexture(WALL_TEXTURE);
+	auto& transformable     = componentStorage.createComponent(Transformable(wall.getType(), wall.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim));
+	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
+	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
+
+	render.node = componentStorage.createIObjectNode();
+
+	render.node->setPosition(transformable.position);
+	render.node->setRotation(transformable.rotation);
+	render.node->setScale(transformable.scale);
+
+	render.node->setTexture(WALL_TEXTURE);
+
+	wall.addComponent(transformable);
+	wall.addComponent(rigidStaticAABB);
+	wall.addComponent(render);
 }
 
 void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
-	Entity& enemy 		    = entities.emplace_back(ENEMY);
+	auto& enemy     = createEntity(ENEMY);
 
-	enemy.physics		    = & componentStorage.createComponent<Physics>(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim);
-	enemy.velocity		    = & componentStorage.createComponent<Velocity>(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION);
-	enemy.triggerMovSphere  = & componentStorage.createComponent<TriggerMovSphere>(enemy.getType(), enemy.getID(), enemy.physics->position, 5, enemy.physics->velocity);
-	enemy.ai			    = & componentStorage.createComponent<AI>(enemy.getType(), enemy.getID(), patrol);
-	enemy.characterData     = & componentStorage.createComponent<CharacterData>(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN);
-	enemy.inode			    =   componentStorage.createIObjectNode(&enemy.physics->position, &enemy.physics->rotation, &enemy.physics->scale);
-	enemy.inode->setTexture(ENEMY_TEXTURE);
+	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
+	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
+	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
+	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
+	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
+
+	render.node = componentStorage.createIObjectNode();
+
+	render.node->setPosition(physics.position);
+	render.node->setRotation(physics.rotation);
+	render.node->setScale(physics.scale);
+
+	render.node->setTexture(ENEMY_TEXTURE);
+
+	enemy.addComponent(physics);
+	enemy.addComponent(velocity);
+	enemy.addComponent(trigger);
+	enemy.addComponent(data);
+	enemy.addComponent(ai);
+	enemy.addComponent(render);
 
 	++enemiesLeft;
 }
 
-void EntityManager::createFloor(const char * const tex, const vec3& pos, const vec3& dim) {
-	Entity& floor 		= entities.emplace_back(FLOOR);
+void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
+	auto& floor = createEntity(FLOOR);
 
-	floor.transformable = & componentStorage.createComponent<Transformable>(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim);
-	floor.inode			=   componentStorage.createIObjectNode(&floor.transformable->position, &floor.transformable->rotation, &floor.transformable->scale);
-	floor.inode->setTexture(tex);
+	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim));
+	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
+
+	render.node = componentStorage.createIObjectNode();
+
+	render.node->setPosition(transformable.position);
+	render.node->setRotation(transformable.rotation);
+	render.node->setScale(transformable.scale);
+
+	render.node->setTexture(tex.data());
+
+	floor.addComponent(transformable);
+	floor.addComponent(render);
 }
 
 void EntityManager::createBullet() {
-	Entity& bullet 		    = entities.emplace_back(BULLET);
+	auto& bullet = createEntity(BULLET);
 
-	bullet.physics		    = & componentStorage.createComponent<Physics>(bullet.getType(), bullet.getID(), player->physics->position, normalize(getXZfromRotationY(player->physics->rotation.y)) * BULLET_SPEED, player->physics->rotation, vec3(0.5, 0, player->triggerMovSphere->radius));
-	bullet.bulletData	    = & componentStorage.createComponent<BulletData>(bullet.getType(), bullet.getID(), length(bullet.physics->velocity), player->characterData->mode, player->characterData->attackDamage);
-	bullet.triggerFastMov   = & componentStorage.createComponent<TriggerFastMov>(bullet.getType(), bullet.getID(), bullet.physics->position, bullet.physics->velocity);
-	bullet.inode		    =   componentStorage.createIObjectNode(&bullet.physics->position, &bullet.physics->rotation, &bullet.physics->scale);
-	bullet.inode->setTexture(player->characterData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
+	auto * playerPhysics = player->getComponent<Physics>();
+	auto * playerTrigger = player->getComponent<TriggerMovSphere>();
+	auto * playerData    = player->getComponent<CharacterData>();
+
+	auto& physics   = componentStorage.createComponent(Physics(bullet.getType(), bullet.getID(), playerPhysics->position, normalize(getXZfromRotationY(playerPhysics->rotation.y)) * BULLET_SPEED, playerPhysics->rotation, vec3(0.5, 0, playerTrigger->radius)));
+	auto& data      = componentStorage.createComponent(BulletData(bullet.getType(), bullet.getID(), length(physics.velocity), playerData->mode, playerData->attackDamage));
+	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
+	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
+
+	render.node = componentStorage.createIObjectNode();
+
+	render.node->setPosition(physics.position);
+	render.node->setRotation(physics.rotation);
+	render.node->setScale(physics.scale);
+
+	render.node->setTexture(playerData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
+
+	bullet.addComponent(physics);
+	bullet.addComponent(data);
+	bullet.addComponent(trigger);
+	bullet.addComponent(render);
 }
 
 void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
-	Entity& door 		    = entities.emplace_back(DOOR);
+	Entity& door 		    = createEntity(DOOR);
 
-	door.transformable 	 	= & componentStorage.createComponent<Transformable>(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim);
-    door.triggStaticAABB 	= & componentStorage.createComponent<TriggerStaticAABB>(door.getType(), door.getID(), door.transformable->position, door.transformable->scale, false);
-	door.rigidStaticAABB	= & componentStorage.createComponent<RigidStaticAABB>(door.getType(), door.getID(), door.transformable->position, door.transformable->scale);
-    door.inode			 	=   componentStorage.createIObjectNode(&door.transformable->position, &door.transformable->rotation, &door.transformable->scale);
-	door.inode->setTexture(DOOR_TEXTURE);
+	auto& transformable     = componentStorage.createComponent(Transformable(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim));
+	auto& trigger           = componentStorage.createComponent(TriggerStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale, false));
+	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
+	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	Entity& key 		= entities.emplace_back(KEY);
+	render.node = componentStorage.createIObjectNode();
 
-	key.transformable	= & componentStorage.createComponent<Transformable>(key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim);
-	key.triggStaticAABB = & componentStorage.createComponent<TriggerStaticAABB>(key.getType(), key.getID(), key.transformable->position, key.transformable->scale, true);
-	key.inode			=   componentStorage.createIObjectNode(&key.transformable->position, &key.transformable->rotation, &key.transformable->scale);
-	key.inode->setTexture(KEY_TEXTURE);
+	render.node->setPosition(transformable.position);
+	render.node->setRotation(transformable.rotation);
+	render.node->setScale(transformable.scale);
+
+	render.node->setTexture(DOOR_TEXTURE);
+
+	door.addComponent(transformable);
+    door.addComponent(trigger);
+	door.addComponent(rigid);
+	door.addComponent(render);
+
+	Entity& key 		    = createEntity(KEY);
+
+	auto& keyTransformable  = componentStorage.createComponent(Transformable(key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim));
+	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
+	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
+
+	keyRender.node = componentStorage.createIObjectNode();
+
+	keyRender.node->setPosition(keyTransformable.position);
+	keyRender.node->setRotation(keyTransformable.rotation);
+	keyRender.node->setScale(keyTransformable.scale);
+
+	keyRender.node->setTexture(KEY_TEXTURE);
+
+	key.addComponent(keyTransformable);
+	key.addComponent(keyTrigger);
+	key.addComponent(keyRender);
 }
 
-const Entity& EntityManager::getEntityByID(const std::size_t id) const {
-	for (const auto& ent : entities)
-		if (ent.getID() == id)
-			return ent;
-	std::cerr << "Entity not found?!?!\n";
-	exit(-1);
+void EntityManager::setNavConnections(const GraphNode & node, const std::vector<const GraphNode *> & conns) const {
+	// MAX_GRAPH_CONN especifica cuantas conexiones puede haber como maximo
+	// si se necesita añadir mas conexiones, ir a util/ComponentConstants.hpp
+	// y cambiar el valor
+
+	// esta linea significa "asegurate de que MAX_GRAPH_CONN es >= al size de
+	// conns, de lo contrario aborta la ejecución"
+	// assert avisara de lo que esta pasando con un mensaje de error por consola
+	assert(MAX_GRAPH_CONN >= conns.size());
+
+	// set devuelve iteradores const, asi que para modificarlos tenemos que usar
+	// const_cast (siempre que haya uno tratando GraphNode es por eso)
+	// PERO CUIDADO no modificar lo que set utilice para ordenar (position en este caso)
+	auto & n = const_cast<GraphNode &>(node);
+
+	// guardamos en cada conexion, la distancia al nodo y un puntero a dicho nodo
+	// los valores que no rellenemos quedaran a <INFINITY, nullptr>
+	for (n.numConns = 0; n.numConns < conns.size(); ++n.numConns) {
+		n.conns[n.numConns] = {
+				distance(n.position, conns[n.numConns]->position),
+				const_cast<GraphNode *>(conns[n.numConns])
+		};
+	}
+
+	// ordenamos las conexiones por distancia, que es lo que guarda el primer valor del pair
+	std::sort( n.conns, n.conns + n.numConns, ComparePairLessThan() );
 }
 
-Entity& EntityManager::getEntityByID(const std::size_t id) {
+
+void EntityManager::createNavigation() {
+	nav = & createEntity(NAV);
+
+	auto & nav_graph = componentStorage.createComponent(Graph(nav->getType(), nav->getID()));
+
+	// hall
+	GraphNode  gn0 ( {    0,  0 } );
+	GraphNode  gn1 ( {    0, 50 } );
+	GraphNode  gn2 ( {    0,100 } );
+	GraphNode  gn3 ( {    0,150 } );
+	GraphNode  gn4 ( {    0,200 } );
+	GraphNode  gn5 ( {    0,260 } );
+
+	// right
+	GraphNode  gn6 ( {   60,270 } );
+	GraphNode  gn7 ( {  130,270 } );
+
+	// left
+	GraphNode  gn8 ( {  -80,270 } );
+	GraphNode  gn9 ( { -160,270 } );
+
+	// square
+	GraphNode gn10 ( { -200,275 } );
+	GraphNode gn11 ( { -210,320 } );
+	GraphNode gn12 ( { -210,230 } );
+	GraphNode gn13 ( { -315,230 } );
+	GraphNode gn14 ( { -315,320 } );
+
+	nav_graph.nodes.insert( {
+		 gn0,  gn1,  gn2,  gn3,  gn4,
+		 gn5,  gn6,  gn7,  gn8,  gn9,
+		gn10, gn11, gn12, gn13, gn14
+	} );
+
+	auto &  i0 = * nav_graph.nodes.find  (gn0);
+	auto &  i1 = * nav_graph.nodes.find  (gn1);
+	auto &  i2 = * nav_graph.nodes.find  (gn2);
+	auto &  i3 = * nav_graph.nodes.find  (gn3);
+	auto &  i4 = * nav_graph.nodes.find  (gn4);
+	auto &  i5 = * nav_graph.nodes.find  (gn5);
+
+	auto &  i6 = * nav_graph.nodes.find  (gn6);
+	auto &  i7 = * nav_graph.nodes.find  (gn7);
+
+	auto &  i8 = * nav_graph.nodes.find  (gn8);
+	auto &  i9 = * nav_graph.nodes.find  (gn9);
+
+	auto & i10 = * nav_graph.nodes.find (gn10);
+	auto & i11 = * nav_graph.nodes.find (gn11);
+	auto & i12 = * nav_graph.nodes.find (gn12);
+	auto & i13 = * nav_graph.nodes.find (gn13);
+	auto & i14 = * nav_graph.nodes.find (gn14);
+
+	setNavConnections(  i0, {             &i1 } );
+	setNavConnections(  i1, {       &i0,  &i2 } );
+	setNavConnections(  i2, {       &i1,  &i3 } );
+	setNavConnections(  i3, {       &i2,  &i4 } );
+	setNavConnections(  i4, {       &i3,  &i5 } );
+	setNavConnections(  i5, { &i4,  &i6,  &i8 } );
+	setNavConnections(  i6, {       &i5,  &i7 } );
+	setNavConnections(  i7, {             &i6 } );
+	setNavConnections(  i8, {       &i5,  &i9 } );
+	setNavConnections(  i9, {       &i8, &i10 } );
+	setNavConnections( i10, { &i9, &i11, &i12 } );
+	setNavConnections( i11, {      &i10, &i14 } );
+	setNavConnections( i12, {      &i10, &i13 } );
+	setNavConnections( i13, {      &i12, &i14 } );
+	setNavConnections( i14, {      &i11, &i13 } );
+
+	nav->addComponent<Graph>(nav_graph);
+}
+
+const Entity& EntityManager::getEntityByID(const EntityID id) const {
+	return entities.find(id)->second;
+}
+
+Entity& EntityManager::getEntityByID(const EntityID id) {
 	return const_cast<Entity &>(std::as_const(*this).getEntityByID(id));
 }
 
@@ -304,6 +475,16 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_3[0], vec3(8), patrol_3);
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
+
+	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Physics>()[0].getName()           << " " << componentStorage.getComponents().get<Physics>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<RigidStaticAABB>()[0].getName()   << " " << componentStorage.getComponents().get<RigidStaticAABB>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<TriggerMovSphere>()[0].getName()  << " " << componentStorage.getComponents().get<TriggerMovSphere>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<AI>()[0].getName()                << " " << componentStorage.getComponents().get<AI>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<TriggerStaticAABB>()[0].getName() << " " << componentStorage.getComponents().get<TriggerStaticAABB>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Render>()[0].getName()            << " " << componentStorage.getComponents().get<Render>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<Velocity>()[0].getName()          << " " << componentStorage.getComponents().get<Velocity>().size() << "\n";
+	std::cout << componentStorage.getComponents().get<CharacterData>()[0].getName()     << " " << componentStorage.getComponents().get<CharacterData>().size() << "\n";
 }
 
 void EntityManager::createGraph()
@@ -373,5 +554,4 @@ void EntityManager::createGraph()
 
 	node_14.connections.emplace_back(14, 11, 9);
 	node_14.connections.emplace_back(14, 13, 9);
-
 }

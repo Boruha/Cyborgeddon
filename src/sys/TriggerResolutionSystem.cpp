@@ -9,7 +9,9 @@ void TriggerResolutionSystem::update(const Context &context, float deltaTime) {
         if (message.type1 == PLAYER) {
             if (message.type2 == KEY) {
                 // TODO : abrir puerta (con mensajes? o context?)
-                context->getEntityByID(message.ID2 - 1).rigidStaticAABB->makeUndefined();
+                auto& door = context->getEntityByID(message.ID2 - 1);
+                door.removeComponent<RigidStaticAABB>();
+
                 soundMessages.emplace_back(PICKUP_KEY_EVENT);
                 deathMessages.emplace_back(message.ID2);
             } else if (message.type2 == DOOR) {
@@ -18,22 +20,31 @@ void TriggerResolutionSystem::update(const Context &context, float deltaTime) {
             }
         } else if (message.type1 == BULLET) {
         	if (message.type2 == ENEMY) {
-        		auto& bullet = *context->getEntityByID(message.ID1).bulletData;
-        		auto& character = *context->getEntityByID(message.ID2).characterData;
+        		auto& bullet = context->getEntityByID(message.ID1);
+        		auto& character = context->getEntityByID(message.ID2);
 
-		        if (character.mode == NEUTRAL) {
-			        character.health -= bullet.damage;
+        		auto * bulletData = bullet.getComponent<BulletData>();
+        		auto * characterData = character.getComponent<CharacterData>();
+
+		        if (characterData->mode == NEUTRAL) {
+			        characterData->health -= bulletData->damage;
 		        } else {
-			        if (character.mode != bullet.damageType)
-				        character.health -= (bullet.damage * FACTOR_DIFFERENT_MODE);
+			        if (characterData->mode != bulletData->damageType)
+				        characterData->health -= (bulletData->damage * FACTOR_DIFFERENT_MODE);
 			        else
-				        character.health -= (bullet.damage * FACTOR_SAME_MODE);
+				        characterData->health -= (bulletData->damage * FACTOR_SAME_MODE);
 		        }
 
 		        soundMessages.emplace_back(HITMARKER_EVENT);
 
-		        if (!greater_e(character.health, 0))
-			        deathMessages.emplace_back(character.getEntityID());
+		        if (!greater_e(characterData->health, 0))
+			        deathMessages.emplace_back(character.getID());
+        	}
+        } else if (message.type1 == ENEMY) {
+        	if (message.type2 == DOOR) {
+        		auto * trigger = context->getEntityByID(message.ID1).getComponent<TriggerMovSphere>();
+        		trigger->position -= *trigger->velocity; // deshago el movimiento del trigger
+        		*trigger->velocity = vec3(0); // pongo la velocidad a 0 para que movement system no mueva el personaje
         	}
         }
     }

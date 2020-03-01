@@ -1,9 +1,9 @@
 #include <cmp/TriggerMovSphere.hpp>
-#include <iostream>
+#include <ostream>
 #include <glm/gtx/string_cast.hpp>
 
 std::ostream& operator<<(std::ostream& os, const TriggerMovSphere& cmp) {
-    cmp.print(os, "RigidMoveSphere")
+    cmp.print(os, cmp.getName())
     << "\n\tPosition: " << glm::to_string(cmp.position)
     << "\n\tRadius: " << cmp.radius
     << "\n\tVelocity: " << glm::to_string(*cmp.velocity);

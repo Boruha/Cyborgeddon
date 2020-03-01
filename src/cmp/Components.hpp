@@ -10,3 +10,5 @@
 #include <cmp/TriggerStaticAABB.hpp>
 #include <cmp/TriggerFastMov.hpp>
 #include <cmp/RigidStaticAABB.hpp>
+#include <cmp/Graph.hpp>
+#include <cmp/Render.hpp>

@@ -1,8 +1,8 @@
 #include <cmp/BulletData.hpp>
-#include <iostream>
+#include <ostream>
 
 std::ostream& operator<<(std::ostream& os, const BulletData& data) {
-	data.print(os, "BulletData")
+	data.print(os, data.getName())
 	<< "\n\tSpeed: " 						<< data.speed
 	<< "\n\tDamageType: ";
 

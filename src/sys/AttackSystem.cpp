@@ -26,14 +26,14 @@ void AttackSystem::update(const Context& context, const float deltaTime) {
     }
 
 	if (enemyDamage != 0) {
-		context->getPlayer().characterData->health -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
+		auto& playerHealth = context->getPlayer().getComponent<CharacterData>()->health;
+
+		playerHealth -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
 		soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); // Creo el SoundMessage de Player herido
 
-		if(!greater_e(context->getPlayer().characterData->health, 0))
+		if(!greater_e(playerHealth, 0))
 		    deathMessages.emplace_back(context->getPlayer().getID());
 	}
-
-
 
 	if (playerShoots)
 		context->createBullet();

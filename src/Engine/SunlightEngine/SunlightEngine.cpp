@@ -12,7 +12,7 @@ extern "C" {
 #include <locale>
 
 void error(const std::string & message) {
-	std::cerr << message << std::endl;
+	std::cerr << message << "\n";
 	glfwTerminate();
 	exit(-1);
 }

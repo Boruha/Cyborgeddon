@@ -28,3 +28,6 @@ constexpr float     ENEMY_ROTATION_SPEED			= 270.f;
 constexpr float     BULLET_SPEED					= 600.f;
 constexpr float     FACTOR_DIFFERENT_MODE			= 2.f;
 constexpr float     FACTOR_SAME_MODE				= 1.f / FACTOR_DIFFERENT_MODE;
+
+// NAV GRAPH
+constexpr unsigned  MAX_GRAPH_CONN                  = 3;

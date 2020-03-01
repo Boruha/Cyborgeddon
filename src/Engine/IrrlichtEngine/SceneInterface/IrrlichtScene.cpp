@@ -5,17 +5,17 @@
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IVideoDriver.h>
 
-std::unique_ptr<INode> IrrlichtScene::addObjectNode(const vec3 * pos, const vec3 * rot, const vec3 * sca) {
-    return std::make_unique<IrrlichtObjectNode>(sceneManager, pos, rot, sca);
+std::unique_ptr<INode> IrrlichtScene::addObjectNode() {
+    return std::make_unique<IrrlichtObjectNode>(sceneManager);
 }
 
-std::unique_ptr<INode> IrrlichtScene::addCameraNode(const vec3 * pos, const vec3 * rot, const vec3 * sca, const vec3 * tar) {
-    auto u_camera = std::make_unique<IrrlichtCameraNode>(sceneManager, pos, rot, sca, tar);
+std::unique_ptr<INode> IrrlichtScene::addCameraNode() {
+    auto u_camera = std::make_unique<IrrlichtCameraNode>(sceneManager);
     camera = u_camera.get();
 	return std::move(u_camera);
 }
 
-vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far) const {
+vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far) {
 	const glm::mat4x4& projectionMatrix = camera->getProjectionMatrix();
 	const glm::mat4x4& viewMatrix = camera->getViewMatrix();
 
