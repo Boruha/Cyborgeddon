@@ -1,5 +1,4 @@
 #include <sys/RenderSystem.hpp>
-#include <src/Engine/util/Math.hpp>
 
 void RenderSystem::update(const Context& context, const float deltaTime) {
 
@@ -12,7 +11,7 @@ void RenderSystem::update(const Context& context, const float deltaTime) {
 		if (cmp && cmp.needUpdate) {    // sin el flag needupdate el bucle dura mas del triple de tiempo de media
 			cmp.node->setPosition(*cmp.pos);
 			cmp.node->setRotation(*cmp.rot);
-			cmp.node->setScale(*cmp.sca);
+//			cmp.node->setScale(*cmp.sca); // de momento no es necesario actualizar el escalado porque no cambia
 		}
 	}
 

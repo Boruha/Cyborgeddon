@@ -4,6 +4,7 @@
 #include <util/GameConstants.hpp>
 #include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/Color.hpp>
+#include <GLFW/glfw3.h>
 
 struct RenderSystem : public System {
 	explicit RenderSystem(const glm::vec2& dim, const wchar_t * const name, const IEngine * const engine = nullptr) : engine(engine) { }

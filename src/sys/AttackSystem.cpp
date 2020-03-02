@@ -23,13 +23,10 @@ void AttackSystem::update(const Context& context, const float deltaTime) {
 			deathMessages.emplace_back(context->getPlayer().getID());
 	}
 
-	if (player.getComponent<CharacterData>()->attacking)
+	if (player.getComponent<CharacterData>()->attacking) {
+		player.getComponent<CharacterData>()->attacking = false;
 		context->createBullet();
-
-	// TODO : la variable attacking no deberia ser necesaria, eliminar lo antes posible
-	for (auto& data : context->getComponents().get<CharacterData>())
-        if (data && data.attacking)
-			data.attacking = false;
+	}
 }
 
 void AttackSystem::init() {
