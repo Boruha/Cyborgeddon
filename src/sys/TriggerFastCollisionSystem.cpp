@@ -7,17 +7,13 @@
 // funcion para calcular el cuadrado de la distancia en el plano XZ
 // a partir de min y max de un aabb, y origin como punto de referencia
 float getSquareDistanceXZ(const vec3& origin, const vec3& min, const vec3& max) {
-	const vec3 v = ((min + max) * 0.5f) - origin;
-
-	return v.x * v.x + v.z * v.z;
+	return manhattan( { 0.5f * (min.x + max.x), 0.5f * (min.z + max.z) }, { origin.x, origin.z } );
 }
 
 // funcion para calcular el cuadrado de la distancia en el plano XZ
 // desde origin hasta end
 float getSquareDistanceXZ(const vec3& origin, const vec3& end) {
-	const vec3 v = end - origin;
-
-	return v.x * v.x + v.z * v.z;
+	return manhattan( { origin.x, origin.z } , { end.x, end.z } );
 }
 
 void TriggerFastCollisionSystem::update(const Context &context, const float deltaTime) {
@@ -38,7 +34,9 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 			// sqDist -> cuadrado de la distancia a la que se encuentra la entidad golpeada
 			// respecto a la posicion inicial de la bala
 
-			auto[id, type, sqDist] = std::tuple<EntityID, EntityType, float>(0, UNDEFINED, -1.f);
+			float inf = std::numeric_limits<float>::infinity();
+
+			auto [id, type, sqDist] = std::tuple<EntityID, EntityType, float>(0, UNDEFINED, inf );
 
 			// primero vamos a recorrer los componentes rigidos y estaticos
 			for (const auto & rigid : context->getComponents().get<RigidStaticAABB>()) {
@@ -54,7 +52,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 					// si no lo es, tenemos que ver si la entidad golpeada esta mas
 					// cerca que la anterior almacenada
 
-					if (sqDist < 0 || less_e(squareDistance, sqDist)) {
+					if (less_e(squareDistance, sqDist)) {
 						id = rigid.getEntityID();
 						type = rigid.getEntityType();
 						sqDist = squareDistance;
@@ -74,7 +72,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 					                                                 trigger.max); // distancia al cuadrado desde el origen de la bala hasta el objeto (bullet.a -> posInicial, bullet.b -> posFinal)
 					// y mismo procedimiento
 
-					if (sqDist < 0 || less_e(squareDistance, sqDist)) {
+					if (less_e(squareDistance, sqDist)) {
 						id = trigger.getEntityID();
 						type = trigger.getEntityType();
 						sqDist = squareDistance;
@@ -94,7 +92,9 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 			// en nuestro juego lo unico que controla este sistema son las balas disparadas por el
 			// personaje)
 
-			const float squareDistanceTravelled = BULLET_SPEED * BULLET_SPEED * deltaTime * deltaTime;
+			constexpr float BULLET_SPEED2 = BULLET_SPEED * BULLET_SPEED;
+
+			const float squareDistanceTravelled = BULLET_SPEED2 * deltaTime * deltaTime;
 
 			// utilizamos el mismo procedimiento
 
@@ -118,7 +118,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 					// una entidad anteriormente
 
 					if (squareDistance < squareDistanceTravelled) {
-						if (sqDist < 0 || less_e(squareDistance, sqDist)) {
+						if (less_e(squareDistance, sqDist)) {
 							id = trigger.getEntityID();
 							type = trigger.getEntityType();
 							sqDist = squareDistance;
@@ -129,7 +129,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 
 			// si el cuadrado de la distancia es positivo significa que hemos chocado con algo significativo
 
-			if (sqDist > 0) {
+			if (type) {
 				// asi que nos encargamos de mandar al sistema de resolucion de trigger
 				// un mensaje con la informacion necesaria para gestionar la colision
 				triggerMessages.emplace_back(fast.getEntityType(), fast.getEntityID(), type, id);

@@ -101,9 +101,9 @@ void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Veloc
     basicBehaviour(ai, phy, vel, player_pos, 0, true);
     
     if(!greater_e(data.currentAttackingCooldown, 0.f)) {
-        data.attacking = true;
         data.currentAttackingCooldown = data.attackingCooldown;
 
+        damageMessages.emplace_back(data.attackDamage);
         soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
     }
 }

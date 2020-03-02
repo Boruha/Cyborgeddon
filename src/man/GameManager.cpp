@@ -3,6 +3,7 @@
 #include <Engine/EngineInterface/SceneInterface/IScene.hpp>
 #include <Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
+#include <Engine/util/Timer.hpp>
 
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
@@ -55,6 +56,8 @@ void GameManager::update(const float deltaTime)
 // TODO: bucle del juego
 void GameManager::loop()
 {
+	Timer timer { };
+
 	std::chrono::high_resolution_clock::time_point last = std::chrono::high_resolution_clock::now();
 	std::chrono::high_resolution_clock::time_point now;
 
@@ -72,6 +75,8 @@ void GameManager::loop()
         }
 
         render.update(entityManager, delta.count() / fixedDelta.count());
+
+        timer.getInfo();
 	}
 
 	terminate();

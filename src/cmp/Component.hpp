@@ -26,7 +26,7 @@ struct Component {
 
 	void destroy() { entityType = UNDEFINED; } // si el tipo de entidad de un componente es undefined lo ignoramos
 
-	virtual ~Component() = default;
+	~Component() = default;
 
 	private:
 		ComponentID ID { nextID++ };	// intentar hacer const

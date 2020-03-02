@@ -4,8 +4,8 @@
 
 struct AttackSystem : System {
 
-    void init() override {  }
+    void init() override;
     void update(const Context& context, float deltaTime) override;
-    void reset() override {  }
+    void reset() override;
 
 };

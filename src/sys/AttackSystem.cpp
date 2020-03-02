@@ -1,40 +1,42 @@
 #include <sys/AttackSystem.hpp>
-#include <iostream>
 #include <util/SoundPaths.hpp>
 #include <Engine/util/Math.hpp>
 
 void AttackSystem::update(const Context& context, const float deltaTime) {
 	float enemyDamage = 0.f;	// daño total que recibira el jugador despues de procesar todos los ataques
-	bool  playerShoots = false;
 
-	for (auto& data : context->getComponents().get<CharacterData>()) {
-        if (data && data.attacking) {
-			switch (data.getEntityType()) {
-				case ENEMY :
-					enemyDamage += data.attackDamage; // vamos acumulando el daño que recibe el player
-					break;
-				case PLAYER :
-					playerShoots = true;
-					break;
-				default :
-					std::cout << "\n\nComo vainas ataca algo que no es ni enemy ni player weon!\n\n";
-					exit(-1);
-			}
+	while (!damageMessages.empty()) {
+		enemyDamage += damageMessages.back().damage;
+		damageMessages.pop_back();
+	}
 
-			data.attacking = false;
-		}
-    }
+	auto & player = context->getPlayer();
 
 	if (enemyDamage != 0) {
-		auto& playerHealth = context->getPlayer().getComponent<CharacterData>()->health;
+		auto & playerHealth = player.getComponent<CharacterData>()->health;
 
-		playerHealth -= enemyDamage; // para no cortar la cache desreferenciando context cada vez que nos alcance un enemy
+		playerHealth -= enemyDamage;
+
 		soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); // Creo el SoundMessage de Player herido
 
 		if(!greater_e(playerHealth, 0))
-		    deathMessages.emplace_back(context->getPlayer().getID());
+			deathMessages.emplace_back(context->getPlayer().getID());
 	}
 
-	if (playerShoots)
+	if (player.getComponent<CharacterData>()->attacking)
 		context->createBullet();
+
+	// TODO : la variable attacking no deberia ser necesaria, eliminar lo antes posible
+	for (auto& data : context->getComponents().get<CharacterData>())
+        if (data && data.attacking)
+			data.attacking = false;
+}
+
+void AttackSystem::init() {
+	damageMessages.reserve(16);
+}
+
+void AttackSystem::reset() {
+	damageMessages.clear();
+	damageMessages.reserve(16);
 }

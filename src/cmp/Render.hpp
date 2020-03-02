@@ -19,7 +19,9 @@ struct Render : Component {
 
 	INode	* node   { nullptr };
 
+	// NO TOCAR EL ORDEN
 	vec3  	* pos  	 { nullptr };
 	vec3  	* rot	 { nullptr };
 	vec3  	* sca	 { nullptr };
+	// NO TOCAR EL ORDEN
 };
