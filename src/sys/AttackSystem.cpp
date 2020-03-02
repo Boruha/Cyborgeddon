@@ -10,21 +10,19 @@ void AttackSystem::update(const Context& context, const float deltaTime) {
 		damageMessages.pop_back();
 	}
 
-	auto & player = context->getPlayer();
+	auto & playerData = *context->getPlayer().getComponent<CharacterData>();
 
 	if (enemyDamage != 0) {
-		auto & playerHealth = player.getComponent<CharacterData>()->health;
-
-		playerHealth -= enemyDamage;
+		playerData.health -= enemyDamage;
 
 		soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); // Creo el SoundMessage de Player herido
 
-		if(!greater_e(playerHealth, 0))
+		if(!greater_e(playerData.health, 0))
 			deathMessages.emplace_back(context->getPlayer().getID());
 	}
 
-	if (player.getComponent<CharacterData>()->attacking) {
-		player.getComponent<CharacterData>()->attacking = false;
+	if (playerData.attacking) {
+		playerData.attacking = false;
 		context->createBullet();
 	}
 }
