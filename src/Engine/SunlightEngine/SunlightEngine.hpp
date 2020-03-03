@@ -10,7 +10,7 @@ struct SunlightEngine final : public virtual IEngine {
 
     ~SunlightEngine() override = default;
 
-    void init(unsigned width, unsigned height, const std::wstring& name) final;
+    void init(unsigned width, unsigned height, const std::string_view name) final;
 
     [[nodiscard]] bool run() const final;
 

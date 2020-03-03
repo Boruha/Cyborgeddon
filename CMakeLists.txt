@@ -21,6 +21,7 @@ file(GLOB SOURCES
         "${PROJECT_SOURCE_DIR}/src/Engine/SunlightEngine/SceneInterface/Resource/*.hpp"
         "${PROJECT_SOURCE_DIR}/src/Engine/SunlightEngine/SceneInterface/Tree/*.hpp"
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.h"
+        "${PROJECT_SOURCE_DIR}/src/Engine/util/*.hpp"
 
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
         "${PROJECT_SOURCE_DIR}/src/cmp/*.cpp"
@@ -34,6 +35,7 @@ file(GLOB SOURCES
         "${PROJECT_SOURCE_DIR}/src/Engine/SunlightEngine/SceneInterface/Resource/*.cpp"
         "${PROJECT_SOURCE_DIR}/src/Engine/SunlightEngine/SceneInterface/Tree/*.cpp"
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.c"
+        "${PROJECT_SOURCE_DIR}/src/Engine/util/*.cpp"
         )
 
 add_executable(cyborgeddon ${SOURCES})

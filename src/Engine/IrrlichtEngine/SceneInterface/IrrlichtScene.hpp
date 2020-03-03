@@ -17,8 +17,8 @@ struct IrrlichtScene : IScene {
 
     [[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
 
-	void loadTexture(const std::string& path) const override;
-	void unloadTexture(const std::string& path) const override;
+	void loadTexture(std::string_view path) const override;
+	void unloadTexture(std::string_view path) const override;
 	void unloadTextures() const override;
     
     private :

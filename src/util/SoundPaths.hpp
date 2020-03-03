@@ -1,30 +1,35 @@
+#pragma once
+
 // SOUND BANKS
-constexpr char const * MASTER_BANK				= "./resources/sounds/banks/Master.bank";
-constexpr char const * MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Master.strings.bank";
+constexpr std::string_view MASTER_BANK				= "./resources/sounds/banks/Master.bank";
+constexpr std::string_view MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Master.strings.bank";
 
 // SOUND EVENTS
 //PLAYER
-constexpr char const * DEMON_SHOOT_EVENT		= "event:/player/disparo_demon";
-constexpr char const * ANGEL_SHOOT_EVENT		= "event:/player/disparo_angel";
+constexpr std::string_view DEMON_SHOOT_EVENT		= "event:/player/disparo_demon";
+constexpr std::string_view ANGEL_SHOOT_EVENT		= "event:/player/disparo_angel";
+constexpr std::string_view PLAYER_SHOOT_EVENT       = "event:/player/disparo_player"; //prueba
+constexpr std::string_view PLAYER_SHOOT_PARAMETER   = "mode";
 
-constexpr char const * DEMON_CHANGE_EVENT		= "event:/player/change_demon";
-constexpr char const * ANGEL_CHANGE_EVENT		= "event:/player/change_angel";
+constexpr std::string_view DEMON_CHANGE_EVENT		= "event:/player/change_demon";
+constexpr std::string_view ANGEL_CHANGE_EVENT		= "event:/player/change_angel";
+constexpr std::string_view CHANGE_MODE_EVENT		= "event:/player/change_mode"; //prueba
 
-constexpr char const * DASH_PLAYER_EVENT        = "event:/player/dash_player";
+constexpr std::string_view DASH_PLAYER_EVENT        = "event:/player/dash_player";
 
-constexpr char const * DAMAGE_PLAYER_EVENT      = "event:/player/damage_player";
+constexpr std::string_view DAMAGE_PLAYER_EVENT      = "event:/player/damage_player";
 
 //MUSIC
-constexpr char const * BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
-constexpr char const * BACKGROUND_MUSIC_EVENT_4 = "event:/music/main_music_4";
+constexpr std::string_view BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
+constexpr std::string_view BACKGROUND_MUSIC_EVENT_4 = "event:/music/main_music_4";
 
 //ENEMY
-constexpr char const * ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled_attack";
+constexpr std::string_view ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled_attack";
 
 //OBJECTS
-constexpr char const * PICKUP_KEY_EVENT         = "event:/objects/pickup_key";
-constexpr char const * OPEN_DOOR_EVENT          = "event:/objects/open_door";
-constexpr char const * HITMARKER_EVENT          = "event:/objects/hitmarker";
+constexpr std::string_view PICKUP_KEY_EVENT         = "event:/objects/pickup_key";
+constexpr std::string_view OPEN_DOOR_EVENT          = "event:/objects/open_door";
+constexpr std::string_view HITMARKER_EVENT          = "event:/objects/hitmarker";
 
 //AMBIENT
 

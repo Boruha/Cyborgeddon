@@ -21,7 +21,7 @@ void framebuffer_size_callback(GLFWwindow * const window, const int width, const
 	glViewport(0, 0, width, height);
 }
 
-void SunlightEngine::init(const unsigned width, const unsigned height, const std::wstring& name) {
+void SunlightEngine::init(const unsigned width, const unsigned height, const std::string_view name) {
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -32,7 +32,7 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	windowWidth = width;
 	windowHeight = height;
 
-	window = glfwCreateWindow(int(width), int(height), std::string(name.begin(), name.end()).c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(int(width), int(height), name.data(), nullptr, nullptr);
 
 	if (!window)
 		error("No se pudo abrir la ventana");

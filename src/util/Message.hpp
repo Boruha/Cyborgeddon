@@ -7,10 +7,12 @@
 // La gestion de los mensajes se lleva a cabo en sound system
 
 struct SoundMessage {
-	explicit SoundMessage(const std::string_view eventName)
-		: soundEventName(eventName) { }
+	explicit SoundMessage(const std::string_view eventName, const std::string_view paramName = "" , const int val = 0)
+		: soundEventName(eventName), parameterName(paramName), value(val) { }
 
-	std::string soundEventName { };
+	const std::string soundEventName;
+	const std::string parameterName;
+	const int value; //Mode dentro de FMOD
 };
 
 // cuando cualquier tipo de entidad tenga que morir se creara un mensaje

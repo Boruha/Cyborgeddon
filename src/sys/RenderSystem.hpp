@@ -7,7 +7,7 @@
 #include <GLFW/glfw3.h>
 
 struct RenderSystem : public System {
-	explicit RenderSystem(const glm::vec2& dim, const wchar_t * const name, const IEngine * const engine)
+	explicit RenderSystem(const glm::vec2& dim, const std::string_view name, const IEngine * const engine)
 		: engine(*engine) { }
 
 	void init() override {  }
