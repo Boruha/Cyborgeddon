@@ -33,7 +33,7 @@ struct Music {
 };
 
 struct SoundSystem : System {
-	~SoundSystem();
+	~SoundSystem() override;
 
 	void init() override;
 	void update(const Context& context, float deltaTime) override;

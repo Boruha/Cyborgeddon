@@ -36,7 +36,7 @@ file(GLOB SOURCES
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.c"
         )
 
-add_executable(cyborgeddon ${SOURCES} src/Engine/util/Timer.hpp src/Engine/util/Timer.cpp)
+add_executable(cyborgeddon ${SOURCES})
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 

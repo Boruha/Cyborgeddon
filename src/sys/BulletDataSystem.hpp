@@ -4,8 +4,9 @@
 
 struct BulletDataSystem : System {
 
-    void init() override {  };
+	~BulletDataSystem() override = default;
+
+	void init() override {  };
     void update(const Context& context, float deltaTime) override;
     void reset() override {  };
-
 };

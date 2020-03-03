@@ -8,14 +8,16 @@ struct IEngine;
 
 struct InputSystem : System
 {
-	explicit InputSystem(IEngine * const engine) : engine(engine) { }
+	explicit InputSystem(IEngine * const engine) : engine(*engine) { }
+
+	~InputSystem() override = default;
 
 	void init() override;
 	void update(const Context &context, float deltaTime) override;
 	void reset() override {  }
 
 	private:
-		IEngine * const engine {nullptr };
+		IEngine& engine; // no puede ser const porque tiene que acceder al input (el cual no puede ser const de momento)
 
 		// Movement
 		void w_pressed(Velocity& velocity, CharacterData& data) const;

@@ -15,7 +15,7 @@ void RenderSystem::update(const Context& context, const float deltaTime) {
 		}
 	}
 
-	engine->clear(Color(background));
-	engine->draw();
-	engine->display();
+	engine.clear( { background } );
+	engine.draw();
+	engine.display();
 }

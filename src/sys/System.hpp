@@ -6,6 +6,7 @@
 #include <cmp/ComponentPool.hpp>
 
 struct System {
+	virtual ~System() = default;
 	virtual void init() = 0;
 	virtual void update(const Context &context, float deltaTime) = 0;
 	virtual	void reset() = 0;

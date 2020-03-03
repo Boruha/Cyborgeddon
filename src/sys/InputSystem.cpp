@@ -57,7 +57,7 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 		auto & data = *player.getComponent<CharacterData>();
 
 		for (const auto * next = keyMap; next->p_func; ++next)
-			if (engine->isKeyPressed(next->key))
+			if (engine.isKeyPressed(next->key))
 				(this->*(next->p_func))(velocity, data);
 
 		// player siempre tiene render
@@ -66,7 +66,7 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 		if (data.switchingMode)
 			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
 
-		const Mouse& mouse = engine->getMouse();
+		const Mouse& mouse = engine.getMouse();
 //    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
 
 		aim_mouse(physics, mouse.position);
@@ -134,7 +134,10 @@ void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
 void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
     const Plane shootingPlane(vec3(0,1,0), phy.position.y);
-    const Line  ray(engine->scene->cursorToWorld(mouse.x, mouse.y, 0), engine->scene->cursorToWorld(mouse.x, mouse.y, 1));
+    const Line  ray (
+    		engine.scene->cursorToWorld(mouse.x, mouse.y, 0),
+    		engine.scene->cursorToWorld(mouse.x, mouse.y, 1)
+	);
 
     const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 
