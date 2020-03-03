@@ -21,9 +21,9 @@ enum ColliderType : uint8_t
 
 enum ModeType : uint8_t
 {
-	DEMON,
-	ANGEL,
-	NEUTRAL
+	DEMON   = 0,
+	ANGEL   = 1,
+	NEUTRAL = 2
 };
 
 enum EntityType : uint16_t

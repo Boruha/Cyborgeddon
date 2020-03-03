@@ -11,6 +11,7 @@ void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line)
 	if (res != FMOD_OK)
 	{
 		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << std::endl;
+		exit(1);
 	}
 }
 
@@ -36,8 +37,8 @@ void SoundSystem::init() {
 
 	ERRCHECK ( system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
 
-	ERRCHECK ( system->loadBankFile(MASTER_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
-	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK, FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
+	ERRCHECK ( system->loadBankFile(MASTER_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
+	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
 
 	soundMessages.reserve(16);
 
@@ -51,6 +52,8 @@ void SoundSystem::init() {
     createSoundEvent(OPEN_DOOR_EVENT);          //Mensaje alojado en CollisionSystem.cpp
     createSoundEvent(DAMAGE_PLAYER_EVENT);      //Mensaje alojado en AttackSystem.cpp
     createSoundEvent(HITMARKER_EVENT);          //Mensaje alojado en HighSpeedCollisionSystem.cpp
+    createSoundEvent(PLAYER_SHOOT_EVENT);          //Mensaje alojado en HighSpeedCollisionSystem.cpp
+
 
 	createMusicEvent(BACKGROUND_MUSIC_EVENT_4, &backingTrack, .2f);
 
@@ -65,9 +68,13 @@ void SoundSystem::update(const Context& context, const float deltaTime) {
 		FMOD_STUDIO_PLAYBACK_STATE state;   // me preparo para recibir un estado
 
 		for (const auto & instance : soundEvents[message.soundEventName].instances) {   // recorro las instancias
+
+		    std::cout<<message.soundEventName<<std::endl;
 			instance->getPlaybackState(&state);                                         // obtengo su estado
 
-			if (state == FMOD_STUDIO_PLAYBACK_STOPPED) {                                // si no esta emitiendo ningun sonido
+			if (state == FMOD_STUDIO_PLAYBACK_STOPPED) { // si no esta emitiendo ningun sonido
+			    if (message.parameterName.length() != 0)
+    			    instance->setParameterByName(message.parameterName.data(), float(message.value));
 				instance->start();                                                      // la pongo a sonar
 				break;                                                                  // corto el bucle
 			}
@@ -97,15 +104,15 @@ void SoundSystem::startBackgroundMusic() {
 	ERRCHECK( backingTrack.instance->start() );
 }
 
-void SoundSystem::createSoundEvent(const char * const name, const float volume) {
-	ERRCHECK( system->getEvent(name, &soundEvents[name].event) ); // creo el Sound e inicializo su parametro event
+void SoundSystem::createSoundEvent(const std::string_view name, const float volume) {
+	ERRCHECK( system->getEvent(name.data(), &soundEvents[name.data()].event) ); // creo el Sound e inicializo su parametro event
 
-	for (unsigned i = 0; i < soundEvents[name].instances.size(); ++i)
-	    createInstance(soundEvents[name].event, soundEvents[name].instances[i], volume);
+	for (unsigned i = 0; i < soundEvents[name.data()].instances.size(); ++i)
+	    createInstance(soundEvents[name.data()].event, soundEvents[name.data()].instances[i], volume);
 }
 
-void SoundSystem::createMusicEvent(const char * const name, Music * music, const float volume) {
-    ERRCHECK ( system->getEvent(name, &music->event) );
+void SoundSystem::createMusicEvent(const std::string_view name, Music * music, const float volume) {
+    ERRCHECK ( system->getEvent(name.data(), &music->event) );
     createInstance(music->event, music->instance, volume);
 }
 

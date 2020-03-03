@@ -1,10 +1,14 @@
 #pragma once
 
 struct SoundMessage {
-	explicit SoundMessage(const char * const eventName)
-		: soundEventName(eventName) { }
+	explicit SoundMessage(const std::string_view eventName, const std::string_view paramName = "" , const int val = 0)
+		: soundEventName(eventName), parameterName(paramName), value(val) { }
 
-	const char * const soundEventName { nullptr };
+	const std::string soundEventName;
+	const std::string parameterName;
+	const int value; //Mode dentro de FMOD
+
+
 };
 
 struct DeathMessage {
