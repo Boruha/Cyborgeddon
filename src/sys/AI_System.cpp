@@ -102,7 +102,7 @@ void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Veloc
         data.attacking = true;
         data.currentAttackingCooldown = data.attackingCooldown;
 
-        soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
+        soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
     }
 }
 
