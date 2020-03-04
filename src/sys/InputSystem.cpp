@@ -71,7 +71,7 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 				data->attacking = true;
 				data->currentAttackingCooldown = data->attackingCooldown;
 
-				soundMessages.emplace_back(PLAYER_SHOOT_EVENT);
+                soundMessages.emplace_back(PLAYER_SHOOT_EVENT, PLAYER_SHOOT_PARAMETER, data->mode);
 			}
 
 //	std::cout << "Click izquierdo\n";
@@ -121,7 +121,7 @@ void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
 		data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
 		data.currentSwitchingCooldown = data.switchingCooldown;
 
-		soundMessages.emplace_back(data.mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
+        soundMessages.emplace_back(CHANGE_MODE_EVENT, CHANGE_MODE_PARAMETER, data.mode);
 	}
 //	std::cout << "M\n";
 }

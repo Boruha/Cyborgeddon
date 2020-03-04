@@ -42,18 +42,15 @@ void SoundSystem::init() {
 
 	soundMessages.reserve(16);
 
-	createSoundEvent(DEMON_SHOOT_EVENT);        //Mensaje alojado en InputSystem.cpp -> void void InputSystem::update()
-	createSoundEvent(ANGEL_SHOOT_EVENT);        //Mensaje alojado en InputSystem.cpp -> void void InputSystem::update()
+
 	createSoundEvent(ASSEMBLED_ATTACK_EVENT);   //Mensaje alojado en ...
 	createSoundEvent(DASH_PLAYER_EVENT);        //Mensaje alojado en InputSystem.cpp -> void InputSystem::shift_pressed()
-	createSoundEvent(ANGEL_CHANGE_EVENT);       //Mensaje alojado en InputSystem.cpp -> void InputSystem::m_pressed()
-	createSoundEvent(DEMON_CHANGE_EVENT);       //Mensaje alojado en InputSystem.cpp -> void InputSystem::m_pressed()
     createSoundEvent(PICKUP_KEY_EVENT);         //Mensaje alojado en CollisionSystem.cpp
     createSoundEvent(OPEN_DOOR_EVENT);          //Mensaje alojado en CollisionSystem.cpp
     createSoundEvent(DAMAGE_PLAYER_EVENT);      //Mensaje alojado en AttackSystem.cpp
     createSoundEvent(HITMARKER_EVENT);          //Mensaje alojado en HighSpeedCollisionSystem.cpp
-    createSoundEvent(PLAYER_SHOOT_EVENT);          //Mensaje alojado en HighSpeedCollisionSystem.cpp
-
+    createSoundEvent(PLAYER_SHOOT_EVENT);       //Mensaje alojado en HighSpeedCollisionSystem.cpp
+    createSoundEvent(CHANGE_MODE_EVENT);        //Mensaje alojado en InputSystem.cpp -> void InputSystem::m_pressed()
 
 	createMusicEvent(BACKGROUND_MUSIC_EVENT_4, &backingTrack, .2f);
 

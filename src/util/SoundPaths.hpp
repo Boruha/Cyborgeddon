@@ -6,14 +6,19 @@ constexpr std::string_view MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Mas
 
 // SOUND EVENTS
 //PLAYER
-constexpr std::string_view DEMON_SHOOT_EVENT		= "event:/player/disparo_demon";
-constexpr std::string_view ANGEL_SHOOT_EVENT		= "event:/player/disparo_angel";
+//constexpr std::string_view DEMON_SHOOT_EVENT		= "event:/player/disparo_demon";
+//constexpr std::string_view ANGEL_SHOOT_EVENT		= "event:/player/disparo_angel";
+
+
 constexpr std::string_view PLAYER_SHOOT_EVENT       = "event:/player/disparo_player"; //prueba
 constexpr std::string_view PLAYER_SHOOT_PARAMETER   = "mode";
 
 constexpr std::string_view DEMON_CHANGE_EVENT		= "event:/player/change_demon";
 constexpr std::string_view ANGEL_CHANGE_EVENT		= "event:/player/change_angel";
+
 constexpr std::string_view CHANGE_MODE_EVENT		= "event:/player/change_mode"; //prueba
+constexpr std::string_view CHANGE_MODE_PARAMETER    = "mode";
+
 
 constexpr std::string_view DASH_PLAYER_EVENT        = "event:/player/dash_player";
 
