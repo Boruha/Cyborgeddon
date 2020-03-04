@@ -126,7 +126,7 @@ void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
 		data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
 		data.currentSwitchingCooldown = data.switchingCooldown;
 
-		soundMessages.emplace_back(data.mode == ANGEL ? ANGEL_CHANGE_EVENT : DEMON_CHANGE_EVENT);
+        soundMessages.emplace_back(CHANGE_MODE_EVENT, CHANGE_MODE_PARAMETER, data.mode);
 	}
 //	std::cout << "M\n";
 }
