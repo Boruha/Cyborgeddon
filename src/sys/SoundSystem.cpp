@@ -55,18 +55,18 @@ void SoundSystem::init() {
 void SoundSystem::update(const Context& context, const float deltaTime) {
 
 	while (!soundMessages.empty()) {
-		const auto& message = soundMessages.back(); // leo el mensaje
+		const auto& [event, paramName, value] = soundMessages.back().tuple;
 
 		FMOD_STUDIO_PLAYBACK_STATE state;   // me preparo para recibir un estado
 
-		for (const auto & instance : soundEvents[message.soundEventName].instances) {   // recorro las instancias
+		for (const auto & instance : soundEvents[event.data()].instances) {   // recorro las instancias
 
-		    std::cout<<message.soundEventName<<std::endl;
-			instance->getPlaybackState(&state);                                         // obtengo su estado
+		    std::cout << event.data() << std::endl;
+
+		    instance->getPlaybackState(&state);                                         // obtengo su estado
 
 			if (state == FMOD_STUDIO_PLAYBACK_STOPPED) { // si no esta emitiendo ningun sonido
-			    if (message.parameterName.length() != 0)
-    			    instance->setParameterByName(message.parameterName.data(), float(message.value));
+			    instance->setParameterByName(paramName.data(), float(value));
 				instance->start();                                                      // la pongo a sonar
 				break;                                                                  // corto el bucle
 			}

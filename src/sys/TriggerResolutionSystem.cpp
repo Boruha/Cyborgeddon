@@ -12,10 +12,10 @@ void TriggerResolutionSystem::update(const Context &context, float deltaTime) {
                 auto& door = context->getEntityByID(message.ID2 - 1);
                 door.removeComponent<RigidStaticAABB>();
 
-                soundMessages.emplace_back(PICKUP_KEY_EVENT);
+                soundMessages.emplace_back(ACTION_GET_KEY);
                 deathMessages.emplace_back(message.ID2);
             } else if (message.type2 == DOOR) {
-                soundMessages.emplace_back(OPEN_DOOR_EVENT);
+                soundMessages.emplace_back(ACTION_OPEN_DOOR);
                 deathMessages.emplace_back(message.ID2);
             }
         } else if (message.type1 == BULLET) {
@@ -35,7 +35,7 @@ void TriggerResolutionSystem::update(const Context &context, float deltaTime) {
 				        characterData->health -= (bulletData->damage * FACTOR_SAME_MODE);
 		        }
 
-		        soundMessages.emplace_back(HITMARKER_EVENT);
+		        soundMessages.emplace_back(ACTION_ENEMY_HITMARKER);
 
 		        if (!greater_e(characterData->health, 0))
 			        deathMessages.emplace_back(character.getID());

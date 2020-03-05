@@ -15,7 +15,8 @@ void AttackSystem::update(const Context& context, const float deltaTime) {
 	if (enemyDamage != 0) {
 		playerData.health -= enemyDamage;
 
-		soundMessages.emplace_back(DAMAGE_PLAYER_EVENT); // Creo el SoundMessage de Player herido
+		soundMessages.emplace_back(DAMAGE_PLAYER); // Creo el SoundMessage de Player herido
+
 
 		if(!greater_e(playerData.health, 0))
 			deathMessages.emplace_back(context->getPlayer().getID());

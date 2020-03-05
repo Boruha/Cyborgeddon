@@ -1,25 +1,24 @@
 #pragma once
 
+#include <util/SoundParameter.hpp>
+
 // cuando haya que hacer sonar algo, mandaremos un mensaje de sonido
 // con el nombre del evento (intentar que el nombre no sea mayor de 16
 // caracteres para que c++ lo guarde en la pila y no el stack)
 
 // La gestion de los mensajes se lleva a cabo en sound system
+struct SoundMessage { //ESTE SERA EL DEFINITIVO
+	explicit SoundMessage(const SoundParameter param)
+            : tuple(getSoundTuple(param)) { }
 
-struct SoundMessage {
-	explicit SoundMessage(const std::string_view eventName, const std::string_view paramName = "" , const int val = 0)
-		: soundEventName(eventName), parameterName(paramName), value(val) { }
-
-	const std::string soundEventName;
-	const std::string parameterName;
-	const int value; //Mode dentro de FMOD
+    const sound_parameter_tuple tuple;
 };
+
 
 // cuando cualquier tipo de entidad tenga que morir se creara un mensaje
 // de muerte, ya sea bala, enemigo, jugador...
 
 // La gestion de los mensajes se lleva a cabo en death system
-
 struct DeathMessage {
     explicit DeathMessage(const EntityID _ID)
         : ID(_ID) { }
