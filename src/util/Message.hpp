@@ -39,20 +39,17 @@ constexpr sound_tuple getSoundTuple(const Parameter p){
         case SWITCH_MODE_DEMON :        return {CHANGE_MODE_EVENT,  "mode", 0};
         case SWITCH_MODE_ANGEL :        return {CHANGE_MODE_EVENT,  "mode", 1};
 
-        case DAMAGE_PLAYER :            return {DAMAGE_PLAYER_EVENT, "mode", 0};
+        case DAMAGE_PLAYER :            return {DAMAGE_EVENT, "mode", 0};
         case DASH_PLAYER :              return {DASH_PLAYER_EVENT,   "mode", 0};
 
 
-        //ENEMY
-        //Segun codigo ahora mismo: Demon=0, Angel=1, Assembled=2
-        case(ATTACK_ENEMY_ASSEMBLY):    return{ASSEMBLED_ATTACK_EVENT, "mode", 0};
-        // case(ATTACK_ENEMY_DEMON):       return{"enemy", 0};
-        // case(ATTACK_ENEMY_ANGEL):       return{"enemy", 1};
-         case(ACTION_ENEMY_HITMARKER):   return{HITMARKER_EVENT, "mode", 0};
+        //ENEMY--> Segun codigo ahora mismo: Demon=0, Angel=1, Assembled=2
+        case(ATTACK_ENEMY_ASSEMBLY):    return{ASSEMBLED_ATTACK_EVENT, "mode", 1};
+        case(ACTION_ENEMY_HITMARKER):   return{DAMAGE_EVENT, "mode", 0};
 
         //ACTION SOUNDS
-        case (ACTION_GET_KEY):          return{PICKUP_KEY_EVENT, "mode", 0};
-        case (ACTION_OPEN_DOOR):        return{OPEN_DOOR_EVENT, "mode", 0};
+        case (ACTION_GET_KEY):          return{KEY_DOOR_EVENT, "mode", 0};
+        case (ACTION_OPEN_DOOR):        return{KEY_DOOR_EVENT, "mode", 1};
 
 
         case ATTACK_ENEMY_DEMON:

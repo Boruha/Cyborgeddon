@@ -45,14 +45,12 @@ void SoundSystem::init() {
 
 	createSoundEvent(ASSEMBLED_ATTACK_EVENT);   //Mensaje alojado en ...
 	createSoundEvent(DASH_PLAYER_EVENT);        //Mensaje alojado en InputSystem.cpp -> void InputSystem::shift_pressed()
-    createSoundEvent(PICKUP_KEY_EVENT);         //Mensaje alojado en CollisionSystem.cpp
-    createSoundEvent(OPEN_DOOR_EVENT);          //Mensaje alojado en CollisionSystem.cpp
-    createSoundEvent(DAMAGE_PLAYER_EVENT);      //Mensaje alojado en AttackSystem.cpp
-    createSoundEvent(HITMARKER_EVENT);          //Mensaje alojado en HighSpeedCollisionSystem.cpp
+    createSoundEvent(KEY_DOOR_EVENT);         //Mensaje alojado en CollisionSystem.cpp
+    createSoundEvent(DAMAGE_EVENT);            //Mensaje alojado en AttackSystem.cpp y HighSpeedCollisionSystem.cpp
     createSoundEvent(PLAYER_SHOOT_EVENT);       //Mensaje alojado en HighSpeedCollisionSystem.cpp
     createSoundEvent(CHANGE_MODE_EVENT);        //Mensaje alojado en InputSystem.cpp -> void InputSystem::m_pressed()
 
-	createMusicEvent(BACKGROUND_MUSIC_EVENT_4, &backingTrack, .2f);
+	createMusicEvent(BACKGROUND_MUSIC_EVENT, &backingTrack, .2f);
 
 	startBackgroundMusic();
 }
@@ -65,9 +63,7 @@ void SoundSystem::update(const Context& context, const float deltaTime) {
 		FMOD_STUDIO_PLAYBACK_STATE state;   // me preparo para recibir un estado
 
 		for (const auto & instance : soundEvents[event.data()].instances) {   // recorro las instancias
-
-		    std::cout << event.data() << std::endl;
-
+		    //std::cout << event.data() << std::endl;
 		    instance->getPlaybackState(&state);                                         // obtengo su estado
 
 			if (state == FMOD_STUDIO_PLAYBACK_STOPPED) { // si no esta emitiendo ningun sonido
