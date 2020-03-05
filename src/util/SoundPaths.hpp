@@ -11,7 +11,7 @@ constexpr std::string_view PLAYER_SHOOT_EVENT       = "event:/player/disparo_pla
 //constexpr std::string_view PLAYER_SHOOT_PARAMETER   = "mode";
 
 constexpr std::string_view CHANGE_MODE_EVENT		= "event:/player/change_mode"; //prueba
-//constexpr std::string_view CHANGE_MODE_PARAMETER    = "mode";
+//constexpr std::string_view CHANGE_MODE_PARAMETER    = "mode"
 
 
 constexpr std::string_view DASH_PLAYER_EVENT        = "event:/player/dash_player";
