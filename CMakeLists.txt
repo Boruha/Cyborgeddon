@@ -50,4 +50,4 @@ add_executable(cyborgeddon ${SOURCES})
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 
-target_link_libraries(cyborgeddon -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl)
+target_link_libraries(cyborgeddon -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lassimp)

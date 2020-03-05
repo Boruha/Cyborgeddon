@@ -27,7 +27,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<VelocitySystem>());                   // se actualiza la velocidad en funcion de la aceleracion (unificar este sistema con el de arriba pasando atributos de velocidad al cmp de fisicas)
 	systems.emplace_back(std::make_unique<CooldownSystem>());                   // se actualizan los cooldowns
     systems.emplace_back(std::make_unique<DeathSystem>());                      // se comprueba si algo tiene que morir y ser eliminado
-//	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
 	for(const auto& sys : systems)
 		sys->init();

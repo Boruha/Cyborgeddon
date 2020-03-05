@@ -16,7 +16,6 @@ void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int l
 }
 
 SoundSystem::~SoundSystem() {
-	// TODO: generalizar sonidos
 	if (system)
 		system->release();
 }
