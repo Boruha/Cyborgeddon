@@ -27,7 +27,7 @@ void GameManager::init()
 	systems.emplace_back(std::make_unique<VelocitySystem>());                   // se actualiza la velocidad en funcion de la aceleracion (unificar este sistema con el de arriba pasando atributos de velocidad al cmp de fisicas)
 	systems.emplace_back(std::make_unique<CooldownSystem>());                   // se actualizan los cooldowns
     systems.emplace_back(std::make_unique<DeathSystem>());                      // se comprueba si algo tiene que morir y ser eliminado
-	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+//	systems.emplace_back(std::make_unique<SoundSystem>());                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
 	for(const auto& sys : systems)
 		sys->init();
@@ -56,27 +56,25 @@ void GameManager::update(const float deltaTime)
 // TODO: bucle del juego
 void GameManager::loop()
 {
-	Timer timer { };
+	Timer gameClock { duration::seconds }; // reloj que controla el juego
 
-	std::chrono::high_resolution_clock::time_point last = std::chrono::high_resolution_clock::now();
-	std::chrono::high_resolution_clock::time_point now;
+	Timer timerUpdateLoop { duration::milliseconds }; // reloj para comprobar coste temporal
 
-	std::chrono::duration<float> delta {0};
+	double delta { 0 };
 
 	while (engine->run()) {
-        now = std::chrono::high_resolution_clock::now();
-        delta += now - last;
-        last = now;
+		delta += gameClock.getElapsedAndReset();
 
-        while(delta.count() > fixedDelta.count())
+        while(delta > FIXED_DELTA_TIME)
         {
-            update(fixedDelta.count());
-            delta -= fixedDelta;
+	        timerUpdateLoop.start();
+            update(FIXED_DELTA_TIME);
+	        timerUpdateLoop.getInfo();
+
+            delta -= FIXED_DELTA_TIME;
         }
 
-        render.update(entityManager, delta.count() / fixedDelta.count());
-
-        timer.getInfo();
+        render.update(entityManager, float(delta / FIXED_DELTA_TIME));
 	}
 
 	terminate();

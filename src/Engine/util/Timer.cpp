@@ -1,8 +1,9 @@
 #include <Engine/util/Timer.hpp>
 
 #include <iostream>
+#include <utility>
 
-Timer::Timer() {
+Timer::Timer(Duration  d) : dur(std::move(d)) {
 	start();
 }
 
@@ -10,14 +11,14 @@ void Timer::start() {
 	before = std::chrono::high_resolution_clock::now();
 }
 
-void Timer::getInfo(const Duration& d) {
+void Timer::getInfo() {
 
 	reset();
 
-	std::cout << "Elapsed: " 	<< elapsed * d.ratio << d.unit;
-	std::cout << "Min: " 		<< minTime * d.ratio << d.unit;
-	std::cout << "Max: " 		<< maxTime * d.ratio << d.unit;
-	std::cout << "Avg: " 		<< average * d.ratio << d.unit;
+	std::cout << "Elapsed: " 	<< elapsed * dur.ratio << dur.unit;
+	std::cout << "Min: " 		<< minTime * dur.ratio << dur.unit;
+	std::cout << "Max: " 		<< maxTime * dur.ratio << dur.unit;
+	std::cout << "Avg: " 		<< average * dur.ratio << dur.unit;
 	std::cout << "Ticks: "   	<< nTimes << "\n\n";
 }
 
@@ -31,12 +32,8 @@ void Timer::reset() {
 	before = now;
 }
 
-double Timer::getElapsed(const Duration& d) {
-	elapsed = (std::chrono::high_resolution_clock::now() - before).count();
-
-	processInfo();
-
-	return d.ratio * elapsed;
+double Timer::getElapsedAndReset() {
+	return getElapsed(true);
 }
 
 void Timer::processInfo() {
@@ -45,5 +42,20 @@ void Timer::processInfo() {
 
 	accum += elapsed;
 
-	average = accum / ++nTimes;
+	average = accum / double(++nTimes);
+}
+
+double Timer::getElapsedNoReset() {
+	return getElapsed(false);
+}
+
+double Timer::getElapsed(const bool should_reset) {
+	elapsed = (std::chrono::high_resolution_clock::now() - before).count();
+
+	processInfo();
+
+	if (should_reset)
+		reset();
+
+	return dur.ratio * elapsed;
 }

@@ -2,9 +2,8 @@
 
 #include <ent/Entity.hpp>
 #include <ent/Graph.hpp>
-#include <src/cmp/ComponentVariant.hpp>
 
-struct ComponentPool;
+struct Storage;
 
 struct GameContext {
 	virtual ~GameContext() = default;
@@ -32,8 +31,8 @@ struct GameContext {
 	[[nodiscard]] virtual const Entity& getEntityByID(EntityID) const = 0;
 	[[nodiscard]] virtual  		Entity& getEntityByID(EntityID) 	  = 0;
 
-	[[nodiscard]] virtual const ComponentPool& getComponents() const = 0;
-	[[nodiscard]] virtual 		ComponentPool& getComponents() 	     = 0;
+	[[nodiscard]] virtual const Storage& getComponents() const = 0;
+	[[nodiscard]] virtual 		Storage& getComponents() 	     = 0;
 
 	virtual void addToDestroy(EntityID ID) = 0;
 };

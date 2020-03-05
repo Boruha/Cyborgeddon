@@ -2,7 +2,6 @@
 
 #include <util/GameContext.hpp>
 #include <src/cmp/Storage.hpp>
-#include <map>
 
 struct IEngine;
 
@@ -27,15 +26,15 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const std::vector<MapNode>& getGraph() const override { return graph; }
 	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
 
-	[[nodiscard]]       std::vector<int>& getPath(EntityID eid) 		  override { return paths[eid]; }
+	[[nodiscard]]       std::vector<int>& getPath(EntityID eid) 		  override { return paths.find(eid)->second; }
 				        void deletePath(EntityID eid) 			          override { paths.erase(eid);  }
 				  		void setPath(EntityID eid, std::vector<int> path) override { paths[eid] = path; }
 
 	[[nodiscard]] const Entity& getEntityByID(EntityID id) const override;
 	[[nodiscard]] 		Entity& getEntityByID(EntityID id) 		 override;
 
-	[[nodiscard]] const ComponentPool& getComponents() const override { return componentStorage.getComponents(); }
-	[[nodiscard]] 		ComponentPool& getComponents() 	     override { return componentStorage.getComponents(); }
+	[[nodiscard]] const Storage& getComponents() const override { return componentStorage; }
+	[[nodiscard]] 		Storage& getComponents() 	   override { return componentStorage; }
 
 	private:
 
@@ -61,14 +60,12 @@ struct EntityManager : GameContext {
 		Entity * nav    { nullptr };
 
     	std::vector<MapNode> graph;
-		std::map<EntityID, std::vector<int>> paths;
+		std::unordered_map<EntityID, std::vector<int>> paths;
 
 	    const IEngine& engine;
 
 	    std::vector<EntityID> toDelete;
 	    std::unordered_map<EntityID, Entity> entities;
-
-		unsigned entitiesLeftToDelete { 0 };
 
 		unsigned enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
 

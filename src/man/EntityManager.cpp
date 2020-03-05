@@ -42,20 +42,18 @@ bool EntityManager::checkVictory() {
 
 // aqui recibimos los IDS de las entidades que queremos destruir
 void EntityManager::addToDestroy(EntityID ID) {
-	for (const auto& id : toDelete)
-		if (id == ID)
-			return;
-
-	if (std::find(toDelete.begin(), toDelete.end(), ID) == toDelete.end()) { 	// si no existe el elemento
+	if (std::find(toDelete.begin(), toDelete.end(), ID) == toDelete.end())
 		toDelete.emplace_back(ID);
-		std::sort(toDelete.begin(), toDelete.end(), std::less<>());	// ordenamos de forma ascendente (apenas tiene coste, el vector no ocupa mas de 8 * size_t de momento)
-		++entitiesLeftToDelete;															// actualizamos el numero de entidades que nos faltan por eliminar
-	}
 }
 
 void EntityManager::killEntities() {
 
 	for (const auto & d : toDelete) {
+		auto & e = entities.find(d)->second;
+
+		if (e.getType() == ENEMY)
+			enemiesLeft--;
+
 		entities.find(d)->second.destroy();
 		entities.erase(d);
 	}
@@ -68,10 +66,16 @@ void EntityManager::killEntities() {
 void EntityManager::cleanData() {
 	Entity::resetIDManagementValue();		// reiniciamos ID
 
+	for (auto & e : entities)
+		if (e.second.getComponent<Render>())
+			e.second.getComponent<Render>()->node->remove();
+
 	entities.clear();					    // limpiamos entidades
 	toDelete.clear();						// limpiamos vector de entidades a borrar
 
-	entitiesLeftToDelete = 0;				// reiniciamos valor
+	graph.clear();                          // limpiamos grafo
+	paths.clear();                          // limpiamos caminos
+
 	enemiesLeft = 0;						// reiniciamos valor
 
 	player = nullptr;						// reiniciamos valor
@@ -102,7 +106,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createIObjectNode();
+	render.node = engine.scene->addObjectNode();
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -122,7 +126,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3()));
 	auto& cameraRender	= componentStorage.createComponent(Render(camera->getType(), camera->getID(), &cameraPhysics.position, &cameraPhysics.rotation, &cameraPhysics.scale, true));
 
-	cameraRender.node = componentStorage.createICameraNode();
+	cameraRender.node = engine.scene->addCameraNode();
 
 	cameraRender.node->setPosition(cameraPhysics.position);
 	cameraRender.node->setRotation(cameraPhysics.rotation);
@@ -140,7 +144,7 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createIObjectNode();
+	render.node = engine.scene->addObjectNode();
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -163,7 +167,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createIObjectNode();
+	render.node = engine.scene->addObjectNode();
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -187,7 +191,7 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createIObjectNode();
+	render.node = engine.scene->addObjectNode();
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -211,7 +215,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createIObjectNode();
+	render.node = engine.scene->addObjectNode();
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -233,7 +237,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createIObjectNode();
+	render.node = engine.scene->addObjectNode();
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -252,7 +256,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createIObjectNode();
+	keyRender.node = engine.scene->addObjectNode();
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
@@ -476,15 +480,15 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
 
-	std::cout << componentStorage.getComponents().get<Transformable>()[0].getName()     << " " << componentStorage.getComponents().get<Transformable>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Physics>()[0].getName()           << " " << componentStorage.getComponents().get<Physics>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<RigidStaticAABB>()[0].getName()   << " " << componentStorage.getComponents().get<RigidStaticAABB>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<TriggerMovSphere>()[0].getName()  << " " << componentStorage.getComponents().get<TriggerMovSphere>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<AI>()[0].getName()                << " " << componentStorage.getComponents().get<AI>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<TriggerStaticAABB>()[0].getName() << " " << componentStorage.getComponents().get<TriggerStaticAABB>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Render>()[0].getName()            << " " << componentStorage.getComponents().get<Render>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<Velocity>()[0].getName()          << " " << componentStorage.getComponents().get<Velocity>().size() << "\n";
-	std::cout << componentStorage.getComponents().get<CharacterData>()[0].getName()     << " " << componentStorage.getComponents().get<CharacterData>().size() << "\n";
+	std::cout << componentStorage.getComponents<Transformable>()[0].getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
+	std::cout << componentStorage.getComponents<Physics>()[0].getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
+	std::cout << componentStorage.getComponents<RigidStaticAABB>()[0].getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";
+	std::cout << componentStorage.getComponents<TriggerMovSphere>()[0].getName()  << " " << componentStorage.getComponents<TriggerMovSphere>().size() << "\n";
+	std::cout << componentStorage.getComponents<AI>()[0].getName()                << " " << componentStorage.getComponents<AI>().size() << "\n";
+	std::cout << componentStorage.getComponents<TriggerStaticAABB>()[0].getName() << " " << componentStorage.getComponents<TriggerStaticAABB>().size() << "\n";
+	std::cout << componentStorage.getComponents<Render>()[0].getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
+	std::cout << componentStorage.getComponents<Velocity>()[0].getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
+	std::cout << componentStorage.getComponents<CharacterData>()[0].getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
 }
 
 void EntityManager::createGraph()

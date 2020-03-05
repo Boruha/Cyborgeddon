@@ -3,11 +3,11 @@
 void RenderSystem::update(const Context& context, const float deltaTime) {
 
 	auto & player   	= context->getPlayer();
-	auto * cameraNode 	= context->getCamera().getComponent<Render>()->node;
+	auto & cameraNode 	= context->getCamera().getComponent<Render>()->node;
 
 	cameraNode->setTarget(player.getComponent<Physics>()->position);
 
-	for (auto & cmp : context->getComponents().get<Render>()) {
+	for (auto & cmp : context->getComponents().getComponents<Render>()) {
 		if (cmp && cmp.needUpdate) {    // sin el flag needupdate el bucle dura mas del triple de tiempo de media
 			cmp.node->setPosition(*cmp.pos);
 			cmp.node->setRotation(*cmp.rot);

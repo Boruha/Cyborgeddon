@@ -27,7 +27,11 @@ struct IrrlichtObjectNode : IObjectNode {
 	[[nodiscard]] const vec3 & getPosition() const override;
 	[[nodiscard]] const vec3 & getRotation() const override;
 	[[nodiscard]] const vec3 & getScale   () const override;
-	[[nodiscard]] const vec3 & getTarget  () const override {  }
+	[[nodiscard]] const vec3 & getTarget  () const override {
+		assert(false);
+		// jamas de los jamases deberia llegar aqui
+		return *(new vec3());
+	}
 
 
 	// setters

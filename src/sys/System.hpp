@@ -3,7 +3,7 @@
 #include <util/GameContext.hpp>
 #include <memory>
 #include <util/Message.hpp>
-#include <cmp/ComponentPool.hpp>
+#include <cmp/Storage.hpp>
 
 struct System {
 	virtual ~System() = default;

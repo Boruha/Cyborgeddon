@@ -4,38 +4,47 @@
 #include <string>
 
 struct Duration {
-	long double ratio {       1 };
-	std::string unit  {" ns\n"};
+	constexpr Duration(const double rat, const std::string_view u)
+		: ratio(rat), unit(u) { }
+
+	const double ratio          {       1 };
+	const std::string_view unit {" ns\n"};
 };
 
 namespace duration {
-	inline Duration nanoseconds 	{1.000000000, " ns\n"};
-	inline Duration microseconds 	{0.001000000, " µs\n"};
-	inline Duration milliseconds 	{0.000001000, " ms\n"};
-	inline Duration seconds			{0.000000001, "  s\n"};
+	constexpr Duration nanoseconds 	    {1.000000000, " ns\n"};
+	constexpr Duration microseconds 	{0.001000000, " µs\n"};
+	constexpr Duration milliseconds 	{0.000001000, " ms\n"};
+	constexpr Duration seconds			{0.000000001, "  s\n"};
 }
 
 struct Timer {
 
-	Timer();
+	explicit Timer(Duration = duration::milliseconds);
 
 	void start ();
 	void reset ();
 
-	double getElapsed(const Duration& = duration::milliseconds);
+	double getElapsedAndReset();
+	double getElapsedNoReset();
 
-	void getInfo (const Duration& = duration::milliseconds);
+	void getInfo();
 
 private:
 
 	void processInfo();
 
+	double getElapsed(bool);
+
 	std::chrono::time_point<std::chrono::high_resolution_clock> before;
 
-		 double 	elapsed	{ 	0 };
-		 double 	maxTime { std::numeric_limits<double>::min() };
-		 double 	minTime { std::numeric_limits<double>::max() };
-		 double 	average { 0.0 };
-	long double 	accum 	{   0 };
-	unsigned long 	nTimes 	{   0 };
+    double 	elapsed	{ 	0 };
+    double 	maxTime { std::numeric_limits<double>::min() };
+    double 	minTime { std::numeric_limits<double>::max() };
+    double 	average { 0.0 };
+    double 	accum 	{   0 };
+
+    unsigned long 	nTimes 	{   0 };
+
+    const Duration  dur { duration::milliseconds };
 };

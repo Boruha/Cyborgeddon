@@ -2,7 +2,7 @@
 #include <Engine/util/MathIntersection.hpp>
 
 void RigidBodySystem::update(const Context &context, float deltaTime) {
-	for (auto& sphere : context->getComponents().get<TriggerMovSphere>()) {
+	for (auto& sphere : context->getComponents().getComponents<TriggerMovSphere>()) {
 		if (sphere) {
 			vec3& velocity = *sphere.velocity;
 
@@ -13,7 +13,7 @@ void RigidBodySystem::update(const Context &context, float deltaTime) {
 				// sumamos la velocidad a la posicion para comprobar la posicion futura SOLO EN ESE EJE
 				sphere.position[i] += velocity[i];
 				// comprobamos con cada collider
-				for (const auto& rigid : context->getComponents().get<RigidStaticAABB>()) {
+				for (const auto& rigid : context->getComponents().getComponents<RigidStaticAABB>()) {
 					// comprobamos la colision de la esfera con la bounding
 					if (rigid && intersectionSphereAABB(sphere.position, sphere.radius, rigid.min, rigid.max)) {
 						// si colisiona, dejamos la posicion como estaba

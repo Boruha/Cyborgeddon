@@ -7,7 +7,7 @@ void MovementSystem::update(const Context &context, const float deltaTime) {
 
 	camPhysics->velocity = plaPhysics->velocity;
 
-	for (auto& cmp : context->getComponents().get<Physics>()) {
+	for (auto& cmp : context->getComponents().getComponents<Physics>()) {
 		if (cmp) {
 			if (cmp.getEntityType() == BULLET)
 				cmp.position += cmp.velocity * deltaTime;

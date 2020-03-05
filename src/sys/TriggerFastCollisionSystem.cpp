@@ -17,7 +17,7 @@ float getSquareDistanceXZ(const vec3& origin, const vec3& end) {
 }
 
 void TriggerFastCollisionSystem::update(const Context &context, const float deltaTime) {
-	for (auto & fast : context->getComponents().get<TriggerFastMov>()) {
+	for (auto & fast : context->getComponents().getComponents<TriggerFastMov>()) {
 		if (fast) {
 			// todas las operaciones que utilizaremos sobre la distancia seran al cuadrado para
 			// evitar usar raices cuadradas
@@ -34,12 +34,12 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 			// sqDist -> cuadrado de la distancia a la que se encuentra la entidad golpeada
 			// respecto a la posicion inicial de la bala
 
-			float inf = std::numeric_limits<float>::infinity();
+			const float inf = std::numeric_limits<float>::infinity();
 
 			auto [id, type, sqDist] = std::tuple<EntityID, EntityType, float>(0, UNDEFINED, inf );
 
 			// primero vamos a recorrer los componentes rigidos y estaticos
-			for (const auto & rigid : context->getComponents().get<RigidStaticAABB>()) {
+			for (const auto & rigid : context->getComponents().getComponents<RigidStaticAABB>()) {
 				// si estan operativos e interseccionan en el plano XZ (ignorando la y)
 				// entonces vemos si hay que almacenar sus datos
 
@@ -62,7 +62,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 
 			// ahora vamos a comprobar los trigger estaticos aabb, que son presumiblemente
 			// puertas y llaves, pero esto puede cambiar
-			for (const auto &trigger : context->getComponents().get<TriggerStaticAABB>()) {
+			for (const auto &trigger : context->getComponents().getComponents<TriggerStaticAABB>()) {
 				// passable es un flag que determina si la bala puede atravesar o no la entidad que lo contiene
 
 				if (trigger && !trigger.passable && lineAABBIntersectionXZ(line, trigger.min, trigger.max)) {
@@ -98,7 +98,7 @@ void TriggerFastCollisionSystem::update(const Context &context, const float delt
 
 			// utilizamos el mismo procedimiento
 
-			for (const auto &trigger : context->getComponents().get<TriggerMovSphere>()) {
+			for (const auto &trigger : context->getComponents().getComponents<TriggerMovSphere>()) {
 				// como las balas salen del player, y el player tiene este tipo de colisionador
 				// tenemos que asegurarnos de que lo ignoramos a la hora de comprobar la colision
 

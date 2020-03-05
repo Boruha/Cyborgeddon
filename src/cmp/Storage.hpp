@@ -1,7 +1,23 @@
 #pragma once
 
-#include <cmp/ComponentPool.hpp>
+#include <cmp/Components.hpp>
 #include <src/Engine/EngineInterface/IEngine.hpp>
+#include <unordered_map>
+#include <iostream>
+
+using std::vector;
+
+struct IComponentVector {
+	virtual ~IComponentVector() = default;
+};
+
+template <typename T>
+struct ComponentVector : IComponentVector {
+	~ComponentVector<T>() override = default;
+	vector<T> components;
+};
+
+using ComponentMap = std::unordered_map < std::size_t, std::unique_ptr < IComponentVector > >;
 
 struct Storage {
 	explicit Storage(const IEngine * const _engine) : engine(*_engine) {  }
@@ -13,48 +29,48 @@ struct Storage {
 	Storage& operator=(const Storage& ) = delete;
 	Storage& operator=(		 Storage&&) = delete;
 
-	[[nodiscard]] const ComponentPool& getComponents() const {
-		return pool;
-	}
+	void initData(unsigned maxComponents);
+	void cleanData();
 
-	ComponentPool& getComponents() {
-		return const_cast<ComponentPool &>(std::as_const(*this).getComponents());
+	template <typename T>
+	void initVector(const unsigned size) {
+		auto   u_ptr = std::make_unique<ComponentVector<T>>();
+		auto *   ptr = u_ptr.get();
+
+		ptr->components.reserve(size);
+
+		map[Component::getCmpTypeID<T>()] = std::move(u_ptr);
 	}
 
 	template <typename T>
-	const T& createComponent(T&& cmp) const {
-		return pool.createComponent(std::forward<T>(cmp));
+	const vector<T>& getComponents() const {
+		const auto it    = map.find ( Component::getCmpTypeID<T>() );
+
+		auto * cmpVector = dynamic_cast<ComponentVector<T>*>(it->second.get());
+
+		return cmpVector->components;
 	}
 
-    template <typename T>
-    T& createComponent(T&& cmp) {
-        return const_cast<T&>(std::as_const(*this).createComponent(std::forward<T>(cmp)));
-    }
-
-	INode* createIObjectNode() {
-	//	std::cout << "\n\nINode\n";
-	//	printVecInfo(nodes);
-
-		for (auto& item : nodes)
-			if (!(*item))
-				return (item = std::move(engine.scene->addObjectNode())).get();
-
-		return nodes.emplace_back(engine.scene->addObjectNode()).get();
+	template <typename T>
+	vector<T>& getComponents() {
+		return const_cast<vector<T> &>(std::as_const(*this).getComponents<T>());
 	}
 
-	INode* createICameraNode() {
-	//	std::cout << "\n\nINode\n";
-	//	printVecInfo(nodes);
+	template <typename T>
+	T& createComponent(T&& cmp) {
+		const auto it = map.find ( Component::getCmpTypeID<T>() );
 
-		for (auto& item : nodes)
-			if (!(*item))
-				return (item = std::move(engine.scene->addCameraNode())).get();
+		auto * cmpVector  = dynamic_cast<ComponentVector<T>*>(it->second.get());
 
-		return nodes.emplace_back(engine.scene->addCameraNode()).get();
+		std::cout << "\n\n" << cmp.getName() << "\n";
+		printVecInfo(cmpVector->components);
+
+		for (auto& item : cmpVector->components)
+			if (!item)
+				return item = std::forward<T>(cmp);
+
+		return cmpVector->components.emplace_back(cmp);
 	}
-
-	void initData(unsigned maxComponents);
-	void cleanData();
 
 private:
 
@@ -66,7 +82,5 @@ private:
 
 	const IEngine& engine;
 
-	ComponentPool pool;
-
-	vector<Node_ptr> nodes;
+	ComponentMap map;
 };

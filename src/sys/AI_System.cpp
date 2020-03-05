@@ -14,7 +14,7 @@ void AI_System::init() {
 void AI_System::update(const Context &context, const float deltaTime) {
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
 
-	for (auto & ai : context->getComponents().get<AI>()) {
+	for (auto & ai : context->getComponents().getComponents<AI>()) {
 		if (ai) {
 			auto & enemy = context->getEntityByID(ai.getEntityID());
 

@@ -18,8 +18,6 @@ struct GameManager {
 	void loop();
 	void terminate();
 
-	const std::chrono::duration<float> fixedDelta { FIXED_DELTA_TIME };
-
 	// esto seguramente pertenezca al motor y haya que hacer algo tipo "registrar sistema" y que sea el motor el que los gestione
 	std::vector<std::unique_ptr<System>> systems;
 
