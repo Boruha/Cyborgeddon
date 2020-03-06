@@ -5,13 +5,8 @@
 #include <man/EngineManager.hpp>
 #include <sys/RenderSystem.hpp>
 #include <Engine/EngineInterface/IEngine.hpp>
-#include <chrono>
-
-struct System;
 
 struct GameManager {
-	GameManager() = default;
-	~GameManager() = default;
 
 	void init();
 	void update(float deltaTime);
@@ -21,8 +16,8 @@ struct GameManager {
 	// esto seguramente pertenezca al motor y haya que hacer algo tipo "registrar sistema" y que sea el motor el que los gestione
 	std::vector<std::unique_ptr<System>> systems;
 
-	EngineManager engineManager { IRRLICHT };
-	std::unique_ptr<IEngine> engine = engineManager.getEngine();
+	EngineManager engineManager { SUNLIGHT };
+	std::unique_ptr<IEngine> engine { engineManager.getEngine() };
     TextureManager textureManager { engine.get() };
 
     // quiza el sistema de render deba mantenerse al margen porque es algo "especial" en el sentido de cuando tiene que ser llamado
@@ -30,4 +25,4 @@ struct GameManager {
 	Context entityManager = std::make_unique<EntityManager>(engine.get());
 };
 
-// TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)
+// TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion ???)

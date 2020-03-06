@@ -65,11 +65,11 @@ inline float getRotationYfromXZ(const vec3& v) {
 	return float(std::atan2(v.x, v.z) * RAD2DEG);
 }
 
-inline vec3 getXZfromRotationY(double deg) {
-	deg *= DEG2RAD;
+inline vec3 getXZfromRotationY(const double deg) {
+	const double rad = deg * DEG2RAD;
 
-	const auto x = float(sin(deg));
-	const auto z = float(cos(deg));
+	const auto x = float(sin(rad));
+	const auto z = float(cos(rad));
 
 	return vec3(x,0,z);
 }

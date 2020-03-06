@@ -61,4 +61,6 @@ constexpr sound_parameter_tuple getSoundTuple(const SoundParameter p){
 
 		default : assert(false);
 	}
+
+	return { "", "", -1 };
 }

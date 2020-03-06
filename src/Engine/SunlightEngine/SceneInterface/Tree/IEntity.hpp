@@ -2,11 +2,10 @@
 
 #include <glm/glm.hpp>
 
-using glm::vec3;
-using glm::mat4x4;
+struct ResourceManager;
 
 struct IEntity {
     virtual ~IEntity() = default;
 
-    virtual void render(const mat4x4&) const = 0;
+    virtual void render(const glm::mat4&) = 0;
 };

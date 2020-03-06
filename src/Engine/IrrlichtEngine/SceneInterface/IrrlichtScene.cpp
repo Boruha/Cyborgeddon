@@ -5,7 +5,7 @@
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IVideoDriver.h>
 
-std::unique_ptr<INode> IrrlichtScene::addObjectNode() {
+std::unique_ptr<INode> IrrlichtScene::addObjectNode(const std::string_view) {
     return std::make_unique<IrrlichtObjectNode>(sceneManager);
 }
 

@@ -6,16 +6,19 @@ namespace irr::scene {
     struct ISceneManager;
 }
 
-struct IrrlichtScene : IScene {
+struct IrrlichtScene final : IScene {
 
     explicit IrrlichtScene(irr::scene::ISceneManager * sceneManager) : sceneManager(sceneManager) { }
     ~IrrlichtScene() override = default;
 
-    std::unique_ptr<INode> addObjectNode() override;
+    std::unique_ptr<INode> addObjectNode(std::string_view) override;
+    INode * addMeshNode(std::string_view) override { return nullptr; }
 
     std::unique_ptr<INode> addCameraNode() override;
+	INode * addFreeCameraNode() override { return nullptr; }
 
-    [[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
+
+	[[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
 
 	void loadTexture(std::string_view path) const override;
 	void unloadTexture(std::string_view path) const override;

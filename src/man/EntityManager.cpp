@@ -106,11 +106,11 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale);
+	render.node->setScale(physics.scale / 2.f);
 
 	render.node->setTexture(DEMON_TEXTURE);
 
@@ -126,7 +126,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3()));
 	auto& cameraRender	= componentStorage.createComponent(Render(camera->getType(), camera->getID(), &cameraPhysics.position, &cameraPhysics.rotation, &cameraPhysics.scale, true));
 
-	cameraRender.node = engine.scene->addCameraNode();
+	cameraRender.node = componentStorage.createCamera();
 
 	cameraRender.node->setPosition(cameraPhysics.position);
 	cameraRender.node->setRotation(cameraPhysics.rotation);
@@ -144,11 +144,11 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
+	render.node->setScale(transformable.scale / 2.f);
 
 	render.node->setTexture(WALL_TEXTURE);
 
@@ -167,11 +167,11 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale);
+	render.node->setScale(physics.scale / 2.f);
 
 	render.node->setTexture(ENEMY_TEXTURE);
 
@@ -191,11 +191,11 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
+	render.node->setScale(transformable.scale / 2.f);
 
 	render.node->setTexture(tex.data());
 
@@ -215,11 +215,11 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale);
+	render.node->setScale(physics.scale / 2.f);
 
 	render.node->setTexture(playerData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
 
@@ -237,11 +237,11 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
+	render.node->setScale(transformable.scale / 2.f);
 
 	render.node->setTexture(DOOR_TEXTURE);
 
@@ -256,11 +256,11 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = engine.scene->addObjectNode();
+	keyRender.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
-	keyRender.node->setScale(keyTransformable.scale);
+	keyRender.node->setScale(keyTransformable.scale / 2.f);
 
 	keyRender.node->setTexture(KEY_TEXTURE);
 

@@ -27,10 +27,20 @@ void Storage::initData(const unsigned maxComponents) {
 	initVector<TriggerFastMov>(maxComponents);
 	initVector<Graph>(maxComponents);
 	initVector<Render>(maxComponents);
+
+	nodes.reserve(maxComponents);
+	inodes.reserve(maxComponents);
 }
 
 void Storage::cleanData() {
 	Component::resetIDManagementValue();	// ID de los componentes a 0
+
+	for (const auto & node : nodes)
+		if (node && *node)
+			node->remove();
+
+	nodes.clear();
+	inodes.clear();
 
 	map.clear();
 }

@@ -6,6 +6,7 @@
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <Engine/util/Mouse.hpp>
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 void InputSystem::init() {
     for (auto * next = keyMap; next->key != static_cast<KEY_CODE>(0); ++next) {
@@ -28,12 +29,12 @@ void InputSystem::init() {
             case KEY_M:
                 next->p_func = &InputSystem::m_pressed;
                 break;
-            case KEY_LSHIFTIRR :
+/*            case KEY_LSHIFTIRR :
                 next->p_func = &InputSystem::shift_pressed;
-                break;
-/*			case KEY_LSHIFTGL:
+                break;*/
+			case KEY_LSHIFTGL:
 				next->p_func = &InputSystem::shift_pressed;
-				break;*/
+				break;
             default : ;
         }
     }
@@ -78,7 +79,7 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 
 				if (data.mode == DEMON)
                     soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
-                else
+				else
                 	soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 			}
 
@@ -109,7 +110,7 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 
         soundMessages.emplace_back(DASH_PLAYER);
     }
- //std::cout << "Shift\n";
+ std::cout << "Shift\n";
 }
 // Shoot
 void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
@@ -150,8 +151,11 @@ void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
     		engine.scene->cursorToWorld(mouse.x, mouse.y, 1)
 	);
 
-    const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
+	const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
+
+    std::cout << intersectPoint.x << " " << intersectPoint.y << " " << intersectPoint.z << std::endl;
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
     phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);
+//    std::cout << phy.rotation.y << std::endl;
 }

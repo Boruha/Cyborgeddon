@@ -71,7 +71,53 @@ struct Storage {
 
 		return cmpVector->components.emplace_back(cmp);
 	}
+/*
+	INode* createMesh(std::string_view mesh) {
+		std::cout << "\n\n" << "Node" << "\n";
+		printVecInfo(nodes);
 
+		INode * n { nullptr };
+
+		for (auto& node : nodes)
+			if (!(*node))
+				n = (node = engine.scene->addObjectNode(mesh)).get();
+
+		if (!n)
+			n = nodes.emplace_back(engine.scene->addObjectNode(mesh)).get();
+
+		return n;
+	}
+
+	INode* createCamera() {
+		std::cout << "\n\n" << "Node" << "\n";
+		printVecInfo(nodes);
+
+		INode * n { nullptr };
+
+		for (auto& node : nodes)
+			if (!(*node))
+				n = (node = engine.scene->addCameraNode()).get();
+
+		if (!n)
+			n = nodes.emplace_back(engine.scene->addCameraNode()).get();
+
+		return n;
+	}
+*/
+
+	INode* createMesh(std::string_view mesh) {
+		std::cout << "\n\n" << "Node" << "\n";
+		printVecInfo(inodes);
+
+		return inodes.emplace_back(engine.scene->addMeshNode(mesh));
+	}
+
+	INode* createCamera() {
+		std::cout << "\n\n" << "Node" << "\n";
+		printVecInfo(inodes);
+
+		return inodes.emplace_back(engine.scene->addFreeCameraNode());
+	}
 private:
 
 	template <typename T>
@@ -81,6 +127,9 @@ private:
 	}
 
 	const IEngine& engine;
+
+	vector<std::unique_ptr<INode>> nodes;
+	vector<INode*> inodes;
 
 	ComponentMap map;
 };

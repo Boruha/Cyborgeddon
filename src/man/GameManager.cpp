@@ -11,7 +11,7 @@
 void GameManager::init()
 {
 	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
-	textureManager.loadTextures();
+//	textureManager.loadTextures();
 
 	systems.reserve(13); // TODO cambiar este valor al anadir un nuevo sistema
 	                                                                            // ORDEN DE EJECUCION
@@ -67,9 +67,9 @@ void GameManager::loop()
 
         while(delta > FIXED_DELTA_TIME)
         {
-	        timerUpdateLoop.start();
+//	        timerUpdateLoop.start();
             update(FIXED_DELTA_TIME);
-	        timerUpdateLoop.getInfo();
+//	        timerUpdateLoop.getInfo();
 
             delta -= FIXED_DELTA_TIME;
         }
@@ -81,6 +81,6 @@ void GameManager::loop()
 }
 
 void GameManager::terminate() {
-	textureManager.unloadTextures();
+//	textureManager.unloadTextures();
     engine->shutdown();
 }
