@@ -5,53 +5,6 @@
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
 
-/* BEHAVIOUR STRUCTURE DEF */
-struct BehaviourNode
-{
-    virtual bool run(AI&, Physics&, CharacterData&, Velocity&, const vec3&, float, const std::unique_ptr<GameContext>&) = 0;
-};
-
-struct CompoundNode : BehaviourNode
-{
-    CompoundNode()  { childs.reserve(3); }
-    ~CompoundNode() { childs.clear(); }
-
-    /* FUNCTIONS */
-    //void addChild(std::unique_ptr<BehaviourNode>& p_BeNode) { childs.push_back(p_BeNode); }
-    const std::vector<std::unique_ptr<BehaviourNode>>& getChilds() const { return childs; };
-
-    /* DATA */
-    std::vector<std::unique_ptr<BehaviourNode>> childs;
-};
-
-struct Sequence : CompoundNode
-{
-    /* FUNCTIONS */
-    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
-    {
-        for(auto& ref_child : getChilds())
-        {
-            if(!ref_child.get()->run(ai, phy, data, vel, player_pos, deltaTime, context))
-                return false;
-        }
-        return true;
-    }
-};
-
-struct Selector : CompoundNode
-{
-    /* FUNCTIONS */
-    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
-    {
-        for(auto& ref_child : getChilds())
-        {
-            if(ref_child.get()->run(ai, phy, data, vel, player_pos, deltaTime, context))
-                return true;
-        }
-        return false;
-    }
-};
-
 /* GENERAL BEHAVIOURS DEF */
 struct SeekBehaviour : BehaviourNode
 {
@@ -141,12 +94,12 @@ struct CreateRouteBehaviour : BehaviourNode
     {
         const std::vector<MapNode>& ref_graph = context->getGraph();
 
-        int final_path = AI_System::nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
-        int ini_path   = AI_System::nearestNode(phy.position, ref_graph); //index -> mapnode + cercano a enemy
+        int final_path = nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
+        int ini_path   = nearestNode(phy.position, ref_graph); //index -> mapnode + cercano a enemy
         ai.path_node   = ini_path;
         ai.path_index  = 0;
         //guardamos el path generado, usamos el ID para identificarlo despues.
-        context->setPath(ai.getEntityID(), AI_System::calculePath(ini_path, final_path, ref_graph));
+        context->setPath(ai.getEntityID(), calculePath(ini_path, final_path, ref_graph));
         ai.target_position = ref_graph[ai.path_node].coord;
         
         return true;
@@ -219,7 +172,7 @@ struct BasicAttackBehaviour : BehaviourNode
         {
             data.attacking = true;
             data.currentAttackingCooldown = data.attackingCooldown;
-            //soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
+            soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
             return true;
         }
         return false;
