@@ -35,7 +35,8 @@ bool EntityManager::checkVictory() {
 		exit(-1);
 	}
 
-	return enemiesLeft <= 0;
+//	return enemiesLeft <= 0;
+	return false;
 }
 
 /*		DESTROY ENTITIES	*/
@@ -188,10 +189,10 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
 	auto& floor = createEntity(FLOOR);
 
-	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim));
+	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(90, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -381,12 +382,12 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, -90));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 240, -90));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,5), vec3(60,0,35)); //Controls
-	createFloor(TIPS_TEXTURE, vec3(-2,0,-27), vec3(45,0,15)); //Tips
-
+//	createFloor(TIPS_TEXTURE, vec3(-2,0,-27), vec3(45,0,15)); //Tips
+/*
 	// Doors and keys
 	createPairKeyDoor(vec3(0,0,60), vec3(3), vec3(-37,0,90), vec3(2,20,10));
 	createPairKeyDoor(vec3(-70,0,90), vec3(3), vec3(37,0,0), vec3(2,20,10));
@@ -489,7 +490,7 @@ void EntityManager::createLevel() {
 	std::cout << componentStorage.getComponents<Render>()[0].getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
 	std::cout << componentStorage.getComponents<Velocity>()[0].getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
 	std::cout << componentStorage.getComponents<CharacterData>()[0].getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
-}
+*/}
 
 void EntityManager::createGraph()
 {

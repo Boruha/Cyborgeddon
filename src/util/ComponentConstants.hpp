@@ -1,7 +1,7 @@
 #pragma once
 
 // PLAYER
-constexpr float     PLAYER_SPEED					= 30.f;
+constexpr float     PLAYER_SPEED					= 300.f;
 constexpr float     PLAYER_DASH_SPEED               = PLAYER_SPEED * 20.f;
 constexpr float     PLAYER_ACCELERATION				= PLAYER_DASH_SPEED * 10.f;
 constexpr float     PLAYER_HEALTH					= 100.f;

@@ -97,10 +97,10 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
-void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
-void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
-void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "S\n";*/ }
-void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
+void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; std::cout << "W\n"; }
+void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; std::cout << "A\n"; }
+void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; std::cout << "S\n"; }
+void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; std::cout << "D\n"; }
 // Dash
 void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
     if(!greater_e(data.currentDashingCooldown, 0.f) && length(velocity.direction) != 0) {
@@ -114,7 +114,7 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 }
 // Shoot
 void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
-	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f)) {
+   	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f)) {
 		data.attacking = true;
 		data.currentAttackingCooldown = data.attackingCooldown;
 
@@ -124,7 +124,7 @@ void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
             soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 
     }
-//	std::cout << "Space\n";
+	std::cout << "Space\n";
 }
 
 // Switch Mode
@@ -153,7 +153,7 @@ void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
 
 	const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 
-    std::cout << intersectPoint.x << " " << intersectPoint.y << " " << intersectPoint.z << std::endl;
+//    std::cout << intersectPoint.x << " " << intersectPoint.y << " " << intersectPoint.z << std::endl;
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
     phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);

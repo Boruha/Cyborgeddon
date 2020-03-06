@@ -62,8 +62,8 @@ struct Storage {
 
 		auto * cmpVector  = dynamic_cast<ComponentVector<T>*>(it->second.get());
 
-		std::cout << "\n\n" << cmp.getName() << "\n";
-		printVecInfo(cmpVector->components);
+//		std::cout << "\n\n" << cmp.getName() << "\n";
+//		printVecInfo(cmpVector->components);
 
 		for (auto& item : cmpVector->components)
 			if (!item)
@@ -106,15 +106,15 @@ struct Storage {
 */
 
 	INode* createMesh(std::string_view mesh) {
-		std::cout << "\n\n" << "Node" << "\n";
-		printVecInfo(inodes);
+//		std::cout << "\n\n" << "Node" << "\n";
+//		printVecInfo(inodes);
 
 		return inodes.emplace_back(engine.scene->addMeshNode(mesh));
 	}
 
 	INode* createCamera() {
-		std::cout << "\n\n" << "Node" << "\n";
-		printVecInfo(inodes);
+//		std::cout << "\n\n" << "Node" << "\n";
+//		printVecInfo(inodes);
 
 		return inodes.emplace_back(engine.scene->addFreeCameraNode());
 	}
