@@ -29,7 +29,7 @@ struct InputSystem : System
 		// Shoot
 		void space_pressed(Velocity& velocity, CharacterData& data) const;
 		// Switch Mode
-		void m_pressed(Velocity& velocity, CharacterData& data) const;
+		void q_pressed(Velocity& velocity, CharacterData& data) const;
 
         void aim_mouse(Physics& phy, const glm::vec2 &mouse) const;
 
@@ -44,7 +44,7 @@ struct InputSystem : System
             {KEY_S,                    nullptr },
             {KEY_D,                    nullptr },
             {KEY_SPACE,                nullptr },
-            {KEY_M,                    nullptr },
+            {KEY_Q,                    nullptr },
             {KEY_LSHIFTIRR,            nullptr },
 			{KEY_LSHIFTGL,             nullptr },
             {static_cast<KEY_CODE>(0), nullptr }

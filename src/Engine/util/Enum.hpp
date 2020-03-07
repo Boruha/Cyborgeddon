@@ -9,7 +9,7 @@ enum KEY_CODE : unsigned
     KEY_D 			= irr::KEY_KEY_D,
     KEY_LSHIFTIRR   = irr::KEY_LSHIFT,
     KEY_LSHIFTGL	= 340,
-    KEY_M			= irr::KEY_KEY_M,
+    KEY_Q			= irr::KEY_KEY_Q,
     KEY_S 			= irr::KEY_KEY_S,
     KEY_W 			= irr::KEY_KEY_W,
     KEY_CODE_COUNT 	= irr::KEY_KEY_CODES_COUNT
