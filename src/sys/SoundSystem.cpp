@@ -7,26 +7,17 @@
 
 #define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
 
-void ERRCHECK_fn(const FMOD_RESULT res, const char * const file, const int line) {
+void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int line) {
 	if (res != FMOD_OK)
 	{
-		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << std::endl;
-		exit(1);
+		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << "\n";
+//		exit(-1);
 	}
 }
 
 SoundSystem::~SoundSystem() {
-	// TODO: generalizar sonidos
-
-	for (const auto& item : soundEvents)
-		ERRCHECK( item.second.event->releaseAllInstances() );
-
-	ERRCHECK( backingTrack.event->releaseAllInstances() );
-
-	if(strings) strings->unload();
-	if(master) master->unload();
-	if(system) system->release();
-	if(core) core->release();
+	if (system)
+		system->release();
 }
 
 void SoundSystem::init() {
@@ -35,7 +26,7 @@ void SoundSystem::init() {
 	ERRCHECK ( system->getCoreSystem(&core) );
 	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
 
-	ERRCHECK ( system->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
+	ERRCHECK ( system->initialize(32, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
 
 	ERRCHECK ( system->loadBankFile(MASTER_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
 	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );

@@ -6,6 +6,10 @@ struct BulletData : Component {
 	explicit BulletData(EntityType e_type, EntityID e_ID, const float speed, const ModeType damageType, const float damage)
 		: Component(e_type, e_ID), damageType(damageType), speed(speed), damage(damage) {  }
 
+	[[nodiscard]] std::string_view getName() const override {
+		return "BulletData";
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const BulletData& data);
 
 	ModeType  	damageType;

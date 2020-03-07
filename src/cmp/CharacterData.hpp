@@ -5,6 +5,10 @@
 struct CharacterData : Component {
 	explicit CharacterData(EntityType, EntityID, ModeType, float hp, float sw_cd, float dmg, float dmg_cd, float dsh, float dsh_cd);
 
+	[[nodiscard]] std::string_view getName() const override {
+		return "CharacterData";
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const CharacterData& data);
 
 	ModeType	mode						{ NEUTRAL };

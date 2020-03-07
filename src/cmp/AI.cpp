@@ -13,7 +13,7 @@ AI::AI(const EntityType e_type, const EntityID e_ID, const std::vector<vec3>& pa
 }
 
 std::ostream& operator<<(std::ostream& os, const AI &ai) {
-	ai.print(os, "AI")
+	ai.print(os, ai.getName())
 	<< "\n\tAI_State: " 		<< ai.state
 	<< "\n\tPatrol Index: " 	<< ai.patrol_index
 	<< "\n\tMax Index: " 		<< ai.max_index

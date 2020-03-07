@@ -1,11 +1,11 @@
 #pragma once
+
 // SOUND BANKS
 constexpr std::string_view MASTER_BANK				= "./resources/sounds/banks/Master.bank";
 constexpr std::string_view MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Master.strings.bank";
 
-
-
 // SOUND EVENTS
+
 //PLAYER
 constexpr std::string_view PLAYER_SHOOT_EVENT       = "event:/player/disparo_player";
 constexpr std::string_view CHANGE_MODE_EVENT		= "event:/player/change_mode";

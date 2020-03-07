@@ -1,5 +1,5 @@
 #include <cmp/Component.hpp>
-#include <iostream>
+#include <ostream>
 
 std::ostream& Component::print(std::ostream& os, const std::string_view name) const {
 	return 	os	<< "\n\n"		<< name

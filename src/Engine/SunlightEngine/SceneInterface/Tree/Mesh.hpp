@@ -10,7 +10,7 @@ struct Mesh : IEntity {
 
     }
 
-    void setMesh(const char * const path) {
+    void setMesh(const std::string_view path) {
 
     }
 

@@ -1,5 +1,5 @@
 #include <cmp/CharacterData.hpp>
-#include <iostream>
+#include <ostream>
 
 CharacterData::CharacterData(   const EntityType type,          const EntityID e_ID,	        const ModeType mode,
                                 const float health,             const float switchCD,           const float attackDamage,
@@ -13,7 +13,7 @@ CharacterData::CharacterData(   const EntityType type,          const EntityID e
                             }
 
 std::ostream& operator<<(std::ostream& os, const CharacterData& data) {
-	data.print(os, "CharacterData")
+	data.print(os, data.getName())
 	<< "\n\tHealth: " 									<< data.health
 	<< "\n\tMode: ";
 

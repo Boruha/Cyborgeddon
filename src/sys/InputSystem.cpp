@@ -43,39 +43,43 @@ void InputSystem::init() {
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
 void InputSystem::update(const Context& context, const float deltaTime) {
 
-	auto& player    = context->getPlayer();
+	auto & player    = context->getPlayer();
 
-	auto* velocity  = player.getComponent<Velocity>();
-	auto* physics = player.getComponent<Physics>();
+	// player siempre tiene velocity y physics
+	auto & velocity  = *player.getComponent<Velocity>();
+	auto & physics   = *player.getComponent<Physics>();
 
-	if (velocity->currentSpeed == velocity->defaultSpeed) {
+	if (velocity.currentSpeed == velocity.defaultSpeed) {
 
-		velocity->direction = vec3();
+		velocity.direction = vec3();
 
-		auto* data = player.getComponent<CharacterData>();
+		// player siempre tiene character data
+		auto & data = *player.getComponent<CharacterData>();
 
 		for (const auto * next = keyMap; next->p_func; ++next)
-			if (engine->isKeyPressed(next->key))
-				(this->*(next->p_func))(*velocity, *data);
+			if (engine.isKeyPressed(next->key))
+				(this->*(next->p_func))(velocity, data);
 
-		if (data->switchingMode)
-			data->mode == DEMON ? player.inode->setTexture(DEMON_TEXTURE) : player.inode->setTexture(ANGEL_TEXTURE);
+		// player siempre tiene render
+		auto & render = *player.getComponent<Render>();
 
-		const Mouse& mouse = engine->getMouse();
-//    std::cout << mouse.position.x << ", " << mouse.position.y << std::endl;
+		if (data.switchingMode)
+			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
 
-		aim_mouse(*physics, mouse.position);
+		const Mouse& mouse = engine.getMouse();
+//    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
+
+		aim_mouse(physics, mouse.position);
 
 		if (mouse.leftPressed) {
-			if(!data->dashing && !greater_e(data->currentAttackingCooldown, 0.f)) {
-				data->attacking = true;
-				data->currentAttackingCooldown = data->attackingCooldown;
+			if(!greater_e(data.currentAttackingCooldown, 0.f)) {
+				data.attacking = true;
+				data.currentAttackingCooldown = data.attackingCooldown;
 
-				if (data->mode == 0)
+				if (data.mode == DEMON)
                     soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
                 else
-                     soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
-
+                	soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 			}
 
 //	std::cout << "Click izquierdo\n";
@@ -85,11 +89,11 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 //		std::cout << "Click derecho\n";
 		}
 
-		if (velocity->currentSpeed == velocity->defaultSpeed)
-			data->dashing = false;
+		if (velocity.currentSpeed == velocity.defaultSpeed)
+			data.dashing = false;
 	}
 
-	physics->velocity = normalize(velocity->direction) * velocity->currentSpeed * deltaTime;
+	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
 void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
@@ -141,7 +145,10 @@ void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
 void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
     const Plane shootingPlane(vec3(0,1,0), phy.position.y);
-    const Line  ray(engine->scene->cursorToWorld(mouse.x, mouse.y, 0), engine->scene->cursorToWorld(mouse.x, mouse.y, 1));
+    const Line  ray (
+    		engine.scene->cursorToWorld(mouse.x, mouse.y, 0),
+    		engine.scene->cursorToWorld(mouse.x, mouse.y, 1)
+	);
 
     const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 

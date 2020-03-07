@@ -3,6 +3,7 @@
 #include <Engine/EngineInterface/SceneInterface/IScene.hpp>
 #include <Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
+#include <Engine/util/Timer.hpp>
 
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
@@ -55,23 +56,25 @@ void GameManager::update(const float deltaTime)
 // TODO: bucle del juego
 void GameManager::loop()
 {
-	std::chrono::high_resolution_clock::time_point last = std::chrono::high_resolution_clock::now();
-	std::chrono::high_resolution_clock::time_point now;
+	Timer gameClock { duration::seconds }; // reloj que controla el juego
 
-	std::chrono::duration<float> delta {0};
+	Timer timerUpdateLoop { duration::milliseconds }; // reloj para comprobar coste temporal
+
+	double delta { 0 };
 
 	while (engine->run()) {
-        now = std::chrono::high_resolution_clock::now();
-        delta += now - last;
-        last = now;
+		delta += gameClock.getElapsedAndReset();
 
-        while(delta.count() > fixedDelta.count())
+        while(delta > FIXED_DELTA_TIME)
         {
-            update(fixedDelta.count());
-            delta -= fixedDelta;
+	        timerUpdateLoop.start();
+            update(FIXED_DELTA_TIME);
+	        timerUpdateLoop.getInfo();
+
+            delta -= FIXED_DELTA_TIME;
         }
 
-        render.update(entityManager, delta.count() / fixedDelta.count());
+        render.update(entityManager, float(delta / FIXED_DELTA_TIME));
 	}
 
 	terminate();

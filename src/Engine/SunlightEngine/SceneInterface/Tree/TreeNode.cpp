@@ -31,7 +31,7 @@ void TreeNode::render(const mat4& m) const {
 	std::cout << "Soy el nodo " << ID;
 	if (parent)
 		std::cout << ", y mi padre es " << parent->ID;
-	std::cout << std::endl;
+	std::cout << "\n";
 
     const mat4 newMatrix = m * calculateMatrix();
 

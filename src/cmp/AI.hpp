@@ -7,6 +7,10 @@
 struct AI : public Component {
 	explicit AI(EntityType e_type, EntityID e_ID, const std::vector<vec3>& patrol);
 
+	[[nodiscard]] std::string_view getName() const override {
+		return "AI";
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const AI& ai);
 
 	AI_State state { PATROL_STATE };

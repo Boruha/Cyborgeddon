@@ -6,9 +6,9 @@ void TriggerCollisionSystem::init() {
 }
 
 void TriggerCollisionSystem::update(const Context &context, const float deltaTime) {
-	for (auto & sphere : context->getComponents().get<TriggerMovSphere>()) {
+	for (auto & sphere : context->getComponents().getComponents<TriggerMovSphere>()) {
 		if (sphere) {
-			for (const auto & aabb : context->getComponents().get<TriggerStaticAABB>())
+			for (const auto & aabb : context->getComponents().getComponents<TriggerStaticAABB>())
 				if (aabb && intersectionSphereAABB(sphere.position, sphere.radius, aabb.min, aabb.max))
 					triggerMessages.emplace_back(sphere.getEntityType(), sphere.getEntityID(), aabb.getEntityType(), aabb.getEntityID());
 		}

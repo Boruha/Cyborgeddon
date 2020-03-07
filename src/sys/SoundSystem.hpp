@@ -33,7 +33,7 @@ struct Music {
 };
 
 struct SoundSystem : System {
-	~SoundSystem();
+	~SoundSystem() override;
 
 	void init() override;
 	void update(const Context& context, float deltaTime) override;
@@ -43,8 +43,8 @@ private:
 
 	void startBackgroundMusic();
 
-	void createSoundEvent(std::string_view , float = 1.f);
-	void createMusicEvent(std::string_view , Music *, float = 1.f);
+	void createSoundEvent(std::string_view, float = 1.f);
+	void createMusicEvent(std::string_view, Music *, float = 1.f);
 
     void createInstance(const Event *, Instance *&, float) const;
 
