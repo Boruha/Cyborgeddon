@@ -11,13 +11,8 @@ void MovementSystem::update(const Context &context, const float deltaTime) {
 		if (cmp) {
 			if (cmp.getEntityType() == BULLET)
 				cmp.position += cmp.velocity * deltaTime;
-			else {
+			else
 				cmp.position += cmp.velocity;
-				if (cmp.getEntityType() == PLAYER && cmp.velocity.x != 0.f)
-					std::cout << cmp.position.x << std::endl;
-			}
 		}
 	}
-
-	std::cout << plaPhysics->position.x << std::endl;
 }

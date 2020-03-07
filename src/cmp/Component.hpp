@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include <string_view>
+
 using glm::vec3; // Component no lo usa pero casi todos los componentes si
 
 struct Component {

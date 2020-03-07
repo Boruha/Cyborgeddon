@@ -4,7 +4,7 @@ void RenderSystem::update(const Context& context, const float deltaTime) {
 	auto & player   	= context->getPlayer();
 	auto & cameraNode 	= context->getCamera().getComponent<Render>()->node;
 
-	cameraNode->setTarget(vec3(player.getComponent<Physics>()->position));
+	cameraNode->setTarget(player.getComponent<Physics>()->position);
 
 	for (auto & cmp : context->getComponents().getComponents<Render>()) {
 		if (cmp && cmp.needUpdate) {    // sin el flag needupdate, el bucle dura mas del triple de tiempo de media

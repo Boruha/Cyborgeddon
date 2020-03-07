@@ -51,12 +51,12 @@ void TreeNode::render(const glm::mat4& m) {
 
 void TreeNode::setPosition(const vec3& trans) {
 	allowCalculateMatrix = true;
-    translation = vec3(trans.x, trans.y, -trans.z);
+    translation = trans;
 }
 
 void TreeNode::setRotation(const vec3& rot) {
 	allowCalculateMatrix = true;
-    rotation = vec3(rot.x, rot.y, rot.z);
+    rotation = rot;
 }
 
 void TreeNode::setScale(const vec3& sca) {

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <cstdint>
 
 enum AI_State : uint8_t
@@ -10,14 +9,6 @@ enum AI_State : uint8_t
 	ATTACK_STATE = 2,
 	END_STATE = 3
 }; // END_STATE debe estar S I E M P R E al final
-
-enum ColliderType : uint8_t
-{
-	DYNAMIC,
-	STATIC,
-	RAY,
-	END_TYPE
-}; // END_TYPE debe estar S I E M P R E al final
 
 enum ModeType : uint8_t
 {

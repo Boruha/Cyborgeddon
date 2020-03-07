@@ -3,6 +3,7 @@
 #include <cmp/Component.hpp>
 #include <util/ComponentConstants.hpp>
 #include <set>
+#include <tuple>
 
 using glm::vec2;
 

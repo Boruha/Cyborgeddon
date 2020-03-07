@@ -2,6 +2,7 @@
 
 #include <ent/Entity.hpp>
 #include <ent/Graph.hpp>
+#include <memory>
 
 struct Storage;
 
