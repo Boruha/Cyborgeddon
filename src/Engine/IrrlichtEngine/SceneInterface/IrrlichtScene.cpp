@@ -4,6 +4,8 @@
 
 #include <irrlicht/ISceneManager.h>
 #include <irrlicht/IVideoDriver.h>
+#include <glm/gtx/string_cast.hpp>
+#include <iostream>
 
 std::unique_ptr<INode> IrrlichtScene::addObjectNode() {
     return std::make_unique<IrrlichtObjectNode>(sceneManager);
@@ -16,6 +18,8 @@ std::unique_ptr<INode> IrrlichtScene::addCameraNode() {
 }
 
 vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far) {
+	std::cout << glm::to_string(glm::inverse(camera->getViewMatrix())) << "\n";
+
 	const glm::mat4x4& projectionMatrix = camera->getProjectionMatrix();
 	const glm::mat4x4& viewMatrix = camera->getViewMatrix();
 
