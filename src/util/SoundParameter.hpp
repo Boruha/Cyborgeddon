@@ -38,7 +38,7 @@ constexpr sound_parameter_tuple getSoundTuple(const SoundParameter p){
         case SWITCH_MODE_DEMON :        return {CHANGE_MODE_EVENT,  "mode", 0};
         case SWITCH_MODE_ANGEL :        return {CHANGE_MODE_EVENT,  "mode", 1};
 
-        case DAMAGE_PLAYER :            return {DAMAGE_EVENT, "mode", 0};
+        case DAMAGE_PLAYER :            return {DAMAGE_EVENT, "mode", 1};
         case DASH_PLAYER :              return {DASH_PLAYER_EVENT,   "mode", 0};
 
 
