@@ -6,7 +6,8 @@ int main()
 	GameManager gameManager;
 
 	gameManager.init();
-	gameManager.loop();
+	gameManager.run();
+	gameManager.terminate();
 
 	return 0;
 }

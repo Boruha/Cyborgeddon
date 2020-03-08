@@ -78,7 +78,7 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 
 				if (data.mode == DEMON)
                     soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
-                else
+				else
                 	soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 			}
 

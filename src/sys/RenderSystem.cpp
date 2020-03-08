@@ -1,7 +1,6 @@
 #include <sys/RenderSystem.hpp>
 
 void RenderSystem::update(const Context& context, const float deltaTime) {
-
 	auto & player   	= context->getPlayer();
 	auto & cameraNode 	= context->getCamera().getComponent<Render>()->node;
 

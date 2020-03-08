@@ -14,7 +14,7 @@ file (
         "${PROJECT_SOURCE_DIR}/src/sys/*.hpp"
         "${PROJECT_SOURCE_DIR}/src/man/*.hpp"
 
-        "${PROJECT_SOURCE_DIR}/util/*.hpp"
+        "${PROJECT_SOURCE_DIR}/src/util/*.hpp"
 
         "${PROJECT_SOURCE_DIR}/src/Engine/EngineInterface/*.hpp"
         "${PROJECT_SOURCE_DIR}/src/Engine/EngineInterface/SceneInterface/*.hpp"
@@ -34,6 +34,8 @@ file (
         "${PROJECT_SOURCE_DIR}/src/ent/*.cpp"
         "${PROJECT_SOURCE_DIR}/src/sys/*.cpp"
         "${PROJECT_SOURCE_DIR}/src/man/*.cpp"
+
+        "${PROJECT_SOURCE_DIR}/src/util/*.cpp"
 
         "${PROJECT_SOURCE_DIR}/src/Engine/IrrlichtEngine/*.cpp"
         "${PROJECT_SOURCE_DIR}/src/Engine/SunlightEngine/*.cpp"
