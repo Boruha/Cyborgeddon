@@ -21,46 +21,21 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 	graph.reserve(20);
 }
 
-bool EntityManager::update(){
-
-	if (!toDelete.empty())			// si hay entidades que "matar"
-		killEntities();				// las matamos
-
-	return checkVictory();
-}
-
-bool EntityManager::checkVictory() {
-	if (!greater_e(player->getComponent<CharacterData>()->health, 0)) {
-		std::cout << "\n\nFin de partida\n\n";
-		exit(-1);
-	}
-
-	return enemiesLeft <= 0;
-}
-
 /*		DESTROY ENTITIES	*/
 
 // aqui recibimos los IDS de las entidades que queremos destruir
 void EntityManager::addToDestroy(EntityID ID) {
-	if (std::find(toDelete.begin(), toDelete.end(), ID) == toDelete.end())
-		toDelete.emplace_back(ID);
-}
+	auto it = entities.find(ID);
 
-void EntityManager::killEntities() {
-
-	for (const auto & d : toDelete) {
-		auto & e = entities.find(d)->second;
+	if (it != entities.end()) {
+		auto & e = it->second;
 
 		if (e.getType() == ENEMY)
 			enemiesLeft--;
 
-		entities.find(d)->second.destroy();
-		entities.erase(d);
+		entities.find(ID)->second.destroy();
+		entities.erase(ID);
 	}
-
-	std::cout << entities.size() << "\n";
-
-	toDelete.clear();							// al acabar de matar las entidades, limpipamos el vector toDelete
 }
 
 void EntityManager::cleanData() {

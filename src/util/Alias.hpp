@@ -40,5 +40,11 @@ enum EntityType : uint16_t
 	NAV = 9
 };
 
+enum StateEnum : uint8_t
+{
+	NO_STATE,
+	INGAME
+};
+
 using EntityID = uint16_t;
 using ComponentID = uint16_t;

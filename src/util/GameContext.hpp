@@ -9,7 +9,6 @@ struct GameContext {
 	virtual ~GameContext() = default;
 
 	virtual void init() = 0;
-	virtual bool update() = 0;
 
 	virtual void createLevel() = 0;
 	virtual void createGraph()  = 0;
@@ -32,7 +31,7 @@ struct GameContext {
 	[[nodiscard]] virtual  		Entity& getEntityByID(EntityID) 	  = 0;
 
 	[[nodiscard]] virtual const Storage& getComponents() const = 0;
-	[[nodiscard]] virtual 		Storage& getComponents() 	     = 0;
+	[[nodiscard]] virtual 		Storage& getComponents() 	   = 0;
 
 	virtual void addToDestroy(EntityID ID) = 0;
 };

@@ -10,7 +10,6 @@ struct EntityManager : GameContext {
 	~EntityManager() override = default;
 
 	void init() override;
-	bool update() override;
 
 	void createLevel() override;
 	void createGraph() override;
@@ -50,10 +49,6 @@ struct EntityManager : GameContext {
 		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
 		void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
 		void createNavigation();
-
-		void killEntities();
-
-		bool checkVictory();
 
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
