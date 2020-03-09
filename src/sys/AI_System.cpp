@@ -154,13 +154,14 @@ struct AttackStateBehaviour : BehaviourNode //innecesario? ad future puede tener
 {
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
-        const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-        if (greater_e(distance2, ATTACK_MIN_DISTANCE2))
-        {
+        //const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+        //if (greater_e(distance2, ATTACK_MIN_DISTANCE2))
+        //{
             ai.target_position = player_pos;
+            phy.velocity = glm::vec3(0);
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
 };
 
@@ -168,8 +169,10 @@ struct BasicAttackBehaviour : BehaviourNode
 {
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
+            std::cout << "ENTROOO !\n";
         if(!greater_e(data.currentAttackingCooldown, 0.f)) 
         {
+            std::cout << "ATTACKING !\n";
             data.attacking = true;
             data.currentAttackingCooldown = data.attackingCooldown;
             soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
@@ -225,9 +228,9 @@ void AI_System::init() {
 
     /* PURSUE STATE */
     std::unique_ptr<Sequence> pursueState = std::make_unique<Sequence>();
-    patrolState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
-    patrolState->childs.push_back(std::move(setGetPursue));
-    patrolState->childs.push_back(std::move(phyUpdate));
+    pursueState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
+    pursueState->childs.push_back(std::move(setGetPursue));
+    pursueState->childs.push_back(std::move(phyUpdate));
 /*-- PURSUE  --*/     
 
 /*-- ATTACK  --*/ 
@@ -238,10 +241,9 @@ void AI_System::init() {
 
     /* ATTACK STATE */
     std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
-    patrolState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
-    patrolState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
-    patrolState->childs.push_back(std::move(phyUpdate));
-
+    attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
+    attackState->childs.push_back(std::move(phyUpdate));
+    attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
 /*-- ATTACK  --*/     
 
     root = std::make_unique<Selector>();
