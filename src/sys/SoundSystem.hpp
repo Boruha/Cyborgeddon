@@ -5,6 +5,7 @@
 #include <util/SoundPaths.hpp>
 
 #include <unordered_map>
+#include <fmod_common.h>
 
 namespace FMOD {
     namespace Studio {
@@ -56,4 +57,5 @@ private:
     Music backingTrack;
 
 	std::unordered_map<std::string, Sound> soundEvents;
+	std::array<FMOD_GUID, NUM_MAX_PARAMETERS> idEvents;
 };

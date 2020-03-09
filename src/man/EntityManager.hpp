@@ -6,16 +6,22 @@
 struct IEngine;
 
 struct EntityManager : GameContext {
-	explicit EntityManager(const IEngine * const _engine) : engine(*_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
+	explicit EntityManager(IEngine * const _engine) : engine(*_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override = default;
-
-	void init() override;
 
 	void createLevel() override;
 	void createGraph() override;
 	void createBullet () override;
 
+	bool checkVictory() const override;
+	bool checkDefeat() const override;
+
 	void addToDestroy(EntityID ID) override;
+
+	[[nodiscard]] bool isKeyPressed(const KEY_CODE key) const override { return engine.isKeyPressed(key); };
+	[[nodiscard]] const Mouse& getMouse()   const override { return engine.getMouse(); };
+	[[nodiscard]] vec3 getWorldPosFromCursor(const float x, const float y, const float depth) const override { return engine.scene->cursorToWorld(x, y, depth); };
+	[[nodiscard]] IEngine& getEngine() const override { return engine; };
 
 	[[nodiscard]] const Entity& getPlayer() const override { return *player; }
 	[[nodiscard]] 		Entity& getPlayer() 	  override { return *player; }
@@ -57,12 +63,12 @@ struct EntityManager : GameContext {
     	std::vector<MapNode> graph;
 		std::unordered_map<EntityID, std::vector<int>> paths;
 
-	    const IEngine& engine;
+		IEngine& engine;
 
 	    std::vector<EntityID> toDelete;
 	    std::unordered_map<EntityID, Entity> entities;
 
-		unsigned enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
+		int enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
 
 		Storage componentStorage;
 };

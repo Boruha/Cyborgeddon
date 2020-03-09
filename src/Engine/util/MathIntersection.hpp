@@ -5,7 +5,7 @@
 #include <Engine/util/Math.hpp>
 
 // punto de interseccion entre una recta y un plano
-inline vec3 intersectionPoint(const Plane& p, const Line& l) {
+constexpr inline vec3 intersectionPoint(const Plane& p, const Line& l) {
     return l.a + ((l.b - l.a) * ((p.distance - dot(p.normal, l.a)) / dot(p.normal, (l.b - l.a))));
 }
 

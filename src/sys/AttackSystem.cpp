@@ -1,5 +1,4 @@
 #include <sys/AttackSystem.hpp>
-#include <util/SoundPaths.hpp>
 #include <Engine/util/Math.hpp>
 
 void AttackSystem::update(const Context& context, const float deltaTime) {

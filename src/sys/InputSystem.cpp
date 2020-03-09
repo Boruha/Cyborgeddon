@@ -1,6 +1,5 @@
 #include <sys/InputSystem.hpp>
 #include <util/TexturePaths.hpp>
-#include <util/SoundPaths.hpp>
 #include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/MathIntersection.hpp>
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
@@ -49,15 +48,17 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 	auto & velocity  = *player.getComponent<Velocity>();
 	auto & physics   = *player.getComponent<Physics>();
 
-	if (velocity.currentSpeed == velocity.defaultSpeed) {
-
+	if (velocity.currentSpeed == velocity.defaultSpeed)
+	{
 		velocity.direction = vec3();
 
-		// player siempre tiene character data
-		auto & data = *player.getComponent<CharacterData>();
+		auto & data     = *player.getComponent<CharacterData>();
+
+		data.dashing = false;
+
 
 		for (const auto * next = keyMap; next->p_func; ++next)
-			if (engine.isKeyPressed(next->key))
+			if (context->isKeyPressed(next->key))
 				(this->*(next->p_func))(velocity, data);
 
 		// player siempre tiene render
@@ -66,13 +67,15 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 		if (data.switchingMode)
 			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
 
-		const Mouse& mouse = engine.getMouse();
+		const Mouse& mouse = context->getMouse();
 //    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
 
-		aim_mouse(physics, mouse.position);
+		aim_mouse(context, physics, mouse.position);
 
-		if (mouse.leftPressed) {
-			if(!greater_e(data.currentAttackingCooldown, 0.f)) {
+		if (mouse.leftPressed)
+		{
+			if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f))
+			{
 				data.attacking = true;
 				data.currentAttackingCooldown = data.attackingCooldown;
 
@@ -81,28 +84,26 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 				else
                 	soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 			}
-
 //	std::cout << "Click izquierdo\n";
 		}
 
-		if (mouse.rightPressed) {
+		if (mouse.rightPressed)
+		{
 //		std::cout << "Click derecho\n";
 		}
-
-		if (velocity.currentSpeed == velocity.defaultSpeed)
-			data.dashing = false;
 	}
 
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
-void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
-void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
-void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "S\n";*/ }
-void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
+constexpr void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
+constexpr void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
+constexpr void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "S\n";*/ }
+constexpr void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
 // Dash
-void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
-    if(!greater_e(data.currentDashingCooldown, 0.f) && length(velocity.direction) != 0) {
+constexpr void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
+    if(!greater_e(data.currentDashingCooldown, 0.f) && length(velocity.direction) != 0)
+    {
         data.dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
         data.currentDashingCooldown = data.dashingCooldown;
         velocity.currentSpeed = data.dashSpeed;
@@ -112,8 +113,9 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
  //std::cout << "Shift\n";
 }
 // Shoot
-void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
-	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f)) {
+constexpr void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
+	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f))
+	{
 		data.attacking = true;
 		data.currentAttackingCooldown = data.attackingCooldown;
 
@@ -127,7 +129,7 @@ void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
 }
 
 // Switch Mode
-void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
+constexpr void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
 	if (!greater_e(data.currentSwitchingCooldown, 0)) {
 		data.switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
@@ -143,11 +145,11 @@ void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
 }
 
 // TODO : llevar cada parte de este codigo a su lugar correspondiente
-void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
+inline void InputSystem::aim_mouse(const Context& context, Physics& phy, const glm::vec2& mouse) const {
     const Plane shootingPlane(vec3(0,1,0), phy.position.y);
     const Line  ray (
-    		engine.scene->cursorToWorld(mouse.x, mouse.y, 0),
-    		engine.scene->cursorToWorld(mouse.x, mouse.y, 1)
+    		context->getWorldPosFromCursor(mouse.x, mouse.y, 0),
+		    context->getWorldPosFromCursor(mouse.x, mouse.y, 1)
 	);
 
     const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);

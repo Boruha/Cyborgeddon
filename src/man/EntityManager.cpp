@@ -9,11 +9,6 @@
 #include <src/Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 
-/*		Init - Update	*/
-void EntityManager::init() {
-	createLevel();	// de momento se crea asi sin mas, pero habra que utilizar un fichero de texto para generar el nivel
-}
-
 void EntityManager::initData(const int maxEntities, const int maxToDelete, const int maxComponents) {
 	cleanData();								// si no es la primera vez que llamamos a esta funcion, hay que limpiar vectores, reiniciar variables...
 	toDelete.reserve(maxToDelete);				// reservamos para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
@@ -25,10 +20,10 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 
 // aqui recibimos los IDS de las entidades que queremos destruir
 void EntityManager::addToDestroy(EntityID ID) {
-	auto it = entities.find(ID);
+	const auto it = entities.find(ID);
 
 	if (it != entities.end()) {
-		auto & e = it->second;
+		const auto & e = it->second;
 
 		if (e.getType() == ENEMY)
 			enemiesLeft--;
@@ -533,4 +528,12 @@ void EntityManager::createGraph()
 
 	node_14.connections.emplace_back(14, 11, 9);
 	node_14.connections.emplace_back(14, 13, 9);
+}
+
+bool EntityManager::checkVictory() const {
+	return enemiesLeft <= 0;
+}
+
+bool EntityManager::checkDefeat() const {
+	return !greater_e(player->getComponent<CharacterData>()->health, 0.f);
 }

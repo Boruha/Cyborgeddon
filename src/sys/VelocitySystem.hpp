@@ -11,6 +11,6 @@ struct VelocitySystem : System {
 	void reset() override {  }
 
 private:
-	void accelerate(Velocity& vel, float deltaTime) const;
-	void decelerate(Velocity& vel, float deltaTime) const;
+	constexpr void accelerate(Velocity& vel, float deltaTime) const;
+	constexpr void decelerate(Velocity& vel, float deltaTime) const;
 };

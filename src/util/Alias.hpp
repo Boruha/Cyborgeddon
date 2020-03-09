@@ -43,7 +43,10 @@ enum EntityType : uint16_t
 enum StateEnum : uint8_t
 {
 	NO_STATE,
-	INGAME
+	INIT,
+	INGAME,
+	PAUSE,
+	ENDING
 };
 
 using EntityID = uint16_t;

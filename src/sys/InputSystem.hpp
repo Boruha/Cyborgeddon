@@ -8,8 +8,6 @@ struct IEngine;
 
 struct InputSystem : System
 {
-	explicit InputSystem(IEngine * const engine) : engine(*engine) { }
-
 	~InputSystem() override = default;
 
 	void init() override;
@@ -17,25 +15,23 @@ struct InputSystem : System
 	void reset() override {  }
 
 	private:
-		IEngine& engine; // no puede ser const porque tiene que acceder al input (el cual no puede ser const de momento)
-
 		// Movement
-		void w_pressed(Velocity& velocity, CharacterData& data) const;
-		void a_pressed(Velocity& velocity, CharacterData& data) const;
-		void s_pressed(Velocity& velocity, CharacterData& data) const;
-		void d_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void w_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void a_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void s_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void d_pressed(Velocity& velocity, CharacterData& data) const;
 		// Dash
-		void shift_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void shift_pressed(Velocity& velocity, CharacterData& data) const;
 		// Shoot
-		void space_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void space_pressed(Velocity& velocity, CharacterData& data) const;
 		// Switch Mode
-		void m_pressed(Velocity& velocity, CharacterData& data) const;
+		constexpr void m_pressed(Velocity& velocity, CharacterData& data) const;
 
-        void aim_mouse(Physics& phy, const glm::vec2 &mouse) const;
+		inline void aim_mouse(const Context& context, Physics& phy, const glm::vec2 &mouse) const;
 
         struct TKey2func {
             KEY_CODE key;
-            void (InputSystem::*p_func)(Velocity& velocity, CharacterData& data) const;
+	        void (InputSystem::*p_func)(Velocity& velocity, CharacterData& data) const;
         };
 
         TKey2func keyMap[KEY_CODE_COUNT] {

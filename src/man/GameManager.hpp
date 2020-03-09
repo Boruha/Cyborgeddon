@@ -10,8 +10,6 @@
 struct System;
 
 struct GameManager {
-	GameManager() = default;
-	~GameManager() = default;
 
 	void init();
 	void run();
@@ -23,7 +21,7 @@ struct GameManager {
     TextureManager textureManager { engine.get() };
 
     State * currentState { nullptr };
-	std::unordered_map <StateEnum, State> states;
+	std::unordered_map <StateEnum, State> states {};
 };
 
 // TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)

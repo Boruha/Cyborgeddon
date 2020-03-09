@@ -39,7 +39,7 @@ void AI_System::update(const Context &context, const float deltaTime) {
 	}
 }
 
-void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& velocity, const vec3& player_pos, float deltaTime, const Context& context) const {
+constexpr void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& velocity, const vec3& player_pos, float deltaTime, const Context& context) const {
 
 	const float distance2 ( length2 ( { physics.position.x - ai.target_position.x, physics.position.z - ai.target_position.z } ) );
 
@@ -89,7 +89,7 @@ void AI_System::pursueBehaviour(AI& ai, Physics& physics, CharacterData& data, V
         basicBehaviour(ai, physics, vel, player_pos, deltaTime, true);
 }
 
-void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
+constexpr void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
 	
     //if we find enemy before end the pathing.
     if(ai.path_index > -1)
@@ -108,7 +108,7 @@ void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Veloc
     }
 }
 
-void AI_System::basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& target, const float deltaTime, const bool align) const {
+constexpr void AI_System::basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& target, const float deltaTime, const bool align) const {
 	targetBehaviour(ai, target);
 
 	seekBehaviour(phy, vel, target, deltaTime);
@@ -117,17 +117,17 @@ void AI_System::basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& 
 		alignBehaviour(phy, target);
 }
 
-void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
+constexpr void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
 	ai.target_position = target;
 }
 
-void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, const vec3& target, const float deltaTime) const {
+constexpr void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, const vec3& target, const float deltaTime) const {
 	velocity.direction = vec3(target.x - physics.position.x, 0, target.z - physics.position.z);
 
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
-void AI_System::alignBehaviour(Physics& physics, const vec3& target) const {
+constexpr void AI_System::alignBehaviour(Physics& physics, const vec3& target) const {
 	physics.rotation.y = nearestAngle(physics.rotation.y, getRotationYfromXZ(physics.position - target));
 }
 

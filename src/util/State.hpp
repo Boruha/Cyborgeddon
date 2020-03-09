@@ -13,28 +13,31 @@ struct SystemDeltaFixed {
 };
 
 struct State {
-	explicit State(const StateEnum _state) : state(_state) {  }
+	explicit State(const StateEnum _state, Context& _context) : state(_state), context(_context) {  }
 
-	void init() const;
+	void init();
 
 	StateEnum update();
 
 	void reset() const;
 
 	template <typename T>
-	void registerSystem(T sys, const double fixedDelta = FIXED_DELTA_TIME) {
-		systems.emplace_back( SystemDeltaFixed { std::move(sys), fixedDelta, 0.0 } );
-	}
-
-	void setContext(Context& c, const double fixedDelta = FIXED_DELTA_TIME) {
-		context = std::move(c);
+	void registerSystem(const double fixedDelta = FIXED_DELTA_TIME) {
+		systems.emplace_back( SystemDeltaFixed { std::make_unique<T>(), fixedDelta, 0.0 } );
 	}
 
 	const StateEnum state { NO_STATE };
 
 	private:
 
-		Context context;
+		StateEnum (*next_state)(const Context&) { nullptr };
+
+		static StateEnum initNextState(const Context&){};
+		static StateEnum ingameNextState(const Context&);
+		static StateEnum pauseNextState(const Context&);
+		static StateEnum endingNextState(const Context&){};
+
+		Context& context;
 		std::vector<SystemDeltaFixed> systems;
 
 		Timer clock { duration::seconds }; // reloj que controla el juego

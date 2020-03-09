@@ -2,17 +2,22 @@
 
 #include <ent/Entity.hpp>
 #include <ent/Graph.hpp>
+#include <Engine/util/Enum.hpp>
+#include <src/Engine/util/Color.hpp>
 
 struct Storage;
+struct Mouse;
+struct IEngine;
 
 struct GameContext {
 	virtual ~GameContext() = default;
 
-	virtual void init() = 0;
-
 	virtual void createLevel() = 0;
 	virtual void createGraph()  = 0;
 	virtual void createBullet() = 0;
+
+	[[nodiscard]] virtual bool checkVictory() const = 0;
+	[[nodiscard]] virtual bool checkDefeat() const = 0;
 
 	[[nodiscard]] virtual const Entity& getPlayer() const = 0;
 	[[nodiscard]] virtual 		Entity& getPlayer()		  = 0;
@@ -34,6 +39,12 @@ struct GameContext {
 	[[nodiscard]] virtual 		Storage& getComponents() 	   = 0;
 
 	virtual void addToDestroy(EntityID ID) = 0;
+
+	[[nodiscard]] virtual bool isKeyPressed(KEY_CODE) const = 0;
+	[[nodiscard]] virtual const Mouse& getMouse() const = 0;
+	[[nodiscard]] virtual vec3 getWorldPosFromCursor(float, float, float) const = 0;
+
+	[[nodiscard]] virtual IEngine & getEngine() const = 0;
 };
 
 // TODO: definir y actualizar periodicamente una interfaz correcta en funcion de las necesidades que surjan

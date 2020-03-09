@@ -3,7 +3,7 @@
 
 int main()
 {
-	GameManager gameManager;
+	GameManager gameManager {};
 
 	gameManager.init();
 	gameManager.run();

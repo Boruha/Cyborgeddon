@@ -14,17 +14,17 @@ struct Entity
 
 	~Entity();
 
-	explicit operator bool() const { return type != UNDEFINED; }
+	constexpr explicit operator bool() const { return type != UNDEFINED; }
 
 	inline static void resetIDManagementValue() { nextID = 0; }
 
 	template <typename T>
-	void addComponent(T& cmp) {
+	constexpr void addComponent(T& cmp) {
 		components.emplace(Component::getCmpTypeID<T>(), &cmp);
 	}
 
 	template <typename T>
-	void removeComponent() {
+	constexpr void removeComponent() {
 		const auto cmpType = Component::getCmpTypeID<T>();
 
 		auto it = components.find(cmpType);
@@ -36,7 +36,7 @@ struct Entity
 	}
 
 	template <typename T>
-	T* getComponent() {
+	constexpr const T* getComponent() const {
 		const auto cmpType = Component::getCmpTypeID<T>();
 
 		auto it = components.find(cmpType);
@@ -48,8 +48,8 @@ struct Entity
 	}
 
 	template <typename T>
-	const T* getComponent() const {
-		return const_cast<const T*>(std::as_const(*this).getComponent<T>());
+	constexpr T* getComponent() {
+		return const_cast<T *>(std::as_const(*this).getComponent<T>());
 	}
 
 	static EntityID getNextID() {

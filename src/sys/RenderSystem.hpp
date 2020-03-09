@@ -1,19 +1,13 @@
 #pragma once
 
 #include <sys/System.hpp>
-#include <util/GameConstants.hpp>
 #include <Engine/EngineInterface/IEngine.hpp>
-#include <Engine/util/Color.hpp>
 #include <GLFW/glfw3.h>
 
-struct RenderSystem : public System {
-	explicit RenderSystem(IEngine * const engine)
-		: engine(*engine) { }
+struct RenderSystem : System {
+	~RenderSystem() override = default;
 
 	void init() override {  }
 	void update(const Context &context, float deltaTime) override;
 	void reset() override {  }
-
-	const IEngine& engine;
-	const Color background { static_cast<const COLOR>( BACKGROUND_COLOR ) };
 };

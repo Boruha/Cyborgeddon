@@ -33,7 +33,7 @@ struct Storage {
 	void cleanData();
 
 	template <typename T>
-	void initVector(const unsigned size) {
+	constexpr void initVector(const unsigned size) {
 		auto   u_ptr = std::make_unique<ComponentVector<T>>();
 		auto *   ptr = u_ptr.get();
 
@@ -43,7 +43,7 @@ struct Storage {
 	}
 
 	template <typename T>
-	const vector<T>& getComponents() const {
+	constexpr const vector<T>& getComponents() const {
 		const auto it    = map.find ( Component::getCmpTypeID<T>() );
 
 		auto * cmpVector = dynamic_cast<ComponentVector<T>*>(it->second.get());
@@ -52,12 +52,12 @@ struct Storage {
 	}
 
 	template <typename T>
-	vector<T>& getComponents() {
+	constexpr vector<T>& getComponents() {
 		return const_cast<vector<T> &>(std::as_const(*this).getComponents<T>());
 	}
 
 	template <typename T>
-	T& createComponent(T&& cmp) {
+	constexpr T& createComponent(T&& cmp) {
 		const auto it = map.find ( Component::getCmpTypeID<T>() );
 
 		auto * cmpVector  = dynamic_cast<ComponentVector<T>*>(it->second.get());
@@ -75,7 +75,7 @@ struct Storage {
 private:
 
 	template <typename T>
-	void printVecInfo(const vector<T>& vec) const {
+	constexpr void printVecInfo(const vector<T>& vec) const {
 		std::cout 	<< "Capacity: " << vec.capacity() 	<< "\n"
 					<< "Size: " 	<< vec.size() 		<< "\n";
 	}

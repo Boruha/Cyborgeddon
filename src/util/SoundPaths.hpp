@@ -18,8 +18,8 @@ constexpr std::string_view BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
 constexpr std::string_view ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled_attack";
 
 //OBJECTS
-constexpr std::string_view KEY_DOOR_EVENT        = "event:/objects/action_key_door";
-constexpr std::string_view DAMAGE_EVENT          = "event:/objects/damage";
+constexpr std::string_view KEY_DOOR_EVENT           = "event:/objects/action_key_door";
+constexpr std::string_view DAMAGE_EVENT             = "event:/objects/damage";
 
 //AMBIENT
 
