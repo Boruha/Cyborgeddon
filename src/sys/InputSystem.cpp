@@ -24,8 +24,8 @@ void InputSystem::init() {
             case KEY_SPACE:
                 next->p_func = &InputSystem::space_pressed;
                 break;
-            case KEY_M:
-                next->p_func = &InputSystem::m_pressed;
+            case KEY_Q:
+                next->p_func = &InputSystem::q_pressed;
                 break;
             case KEY_LSHIFTIRR :
                 next->p_func = &InputSystem::shift_pressed;
@@ -56,7 +56,6 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 
 		data.dashing = false;
 
-
 		for (const auto * next = keyMap; next->p_func; ++next)
 			if (context->isKeyPressed(next->key))
 				(this->*(next->p_func))(velocity, data);
@@ -80,9 +79,9 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 				data.currentAttackingCooldown = data.attackingCooldown;
 
 				if (data.mode == DEMON)
-                    soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
+					soundMessages.emplace_back(SWITCH_MODE_DEMON);
 				else
-                	soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
+					soundMessages.emplace_back(SWITCH_MODE_ANGEL);
 			}
 //	std::cout << "Click izquierdo\n";
 		}
@@ -119,17 +118,17 @@ constexpr void InputSystem::space_pressed(Velocity& velocity, CharacterData& dat
 		data.attacking = true;
 		data.currentAttackingCooldown = data.attackingCooldown;
 
-        if (data.mode == 0)
-            soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
+        if (data.mode == DEMON)
+            soundMessages.emplace_back(SWITCH_MODE_DEMON);
         else
-            soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
+            soundMessages.emplace_back(SWITCH_MODE_ANGEL);
 
     }
 //	std::cout << "Space\n";
 }
 
 // Switch Mode
-constexpr void InputSystem::m_pressed(Velocity& velocity, CharacterData& data) const {
+constexpr void InputSystem::q_pressed(Velocity& velocity, CharacterData& data) const {
 	if (!greater_e(data.currentSwitchingCooldown, 0)) {
 		data.switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
