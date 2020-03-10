@@ -45,7 +45,8 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 		error("No se pudo inicializar glad");
 
 	// opengl no dibujara lo que este detras de algo ya dibujado
-//	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
+//	glEnable(GL_CULL_FACE);
 
 	resourceManager = std::make_unique<ResourceManager>();
 	sceneManager = std::make_unique<SceneManager>(this, resourceManager.get());
@@ -92,7 +93,7 @@ const Mouse & SunlightEngine::getMouse() {
 
 void SunlightEngine::clear(const Color color) const {
 	glClearColor(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f, float(color.a) / 255.f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(unsigned(GL_COLOR_BUFFER_BIT) | unsigned(GL_DEPTH_BUFFER_BIT));
 }
 
 void SunlightEngine::draw() const {
