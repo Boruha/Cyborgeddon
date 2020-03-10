@@ -255,27 +255,17 @@ void AI_System::init() {
 void AI_System::update(const Context &context, const float deltaTime) {
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
 
-	for (auto & ai : context->getComponents().get<AI>()) {
-		if (ai) {
-			auto & enemy = context->getEntityByID(ai.getEntityID());
-			auto & physics = *enemy.getComponent<Physics>();
-/*
-			const float distance2 = length2 ( { physics.position.x - player_pos.x, physics.position.z - player_pos.z } );
-
-			if (greater_e(distance2, PATROL_MIN_DISTANCE2))
-				ai.state = PATROL_STATE;
-			else if (greater_e(distance2, PURSUE_MIN_DISTANCE2))
-				ai.state = PURSUE_STATE;
-			else if (greater_e(distance2, ATTACK_MIN_DISTANCE2))
-				ai.state = ATTACK_STATE;
-*/
+	for (auto & ai : context->getComponents().get<AI>()) 
+    {
+		if (ai) 
+        {
+			auto & enemy    = context->getEntityByID(ai.getEntityID());
+			auto & physics  = *enemy.getComponent<Physics>();
 			auto & data     = *enemy.getComponent<CharacterData>();
 			auto & velocity = *enemy.getComponent<Velocity>();
 
             root->run(ai, physics, data, velocity, player_pos,
                       deltaTime, context);
-
-//			(this->*(stateFunctions[ai.state].p_func))(ai, physics, data, velocity, player_pos, deltaTime, context);
 		}
 	}
 }
