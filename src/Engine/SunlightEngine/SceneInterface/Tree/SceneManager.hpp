@@ -8,7 +8,7 @@ struct SunlightEngine;
 struct ResourceManager;
 
 struct SceneManager {
-	explicit SceneManager(SunlightEngine* _engine, ResourceManager* _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
+	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
 
 	void render();
 
@@ -19,6 +19,7 @@ struct SceneManager {
 
 	void setCamera(Camera * cam);
 
+	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera * getCamera() const { return camera; }
 
 	SunlightEngine * getEngine() { return engine; }
@@ -27,8 +28,10 @@ private :
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
 	TreeNode * cameraNode { nullptr };
-	Camera * camera { nullptr };
+	Camera   * camera { nullptr };
 
-	SunlightEngine * engine { nullptr };
-	ResourceManager* resourceManager;
+	mat4 viewProjection {1};
+
+	SunlightEngine  * engine { nullptr };
+	ResourceManager * resourceManager;
 };

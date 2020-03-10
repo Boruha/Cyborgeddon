@@ -7,11 +7,13 @@
 
 void SceneManager::render() {
 	camera->setViewMatrix(glm::lookAt(cameraNode->getPosition(), camera->getTarget(), glm::vec3(0, 1, 0)));
+	viewProjection = camera->getViewProjectionMatrix();
+
 	root->render(glm::mat4(1));
 }
 
 glm::mat4 SceneManager::getViewProjection() const {
-	return camera->getViewProjectionMatrix();
+	return viewProjection;
 }
 
 TreeNode * SceneManager::addMeshNode(const std::string_view mesh) {

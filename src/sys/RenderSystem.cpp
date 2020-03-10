@@ -1,4 +1,5 @@
 #include <sys/RenderSystem.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 void RenderSystem::update(const Context& context, const float deltaTime) {
 	auto & player   	= context->getPlayer();

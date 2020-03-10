@@ -12,15 +12,13 @@ std::unique_ptr<INode> SunlightScene::addCameraNode() {
 }
 
 vec3 SunlightScene::cursorToWorld(const float x, const float y, const float far) {
-	std::cout << glm::to_string(glm::inverse(sceneManager->getCamera()->getViewMatrix())) << "\n";
-
 	const glm::mat4x4& viewProjMatrix = sceneManager->getCamera()->getViewProjectionMatrix();
 
 	// Deshacemos [projection * view] obteniendo su inversa (para pasar de coordenadas del mundo a la pantalla, hay que hacer projection * view)
 	const glm::mat4x4& unprojectMatrix = glm::inverse(viewProjMatrix);
 
-	const float VIEWPORT_HEIGHT = sceneManager->getEngine()->getViewport().x;
-	const float VIEWPORT_WIDTH  = sceneManager->getEngine()->getViewport().y;
+	const float VIEWPORT_WIDTH = sceneManager->getEngine()->getViewport().x;
+	const float VIEWPORT_HEIGHT  = sceneManager->getEngine()->getViewport().y;
 
 	// Por algun motivo OpenGL lee la Y de la pantalla de abajo a arriba, asi que invertimos la y
 	// Hay que normalizar las coordenadas entre -1 (izquierda/abajo) y +1 (derecha/arriba)

@@ -52,15 +52,12 @@ struct TreeNode final : INode {
     [[nodiscard]] const mat4& getTransform() const;
 
 
-	[[nodiscard]] const vec3 & getTarget() const override {};
+	[[nodiscard]] const vec3 & getTarget() const override {
+
+	};
 
 	// setters
-	void setTarget(const vec3 & tar) override {
-		auto * cam = dynamic_cast<Camera*>(entity.get());
-
-		if (cam)
-			cam->setTarget(vec3(tar.x, tar.y, -tar.z));
-	};
+	void setTarget(const vec3 & tar) override;
 
 	// set texture
 	void setTexture(std::string_view) const override {};
@@ -68,8 +65,10 @@ struct TreeNode final : INode {
 	// sets if light should affect a node
 	void affectedByLight(bool) const override {};
 
-    private :
-        [[nodiscard]] mat4 calculateMatrix();
+	void calculateTransform() { transform = calculateMatrix(); }
+
+	private :
+		[[nodiscard]] mat4 calculateMatrix();
 
         std::unique_ptr<IEntity> entity { nullptr };
 

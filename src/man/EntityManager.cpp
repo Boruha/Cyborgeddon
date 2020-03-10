@@ -132,7 +132,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	cameraRender.node->setPosition(cameraPhysics.position);
 	cameraRender.node->setRotation(cameraPhysics.rotation);
 	cameraRender.node->setScale(cameraPhysics.scale);
-	cameraRender.node->setTarget(pos);
+	cameraRender.node->setTarget(physics.position);
 
 	camera->addComponent(cameraPhysics);
 	camera->addComponent(cameraRender);
@@ -382,89 +382,89 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, -90));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, 90));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
-	createFloor(CONTROLS_TEXTURE, vec3(0,0,5), vec3(60,0,35)); //Controls
-	createFloor(TIPS_TEXTURE, vec3(-2,0,-27), vec3(45,0,15)); //Tips
+	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
+	createFloor(TIPS_TEXTURE, vec3(-2,0,27), vec3(45,0,15)); //Tips
 
 	// Doors and keys
-	createPairKeyDoor(vec3(0,0,60), vec3(3), vec3(-37,0,90), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,90), vec3(3), vec3(37,0,0), vec3(2,20,10));
+	createPairKeyDoor(vec3(0,0,-60), vec3(3), vec3(-37,0,-90), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,-90), vec3(3), vec3(37,0,0), vec3(2,20,10));
 	createPairKeyDoor(vec3(70,0,0), vec3(3), vec3(-37,0,0), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,0), vec3(3), vec3(37,0,190), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,190), vec3(3), vec3(-37,0,190), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,190), vec3(3), vec3(37,0,90), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,90), vec3(3), vec3(152.5,0,300), vec3(45,10,10));
-	createPairKeyDoor(vec3(158,0,320), vec3(3), vec3(-180,0,272.5), vec3(10,10,45));
+	createPairKeyDoor(vec3(-70,0,0), vec3(3), vec3(37,0,-190), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,-190), vec3(3), vec3(-37,0,-190), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,-190), vec3(3), vec3(37,0,-90), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,-90), vec3(3), vec3(152.5,0,-300), vec3(45,10,10));
+	createPairKeyDoor(vec3(158,0,-320), vec3(3), vec3(-180,0,-272.5), vec3(10,10,45));
 
 	//Pasillo inicial
 
 	//Derecha
-	createWall(vec3(40,0,-27.5), vec3(10,10,45));
-	createWall(vec3(40,0,45), vec3(10,10,80));
-	createWall(vec3(40,0,140), vec3(10,10,90));
-	createWall(vec3(40,0,222.5), vec3(10,10,55));
+	createWall(vec3(40,0,27.5), vec3(10,10,45));
+	createWall(vec3(40,0,-45), vec3(10,10,80));
+	createWall(vec3(40,0,-140), vec3(10,10,90));
+	createWall(vec3(40,0,-222.5), vec3(10,10,55));
 
 	//Izquierda
-	createWall(vec3(-40,0,-27.5), vec3(10,10,45));
-	createWall(vec3(-40,0,45), vec3(10,10,80));
-	createWall(vec3(-40,0,140), vec3(10,10,90));
-	createWall(vec3(-40,0,222.5), vec3(10,10,55));
+	createWall(vec3(-40,0,27.5), vec3(10,10,45));
+	createWall(vec3(-40,0,-45), vec3(10,10,80));
+	createWall(vec3(-40,0,-140), vec3(10,10,90));
+	createWall(vec3(-40,0,-222.5), vec3(10,10,55));
 
-	createWall(vec3(0,0,-45), vec3(70,10,10));      //Cierre inferior
+	createWall(vec3(0,0,45), vec3(70,10,10));      //Cierre inferior
 
 	//Salas del pasillo
 
 	//Sala 1
-	createWall(vec3(75,0,-30), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,30), vec3(60,10,10));    //Arriba
+	createWall(vec3(75,0,30), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,-30), vec3(60,10,10));    //Arriba
 	createWall(vec3(100,0,0), vec3(10,10,50));    //Cierre
 
 	//Sala 2
-	createWall(vec3(-75,0,-30), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,30), vec3(60,10,10));    //Arriba
+	createWall(vec3(-75,0,30), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,-30), vec3(60,10,10));    //Arriba
 	createWall(vec3(-100,0,0), vec3(10,10,50));    //Cierre
 
 	//Sala 3
-	createWall(vec3(75,0,60), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,120), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,90), vec3(10,10,50));    //Cierre
+	createWall(vec3(75,0,-60), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,-120), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,-90), vec3(10,10,50));    //Cierre
 
 	//Sala 4
-	createWall(vec3(-75,0,60), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,120), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,90), vec3(10,10,50));    //Cierre
+	createWall(vec3(-75,0,-60), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,-120), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,-90), vec3(10,10,50));    //Cierre
 
 	//Sala 5
-	createWall(vec3(-75,0,160), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,220), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,190), vec3(10,10,50));    //Cierre
+	createWall(vec3(-75,0,-160), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,-220), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,-190), vec3(10,10,50));    //Cierre
 
 	//Sala 6
-	createWall(vec3(75,0,160), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,220), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,190), vec3(10,10,50));    //Cierre
+	createWall(vec3(75,0,-160), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,-220), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,-190), vec3(10,10,50));    //Cierre
 
 	//Pasillo Horizontal
-	createWall(vec3(-115,0,245), vec3(140,10,10));    //Inferior izda
-	createWall(vec3(115,0,245), vec3(140,10,10));     //Inderior dcha
-	createWall(vec3(-27.5,0,300), vec3(315,10,10));   //Superior
-	createWall(vec3(180,0,277.5), vec3(10,10,55));  //Derecha
+	createWall(vec3(-115,0,-245), vec3(140,10,10));    //Inferior izda
+	createWall(vec3(115,0,-245), vec3(140,10,10));     //Inderior dcha
+	createWall(vec3(-27.5,0,-300), vec3(315,10,10));   //Superior
+	createWall(vec3(180,0,-277.5), vec3(10,10,55));  //Derecha
 
 	//Sala llave principal
-	createWall(vec3(200,0,300), vec3(30,10,10));
-	createWall(vec3(210,0,345), vec3(10,10,80));
-	createWall(vec3(100,0,345), vec3(10,10,80));
-	createWall(vec3(157.5,0,380), vec3(105,10,10));
+	createWall(vec3(200,0,-300), vec3(30,10,10));
+	createWall(vec3(210,0,-345), vec3(10,10,80));
+	createWall(vec3(100,0,-345), vec3(10,10,80));
+	createWall(vec3(157.5,0,-380), vec3(105,10,10));
 
 	//Zona patrulla
-	createWall(vec3(-180,0,227.5), vec3(10,10,45)); //Inf der
-	createWall(vec3(-180,0,327.5), vec3(10,10,45)); //Sup der
-	createWall(vec3(-262.5,0,345), vec3(160,10,10)); //Sup
-	createWall(vec3(-262.5,0,210), vec3(160,10,10)); //Inf
-	createWall(vec3(-347.5,0,277.5), vec3(10,10,145)); //Izq
-	createWall(vec3(-265,0,277.5), vec3(60,20,55)); //Pilar
+	createWall(vec3(-180,0,-227.5), vec3(10,10,45)); //Inf der
+	createWall(vec3(-180,0,-327.5), vec3(10,10,45)); //Sup der
+	createWall(vec3(-262.5,0,-345), vec3(160,10,10)); //Sup
+	createWall(vec3(-262.5,0,-210), vec3(160,10,10)); //Inf
+	createWall(vec3(-347.5,0,-277.5), vec3(10,10,145)); //Izq
+	createWall(vec3(-265,0,-277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
 	createGraph();
@@ -496,23 +496,23 @@ void EntityManager::createGraph()
 {
 	//hall
 	auto& node_0  = graph.emplace_back(MapNode(0, 0));
-	auto& node_1  = graph.emplace_back(MapNode(0, 50));
-	auto& node_2  = graph.emplace_back(MapNode(0, 100));
-	auto& node_3  = graph.emplace_back(MapNode(0, 150));
-	auto& node_4  = graph.emplace_back(MapNode(0, 200));
-	auto& node_5  = graph.emplace_back(MapNode(0, 260));
+	auto& node_1  = graph.emplace_back(MapNode(0, -50));
+	auto& node_2  = graph.emplace_back(MapNode(0, -100));
+	auto& node_3  = graph.emplace_back(MapNode(0, -150));
+	auto& node_4  = graph.emplace_back(MapNode(0, -200));
+	auto& node_5  = graph.emplace_back(MapNode(0, -260));
 	//right
-	auto& node_6  = graph.emplace_back(MapNode(60, 270));
-	auto& node_7  = graph.emplace_back(MapNode(130, 270));
+	auto& node_6  = graph.emplace_back(MapNode(60, -270));
+	auto& node_7  = graph.emplace_back(MapNode(130, -270));
 	//left
-	auto& node_8  = graph.emplace_back(MapNode(-80, 270));
-	auto& node_9  = graph.emplace_back(MapNode(-160, 270));
+	auto& node_8  = graph.emplace_back(MapNode(-80, -270));
+	auto& node_9  = graph.emplace_back(MapNode(-160, -270));
 	//square
-	auto& node_10 = graph.emplace_back(MapNode(-200, 275));
-	auto& node_11 = graph.emplace_back(MapNode(-210, 320));
-	auto& node_12 = graph.emplace_back(MapNode(-210, 230));
-	auto& node_13 = graph.emplace_back(MapNode(-315, 230));
-	auto& node_14 = graph.emplace_back(MapNode(-315, 320));
+	auto& node_10 = graph.emplace_back(MapNode(-200, -275));
+	auto& node_11 = graph.emplace_back(MapNode(-210, -320));
+	auto& node_12 = graph.emplace_back(MapNode(-210, -230));
+	auto& node_13 = graph.emplace_back(MapNode(-315, -230));
+	auto& node_14 = graph.emplace_back(MapNode(-315, -320));
 
 	node_0.connections.emplace_back(0, 1, 5);
 

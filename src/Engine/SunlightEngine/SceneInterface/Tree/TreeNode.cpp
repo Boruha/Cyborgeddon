@@ -110,6 +110,19 @@ glm::mat4 TreeNode::calculateMatrix() {
 }
 
 void TreeNode::remove() {
-	if (parent)
+	if (parent) {
+		auto * p = parent;
+		p = nullptr;
 		parent->removeChildren(this);
+	}
+}
+
+void TreeNode::setTarget(const vec3 &tar) {
+	auto * cam = dynamic_cast<Camera*>(entity.get());
+
+	if (cam) {
+		cam->setViewMatrix(glm::lookAt(translation, tar, vec3(0, 1, 0)));
+		cam->setTarget(tar);
+		sceneManager.getCameraNode()->setTransform(glm::inverse(cam->getViewMatrix()));
+	}
 }
