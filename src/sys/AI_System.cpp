@@ -5,43 +5,6 @@
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
 
-<<<<<<< HEAD
-void AI_System::init() {
-    stateFunctions[PATROL_STATE].p_func = &AI_System::patrolBehaviour;
-    stateFunctions[PURSUE_STATE].p_func = &AI_System::pursueBehaviour;
-    stateFunctions[ATTACK_STATE].p_func = &AI_System::attackBehaviour;
-}
-
-void AI_System::update(const Context &context, const float deltaTime) {
-	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
-
-	for (auto & ai : context->getComponents().getComponents<AI>()) {
-		if (ai) {
-			auto & enemy = context->getEntityByID(ai.getEntityID());
-
-			// si tiene ai, tambien tiene physics
-			auto & physics = *enemy.getComponent<Physics>();
-
-			const float distance2 = length2 ( { physics.position.x - player_pos.x, physics.position.z - player_pos.z } );
-
-			if (greater_e(distance2, PATROL_MIN_DISTANCE2))
-				ai.state = PATROL_STATE;
-			else if (greater_e(distance2, PURSUE_MIN_DISTANCE2))
-				ai.state = PURSUE_STATE;
-			else if (greater_e(distance2, ATTACK_MIN_DISTANCE2))
-				ai.state = ATTACK_STATE;
-
-			// si tiene ai, tambien tiene data y velocity
-			auto & data     = *enemy.getComponent<CharacterData>();
-			auto & velocity = *enemy.getComponent<Velocity>();
-
-			(this->*(stateFunctions[ai.state].p_func))(ai, physics, data, velocity, player_pos, deltaTime, context);
-		}
-	}
-}
-
-constexpr void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& velocity, const vec3& player_pos, float deltaTime, const Context& context) const {
-=======
 /* GENERAL BEHAVIOURS DEF */
 struct SeekBehaviour : BehaviourNode
 {
@@ -61,7 +24,6 @@ struct AlignBehaviour : BehaviourNode
         return true;
     }
 };
->>>>>>> Behaviour_Tree
 
 struct ArriveBehaviour : BehaviourNode
 {
@@ -161,24 +123,9 @@ struct NextPursePointBehaviour : BehaviourNode
     }
 };
 
-<<<<<<< HEAD
-	const float distance2 ( length2 ( { physics.position.x - player_pos.x, physics.position.z - player_pos.z } ) );
-
-    if (greater_e(distance2, CHASE_MIN_DISTANCE2))
-        basicBehaviour(ai, physics, vel, ref_graph[ai.path_node].coord, deltaTime, true);
-    else
-        basicBehaviour(ai, physics, vel, player_pos, deltaTime, true);
-}
-
-constexpr void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
-	
-    //if we find enemy before end the pathing.
-    if(ai.path_index > -1)
-=======
 struct DeletePurseBehaviour : BehaviourNode
 {
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
->>>>>>> Behaviour_Tree
     {
         ai.path_index = -1;
         ai.path_node  = -1;
@@ -188,15 +135,6 @@ struct DeletePurseBehaviour : BehaviourNode
     }
 };
 
-<<<<<<< HEAD
-    basicBehaviour(ai, phy, vel, player_pos, 0, true);
-    
-    if(!greater_e(data.currentAttackingCooldown, 0.f)) {
-        data.currentAttackingCooldown = data.attackingCooldown;
-
-        damageMessages.emplace_back(data.attackDamage);
-        soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
-=======
 struct ChaseStateBehaviour : BehaviourNode
 {
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
@@ -224,31 +162,24 @@ struct AttackStateBehaviour : BehaviourNode //innecesario? ad future puede tener
             return true;
         //}
         //return false;
->>>>>>> Behaviour_Tree
     }
 };
 
-<<<<<<< HEAD
-constexpr void AI_System::basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& target, const float deltaTime, const bool align) const {
-	targetBehaviour(ai, target);
-=======
 struct BasicAttackBehaviour : BehaviourNode 
 {
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
-            std::cout << "ENTROOO !\n";
         if(!greater_e(data.currentAttackingCooldown, 0.f)) 
         {
-            std::cout << "ATTACKING !\n";
             data.attacking = true;
             data.currentAttackingCooldown = data.attackingCooldown;
-            soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
+            damageMessages.emplace_back(data.attackDamage);
+            soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
             return true;
         }
         return false;
     }
 };
->>>>>>> Behaviour_Tree
 
 /* FUNCTIONS */
 void AI_System::init() {
@@ -259,14 +190,6 @@ void AI_System::init() {
     patrolPoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
     patrolPoint->childs.emplace_back(std::make_unique<NextPatrolBehaviour>());
 
-<<<<<<< HEAD
-constexpr void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
-	ai.target_position = target;
-}
-
-constexpr void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, const vec3& target, const float deltaTime) const {
-	velocity.direction = vec3(target.x - physics.position.x, 0, target.z - physics.position.z);
-=======
     /* PHY UPDATE */
     std::unique_ptr<Sequence> phyUpdate = std::make_unique<Sequence>();
     phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
@@ -330,9 +253,8 @@ constexpr void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, co
 
 void AI_System::update(const Context &context, const float deltaTime) {
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
->>>>>>> Behaviour_Tree
 
-	for (auto & ai : context->getComponents().get<AI>()) 
+	for (auto & ai : context->getComponents().getComponents<AI>()) 
     {
 		if (ai) 
         {
@@ -341,15 +263,10 @@ void AI_System::update(const Context &context, const float deltaTime) {
 			auto & data     = *enemy.getComponent<CharacterData>();
 			auto & velocity = *enemy.getComponent<Velocity>();
 
-<<<<<<< HEAD
-constexpr void AI_System::alignBehaviour(Physics& physics, const vec3& target) const {
-	physics.rotation.y = nearestAngle(physics.rotation.y, getRotationYfromXZ(physics.position - target));
-=======
             root->run(ai, physics, data, velocity, player_pos,
                       deltaTime, context);
 		}
 	}
->>>>>>> Behaviour_Tree
 }
 
 //PATHING
@@ -429,7 +346,6 @@ std::vector<int> AI_System::calculePath(const int start, const int end, const st
 
         path.insert(path.begin(), currentRecord->node);
     }
-
     return path;
 }
 
@@ -457,6 +373,5 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
             small_index = i;
         }
     }
-
     return small_index;
 }
