@@ -16,17 +16,6 @@ protected:
     [[nodiscard]] int nearestNode(const vec3&, const std::vector<MapNode>&) const;
 
 private:
-
-    void patrolBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&) const;
-    void pursueBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&) const;
-    void attackBehaviour(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>&) const;
-
-    void basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& target, float deltaTime, bool align) const;
-
-    void targetBehaviour(AI& ai, const vec3& target) const;
-    void seekBehaviour(Physics& phy, Velocity& vel, const vec3& target, float deltaTime) const;
-    void alignBehaviour(Physics& phy, const vec3& target) const;
-
     /* Behaviour Tree */
     std::unique_ptr<Selector> root;
 };
