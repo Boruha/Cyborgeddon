@@ -36,7 +36,3 @@ TreeNode * SceneManager::addCameraNode() {
 
 	return root->addChildren(std::move(tree_ptr));
 }
-
-void SceneManager::setCamera(Camera * const cam) {
-	camera = cam;
-}

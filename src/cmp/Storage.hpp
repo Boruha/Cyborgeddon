@@ -46,7 +46,7 @@ struct Storage {
 	const vector<T>& getComponents() const {
 		const auto it    = map.find ( Component::getCmpTypeID<T>() );
 
-		auto * cmpVector = dynamic_cast<ComponentVector<T>*>(it->second.get());
+		const auto * cmpVector = dynamic_cast<const ComponentVector<T>*>(it->second.get());
 
 		return cmpVector->components;
 	}
@@ -71,53 +71,13 @@ struct Storage {
 
 		return cmpVector->components.emplace_back(cmp);
 	}
-/*
-	INode* createMesh(std::string_view mesh) {
-		std::cout << "\n\n" << "Node" << "\n";
-		printVecInfo(nodes);
 
-		INode * n { nullptr };
+	INode * createMesh(std::string_view mesh);
 
-		for (auto& node : nodes)
-			if (!(*node))
-				n = (node = engine.scene->addObjectNode(mesh)).get();
+	INode * createCamera();
 
-		if (!n)
-			n = nodes.emplace_back(engine.scene->addObjectNode(mesh)).get();
+	void removeNode(const INode * n);
 
-		return n;
-	}
-
-	INode* createCamera() {
-		std::cout << "\n\n" << "Node" << "\n";
-		printVecInfo(nodes);
-
-		INode * n { nullptr };
-
-		for (auto& node : nodes)
-			if (!(*node))
-				n = (node = engine.scene->addCameraNode()).get();
-
-		if (!n)
-			n = nodes.emplace_back(engine.scene->addCameraNode()).get();
-
-		return n;
-	}
-*/
-
-	INode* createMesh(std::string_view mesh) {
-//		std::cout << "\n\n" << "Node" << "\n";
-//		printVecInfo(inodes);
-
-		return inodes.emplace_back(engine.scene->addMeshNode(mesh));
-	}
-
-	INode* createCamera() {
-//		std::cout << "\n\n" << "Node" << "\n";
-//		printVecInfo(inodes);
-
-		return inodes.emplace_back(engine.scene->addFreeCameraNode());
-	}
 private:
 
 	template <typename T>
@@ -128,8 +88,7 @@ private:
 
 	const IEngine& engine;
 
-	vector<std::unique_ptr<INode>> nodes;
-	vector<INode*> inodes;
+	vector<INode*> nodes {};
 
-	ComponentMap map;
+	ComponentMap map {};
 };

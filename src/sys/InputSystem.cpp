@@ -153,8 +153,6 @@ void InputSystem::aim_mouse(Physics& phy, const glm::vec2& mouse) const {
 
 	const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 
-	std::cout << intersectPoint.x << " " << intersectPoint.z << std::endl;
-
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
     phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);
 //    std::cout << phy.rotation.y << std::endl;

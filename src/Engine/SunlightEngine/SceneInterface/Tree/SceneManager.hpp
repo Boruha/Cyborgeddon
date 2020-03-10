@@ -17,8 +17,6 @@ struct SceneManager {
 	TreeNode * addMeshNode(std::string_view);
 	TreeNode * addCameraNode();
 
-	void setCamera(Camera * cam);
-
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera * getCamera() const { return camera; }
 

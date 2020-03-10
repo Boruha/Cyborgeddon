@@ -14,9 +14,9 @@ struct Render : Component {
 
 	friend std::ostream& operator<<(std::ostream& os, const Render& phy);
 
-	bool    needUpdate { false };
+	bool  needUpdate {  false  };
 
-	INode   * node { nullptr };
+	INode   * node   { nullptr };
 
 	// NO TOCAR EL ORDEN
 	vec3  	* pos  	 { nullptr };

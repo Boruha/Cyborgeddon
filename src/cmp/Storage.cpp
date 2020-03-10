@@ -29,18 +29,65 @@ void Storage::initData(const unsigned maxComponents) {
 	initVector<Render>(maxComponents);
 
 	nodes.reserve(maxComponents);
-	inodes.reserve(maxComponents);
 }
 
 void Storage::cleanData() {
 	Component::resetIDManagementValue();	// ID de los componentes a 0
 
 	for (const auto & node : nodes)
-		if (node && *node)
+		if (node)
 			node->remove();
 
 	nodes.clear();
-	inodes.clear();
 
 	map.clear();
+}
+
+INode * Storage::createMesh(const std::string_view mesh) {
+
+//		std::cout << "\n\n" << "Node" << "\n";
+//		printVecInfo(nodes);
+
+	INode * returnValue { nullptr };
+
+	for (auto & node : nodes) {
+		if (node == nullptr) {
+			returnValue = node = engine.scene->addMeshNode(mesh);
+			break;
+		}
+	}
+
+	if (!returnValue)
+		returnValue = nodes.emplace_back(engine.scene->addMeshNode(mesh));
+
+	return returnValue;
+}
+
+INode * Storage::createCamera() {
+
+//		std::cout << "\n\n" << "Node" << "\n";
+//		printVecInfo(nodes);
+
+	INode * returnValue { nullptr };
+
+	for (auto & node : nodes) {
+		if (node == nullptr) {
+			returnValue = node = engine.scene->addFreeCameraNode();
+			break;
+		}
+	}
+
+	if (!returnValue)
+		returnValue = nodes.emplace_back(engine.scene->addFreeCameraNode());
+
+	return returnValue;
+}
+
+void Storage::removeNode(const INode * n) {
+	for (auto & node : nodes) {
+		if (n == node) {
+			node = nullptr;
+			return;
+		}
+	}
 }
