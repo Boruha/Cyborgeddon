@@ -5,6 +5,7 @@
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
 
+<<<<<<< HEAD
 void AI_System::init() {
     stateFunctions[PATROL_STATE].p_func = &AI_System::patrolBehaviour;
     stateFunctions[PURSUE_STATE].p_func = &AI_System::pursueBehaviour;
@@ -40,47 +41,127 @@ void AI_System::update(const Context &context, const float deltaTime) {
 }
 
 constexpr void AI_System::patrolBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& velocity, const vec3& player_pos, float deltaTime, const Context& context) const {
-
-	const float distance2 ( length2 ( { physics.position.x - ai.target_position.x, physics.position.z - ai.target_position.z } ) );
-
-	if (greater_e(distance2, ARRIVED_MIN_DISTANCE2)) {
-		basicBehaviour(ai, physics, velocity, ai.patrol_position[ai.patrol_index], deltaTime, true);
-	} else {
-		ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
-		// sumo uno a patrol_index y evito que se pase del size del array de patrol_position (max_index)
-
-		basicBehaviour(ai, physics, velocity, ai.patrol_position[ai.patrol_index], 0, false);
-	}
-}
-
-void AI_System::pursueBehaviour(AI& ai, Physics& physics, CharacterData& data, Velocity& vel, const vec3& player_pos, const float deltaTime, const Context& context) const {
-
-    const std::vector<MapNode>& ref_graph = context->getGraph();
-
-    if(ai.path_index < 0)
+=======
+/* GENERAL BEHAVIOURS DEF */
+struct SeekBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
-        int final_path       = nearestNode(player_pos, ref_graph); //index -> mapnode + cercano a player
-        int ini_path         = nearestNode(physics.position, ref_graph); //index -> mapnode + cercano a player
-        ai.path_node  = ini_path;
-        ai.path_index = 0;
+        vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
+        phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
+        return true;
+    }
+};
+
+struct AlignBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+	    phy.rotation.y = nearestAngle(phy.rotation.y, getRotationYfromXZ(phy.position - ai.target_position));
+        return true;
+    }
+};
+>>>>>>> Behaviour_Tree
+
+struct ArriveBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+    	const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
+	    if (greater_e(distance2, ARRIVED_MIN_DISTANCE2))
+            return true;
+        return false;
+    }
+};
+
+/* PATROL BEHAVIOURS DEF */
+struct NextPatrolBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+    	ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
+		ai.target_position = ai.patrol_position[ai.patrol_index];
+        return true;
+    }
+};
+
+struct PatrolStateBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+        if (greater_e(distance2, PATROL_MIN_DISTANCE2))
+        {
+            ai.target_position = ai.patrol_position[ai.patrol_index];
+            return true;
+        }
+        return false;
+    }
+};
+
+/* PURSE BEHAVIOURS DEF */
+struct PursueStateBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+        if (greater_e(distance2, PURSUE_MIN_DISTANCE2))
+            return true;
+        return false;
+    }
+};
+
+struct HaveRouteBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        if(ai.path_index > -1)
+        {
+            const std::vector<MapNode>& ref_graph = context->getGraph();
+            ai.target_position = ref_graph[ai.path_node].coord;
+
+            return true;
+        }
+        return false;
+    }
+};
+//Se deberia comprobar que se genere todo(?)
+struct CreateRouteBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        const std::vector<MapNode>& ref_graph = context->getGraph();
+
+        int final_path = nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
+        int ini_path   = nearestNode(phy.position, ref_graph); //index -> mapnode + cercano a enemy
+        ai.path_node   = ini_path;
+        ai.path_index  = 0;
         //guardamos el path generado, usamos el ID para identificarlo despues.
         context->setPath(ai.getEntityID(), calculePath(ini_path, final_path, ref_graph));
+        ai.target_position = ref_graph[ai.path_node].coord;
+        
+        return true;
     }
-    else
+};
+
+struct NextPursePointBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
+        const std::vector<MapNode>& ref_graph = context->getGraph();
         std::vector<int>& ref_path = context->getPath(ai.getEntityID());
 
-	    const float distance2 ( length2 ( { physics.position.x - ai.target_position.x, physics.position.z - ai.target_position.z } ) );
-        
-        if (!greater_e(distance2, ARRIVED_MIN_DISTANCE2))
+        if(unsigned(++ai.path_index) < ref_path.size())
         {
-            if(unsigned(++ai.path_index) < ref_path.size())
-                ai.path_node  = ref_path[ai.path_index];
-            else
-                ai.path_index = -1;
+            ai.path_node  = ref_path[ai.path_index];
+            ai.target_position = ref_graph[ai.path_node].coord;
+            return true;
         }
+        return false;
     }
+};
 
+<<<<<<< HEAD
 	const float distance2 ( length2 ( { physics.position.x - player_pos.x, physics.position.z - player_pos.z } ) );
 
     if (greater_e(distance2, CHASE_MIN_DISTANCE2))
@@ -93,11 +174,21 @@ constexpr void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& d
 	
     //if we find enemy before end the pathing.
     if(ai.path_index > -1)
+=======
+struct DeletePurseBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+>>>>>>> Behaviour_Tree
     {
         ai.path_index = -1;
+        ai.path_node  = -1;
         context->deletePath(ai.getEntityID());
+    
+        return false;
     }
+};
 
+<<<<<<< HEAD
     basicBehaviour(ai, phy, vel, player_pos, 0, true);
     
     if(!greater_e(data.currentAttackingCooldown, 0.f)) {
@@ -105,32 +196,161 @@ constexpr void AI_System::attackBehaviour(AI& ai, Physics& phy, CharacterData& d
 
         damageMessages.emplace_back(data.attackDamage);
         soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
+=======
+struct ChaseStateBehaviour : BehaviourNode
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+        if (!greater_e(distance2, CHASE_MIN_DISTANCE2))
+        {
+            ai.target_position = player_pos;
+            return true;
+        }
+        return false;
     }
-}
+};
 
+/* ATTACK BEVAHOIUR DEF */
+struct AttackStateBehaviour : BehaviourNode //innecesario? ad future puede tener un parametro no distancia. ai.state cambiarlo a una condition? 
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        //const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+        //if (greater_e(distance2, ATTACK_MIN_DISTANCE2))
+        //{
+            ai.target_position = player_pos;
+            phy.velocity = glm::vec3(0);
+            return true;
+        //}
+        //return false;
+>>>>>>> Behaviour_Tree
+    }
+};
+
+<<<<<<< HEAD
 constexpr void AI_System::basicBehaviour(AI& ai, Physics& phy, Velocity& vel, const vec3& target, const float deltaTime, const bool align) const {
 	targetBehaviour(ai, target);
+=======
+struct BasicAttackBehaviour : BehaviourNode 
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+            std::cout << "ENTROOO !\n";
+        if(!greater_e(data.currentAttackingCooldown, 0.f)) 
+        {
+            std::cout << "ATTACKING !\n";
+            data.attacking = true;
+            data.currentAttackingCooldown = data.attackingCooldown;
+            soundMessages.emplace_back(ASSEMBLED_ATTACK_EVENT);
+            return true;
+        }
+        return false;
+    }
+};
+>>>>>>> Behaviour_Tree
 
-	seekBehaviour(phy, vel, target, deltaTime);
+/* FUNCTIONS */
+void AI_System::init() {
 
-	if (align)
-		alignBehaviour(phy, target);
-}
+/*-- PATROL  --*/     
+    /* PATROL UPDATE */
+    std::unique_ptr<Selector> patrolPoint = std::make_unique<Selector>();
+    patrolPoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
+    patrolPoint->childs.emplace_back(std::make_unique<NextPatrolBehaviour>());
 
+<<<<<<< HEAD
 constexpr void AI_System::targetBehaviour(AI& ai, const vec3& target) const {
 	ai.target_position = target;
 }
 
 constexpr void AI_System::seekBehaviour(Physics& physics, Velocity& velocity, const vec3& target, const float deltaTime) const {
 	velocity.direction = vec3(target.x - physics.position.x, 0, target.z - physics.position.z);
+=======
+    /* PHY UPDATE */
+    std::unique_ptr<Sequence> phyUpdate = std::make_unique<Sequence>();
+    phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
+    phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
+    
+    /* PATROL STATE */
+    std::unique_ptr<Sequence> patrolState = std::make_unique<Sequence>();
+    patrolState->childs.emplace_back(std::make_unique<PatrolStateBehaviour>());
+    patrolState->childs.push_back(std::move(patrolPoint));
+    patrolState->childs.push_back(std::move(phyUpdate));
+/*-- PATROL  --*/     
 
-	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
+/*-- PURSUE  --*/     
+    /* UPDATE PURSUE */
+    std::unique_ptr<Selector> pursuePoint = std::make_unique<Selector>();
+    pursuePoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
+    pursuePoint->childs.emplace_back(std::make_unique<NextPursePointBehaviour>());
+    pursuePoint->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
+
+    /* GET PURSUE */
+    std::unique_ptr<Sequence> getPursue = std::make_unique<Sequence>();
+    getPursue->childs.emplace_back(std::make_unique<HaveRouteBehaviour>());
+    getPursue->childs.push_back(std::move(pursuePoint));
+
+    /* SET/GET PURSE */
+    std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();    
+    setGetPursue->childs.emplace_back(std::make_unique<ChaseStateBehaviour>());
+    setGetPursue->childs.push_back(std::move(getPursue));
+    setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
+    
+    /* PHY UPDATE */
+    phyUpdate = std::make_unique<Sequence>();
+    phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
+    phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
+
+    /* PURSUE STATE */
+    std::unique_ptr<Sequence> pursueState = std::make_unique<Sequence>();
+    pursueState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
+    pursueState->childs.push_back(std::move(setGetPursue));
+    pursueState->childs.push_back(std::move(phyUpdate));
+/*-- PURSUE  --*/     
+
+/*-- ATTACK  --*/ 
+    /* PHY UPDATE */
+    phyUpdate = std::make_unique<Sequence>();
+    phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
+    phyUpdate->childs.emplace_back(std::make_unique<BasicAttackBehaviour>());
+
+    /* ATTACK STATE */
+    std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
+    attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
+    attackState->childs.push_back(std::move(phyUpdate));
+    attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
+/*-- ATTACK  --*/     
+
+    root = std::make_unique<Selector>();
+    root->childs.push_back(std::move(patrolState));
+    root->childs.push_back(std::move(pursueState));
+    root->childs.push_back(std::move(attackState));
 }
 
+void AI_System::update(const Context &context, const float deltaTime) {
+	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
+>>>>>>> Behaviour_Tree
+
+	for (auto & ai : context->getComponents().get<AI>()) 
+    {
+		if (ai) 
+        {
+			auto & enemy    = context->getEntityByID(ai.getEntityID());
+			auto & physics  = *enemy.getComponent<Physics>();
+			auto & data     = *enemy.getComponent<CharacterData>();
+			auto & velocity = *enemy.getComponent<Velocity>();
+
+<<<<<<< HEAD
 constexpr void AI_System::alignBehaviour(Physics& physics, const vec3& target) const {
 	physics.rotation.y = nearestAngle(physics.rotation.y, getRotationYfromXZ(physics.position - target));
+=======
+            root->run(ai, physics, data, velocity, player_pos,
+                      deltaTime, context);
+		}
+	}
+>>>>>>> Behaviour_Tree
 }
-
 
 //PATHING
 std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph) const {
