@@ -60,7 +60,7 @@ struct EntityManager : GameContext {
 		Entity * camera { nullptr };
 		Entity * nav    { nullptr };
 
-    	std::vector<MapNode> graph;
+		std::vector<MapNode> graph;
 		std::unordered_map<EntityID, std::vector<int>> paths;
 
 		IEngine& engine;

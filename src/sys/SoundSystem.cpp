@@ -11,7 +11,7 @@ void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int l
 	if (res != FMOD_OK)
 	{
 		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << "\n";
-//		exit(-1);
+		exit(-1);
 	}
 }
 
@@ -26,20 +26,35 @@ void SoundSystem::init() {
 	ERRCHECK ( system->getCoreSystem(&core) );
 	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
 
-	ERRCHECK ( system->initialize(32, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
+	ERRCHECK ( system->initialize(16, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
 
 	ERRCHECK ( system->loadBankFile(MASTER_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
 	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
 
 	soundMessages.reserve(16);
 
+	SoundParameter parameters [NUM_MAX_PARAMETERS]
+	{
+			ATTACK_PLAYER_DEMON,
+			ATTACK_PLAYER_ANGEL,
+			SWITCH_MODE_DEMON,      //El personaje pasa de angel a demonio
+			SWITCH_MODE_ANGEL,      //El personaje pasa de demonio a angel
+			DAMAGE_PLAYER,
+			DASH_PLAYER,
 
-	createSoundEvent(ASSEMBLED_ATTACK_EVENT);   // Mensaje alojado en ...
-	createSoundEvent(DASH_PLAYER_EVENT);        // Mensaje alojado en InputSystem.cpp -> void InputSystem::shift_pressed()
-    createSoundEvent(KEY_DOOR_EVENT);           // Mensaje alojado en CollisionSystem.cpp
-    createSoundEvent(DAMAGE_EVENT);             // Mensaje alojado en AttackSystem.cpp y HighSpeedCollisionSystem.cpp
-    createSoundEvent(PLAYER_SHOOT_EVENT);       // Mensaje alojado en HighSpeedCollisionSystem.cpp
-    createSoundEvent(CHANGE_MODE_EVENT);        // Mensaje alojado en InputSystem.cpp -> void InputSystem::m_pressed()
+			//ENEMY
+			ATTACK_ENEMY_ASSEMBLY,
+			ATTACK_ENEMY_DEMON,
+			ATTACK_ENEMY_ANGEL,
+			ACTION_ENEMY_HITMARKER,
+
+			//ACTION SOUNDS
+			ACTION_GET_KEY,
+			ACTION_OPEN_DOOR
+	};
+
+	for (const auto & param : parameters)
+		createSoundEvent(param);
 
 	createMusicEvent(BACKGROUND_MUSIC_EVENT, &backingTrack, .2f);
 
@@ -49,12 +64,13 @@ void SoundSystem::init() {
 void SoundSystem::update(const Context& context, const float deltaTime) {
 
 	while (!soundMessages.empty()) {
-		const auto& [event, paramName, value] = soundMessages.back().tuple;
+		const auto parameter = soundMessages.back().parameter;
+
+		const auto & [paramName, value] = getParameterValue(parameter);
 
 		FMOD_STUDIO_PLAYBACK_STATE state;   // me preparo para recibir un estado
 
-		for (const auto & instance : soundEvents[event.data()].instances) {             // recorro las instancias
-		    //std::cout << event.data() << std::endl;
+		for (const auto & instance : soundEvents[eventID[parameter]].instances) {   // recorro las instancias
 		    instance->getPlaybackState(&state);                                         // obtengo su estado
 
 			if (state == FMOD_STUDIO_PLAYBACK_STOPPED) { // si no esta emitiendo ningun sonido
@@ -67,7 +83,7 @@ void SoundSystem::update(const Context& context, const float deltaTime) {
 		soundMessages.pop_back();                                                       // elimino el mensaje del vector
 	}
 
-	ERRCHECK (system->update() );
+//	ERRCHECK (system->update() );
 }
 
 void SoundSystem::reset() {
@@ -86,13 +102,33 @@ void SoundSystem::reset() {
 
 void SoundSystem::startBackgroundMusic() {
 	ERRCHECK( backingTrack.instance->start() );
+	ERRCHECK (system->update() );
 }
 
-void SoundSystem::createSoundEvent(const std::string_view name, const float volume) {
-	ERRCHECK( system->getEvent(name.data(), &soundEvents[name.data()].event) ); // creo el Sound e inicializo su parametro event
+void SoundSystem::createSoundEvent(const SoundParameter param) {
+	const std::string_view eventName = getEvent(param);
 
-	for (unsigned i = 0; i < soundEvents[name.data()].instances.size(); ++i)
-	    createInstance(soundEvents[name.data()].event, soundEvents[name.data()].instances[i], volume);
+	if (eventName != "")
+	{
+		Sound sound { };
+
+		ERRCHECK( system->getEvent(eventName.data(), &sound.event) ); // creo el Sound e inicializo su parametro event
+
+		auto & idEvent = eventID[param];
+
+		ERRCHECK( sound.event->getID(&idEvent) );
+
+		auto it = soundEvents.find(idEvent);
+
+		if (it == soundEvents.end())
+		{
+			soundEvents[idEvent] = sound;
+
+			for (unsigned i = 0; i < soundEvents[idEvent].instances.size(); ++i)
+				createInstance(soundEvents[idEvent].event, soundEvents[idEvent].instances[i], 1.f);
+		}
+	}
+
 }
 
 void SoundSystem::createMusicEvent(const std::string_view name, Music * music, const float volume) {

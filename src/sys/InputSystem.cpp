@@ -79,9 +79,9 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 				data.currentAttackingCooldown = data.attackingCooldown;
 
 				if (data.mode == DEMON)
-					soundMessages.emplace_back(SWITCH_MODE_DEMON);
+					soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
 				else
-					soundMessages.emplace_back(SWITCH_MODE_ANGEL);
+					soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 			}
 //	std::cout << "Click izquierdo\n";
 		}
@@ -119,9 +119,9 @@ constexpr void InputSystem::space_pressed(Velocity& velocity, CharacterData& dat
 		data.currentAttackingCooldown = data.attackingCooldown;
 
         if (data.mode == DEMON)
-            soundMessages.emplace_back(SWITCH_MODE_DEMON);
+            soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
         else
-            soundMessages.emplace_back(SWITCH_MODE_ANGEL);
+            soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 
     }
 //	std::cout << "Space\n";

@@ -10,9 +10,9 @@
 // La gestion de los mensajes se lleva a cabo en sound system
 struct SoundMessage {
 	explicit SoundMessage(const SoundParameter param)
-            : tuple(getSoundTuple(param)) { }
+            : parameter(param) { }
 
-    const sound_parameter_tuple tuple;
+    const SoundParameter parameter;
 };
 
 
