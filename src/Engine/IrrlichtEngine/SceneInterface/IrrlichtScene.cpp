@@ -7,7 +7,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <iostream>
 
-std::unique_ptr<INode> IrrlichtScene::addObjectNode() {
+std::unique_ptr<INode> IrrlichtScene::addObjectNode(const std::string_view) {
     return std::make_unique<IrrlichtObjectNode>(sceneManager);
 }
 
@@ -26,8 +26,8 @@ vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far)
 	// Deshacemos [projection * view] obteniendo su inversa (para pasar de coordenadas del mundo a la pantalla, hay que hacer projection * view)
 	const glm::mat4x4& unprojectMatrix = glm::inverse(projectionMatrix * viewMatrix);
 
-	const float VIEWPORT_HEIGHT = sceneManager->getVideoDriver()->getViewPort().getHeight();
 	const float VIEWPORT_WIDTH  = sceneManager->getVideoDriver()->getViewPort().getWidth();
+	const float VIEWPORT_HEIGHT = sceneManager->getVideoDriver()->getViewPort().getHeight();
 
 	// Por algun motivo OpenGL lee la Y de la pantalla de abajo a arriba, asi que invertimos la y
 	// Hay que normalizar las coordenadas entre -1 (izquierda/abajo) y +1 (derecha/arriba)

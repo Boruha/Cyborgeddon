@@ -16,16 +16,16 @@ struct InputSystem : System
 
 	private:
 		// Movement
-		constexpr void w_pressed(Velocity& velocity, CharacterData& data) const;
-		constexpr void a_pressed(Velocity& velocity, CharacterData& data) const;
-		constexpr void s_pressed(Velocity& velocity, CharacterData& data) const;
-		constexpr void d_pressed(Velocity& velocity, CharacterData& data) const;
+		void w_pressed(Velocity& velocity, CharacterData& data) const;
+		void a_pressed(Velocity& velocity, CharacterData& data) const;
+		void s_pressed(Velocity& velocity, CharacterData& data) const;
+		void d_pressed(Velocity& velocity, CharacterData& data) const;
 		// Dash
-		constexpr void shift_pressed(Velocity& velocity, CharacterData& data) const;
+		void shift_pressed(Velocity& velocity, CharacterData& data) const;
 		// Shoot
-		constexpr void space_pressed(Velocity& velocity, CharacterData& data) const;
+		void space_pressed(Velocity& velocity, CharacterData& data) const;
 		// Switch Mode
-		constexpr void q_pressed(Velocity& velocity, CharacterData& data) const;
+		void q_pressed(Velocity& velocity, CharacterData& data) const;
 
 		inline void aim_mouse(const Context& context, Physics& phy, const glm::vec2 &mouse) const;
 
@@ -35,14 +35,13 @@ struct InputSystem : System
         };
 
         TKey2func keyMap[KEY_CODE_COUNT] {
-            {KEY_W,                    nullptr },
-            {KEY_A,                    nullptr },
-            {KEY_S,                    nullptr },
-            {KEY_D,                    nullptr },
-            {KEY_SPACE,                nullptr },
-            {KEY_Q,                    nullptr },
-            {KEY_LSHIFTIRR,            nullptr },
-			{KEY_LSHIFTGL,             nullptr },
-            {static_cast<KEY_CODE>(0), nullptr }
+            { KEY_W,                    nullptr },
+            { KEY_A,                    nullptr },
+            { KEY_S,                    nullptr },
+            { KEY_D,                    nullptr },
+            { KEY_SPACE,                nullptr },
+            { KEY_Q,                    nullptr },
+			{ KEY_LSHIFT,               nullptr },
+            { static_cast<KEY_CODE>(0), nullptr }
         };
 };

@@ -11,7 +11,7 @@ void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int l
 	if (res != FMOD_OK)
 	{
 		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << "\n";
-		exit(-1);
+//		exit(-1);
 	}
 }
 

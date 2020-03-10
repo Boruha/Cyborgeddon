@@ -19,16 +19,34 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 /*		DESTROY ENTITIES	*/
 
 // aqui recibimos los IDS de las entidades que queremos destruir
-void EntityManager::addToDestroy(EntityID ID) {
+void EntityManager::addToDestroy(const EntityID ID) {
 	const auto it = entities.find(ID);
 
-	if (it != entities.end()) {
-		const auto & e = it->second;
+	if (it != entities.end())
+	{
+		// obtenemos la entidad que vamos a eliminar
+		Entity& e = it->second;
 
+		// si es un enemigo actualizamos la cantidad de enemigos que nos quedan
+		// por eliminar para ganar la partida
 		if (e.getType() == ENEMY)
 			enemiesLeft--;
 
-		entities.find(ID)->second.destroy();
+		// obtenemos su componente de render
+		const auto * ren = e.getComponent<Render>();
+
+		// comprobamos que lo tenga (no todas las entidades lo van a tener)
+		if (ren) {
+			// importante, tenemos que decirle a component storage que ese nodo ahora es libre
+			// de ser sobreescrito por otro que necesite alojarse en el vector de nodos
+			componentStorage.removeNode(ren->node);
+		}
+
+		// destruimos la entidad (anulamos todos sus componentes para que otros puedan ocupar su lugar
+		// en el vector de componentes correspondiente)
+		e.destroy();
+
+		// borramos la entidad de nuestro contenedor de entidades
 		entities.erase(ID);
 	}
 }
@@ -76,11 +94,11 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale);
+	render.node->setScale(physics.scale / 2.f);
 
 	render.node->setTexture(DEMON_TEXTURE);
 
@@ -96,12 +114,12 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3()));
 	auto& cameraRender	= componentStorage.createComponent(Render(camera->getType(), camera->getID(), &cameraPhysics.position, &cameraPhysics.rotation, &cameraPhysics.scale, true));
 
-	cameraRender.node = engine.scene->addCameraNode();
+	cameraRender.node = componentStorage.createCamera();
 
 	cameraRender.node->setPosition(cameraPhysics.position);
 	cameraRender.node->setRotation(cameraPhysics.rotation);
 	cameraRender.node->setScale(cameraPhysics.scale);
-	cameraRender.node->setTarget(pos);
+	cameraRender.node->setTarget(physics.position);
 
 	camera->addComponent(cameraPhysics);
 	camera->addComponent(cameraRender);
@@ -114,11 +132,11 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
+	render.node->setScale(transformable.scale / 2.f);
 
 	render.node->setTexture(WALL_TEXTURE);
 
@@ -137,11 +155,11 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale);
+	render.node->setScale(physics.scale / 2.f);
 
 	render.node->setTexture(ENEMY_TEXTURE);
 
@@ -158,14 +176,14 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
 	auto& floor = createEntity(FLOOR);
 
-	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), dim));
+	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(-90, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
+	render.node->setScale(transformable.scale * 2.f);
 
 	render.node->setTexture(tex.data());
 
@@ -185,11 +203,11 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale);
+	render.node->setScale(physics.scale / 2.f);
 
 	render.node->setTexture(playerData->mode ? ANGEL_TEXTURE : DEMON_TEXTURE);
 
@@ -207,11 +225,11 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = engine.scene->addObjectNode();
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
+	render.node->setScale(transformable.scale / 2.f);
 
 	render.node->setTexture(DOOR_TEXTURE);
 
@@ -226,11 +244,11 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = engine.scene->addObjectNode();
+	keyRender.node = componentStorage.createMesh("../resources/models/Cubo/cubo2.fbx");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
-	keyRender.node->setScale(keyTransformable.scale);
+	keyRender.node->setScale(keyTransformable.scale / 2.f);
 
 	keyRender.node->setTexture(KEY_TEXTURE);
 
@@ -351,89 +369,89 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, -90));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, 90));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
-	createFloor(CONTROLS_TEXTURE, vec3(0,0,5), vec3(60,0,35)); //Controls
-	createFloor(TIPS_TEXTURE, vec3(-2,0,-27), vec3(45,0,15)); //Tips
+	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
+//	createFloor(TIPS_TEXTURE, vec3(-2,0,27), vec3(45,0,15)); //Tips
 
 	// Doors and keys
-	createPairKeyDoor(vec3(0,0,60), vec3(3), vec3(-37,0,90), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,90), vec3(3), vec3(37,0,0), vec3(2,20,10));
+	createPairKeyDoor(vec3(0,0,-60), vec3(3), vec3(-37,0,-90), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,-90), vec3(3), vec3(37,0,0), vec3(2,20,10));
 	createPairKeyDoor(vec3(70,0,0), vec3(3), vec3(-37,0,0), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,0), vec3(3), vec3(37,0,190), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,190), vec3(3), vec3(-37,0,190), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,190), vec3(3), vec3(37,0,90), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,90), vec3(3), vec3(152.5,0,300), vec3(45,10,10));
-	createPairKeyDoor(vec3(158,0,320), vec3(3), vec3(-180,0,272.5), vec3(10,10,45));
+	createPairKeyDoor(vec3(-70,0,0), vec3(3), vec3(37,0,-190), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,-190), vec3(3), vec3(-37,0,-190), vec3(2,20,10));
+	createPairKeyDoor(vec3(-70,0,-190), vec3(3), vec3(37,0,-90), vec3(2,20,10));
+	createPairKeyDoor(vec3(70,0,-90), vec3(3), vec3(152.5,0,-300), vec3(45,10,10));
+	createPairKeyDoor(vec3(158,0,-320), vec3(3), vec3(-180,0,-272.5), vec3(10,10,45));
 
 	//Pasillo inicial
 
 	//Derecha
-	createWall(vec3(40,0,-27.5), vec3(10,10,45));
-	createWall(vec3(40,0,45), vec3(10,10,80));
-	createWall(vec3(40,0,140), vec3(10,10,90));
-	createWall(vec3(40,0,222.5), vec3(10,10,55));
+	createWall(vec3(40,0,27.5), vec3(10,10,45));
+	createWall(vec3(40,0,-45), vec3(10,10,80));
+	createWall(vec3(40,0,-140), vec3(10,10,90));
+	createWall(vec3(40,0,-222.5), vec3(10,10,55));
 
 	//Izquierda
-	createWall(vec3(-40,0,-27.5), vec3(10,10,45));
-	createWall(vec3(-40,0,45), vec3(10,10,80));
-	createWall(vec3(-40,0,140), vec3(10,10,90));
-	createWall(vec3(-40,0,222.5), vec3(10,10,55));
+	createWall(vec3(-40,0,27.5), vec3(10,10,45));
+	createWall(vec3(-40,0,-45), vec3(10,10,80));
+	createWall(vec3(-40,0,-140), vec3(10,10,90));
+	createWall(vec3(-40,0,-222.5), vec3(10,10,55));
 
-	createWall(vec3(0,0,-45), vec3(70,10,10));      //Cierre inferior
+	createWall(vec3(0,0,45), vec3(70,10,10));      //Cierre inferior
 
 	//Salas del pasillo
 
 	//Sala 1
-	createWall(vec3(75,0,-30), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,30), vec3(60,10,10));    //Arriba
+	createWall(vec3(75,0,30), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,-30), vec3(60,10,10));    //Arriba
 	createWall(vec3(100,0,0), vec3(10,10,50));    //Cierre
 
 	//Sala 2
-	createWall(vec3(-75,0,-30), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,30), vec3(60,10,10));    //Arriba
+	createWall(vec3(-75,0,30), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,-30), vec3(60,10,10));    //Arriba
 	createWall(vec3(-100,0,0), vec3(10,10,50));    //Cierre
 
 	//Sala 3
-	createWall(vec3(75,0,60), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,120), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,90), vec3(10,10,50));    //Cierre
+	createWall(vec3(75,0,-60), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,-120), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,-90), vec3(10,10,50));    //Cierre
 
 	//Sala 4
-	createWall(vec3(-75,0,60), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,120), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,90), vec3(10,10,50));    //Cierre
+	createWall(vec3(-75,0,-60), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,-120), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,-90), vec3(10,10,50));    //Cierre
 
 	//Sala 5
-	createWall(vec3(-75,0,160), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,220), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,190), vec3(10,10,50));    //Cierre
+	createWall(vec3(-75,0,-160), vec3(60,10,10));    //Abajo
+	createWall(vec3(-75,0,-220), vec3(60,10,10));    //Arriba
+	createWall(vec3(-100,0,-190), vec3(10,10,50));    //Cierre
 
 	//Sala 6
-	createWall(vec3(75,0,160), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,220), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,190), vec3(10,10,50));    //Cierre
+	createWall(vec3(75,0,-160), vec3(60,10,10));    //Abajo
+	createWall(vec3(75,0,-220), vec3(60,10,10));    //Arriba
+	createWall(vec3(100,0,-190), vec3(10,10,50));    //Cierre
 
 	//Pasillo Horizontal
-	createWall(vec3(-115,0,245), vec3(140,10,10));    //Inferior izda
-	createWall(vec3(115,0,245), vec3(140,10,10));     //Inderior dcha
-	createWall(vec3(-27.5,0,300), vec3(315,10,10));   //Superior
-	createWall(vec3(180,0,277.5), vec3(10,10,55));  //Derecha
+	createWall(vec3(-115,0,-245), vec3(140,10,10));    //Inferior izda
+	createWall(vec3(115,0,-245), vec3(140,10,10));     //Inderior dcha
+	createWall(vec3(-27.5,0,-300), vec3(315,10,10));   //Superior
+	createWall(vec3(180,0,-277.5), vec3(10,10,55));  //Derecha
 
 	//Sala llave principal
-	createWall(vec3(200,0,300), vec3(30,10,10));
-	createWall(vec3(210,0,345), vec3(10,10,80));
-	createWall(vec3(100,0,345), vec3(10,10,80));
-	createWall(vec3(157.5,0,380), vec3(105,10,10));
+	createWall(vec3(200,0,-300), vec3(30,10,10));
+	createWall(vec3(210,0,-345), vec3(10,10,80));
+	createWall(vec3(100,0,-345), vec3(10,10,80));
+	createWall(vec3(157.5,0,-380), vec3(105,10,10));
 
 	//Zona patrulla
-	createWall(vec3(-180,0,227.5), vec3(10,10,45)); //Inf der
-	createWall(vec3(-180,0,327.5), vec3(10,10,45)); //Sup der
-	createWall(vec3(-262.5,0,345), vec3(160,10,10)); //Sup
-	createWall(vec3(-262.5,0,210), vec3(160,10,10)); //Inf
-	createWall(vec3(-347.5,0,277.5), vec3(10,10,145)); //Izq
-	createWall(vec3(-265,0,277.5), vec3(60,20,55)); //Pilar
+	createWall(vec3(-180,0,-227.5), vec3(10,10,45)); //Inf der
+	createWall(vec3(-180,0,-327.5), vec3(10,10,45)); //Sup der
+	createWall(vec3(-262.5,0,-345), vec3(160,10,10)); //Sup
+	createWall(vec3(-262.5,0,-210), vec3(160,10,10)); //Inf
+	createWall(vec3(-347.5,0,-277.5), vec3(10,10,145)); //Izq
+	createWall(vec3(-265,0,-277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
 
 	createGraph();
@@ -465,23 +483,23 @@ void EntityManager::createGraph()
 {
 	//hall
 	auto& node_0  = graph.emplace_back(MapNode(0, 0));
-	auto& node_1  = graph.emplace_back(MapNode(0, 50));
-	auto& node_2  = graph.emplace_back(MapNode(0, 100));
-	auto& node_3  = graph.emplace_back(MapNode(0, 150));
-	auto& node_4  = graph.emplace_back(MapNode(0, 200));
-	auto& node_5  = graph.emplace_back(MapNode(0, 260));
+	auto& node_1  = graph.emplace_back(MapNode(0, -50));
+	auto& node_2  = graph.emplace_back(MapNode(0, -100));
+	auto& node_3  = graph.emplace_back(MapNode(0, -150));
+	auto& node_4  = graph.emplace_back(MapNode(0, -200));
+	auto& node_5  = graph.emplace_back(MapNode(0, -260));
 	//right
-	auto& node_6  = graph.emplace_back(MapNode(60, 270));
-	auto& node_7  = graph.emplace_back(MapNode(130, 270));
+	auto& node_6  = graph.emplace_back(MapNode(60, -270));
+	auto& node_7  = graph.emplace_back(MapNode(130, -270));
 	//left
-	auto& node_8  = graph.emplace_back(MapNode(-80, 270));
-	auto& node_9  = graph.emplace_back(MapNode(-160, 270));
+	auto& node_8  = graph.emplace_back(MapNode(-80, -270));
+	auto& node_9  = graph.emplace_back(MapNode(-160, -270));
 	//square
-	auto& node_10 = graph.emplace_back(MapNode(-200, 275));
-	auto& node_11 = graph.emplace_back(MapNode(-210, 320));
-	auto& node_12 = graph.emplace_back(MapNode(-210, 230));
-	auto& node_13 = graph.emplace_back(MapNode(-315, 230));
-	auto& node_14 = graph.emplace_back(MapNode(-315, 320));
+	auto& node_10 = graph.emplace_back(MapNode(-200, -275));
+	auto& node_11 = graph.emplace_back(MapNode(-210, -320));
+	auto& node_12 = graph.emplace_back(MapNode(-210, -230));
+	auto& node_13 = graph.emplace_back(MapNode(-315, -230));
+	auto& node_14 = graph.emplace_back(MapNode(-315, -320));
 
 	node_0.connections.emplace_back(0, 1, 5);
 

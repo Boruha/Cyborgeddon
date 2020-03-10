@@ -4,6 +4,7 @@
 #include <ent/Graph.hpp>
 #include <Engine/util/Enum.hpp>
 #include <src/Engine/util/Color.hpp>
+#include <memory>
 
 struct Storage;
 struct Mouse;

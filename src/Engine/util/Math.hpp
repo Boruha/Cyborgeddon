@@ -54,11 +54,11 @@ constexpr inline vec3& normalize(vec3& v) {
 }
 
 constexpr inline float dot(const vec2& v1, const vec2& v2) {
-	return v1.x * v2.x + v1.y * v2.y;
+	return (v1.x * v2.x) + (v1.y * v2.y);
 }
 
 constexpr inline float dot(const vec3& v1, const vec3& v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 }
 
 constexpr inline float getRotationYfromXZ(const vec3& v) {
@@ -91,8 +91,8 @@ inline void rotateXZ(vec3& v, const double deg, const vec3& origin = vec3()) {
 	v.x -= origin.x;
 	v.z -= origin.z;
 
-	v.x = v.x * cos(rad) - v.z * sin(rad);
-	v.z = v.x * sin(rad) + v.z * cos(rad);
+	v.x = (v.x * cos(rad)) - (v.z * sin(rad));
+	v.z = (v.x * sin(rad)) + (v.z * cos(rad));
 
 	v.x += origin.x;
 	v.z += origin.z;
@@ -104,8 +104,8 @@ inline void rotateXY(vec3& v, const double deg, const vec3& origin = vec3()) {
 	v.x -= origin.x;
 	v.y -= origin.y;
 
-	v.x = v.x * cos(rad) - v.y * sin(rad);
-	v.y = v.x * sin(rad) + v.y * cos(rad);
+	v.x = (v.x * cos(rad)) - (v.y * sin(rad));
+	v.y = (v.x * sin(rad)) + (v.y * cos(rad));
 
 	v.x += origin.x;
 	v.y += origin.y;
@@ -117,8 +117,8 @@ inline void rotateYZ(vec3& v, const double deg, const vec3& origin = vec3()) {
 	v.y -= origin.y;
 	v.z -= origin.z;
 
-	v.y = v.y * cos(rad) - v.z * sin(rad);
-	v.z = v.y * sin(rad) + v.z * cos(rad);
+	v.y = (v.y * cos(rad)) - (v.z * sin(rad));
+	v.z = (v.y * sin(rad)) + (v.z * cos(rad));
 
 	v.y += origin.y;
 	v.z += origin.z;

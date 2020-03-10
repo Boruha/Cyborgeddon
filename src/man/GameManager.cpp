@@ -37,7 +37,7 @@ void GameManager::init()
 	currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 	currentState->registerSystem<RenderSystem>();
 
-	textureManager.loadTextures();
+//	textureManager.loadTextures();
 
 	currentState->init();
 }
@@ -54,6 +54,6 @@ void GameManager::run()
 }
 
 void GameManager::terminate() {
-	textureManager.unloadTextures();
+//	textureManager.unloadTextures();
     engine->shutdown();
 }

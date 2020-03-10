@@ -5,6 +5,7 @@
 #include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <Engine/util/Mouse.hpp>
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 void InputSystem::init() {
     for (auto * next = keyMap; next->key != static_cast<KEY_CODE>(0); ++next) {
@@ -27,12 +28,9 @@ void InputSystem::init() {
             case KEY_Q:
                 next->p_func = &InputSystem::q_pressed;
                 break;
-            case KEY_LSHIFTIRR :
-                next->p_func = &InputSystem::shift_pressed;
-                break;
-/*			case KEY_LSHIFTGL:
+			case KEY_LSHIFT:
 				next->p_func = &InputSystem::shift_pressed;
-				break;*/
+				break;
             default : ;
         }
     }
@@ -95,12 +93,12 @@ void InputSystem::update(const Context& context, const float deltaTime) {
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
 }
 
-constexpr void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "W\n";*/ }
-constexpr void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
-constexpr void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "S\n";*/ }
-constexpr void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
+void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "W\n";*/ }
+void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
+void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "S\n";*/ }
+void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
 // Dash
-constexpr void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
+void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
     if(!greater_e(data.currentDashingCooldown, 0.f) && length(velocity.direction) != 0)
     {
         data.dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
@@ -109,10 +107,10 @@ constexpr void InputSystem::shift_pressed(Velocity& velocity, CharacterData& dat
 
         soundMessages.emplace_back(DASH_PLAYER);
     }
- //std::cout << "Shift\n";
+ std::cout << "Shift\n";
 }
 // Shoot
-constexpr void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
+void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
 	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f))
 	{
 		data.attacking = true;
@@ -124,11 +122,11 @@ constexpr void InputSystem::space_pressed(Velocity& velocity, CharacterData& dat
             soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 
     }
-//	std::cout << "Space\n";
+	std::cout << "Space\n";
 }
 
 // Switch Mode
-constexpr void InputSystem::q_pressed(Velocity& velocity, CharacterData& data) const {
+void InputSystem::q_pressed(Velocity& velocity, CharacterData& data) const {
 	if (!greater_e(data.currentSwitchingCooldown, 0)) {
 		data.switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
 		data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
@@ -151,8 +149,9 @@ inline void InputSystem::aim_mouse(const Context& context, Physics& phy, const g
 		    context->getWorldPosFromCursor(mouse.x, mouse.y, 1)
 	);
 
-    const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
+	const vec3 intersectPoint = intersectionPoint(shootingPlane, ray);
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
     phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);
+//    std::cout << phy.rotation.y << std::endl;
 }

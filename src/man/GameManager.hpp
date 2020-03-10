@@ -15,13 +15,14 @@ struct GameManager {
 	void run();
 	void terminate();
 
-	EngineManager engineManager { IRRLICHT };
-	std::unique_ptr<IEngine> engine = engineManager.getEngine();
+
+	EngineManager engineManager { SUNLIGHT };
+	std::unique_ptr<IEngine> engine { engineManager.getEngine() };
 	Context entityManager = std::make_unique<EntityManager>(engine.get());
-    TextureManager textureManager { engine.get() };
+//    TextureManager textureManager { engine.get() };
 
     State * currentState { nullptr };
 	std::unordered_map <StateEnum, State> states {};
 };
 
-// TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion)
+// TODO: considerar estados de pausa, menu... donde algunos sistemas se ejecuten y otros no (punteros a funcion ???)

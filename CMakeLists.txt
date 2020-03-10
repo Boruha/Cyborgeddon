@@ -27,6 +27,7 @@ file (
 
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.h"
         "${PROJECT_SOURCE_DIR}/src/Engine/util/*.hpp"
+        "${PROJECT_SOURCE_DIR}/src/Engine/util/shaders/*.hpp"
 
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
 
@@ -46,9 +47,11 @@ file (
 
         "${PROJECT_SOURCE_DIR}/src/Engine/util/glad/*.c"
         "${PROJECT_SOURCE_DIR}/src/Engine/util/*.cpp"
+        "${PROJECT_SOURCE_DIR}/src/Engine/util/shaders/*.cpp"
+
 )
 
-add_executable(cyborgeddon ${SOURCES})
+add_executable(cyborgeddon ${SOURCES} src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src)
 

@@ -46,7 +46,7 @@ struct Storage {
 	constexpr const vector<T>& getComponents() const {
 		const auto it    = map.find ( Component::getCmpTypeID<T>() );
 
-		auto * cmpVector = dynamic_cast<ComponentVector<T>*>(it->second.get());
+		const auto * cmpVector = dynamic_cast<const ComponentVector<T>*>(it->second.get());
 
 		return cmpVector->components;
 	}
@@ -62,8 +62,8 @@ struct Storage {
 
 		auto * cmpVector  = dynamic_cast<ComponentVector<T>*>(it->second.get());
 
-		std::cout << "\n\n" << cmp.getName() << "\n";
-		printVecInfo(cmpVector->components);
+//		std::cout << "\n\n" << cmp.getName() << "\n";
+//		printVecInfo(cmpVector->components);
 
 		for (auto& item : cmpVector->components)
 			if (!item)
@@ -71,6 +71,12 @@ struct Storage {
 
 		return cmpVector->components.emplace_back(cmp);
 	}
+
+	INode * createMesh(std::string_view mesh);
+
+	INode * createCamera();
+
+	void removeNode(const INode * n);
 
 private:
 
@@ -82,5 +88,7 @@ private:
 
 	const IEngine& engine;
 
-	ComponentMap map;
+	vector<INode*> nodes {};
+
+	ComponentMap map {};
 };
