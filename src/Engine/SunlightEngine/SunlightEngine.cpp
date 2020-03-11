@@ -20,7 +20,7 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 
 	// le decimos la version de opengl que debe soportar
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 
 	// como ya hemos establecido la version de opengl que debe soportar,
 	// al usar core profile, no va a controlar si lo que hagamos lo va a
