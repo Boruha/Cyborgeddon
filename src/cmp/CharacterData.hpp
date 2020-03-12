@@ -3,7 +3,7 @@
 #include <cmp/Component.hpp>
 
 struct CharacterData : Component {
-	explicit CharacterData(EntityType, EntityID, ModeType, float hp, float sw_cd, float dmg, float dmg_cd, float dsh, float dsh_cd);
+	explicit CharacterData(EntityType, EntityID, ModeType, float hp, float sw_cd, float dmg, float dmg_cd, float dmg_rg, float dsh, float dsh_cd);
 
 	[[nodiscard]] std::string_view getName() const override {
 		return "CharacterData";
@@ -21,6 +21,7 @@ struct CharacterData : Component {
 	float		currentSwitchingCooldown	{    0.f  };
 
 	float 		attackDamage				{   50.f  };
+	float 		attackRange 				{   10.f  }; //NEW
 	float 		attackingCooldown			{    0.f  };
 	float  		currentAttackingCooldown   	{	 0.f  };
 

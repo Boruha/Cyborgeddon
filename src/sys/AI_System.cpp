@@ -181,6 +181,17 @@ struct BasicAttackBehaviour : BehaviourNode
     }
 };
 
+struct RangeBasicAttackBehaviour : BehaviourNode 
+{
+    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    {
+        const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+        if(greater_e(distance2, data.attackRange))
+            return true;
+        return false;
+    }
+};
+
 /* FUNCTIONS */
 void AI_System::init() {
 
@@ -216,7 +227,7 @@ void AI_System::init() {
 
     /* SET/GET PURSE */
     std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();    
-    setGetPursue->childs.emplace_back(std::make_unique<ChaseStateBehaviour>());
+    //setGetPursue->childs.emplace_back(std::make_unique<ChaseStateBehaviour>());
     setGetPursue->childs.push_back(std::move(getPursue));
     setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
     
@@ -233,15 +244,22 @@ void AI_System::init() {
 /*-- PURSUE  --*/     
 
 /*-- ATTACK  --*/ 
+    
     /* PHY UPDATE */
     phyUpdate = std::make_unique<Sequence>();
-    phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
-    phyUpdate->childs.emplace_back(std::make_unique<BasicAttackBehaviour>());
+    phyUpdate->childs.emplace_back(std::make_unique<RangeBasicAttackBehaviour>());
+    phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
+
+    /* ACTION SELECTOR*/
+    std::unique_ptr<Selector> actionSelector = std::make_unique<Selector>();
+    actionSelector->childs.push_back(std::move(phyUpdate));
+    actionSelector->childs.emplace_back(std::make_unique<BasicAttackBehaviour>());  
 
     /* ATTACK STATE */
     std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
     attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
-    attackState->childs.push_back(std::move(phyUpdate));
+    attackState->childs.emplace_back(std::make_unique<AlignBehaviour>());
+    attackState->childs.push_back(std::move(actionSelector));
     attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
 /*-- ATTACK  --*/     
 
