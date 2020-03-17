@@ -31,7 +31,7 @@ struct BehaviourNode : AI_System
 struct CompoundNode : BehaviourNode
 {
     CompoundNode()  { childs.reserve(3); }
-    ~CompoundNode() = default;
+    ~CompoundNode() override = default;
 
     /* FUNCTIONS */
     const std::vector<std::unique_ptr<BehaviourNode>>& getChilds() const { return childs; };
@@ -47,7 +47,7 @@ struct Sequence : CompoundNode
     {
         for(auto& ref_child : getChilds())
         {
-            if(!ref_child.get()->run(ai, phy, data, vel, player_pos, deltaTime, context))
+            if(!ref_child->run(ai, phy, data, vel, player_pos, deltaTime, context))
                 return false;
         }
         return true;
@@ -61,7 +61,7 @@ struct Selector : CompoundNode
     {
         for(auto& ref_child : getChilds())
         {
-            if(ref_child.get()->run(ai, phy, data, vel, player_pos, deltaTime, context))
+            if(ref_child->run(ai, phy, data, vel, player_pos, deltaTime, context))
                 return true;
         }
         return false;

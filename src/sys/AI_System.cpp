@@ -30,9 +30,8 @@ struct ArriveBehaviour : BehaviourNode
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
     	const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
-	    if (greater_e(distance2, ARRIVED_MIN_DISTANCE2))
-            return true;
-        return false;
+
+    	return greater_e(distance2, ARRIVED_MIN_DISTANCE2);
     }
 };
 
@@ -67,9 +66,8 @@ struct PursueStateBehaviour : BehaviourNode
     bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
         const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-        if (greater_e(distance2, PURSUE_MIN_DISTANCE2))
-            return true;
-        return false;
+
+        return greater_e(distance2, PURSUE_MIN_DISTANCE2);
     }
 };
 
@@ -84,9 +82,11 @@ struct HaveRouteBehaviour : BehaviourNode
 
             return true;
         }
+
         return false;
     }
 };
+
 //Se deberia comprobar que se genere todo(?)
 struct CreateRouteBehaviour : BehaviourNode
 {
@@ -119,6 +119,7 @@ struct NextPursePointBehaviour : BehaviourNode
             ai.target_position = ref_graph[ai.path_node].coord;
             return true;
         }
+
         return false;
     }
 };
@@ -194,13 +195,14 @@ void AI_System::init() {
     std::unique_ptr<Sequence> phyUpdate = std::make_unique<Sequence>();
     phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
     phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
-    
+
     /* PATROL STATE */
     std::unique_ptr<Sequence> patrolState = std::make_unique<Sequence>();
     patrolState->childs.emplace_back(std::make_unique<PatrolStateBehaviour>());
-    patrolState->childs.push_back(std::move(patrolPoint));
-    patrolState->childs.push_back(std::move(phyUpdate));
-/*-- PATROL  --*/     
+    patrolState->childs.emplace_back(std::move(patrolPoint));
+    patrolState->childs.emplace_back(std::move(phyUpdate));
+
+    /*-- PATROL  --*/
 
 /*-- PURSUE  --*/     
     /* UPDATE PURSUE */
@@ -212,14 +214,14 @@ void AI_System::init() {
     /* GET PURSUE */
     std::unique_ptr<Sequence> getPursue = std::make_unique<Sequence>();
     getPursue->childs.emplace_back(std::make_unique<HaveRouteBehaviour>());
-    getPursue->childs.push_back(std::move(pursuePoint));
+    getPursue->childs.emplace_back(std::move(pursuePoint));
 
     /* SET/GET PURSE */
     std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();    
     setGetPursue->childs.emplace_back(std::make_unique<ChaseStateBehaviour>());
-    setGetPursue->childs.push_back(std::move(getPursue));
+    setGetPursue->childs.emplace_back(std::move(getPursue));
     setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
-    
+
     /* PHY UPDATE */
     phyUpdate = std::make_unique<Sequence>();
     phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
@@ -228,9 +230,9 @@ void AI_System::init() {
     /* PURSUE STATE */
     std::unique_ptr<Sequence> pursueState = std::make_unique<Sequence>();
     pursueState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
-    pursueState->childs.push_back(std::move(setGetPursue));
-    pursueState->childs.push_back(std::move(phyUpdate));
-/*-- PURSUE  --*/     
+    pursueState->childs.emplace_back(std::move(setGetPursue));
+    pursueState->childs.emplace_back(std::move(phyUpdate));
+/*-- PURSUE  --*/
 
 /*-- ATTACK  --*/ 
     /* PHY UPDATE */
@@ -241,14 +243,14 @@ void AI_System::init() {
     /* ATTACK STATE */
     std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
     attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
-    attackState->childs.push_back(std::move(phyUpdate));
+    attackState->childs.emplace_back(std::move(phyUpdate));
     attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
-/*-- ATTACK  --*/     
+/*-- ATTACK  --*/
 
     root = std::make_unique<Selector>();
-    root->childs.push_back(std::move(patrolState));
-    root->childs.push_back(std::move(pursueState));
-    root->childs.push_back(std::move(attackState));
+    root->childs.emplace_back(std::move(patrolState));
+    root->childs.emplace_back(std::move(pursueState));
+    root->childs.emplace_back(std::move(attackState));
 }
 
 void AI_System::update(const Context &context, const float deltaTime) {
@@ -259,6 +261,7 @@ void AI_System::update(const Context &context, const float deltaTime) {
 		if (ai) 
         {
 			auto & enemy    = context->getEntityByID(ai.getEntityID());
+
 			auto & physics  = *enemy.getComponent<Physics>();
 			auto & data     = *enemy.getComponent<CharacterData>();
 			auto & velocity = *enemy.getComponent<Velocity>();
@@ -373,5 +376,6 @@ int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph)
             small_index = i;
         }
     }
+
     return small_index;
 }
