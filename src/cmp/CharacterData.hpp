@@ -21,16 +21,24 @@ struct CharacterData : Component {
 	float		currentSwitchingCooldown	{    0.f  };
 
 	float 		attackDamage				{   50.f  };
-	float 		attackRange 				{   10.f  }; //NEW
 	float 		attackingCooldown			{    0.f  };
 	float  		currentAttackingCooldown   	{	 0.f  };
+	float 		attackRange 				{    0.f  }; //NEW
 
 	float 		dashSpeed					{    0.f  };
 	float 		dashingCooldown				{	 0.f  };
 	float		currentDashingCooldown		{    0.f  };
 
+	//DEMON JUMP | NEW
+	bool		jumping 					{  false  };
+	float 		jumpCooldown				{    3.f  };
+	float 		currentJumpCooldown			{    0.f  };
+	float 		jumpCounter          		{    1.f  };
+	vec3 		jumpTargetLocation     		{    0    };
+
 	// TODO : Componentes
-	// 		Character 	-> mode, health, attack, attacking, attackingCooldown, currentAttackingCooldown
+	// 		Character 	-> mode, health, attack, attacking, attackingCooldown, currentAttackingCooldown, attackRange
 	//		Switch		-> switching, switchingCooldown, currentSwitchingCooldown
 	//		Dash		-> dashing, dashingCooldown, currentDashingCooldown
+	// 		Jump		-> 
 };

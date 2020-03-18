@@ -107,7 +107,7 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 
         soundMessages.emplace_back(DASH_PLAYER);
     }
- std::cout << "Shift\n";
+// std::cout << "Shift\n";
 }
 // Shoot
 void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {

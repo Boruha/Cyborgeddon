@@ -9,5 +9,7 @@ void CooldownSystem::update(const Context& context, const float deltaTime) {
 			data.currentSwitchingCooldown = 0.f;
 		if (less_e(data.currentDashingCooldown -= deltaTime, 0))
 		    data.currentDashingCooldown = 0.f;
+		if (less_e(data.currentJumpCooldown -= deltaTime, 0))
+		    data.currentJumpCooldown = 0.f;
 	}
 }

@@ -172,8 +172,8 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 
 	++enemiesLeft;
 }
-/*--- TEST RANGE ENEMY ---*/
-void EntityManager::createEnemy_Range(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
+/*--- TEST ANGEL ENEMY ---*/
+void EntityManager::createEnemy_Angel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	auto& enemy     = createEntity(ENEMY);
 
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
@@ -200,7 +200,37 @@ void EntityManager::createEnemy_Range(const vec3& pos, const vec3& dim, const st
 
 	++enemiesLeft;
 }
-/*--- TEST RANGE ENEMY ---*/
+/*--- TEST ANGEL ENEMY ---*/
+
+/*--- TEST DEMON ENEMY ---*/
+void EntityManager::createEnemy_Demon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
+	auto& enemy     = createEntity(ENEMY);
+
+	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
+	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
+	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
+	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), DEMON, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
+	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
+
+	render.node = componentStorage.createMesh("resources/models/Cubo/cubo2.fbx");
+
+	render.node->setPosition(physics.position);
+	render.node->setRotation(physics.rotation);
+	render.node->setScale(physics.scale / 2.f);
+
+	render.node->setTexture(ENEMY_TEXTURE);
+
+	enemy.addComponent(physics);
+	enemy.addComponent(velocity);
+	enemy.addComponent(trigger);
+	enemy.addComponent(data);
+	enemy.addComponent(ai);
+	enemy.addComponent(render);
+
+	++enemiesLeft;
+}
+/*--- TEST DEMON ENEMY ---*/
 
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
 	auto& floor = createEntity(FLOOR);
@@ -398,7 +428,7 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(10, 120, 90));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 50, 90));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 //	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
@@ -493,7 +523,8 @@ void EntityManager::createLevel() {
 
 	createEnemy(patrol_1[0], vec3(8), patrol_1);
 	//createEnemy(patrol_2[0], vec3(8), patrol_2);
-	createEnemy_Range(patrol_2[0], vec3(11), patrol_2);
+	createEnemy_Demon(patrol_2[0], vec3(11), patrol_2);
+	//createEnemy_Demon(vec3(0,10,-200), vec3(11), patrol_2);
 	createEnemy(patrol_3[0], vec3(8), patrol_3);
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);

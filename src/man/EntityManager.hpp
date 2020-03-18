@@ -50,7 +50,8 @@ struct EntityManager : GameContext {
 
 		void createPairPlayerCamera (const vec3& pos, const vec3& dim, const vec3& posCamera);
 		void createEnemy  (const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
-		void createEnemy_Range(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
+		void createEnemy_Angel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
+		void createEnemy_Demon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
 
 		void createWall   (const vec3& pos, const vec3& dim);
 		void createFloor  (std::string_view tex, const vec3& pos, const vec3& dim);

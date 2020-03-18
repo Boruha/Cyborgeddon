@@ -22,7 +22,7 @@ void GameManager::init()
 
 	currentState = & states.emplace(std::make_pair(INGAME, State(INGAME, entityManager))).first->second;
 
-	currentState->registerSystem<InputSystem>();                  // se detecta input del player
+	currentState->registerSystem<InputSystem>();                      // se detecta input del player
 	currentState->registerSystem<AI_System>();                        // se detecta input de los enemigos
 	currentState->registerSystem<AttackSystem>();                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	currentState->registerSystem<TriggerFastCollisionSystem>();       // se ejecutan las comprobaciones de colision entre balas y resto de cosas relevantes
