@@ -16,7 +16,7 @@ struct Velocity : public Component
 
 	friend std::ostream& operator<<(std::ostream& os, const Velocity& vel);
 
-	vec3		direction {0};
+	vec3		    direction    {0};
 	float 	 		currentSpeed {0};
 	float		 	defaultSpeed {0};
 	float 			acceleration {0};

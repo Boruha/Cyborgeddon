@@ -77,10 +77,10 @@ struct TreeNode final : INode {
         std::vector<std::unique_ptr<TreeNode>> children { };
 
 		vec3 translation { 0 };
-		vec3 rotation { 0 };
-		vec3 scale { 1 };
+		vec3 rotation    { 0 };
+		vec3 scale       { 1 };
 
-		mat4 transform { 1 };
+		mat4 transform   { 1 };
 
 		bool allowCalculateMatrix { true };
 
