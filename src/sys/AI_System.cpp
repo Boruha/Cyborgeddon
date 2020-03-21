@@ -17,20 +17,12 @@
 
     struct AlignBehaviour : BehaviourNode
     {
-<<<<<<< HEAD
-    	const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
-
-    	return greater_e(distance2, ARRIVED_MIN_DISTANCE2);
-    }
-};
-=======
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             phy.rotation.y = nearestAngle(phy.rotation.y, getRotationYfromXZ(phy.position - ai.target_position));
             return true;
         }
     };
->>>>>>> Angel_Attack
 
     struct ArriveBehaviour : BehaviourNode
     {
@@ -57,13 +49,6 @@
 
     struct PatrolStateBehaviour : BehaviourNode
     {
-<<<<<<< HEAD
-        const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-
-        return greater_e(distance2, PURSUE_MIN_DISTANCE2);
-    }
-};
-=======
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
@@ -76,7 +61,6 @@
         }
     };
 /*  PATROL BEHAVIOURS  */
->>>>>>> Angel_Attack
 
 /*  PURSE BEHAVIOURS  */
     struct PursueStateBehaviour : BehaviourNode
@@ -88,33 +72,8 @@
                 return true;
             return false;
         }
-<<<<<<< HEAD
 
-        return false;
-    }
-};
-
-//Se deberia comprobar que se genere todo(?)
-struct CreateRouteBehaviour : BehaviourNode
-{
-    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
-    {
-        const std::vector<MapNode>& ref_graph = context->getGraph();
-
-        int final_path = nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
-        int ini_path   = nearestNode(phy.position, ref_graph); //index -> mapnode + cercano a enemy
-        ai.path_node   = ini_path;
-        ai.path_index  = 0;
-        //guardamos el path generado, usamos el ID para identificarlo despues.
-        context->setPath(ai.getEntityID(), calculePath(ini_path, final_path, ref_graph));
-        ai.target_position = ref_graph[ai.path_node].coord;
-        
-        return true;
-    }
-};
-=======
     };
->>>>>>> Angel_Attack
 
     struct HaveRouteBehaviour : BehaviourNode
     {
@@ -147,14 +106,7 @@ struct CreateRouteBehaviour : BehaviourNode
             
             return true;
         }
-<<<<<<< HEAD
-
-        return false;
-    }
-};
-=======
     };
->>>>>>> Angel_Attack
 
     struct NextPursePointBehaviour : BehaviourNode
     {
@@ -345,7 +297,7 @@ void AI_System::init() {
     patrolState->childs.emplace_back(std::move(patrolPoint));
     patrolState->childs.emplace_back(std::move(phyUpdate));
 
-    /*-- PATROL  --*/
+/*-- PATROL  --*/
 
 /*-- PURSUE  --*/     
     /* UPDATE PURSUE */
@@ -360,14 +312,8 @@ void AI_System::init() {
     getPursue->childs.emplace_back(std::move(pursuePoint));
 
     /* SET/GET PURSE */
-    std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();    
-<<<<<<< HEAD
-    setGetPursue->childs.emplace_back(std::make_unique<ChaseStateBehaviour>());
-    setGetPursue->childs.emplace_back(std::move(getPursue));
-=======
-    //setGetPursue->childs.emplace_back(std::make_unique<ChaseStateBehaviour>());
+    std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();
     setGetPursue->childs.push_back(std::move(getPursue));
->>>>>>> Angel_Attack
     setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
 
     /* PHY UPDATE */
@@ -431,16 +377,10 @@ void AI_System::init() {
     /* ATTACK STATE */
     std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
     attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
-<<<<<<< HEAD
-    attackState->childs.emplace_back(std::move(phyUpdate));
-    attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
-/*-- ATTACK  --*/
-=======
     attackState->childs.push_back(std::move(attackSelector));
     attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
 
 /*-- ATTACK  --*/     
->>>>>>> Angel_Attack
 
     root = std::make_unique<Selector>();
     root->childs.emplace_back(std::move(patrolState));

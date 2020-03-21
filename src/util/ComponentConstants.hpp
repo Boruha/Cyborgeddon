@@ -46,7 +46,3 @@ constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTA
 
 // NAV GRAPH
 constexpr unsigned  MAX_GRAPH_CONN                  = 3;
-
-//PHYSICS
-constexpr float     GRAVITY_FORCE                   = -9.8f;
-constexpr float     JUMP_V0                         = 20.f;
