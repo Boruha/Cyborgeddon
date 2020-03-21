@@ -3,6 +3,7 @@
 #include <Engine/SunlightEngine/SceneInterface/Tree/TreeNode.hpp>
 
 #include <Engine/SunlightEngine/SceneInterface/Tree/Camera.hpp>
+#include <Engine/SunlightEngine/SceneInterface/Tree/Light.hpp>
 
 struct SunlightEngine;
 struct ResourceManager;
@@ -16,9 +17,13 @@ struct SceneManager {
 
 	TreeNode * addMeshNode(std::string_view);
 	TreeNode * addCameraNode();
+	TreeNode * addLightNode(float amb, float diff, float spe);
 
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
-	[[nodiscard]] Camera * getCamera() const { return camera; }
+	[[nodiscard]] Camera   * getCamera()     const { return camera;     }
+
+	[[nodiscard]] TreeNode * getLightNode()  const { return lightNode;  }
+	[[nodiscard]] Light    * getLight()      const { return light;      }
 
 	SunlightEngine * getEngine() { return engine; }
 
@@ -26,7 +31,10 @@ private :
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
 	TreeNode * cameraNode { nullptr };
-	Camera   * camera { nullptr };
+	Camera   * camera     { nullptr };
+
+	TreeNode * lightNode  { nullptr };
+	Light    * light      { nullptr };
 
 	mat4 viewProjection {1};
 

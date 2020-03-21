@@ -75,6 +75,7 @@ struct Storage {
 	INode * createMesh(std::string_view mesh);
 
 	INode * createCamera();
+	INode * createLight(float amb, float diff, float spe);
 
 	void removeNode(const INode * n);
 

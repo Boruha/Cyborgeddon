@@ -51,11 +51,11 @@ constexpr std::string_view MVP_GEMOTRY_PATH {
 };
 
 constexpr std::string_view MODEL_VERTEX_PATH {
-		"./src/Engine/util/shaders/model/vertex.glsl"
+		"src/Engine/util/shaders/model/vertex.glsl"
 };
 
 constexpr std::string_view MODEL_FRAGMENT_PATH {
-		"./src/Engine/util/shaders/model/fragment.glsl"
+		"src/Engine/util/shaders/model/fragment.glsl"
 };
 
 constexpr std::string_view MODEL_GEMOTRY_PATH {

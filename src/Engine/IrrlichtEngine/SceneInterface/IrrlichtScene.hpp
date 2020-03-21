@@ -17,6 +17,10 @@ struct IrrlichtScene final : IScene {
     std::unique_ptr<INode> addCameraNode() override;
 	INode * addFreeCameraNode() override { return nullptr; }
 
+    std::unique_ptr<INode> addLightNode() override;
+	INode * addFreeLightNode(float amb, float diff, float spe) override { return nullptr; }
+
+
 
 	[[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
 

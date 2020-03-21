@@ -65,8 +65,8 @@ void RModel::processNode(aiNode * node, const aiScene * scene) {
 }
 
 void RModel::processMesh(aiMesh * mesh, const aiScene * scene) {
-	std::vector<Vertex> vertices;
-	std::vector<Index> indices;
+	std::vector<Vertex>  vertices;
+	std::vector<Index>   indices;
 	std::vector<Texture> textures;
 
 	processVertices(mesh, vertices);

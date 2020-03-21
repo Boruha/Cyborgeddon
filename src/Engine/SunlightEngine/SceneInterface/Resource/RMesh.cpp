@@ -58,11 +58,7 @@ void RMesh::render(const glm::mat4 & m, Shader shader) const {
 
 		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
 	}
-
-	shader.mat4Uniform("projection", glm::perspective(glm::radians(45.f), float(WINDOW_WIDTH) / float(WINDOW_HEIGHT), 0.1f, 1000.f));
-	shader.mat4Uniform("view", glm::lookAt(glm::vec3(0, 10, 27.5), glm::vec3(0, 10, 27.5) + glm::vec3(0, 0, -1), glm::vec3(0, 1, 0)));
-	shader.mat4Uniform("model", m);
-
+	
 	shader.mat4Uniform("mvp", m);
 
 	glBindVertexArray(VAO);

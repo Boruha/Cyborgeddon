@@ -6,7 +6,10 @@
 
 #include <Engine/SunlightEngine/SceneInterface/Tree/SceneManager.hpp>
 
-void Camera::render(const glm::mat4& m) { };
+void Camera::render(const glm::mat4& m)
+{
+	//TODO:: SHADER->UNIFORM.
+};
 
 void Camera::setPerspective(const float near, const float far, const float fov) {
 	projection = glm::perspective(glm::radians(fov), float(WINDOW_WIDTH) / float(WINDOW_HEIGHT), near, far);

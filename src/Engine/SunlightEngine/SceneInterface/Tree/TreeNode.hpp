@@ -52,18 +52,16 @@ struct TreeNode final : INode {
     [[nodiscard]] const mat4& getTransform() const;
 
 
-	[[nodiscard]] const vec3 & getTarget() const override {
-
-	};
+	[[nodiscard]] const vec3& getTarget() const override { return vec3(); }
 
 	// setters
-	void setTarget(const vec3 & tar) override;
+	void setTarget(const vec3& tar) override;
 
 	// set texture
 	void setTexture(std::string_view) const override {};
 
 	// sets if light should affect a node
-	void affectedByLight(bool) const override {};
+	void affectedByLight(bool) const override {/*TODO: SERA UN UNIFORM*/};
 
 	void calculateTransform() { transform = calculateMatrix(); }
 
