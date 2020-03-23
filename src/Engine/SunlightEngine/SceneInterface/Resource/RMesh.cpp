@@ -38,7 +38,7 @@ RMesh::~RMesh() = default;
 void RMesh::render(const glm::mat4 & m, Shader shader) const {
 	unsigned diffuse {0}, specular {0}, normal {0}, height {0};
 
-	shader.enable();
+	//shader.enable();
 
 	for (int i = 0; i < textures.size(); ++i) {
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -59,7 +59,7 @@ void RMesh::render(const glm::mat4 & m, Shader shader) const {
 		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
 	}
 	
-	shader.mat4Uniform("mvp", m);
+	shader.mat4Uniform("m_MVP", m);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, reinterpret_cast<void *>(0));

@@ -7,9 +7,13 @@ layout (location = 2) in vec2 aTexCoords;   // coordenada de textura del vertex
 out vec2 TexCoords;     // coordenada de textura que va a recibir el fragment
 /*
 uniform mat4 model;         // matriz modelo
-uniform mat4 view;          // matriz vista
 uniform mat4 projection;    // matriz proyeccion
 */
+float ambient;
+float diffuse;
+float specular;
+
+uniform mat4 viewMatrix;          // matriz vista
 uniform mat4 mvp;
 
 // TODO : calcular mvp antes puede ser interesante para mejorar rendimiento

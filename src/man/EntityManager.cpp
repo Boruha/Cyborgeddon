@@ -125,7 +125,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	camera->addComponent(cameraRender);
 }
 
-void EntityManager::createLight(const vec3& pos, const float amb, const float diff, const float spe)
+void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& diff, const vec3& spe)
 {
 	auto* light = & createEntity(LIGHT);
 
@@ -448,7 +448,7 @@ void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
 	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 50, 90));
-	createLight(vec3(0, 20, 0), 0.4, 0.0, 0.0);
+	createLight(vec3(0, 30, 0), vec3(0.0), vec3(0.0), vec3(0.0));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	//	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls

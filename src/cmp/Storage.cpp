@@ -85,8 +85,7 @@ INode * Storage::createCamera() {
 	return returnValue;
 }
 
-INode * Storage::createLight(float amb, float diff, float spe) {
-
+INode * Storage::createLight(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) {
 	INode * returnValue { nullptr };
 
 	for (auto & node : nodes) {

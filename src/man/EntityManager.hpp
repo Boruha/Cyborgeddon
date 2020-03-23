@@ -49,7 +49,7 @@ struct EntityManager : GameContext {
         Entity& createEntity(EntityType type);
 
 		void createPairPlayerCamera(const vec3& pos, const vec3& dim, const vec3& posCamera);
-		void createLight(const vec3& pos, const float amb, const float diff, const float spe);
+		void createLight(const vec3& pos, const vec3& amb, const vec3& diff, const vec3& spe);
 		void createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
 		void createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);
 		void createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol);

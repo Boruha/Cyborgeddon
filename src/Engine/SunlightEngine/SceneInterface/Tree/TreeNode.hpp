@@ -14,6 +14,7 @@ using glm::vec3;
 using glm::mat4;
 
 struct SceneManager;
+struct Shader;
 
 struct TreeNode final : INode {
 
@@ -21,7 +22,7 @@ struct TreeNode final : INode {
 
 	explicit operator bool() const override { return true; };
 
-    void render(const mat4& m);
+    void render(const mat4& m, Shader shader);
 
 	void remove() override;
 
@@ -79,6 +80,8 @@ struct TreeNode final : INode {
 		vec3 scale       { 1 };
 
 		mat4 transform   { 1 };
+        mat4 modelView   { 1 };
+        mat4 m_normal    { 1 };
 
 		bool allowCalculateMatrix { true };
 

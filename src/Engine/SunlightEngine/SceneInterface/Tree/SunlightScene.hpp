@@ -15,7 +15,7 @@ struct SunlightScene : IScene {
 	INode * addFreeCameraNode() override;
 
 	std::unique_ptr<INode> addLightNode() override;
-	INode * addFreeLightNode(float amb, float diff, float spe) override;
+	INode * addFreeLightNode(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) override;
 
 	[[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
 

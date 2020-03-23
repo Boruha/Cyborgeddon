@@ -52,7 +52,7 @@ RModel::~RModel() {
 		glDeleteTextures(1, &t.ID);
 }
 
-void RModel::render(const glm::mat4 & m) const {
+void RModel::render(const glm::mat4 & m, Shader shader) const {
 	for (const auto & mesh : modelMeshes)
 		mesh.render(m, shader);
 }
