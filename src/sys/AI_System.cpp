@@ -11,6 +11,7 @@
         {
             vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
             phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
+
             return true;
         }
     };
@@ -20,6 +21,7 @@
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             phy.rotation.y = nearestAngle(phy.rotation.y, getRotationYfromXZ(phy.position - ai.target_position));
+
             return true;
         }
     };
@@ -29,9 +31,8 @@
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
-            if (greater_e(distance2, ARRIVED_MIN_DISTANCE2))
-                return true;
-            return false;
+
+            return greater_e(distance2, ARRIVED_MIN_DISTANCE2);
         }
     };
 /*  GENERAL BEHAVIOURS  */
@@ -43,6 +44,7 @@
         {
             ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
             ai.target_position = ai.patrol_position[ai.patrol_index];
+
             return true;
         }
     };
@@ -52,11 +54,14 @@
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+
             if (greater_e(distance2, PATROL_MIN_DISTANCE2))
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
+
                 return true;
             }
+
             return false;
         }
     };
@@ -68,9 +73,8 @@
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-            if (greater_e(distance2, PURSUE_MIN_DISTANCE2) && !data.jumping)
-                return true;
-            return false;
+
+            return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !data.jumping;
         }
 
     };
@@ -142,11 +146,14 @@
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+
             if (!greater_e(distance2, CHASE_MIN_DISTANCE2))
             {
                 ai.target_position = player_pos;
+
                 return true;
             }
+
             return false;
         }
     };
@@ -176,6 +183,7 @@
                     soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
                     return true;
                 }
+
                 return false;
             }
         };
@@ -185,9 +193,8 @@
             bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
                 const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-                if(greater_e(distance2, data.attackRange))
-                    return true;
-                return false;
+
+                return greater_e(distance2, data.attackRange);
             }
         };
     /*  BASIC ATTACK  */
@@ -197,11 +204,7 @@
         {
             bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
-                if(data.mode == DEMON) 
-                {
-                    return true;
-                }
-                return false;
+	            return data.mode == DEMON;
             }
         };
 

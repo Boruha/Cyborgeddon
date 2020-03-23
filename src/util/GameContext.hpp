@@ -18,7 +18,7 @@ struct GameContext {
 	virtual void createBullet() = 0;
 
 	[[nodiscard]] virtual bool checkVictory() const = 0;
-	[[nodiscard]] virtual bool checkDefeat() const = 0;
+	[[nodiscard]] virtual bool checkDefeat()  const = 0;
 
 	[[nodiscard]] virtual const Entity& getPlayer() const = 0;
 	[[nodiscard]] virtual 		Entity& getPlayer()		  = 0;
@@ -29,8 +29,8 @@ struct GameContext {
 	[[nodiscard]] virtual const std::vector<MapNode>& getGraph() const = 0;
 	[[nodiscard]] virtual 		std::vector<MapNode>& getGraph()	   = 0;
 
-	[[nodiscard]] virtual       std::vector<int>& getPath(EntityID eid)  = 0;
-				  virtual       void deletePath(EntityID eid)            = 0;
+	[[nodiscard]] virtual       std::vector<int>& getPath(EntityID)      = 0;
+				  virtual       void deletePath(EntityID)                = 0;
 				  virtual 		void setPath(EntityID, std::vector<int>) = 0;
 
 	[[nodiscard]] virtual const Entity& getEntityByID(EntityID) const = 0;
@@ -39,7 +39,7 @@ struct GameContext {
 	[[nodiscard]] virtual const Storage& getComponents() const = 0;
 	[[nodiscard]] virtual 		Storage& getComponents() 	   = 0;
 
-	virtual void addToDestroy(EntityID ID) = 0;
+	virtual void addToDestroy(EntityID) = 0;
 
 	[[nodiscard]] virtual bool isKeyPressed(KEY_CODE) const = 0;
 	[[nodiscard]] virtual const Mouse& getMouse() const = 0;

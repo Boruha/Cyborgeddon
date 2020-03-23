@@ -34,7 +34,7 @@ struct CompoundNode : BehaviourNode
     ~CompoundNode() override = default;
 
     /* FUNCTIONS */
-    const std::vector<std::unique_ptr<BehaviourNode>>& getChilds() const { return childs; };
+    [[nodiscard]] const std::vector<std::unique_ptr<BehaviourNode>>& getChilds() const { return childs; };
 
     /* DATA */
     std::vector<std::unique_ptr<BehaviourNode>> childs;
