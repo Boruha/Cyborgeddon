@@ -83,7 +83,7 @@ void SoundSystem::update(const Context& context, const float deltaTime) {
 		soundMessages.pop_back();                                                       // elimino el mensaje del vector
 	}
 
-//	ERRCHECK (system->update() );
+	ERRCHECK ( system->update() );
 }
 
 void SoundSystem::reset() {
@@ -101,7 +101,7 @@ void SoundSystem::reset() {
 }
 
 void SoundSystem::startBackgroundMusic() {
-	ERRCHECK( backingTrack.instance->start() );
+	ERRCHECK ( backingTrack.instance->start() );
 	ERRCHECK (system->update() );
 }
 
