@@ -94,7 +94,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("resources/models/Bot/bot.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -130,7 +130,7 @@ void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& di
 	auto* light = & createEntity(LIGHT);
 
 	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(), vec3()));
-	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, true));
+	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, false));
 
 	render.node   = componentStorage.createLight(amb, diff, spe);
 	
@@ -142,7 +142,6 @@ void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& di
 	light->addComponent(render);
 
 }
-
 
 void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& wall = createEntity(WALL);
@@ -191,6 +190,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 
 	++enemiesLeft;
 }
+
 /*--- TEST ANGEL ENEMY ---*/
 void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	auto& enemy     = createEntity(ENEMY);
@@ -447,8 +447,8 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 50, 90));
-	createLight(vec3(30, 50, 40), vec3(0.1), vec3(0.6), vec3(0.1));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 40, 50));
+	createLight(vec3(30, 60, 20), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls

@@ -14,7 +14,8 @@ struct Light
 uniform Light     light;
 //Textures
 uniform sampler2D texture_diffuse0;
-
+uniform sampler2D texture_normal0;
+uniform bool      has_normal;
 /*-------  INPUTS  -------*/
 in vec2 TexCoords;
 in vec3 view_Pos;
@@ -39,11 +40,16 @@ void main() {
     vec3 f_diff        = light.diffuse * max(dot(vec_obj_light, vec_normal), 0.0) * vec_tex;
 
     /* SPECULAR */
-    vec3 vec_view = normalize(-view_Pos); //Camera in 0.0
-    vec3 vec_spec = reflect(-vec_obj_light, vec_normal);
+    vec3 f_spec = vec3(0);
 
-    vec3 f_spec   = light.specular * pow(max(dot(vec_spec, vec_view), 0.0), 0.3) * vec_tex;
-    
+    if(has_normal)
+    {
+        vec3 vec_view = normalize(-view_Pos); //Camera in 0.0
+        vec3 vec_spec = reflect(-vec_obj_light, vec_normal);
+        vec3 vec_tex2 = vec3(texture(texture_normal0, TexCoords));
+
+        f_spec        = light.specular * pow(max(dot(vec_spec, vec_view), 0.0), 0.2) * vec_tex2;
+    }
     /* TOTAL    */
     vec3 phong  = f_amb + f_diff + f_spec;
 

@@ -23,4 +23,6 @@ struct RMesh : IResource {
 		std::vector<Vertex>  vertices;
 		std::vector<Index>    indices;
 		std::vector<Texture> textures;
+
+		bool normal_tex      { false };
 };
