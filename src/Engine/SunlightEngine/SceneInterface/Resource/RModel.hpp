@@ -12,9 +12,8 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/Index.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Resource/Texture.hpp>
 
-#include <Engine/util/shaders/Shader.hpp>
-
-#include <Engine/util/shaders/ShaderPath.hpp>
+//#include <Engine/util/shaders/Shader.hpp>
+//#include <Engine/util/shaders/ShaderPath.hpp>
 
 struct aiScene;
 struct aiNode;
@@ -25,10 +24,10 @@ struct RModel : IResource {
 	explicit RModel (std::string_view path);
 	~RModel() override;
 
-	void render(const glm::mat4 & m) const;
+	void render(const glm::mat4 & m, Shader shader) const;
 
 	private :
-		Shader shader { MODEL_SHADER_PATH };
+		//Shader shader { MODEL_SHADER_PATH };
 
 		std::vector<RMesh> modelMeshes;
 		std::vector<Texture> modelTextures;

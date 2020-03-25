@@ -31,14 +31,15 @@ RMesh::RMesh(std::vector<Vertex> _vertices, std::vector<Index> _indices, std::ve
 	glEnableVertexAttribArray(TEXCOORD_LOCATION);
 
 	glBindVertexArray(0);	// desenlazamos el VAO
+
+	if(textures.size() > 1)
+		normal_tex = true;
 }
 
 RMesh::~RMesh() = default;
 
 void RMesh::render(const glm::mat4 & m, Shader shader) const {
 	unsigned diffuse {0}, specular {0}, normal {0}, height {0};
-
-	shader.enable();
 
 	for (int i = 0; i < textures.size(); ++i) {
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -53,17 +54,14 @@ void RMesh::render(const glm::mat4 & m, Shader shader) const {
 			name += std::to_string(normal++);
 		else if (std::string_view(name) == HEIGHT)
 			name += std::to_string(height++);
-
+		
 		shader.intUniform(name, i);
 
 		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
 	}
 
-	shader.mat4Uniform("projection", glm::perspective(glm::radians(45.f), float(WINDOW_WIDTH) / float(WINDOW_HEIGHT), 0.1f, 1000.f));
-	shader.mat4Uniform("view", glm::lookAt(glm::vec3(0, 10, 27.5), glm::vec3(0, 10, 27.5) + glm::vec3(0, 0, -1), glm::vec3(0, 1, 0)));
-	shader.mat4Uniform("model", m);
-
-	shader.mat4Uniform("mvp", m);
+	shader.boolUniform("has_normal", normal_tex);
+	shader.mat4Uniform("m_MVP", m);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, reinterpret_cast<void *>(0));

@@ -11,6 +11,10 @@ std::unique_ptr<INode> SunlightScene::addCameraNode() {
 	return std::unique_ptr<INode>();
 }
 
+std::unique_ptr<INode> SunlightScene::addLightNode() {
+	return std::unique_ptr<INode>();
+}
+
 vec3 SunlightScene::cursorToWorld(const float x, const float y, const float far) {
 	const glm::mat4x4& viewProjMatrix = sceneManager->getCamera()->getViewProjectionMatrix();
 
@@ -36,4 +40,8 @@ INode * SunlightScene::addMeshNode(const std::string_view mesh) {
 
 INode * SunlightScene::addFreeCameraNode() {
 	return sceneManager->addCameraNode();
+}
+
+INode * SunlightScene::addFreeLightNode(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) {
+	return sceneManager->addLightNode(amb, diff, spe);
 }

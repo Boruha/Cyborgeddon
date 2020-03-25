@@ -35,18 +35,24 @@ TreeNode * TreeNode::getParent() const {
     return parent;
 }
 
-void TreeNode::render(const glm::mat4& m) {
+void TreeNode::render(const glm::mat4& m, Shader shader) {
 	if (allowCalculateMatrix)
 		transform = calculateMatrix();
+
+	modelView = sceneManager.getView() * transform; //View no cambia(?) pasar al if.	
+	m_normal  = glm::transpose( glm::inverse(modelView) );
+	
+	shader.mat4Uniform("m_MV"    , modelView);
+	shader.mat4Uniform("m_Normal", m_normal);
 
     const glm::mat4 newMatrix = m * transform;
 
     if (entity)
-        entity->render(sceneManager.getViewProjection() * newMatrix);
+        entity->render(sceneManager.getViewProjection() * newMatrix, shader);
 
     if (!children.empty())
         for (const auto & child : children)
-            child->render(newMatrix);
+            child->render(newMatrix, shader);
 }
 
 void TreeNode::setPosition(const vec3& trans) {

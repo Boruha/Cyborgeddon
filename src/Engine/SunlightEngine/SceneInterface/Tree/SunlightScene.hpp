@@ -14,6 +14,9 @@ struct SunlightScene : IScene {
 	std::unique_ptr<INode> addCameraNode() override;
 	INode * addFreeCameraNode() override;
 
+	std::unique_ptr<INode> addLightNode() override;
+	INode * addFreeLightNode(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) override;
+
 	[[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
 
 	void loadTexture(std::string_view path) const override {}
@@ -21,6 +24,5 @@ struct SunlightScene : IScene {
 	void unloadTextures() const override {}
 
 private :
-
 	SceneManager * sceneManager;
 };

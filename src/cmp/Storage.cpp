@@ -85,6 +85,22 @@ INode * Storage::createCamera() {
 	return returnValue;
 }
 
+INode * Storage::createLight(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) {
+	INode * returnValue { nullptr };
+
+	for (auto & node : nodes) {
+		if (node == nullptr) {
+			returnValue = node = engine.scene->addFreeLightNode(amb, diff, spe);
+			break;
+		}
+	}
+
+	if (!returnValue)
+		returnValue = nodes.emplace_back(engine.scene->addFreeLightNode(amb, diff, spe));
+
+	return returnValue;
+}
+
 void Storage::removeNode(const INode * n) {
 	for (auto & node : nodes) {
 		if (n == node) {

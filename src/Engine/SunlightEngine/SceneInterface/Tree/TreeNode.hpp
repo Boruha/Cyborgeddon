@@ -14,6 +14,7 @@ using glm::vec3;
 using glm::mat4;
 
 struct SceneManager;
+struct Shader;
 
 struct TreeNode final : INode {
 
@@ -21,7 +22,7 @@ struct TreeNode final : INode {
 
 	explicit operator bool() const override { return true; };
 
-    void render(const mat4& m);
+    void render(const mat4& m, Shader shader);
 
 	void remove() override;
 
@@ -52,18 +53,16 @@ struct TreeNode final : INode {
     [[nodiscard]] const mat4& getTransform() const;
 
 
-	[[nodiscard]] const vec3 & getTarget() const override {
-
-	};
+	[[nodiscard]] const vec3& getTarget() const override { return vec3(); }
 
 	// setters
-	void setTarget(const vec3 & tar) override;
+	void setTarget(const vec3& tar) override;
 
 	// set texture
 	void setTexture(std::string_view) const override {};
 
 	// sets if light should affect a node
-	void affectedByLight(bool) const override {};
+	void affectedByLight(bool) const override {/*TODO: SERA UN UNIFORM*/};
 
 	void calculateTransform() { transform = calculateMatrix(); }
 
@@ -81,6 +80,8 @@ struct TreeNode final : INode {
 		vec3 scale       { 1 };
 
 		mat4 transform   { 1 };
+        mat4 modelView   { 1 };
+        mat4 m_normal    { 1 };
 
 		bool allowCalculateMatrix { true };
 

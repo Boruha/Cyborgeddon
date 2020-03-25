@@ -52,7 +52,7 @@ RModel::~RModel() {
 		glDeleteTextures(1, &t.ID);
 }
 
-void RModel::render(const glm::mat4 & m) const {
+void RModel::render(const glm::mat4 & m, Shader shader) const {
 	for (const auto & mesh : modelMeshes)
 		mesh.render(m, shader);
 }
@@ -65,8 +65,8 @@ void RModel::processNode(aiNode * node, const aiScene * scene) {
 }
 
 void RModel::processMesh(aiMesh * mesh, const aiScene * scene) {
-	std::vector<Vertex> vertices;
-	std::vector<Index> indices;
+	std::vector<Vertex>  vertices;
+	std::vector<Index>   indices;
 	std::vector<Texture> textures;
 
 	processVertices(mesh, vertices);

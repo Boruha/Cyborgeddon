@@ -17,6 +17,12 @@ std::unique_ptr<INode> IrrlichtScene::addCameraNode() {
 	return std::move(u_camera);
 }
 
+std::unique_ptr<INode> IrrlichtScene::addLightNode() { //Para que no se queje
+    auto u_camera = std::make_unique<IrrlichtCameraNode>(sceneManager);
+    camera = u_camera.get();
+	return std::move(u_camera);
+}
+
 vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far) {
 	//std::cout << glm::to_string(glm::inverse(camera->getViewMatrix())) << "\n";
 

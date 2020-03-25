@@ -4,7 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 
-constexpr unsigned SHADER_TYPES = 3;
+constexpr unsigned SHADER_TYPES = 2;
 
 class Shader {
     unsigned ID { 0 };
