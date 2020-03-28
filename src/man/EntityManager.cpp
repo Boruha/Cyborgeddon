@@ -450,10 +450,9 @@ void EntityManager::createLevel() {
 	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 40, 50));
 	createLight(vec3(30, 60, 20), vec3(0.1), vec3(0.6), vec3(0.2));
 
-	//------------ Creacion del escenario para las Christmas ------------------------------------------
-	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
-//	createFloor(TIPS_TEXTURE, vec3(-2,0,27), vec3(45,0,15)); //Tips
+	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
 
+	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys
 	createPairKeyDoor(vec3(0,0,-60), vec3(3), vec3(-37,0,-90), vec3(2,20,10));
 	createPairKeyDoor(vec3(-70,0,-90), vec3(3), vec3(37,0,0), vec3(2,20,10));

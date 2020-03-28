@@ -140,23 +140,6 @@
             return false;
         }
     };
-    //DEPRECATE(?)
-    struct ChaseStateBehaviour : BehaviourNode
-    {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
-        {
-            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-
-            if (!greater_e(distance2, CHASE_MIN_DISTANCE2))
-            {
-                ai.target_position = player_pos;
-
-                return true;
-            }
-
-            return false;
-        }
-    };
 /*  PURSE BEHAVIOURS  */
 
 /*  ATTACK BEVAHOIUR  */

@@ -1,11 +1,8 @@
 #pragma once
 
 #include <Engine/SunlightEngine/SceneInterface/Tree/TreeNode.hpp>
-
 #include <Engine/SunlightEngine/SceneInterface/Tree/Camera.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Tree/Light.hpp>
-
-
 #include <Engine/util/shaders/Shader.hpp>
 #include <Engine/util/shaders/ShaderPath.hpp>
 
@@ -35,7 +32,7 @@ struct SceneManager {
 private :
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
-	Shader shader { PHONG_LIGTHMAP_SHADER }; //TODO: add a shader selector;
+	Shader shader { PHONG_BASIC_SHADER }; //TODO: add a shader selector;
 
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };
