@@ -224,11 +224,12 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 /*--- TEST DEMON ENEMY ---*/
 void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	auto& enemy     = createEntity(ENEMY);
-
+	std::cout << "DEMON START\n";
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), DEMON, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
+	auto& jump 		= componentStorage.createComponent(Jump(enemy.getType(), enemy.getID(), JUMP_COOLDOWN, JUMP_TIMER));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
@@ -244,10 +245,13 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(velocity);
 	enemy.addComponent(trigger);
 	enemy.addComponent(data);
+	enemy.addComponent(jump);
 	enemy.addComponent(ai);
 	enemy.addComponent(render);
 
 	++enemiesLeft;
+
+	std::cout << "DEMON OKKKKK\n";
 }
 /*--- TEST DEMON ENEMY ---*/
 

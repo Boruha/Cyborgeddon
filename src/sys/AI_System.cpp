@@ -1,6 +1,7 @@
 #include <sys/AI_System.hpp>
 
 #include <Engine/util/Math.hpp>
+
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
 
@@ -35,6 +36,47 @@
             return greater_e(distance2, ARRIVED_MIN_DISTANCE2);
         }
     };
+
+    struct jumpingBehaviour : BehaviourNode //Need previous condition which set jumping to true
+    {
+        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        {
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+			auto & jump     = *enemy.getComponent<Jump>();
+            
+            if(jump.jumping) 
+            {
+                ai.target_position = jump.jumpTargetLocation;
+                return true;
+            }
+            return false;
+        }
+    };
+
+    struct jumpUpdateBehaviour : BehaviourNode 
+    {
+        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        {
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+			auto & jump     = *enemy.getComponent<Jump>();
+
+            vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
+            phy.velocity  = normalize(vel.direction) * (vel.currentSpeed * 2) * deltaTime;
+            
+            jump.jumpTimer -= deltaTime * 2;
+            phy.velocity.y = jump.jumpTimer * (vel.currentSpeed * 2) * deltaTime;  
+            
+            if(phy.position.y < (phy.scale.y / 2))
+            {
+                jump.jumpTimer = 1.f;
+                phy.position.y = phy.scale.y / 2;
+                phy.velocity.y = 0;
+                jump.jumping = false;
+            }
+            return true;
+        }
+    };
+
 /*  GENERAL BEHAVIOURS  */
 
 /*  PATROL BEHAVIOURS  */
@@ -72,9 +114,16 @@
     {
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+			auto * jump     = enemy.getComponent<Jump>();
+
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
 
-            return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !data.jumping;
+            if(jump)    
+                return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
+            else
+                return greater_e(distance2, PURSUE_MIN_DISTANCE2);
+
         }
 
     };
@@ -101,7 +150,7 @@
             const std::vector<MapNode>& ref_graph = context->getGraph();
 
             int final_path = nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
-            int ini_path   = nearestNode(phy.position, ref_graph); //index -> mapnode + cercano a enemy
+            int ini_path   = nearestNode(phy.position, ref_graph);     //index -> mapnode + cercano a enemy
             ai.path_node   = ini_path;
             ai.path_index  = 0;
             //guardamos el path generado, usamos el ID para identificarlo despues.
@@ -133,10 +182,12 @@
     {
         bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
-            ai.path_index = -1;
-            ai.path_node  = -1;
-            context->deletePath(ai.getEntityID());
-        
+            if(ai.path_index != -1)
+            {
+                ai.path_index = -1;
+                ai.path_node  = -1;
+                context->deletePath(ai.getEntityID());
+            }
             return false;
         }
     };
@@ -191,46 +242,14 @@
             }
         };
 
-        struct jumpingBehaviour : BehaviourNode 
-        {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
-            {
-                if(data.jumping) 
-                {
-                    ai.target_position = data.jumpTargetLocation;
-                    return true;
-                }
-                return false;
-            }
-        };
-
-        struct jumpUpdateBehaviour : BehaviourNode 
-        {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
-            {
-                vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
-                phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
-                
-                data.jumpCounter -= deltaTime * 2; //(GRAVITY_FORCE / 4);
-                phy.velocity.y = data.jumpCounter * vel.currentSpeed * deltaTime;     
-                
-                if(phy.position.y < (phy.scale.y / 2))
-                {
-                    std::cout << "LANDING\n";
-                    data.jumpCounter = 1.f;
-                    phy.position.y = phy.scale.y / 2;
-                    phy.velocity.y = 0;
-                    data.jumping = false;
-                }
-                return true;
-            }
-        };
-
         struct jumpDmgBehaviour : BehaviourNode 
         {
             bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
-                if(!data.jumping)
+                auto & enemy    = context->getEntityByID(ai.getEntityID());
+			    auto & jump     = *enemy.getComponent<Jump>();
+                
+                if(!jump.jumping)
                 {
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
@@ -245,15 +264,17 @@
         {
             bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
+                auto & enemy    = context->getEntityByID(ai.getEntityID());
+			    auto & jump     = *enemy.getComponent<Jump>();
+                
                 const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
 
                 if(!greater_e(distance2, DIST_ATTACK_RANGE2) && greater_e(distance2, MELEE_ATTACK_RANGE2) 
-                && !greater_e(data.currentJumpCooldown, 0)) 
+                && !greater_e(jump.currentJumpCooldown, 0)) 
                 {
-                    std::cout << "JUMP: " << phy.position.y << "\n";
-                    data.jumpTargetLocation = player_pos;
-                    data.jumping = true;
-                    data.currentJumpCooldown = data.jumpCooldown;
+                    jump.jumpTargetLocation = player_pos;
+                    jump.jumping = true;
+                    jump.currentJumpCooldown = jump.jumpCooldown;
                     return true;
                 }   
                 return false;
@@ -263,110 +284,112 @@
 
 /*  ATTACK BEVAHOIUR  */
 
+
+
 /* FUNCTIONS */
 void AI_System::init() {
 
-/*-- PATROL  --*/     
-    /* PATROL UPDATE */
-    std::unique_ptr<Selector> patrolPoint = std::make_unique<Selector>();
-    patrolPoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
-    patrolPoint->childs.emplace_back(std::make_unique<NextPatrolBehaviour>());
+    /*-- PATROL  --*/     
+        /* PATROL UPDATE */
+        std::unique_ptr<Selector> patrolPoint = std::make_unique<Selector>();
+        patrolPoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
+        patrolPoint->childs.emplace_back(std::make_unique<NextPatrolBehaviour>());
 
-    /* PHY UPDATE */
-    std::unique_ptr<Sequence> phyUpdate = std::make_unique<Sequence>();
-    phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
-    phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
-
-    /* PATROL STATE */
-    std::unique_ptr<Sequence> patrolState = std::make_unique<Sequence>();
-    patrolState->childs.emplace_back(std::make_unique<PatrolStateBehaviour>());
-    patrolState->childs.emplace_back(std::move(patrolPoint));
-    patrolState->childs.emplace_back(std::move(phyUpdate));
-
-/*-- PATROL  --*/
-
-/*-- PURSUE  --*/     
-    /* UPDATE PURSUE */
-    std::unique_ptr<Selector> pursuePoint = std::make_unique<Selector>();
-    pursuePoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
-    pursuePoint->childs.emplace_back(std::make_unique<NextPursePointBehaviour>());
-    pursuePoint->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
-
-    /* GET PURSUE */
-    std::unique_ptr<Sequence> getPursue = std::make_unique<Sequence>();
-    getPursue->childs.emplace_back(std::make_unique<HaveRouteBehaviour>());
-    getPursue->childs.emplace_back(std::move(pursuePoint));
-
-    /* SET/GET PURSE */
-    std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();
-    setGetPursue->childs.push_back(std::move(getPursue));
-    setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
-
-    /* PHY UPDATE */
-    phyUpdate = std::make_unique<Sequence>();
-    phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
-    phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
-
-    /* PURSUE STATE */
-    std::unique_ptr<Sequence> pursueState = std::make_unique<Sequence>();
-    pursueState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
-    pursueState->childs.emplace_back(std::move(setGetPursue));
-    pursueState->childs.emplace_back(std::move(phyUpdate));
-/*-- PURSUE  --*/
-
-/*-- ATTACK  --*/ 
-    /* BASIC ATTACK */
         /* PHY UPDATE */
-        phyUpdate = std::make_unique<Sequence>();
-        phyUpdate->childs.emplace_back(std::make_unique<RangeBasicAttackBehaviour>());
+        std::unique_ptr<Sequence> phyUpdate = std::make_unique<Sequence>();
+        phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
         phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
 
-        /* ACTION SELECTOR*/
-        std::unique_ptr<Selector> actionSelector = std::make_unique<Selector>();
-        actionSelector->childs.push_back(std::move(phyUpdate));
-        actionSelector->childs.emplace_back(std::make_unique<BasicAttackBehaviour>());  
+        /* PATROL STATE */
+        std::unique_ptr<Sequence> patrolState = std::make_unique<Sequence>();
+        patrolState->childs.emplace_back(std::make_unique<PatrolStateBehaviour>());
+        patrolState->childs.emplace_back(std::move(patrolPoint));
+        patrolState->childs.emplace_back(std::move(phyUpdate));
 
-        /* ATTACK */
-        std::unique_ptr<Sequence> basicAttack = std::make_unique<Sequence>();
-        basicAttack->childs.emplace_back(std::make_unique<AlignBehaviour>());
-        basicAttack->childs.push_back(std::move(actionSelector));
-    /* BASIC ATTACK */
+    /*-- PATROL  --*/
 
-    /* DEMON BRANCH */
-        /* UPDATE JUMP */
-        std::unique_ptr<Sequence> jumpUpdate = std::make_unique<Sequence>();
-        jumpUpdate->childs.emplace_back(std::make_unique<jumpingBehaviour>());
-        jumpUpdate->childs.emplace_back(std::make_unique<jumpUpdateBehaviour>());
-        jumpUpdate->childs.emplace_back(std::make_unique<jumpDmgBehaviour>());
+    /*-- PURSUE  --*/     
+        /* UPDATE PURSUE */
+        std::unique_ptr<Selector> pursuePoint = std::make_unique<Selector>();
+        pursuePoint->childs.emplace_back(std::make_unique<ArriveBehaviour>());
+        pursuePoint->childs.emplace_back(std::make_unique<NextPursePointBehaviour>());
+        pursuePoint->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
 
-        /* START JUMP */
-        std::unique_ptr<Sequence> jumpStart = std::make_unique<Sequence>();
-        jumpStart->childs.emplace_back(std::make_unique<tryJumpBehaviour>());
-        jumpStart->childs.emplace_back(std::make_unique<AlignBehaviour>());
-        
-        /* JUMP ATTACK */
-        std::unique_ptr<Selector> jumpAttack = std::make_unique<Selector>();
-        jumpAttack->childs.push_back(std::move(jumpUpdate));
-        jumpAttack->childs.push_back(std::move(jumpStart));
+        /* GET PURSUE */
+        std::unique_ptr<Sequence> getPursue = std::make_unique<Sequence>();
+        getPursue->childs.emplace_back(std::make_unique<HaveRouteBehaviour>());
+        getPursue->childs.emplace_back(std::move(pursuePoint));
 
-        /* ATTACK */
-        std::unique_ptr<Sequence> demonAttack = std::make_unique<Sequence>();
-        demonAttack->childs.emplace_back(std::make_unique<DemonBehaviour>());
-        demonAttack->childs.push_back(std::move(jumpAttack));
-    /* DEMON BRANCH */
+        /* SET/GET PURSE */
+        std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();
+        setGetPursue->childs.push_back(std::move(getPursue));
+        setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
 
-    /* ATTACK SELECTOR */
-    std::unique_ptr<Selector> attackSelector = std::make_unique<Selector>();
-    attackSelector->childs.push_back(std::move(demonAttack));
-    attackSelector->childs.push_back(std::move(basicAttack));
+        /* PHY UPDATE */
+        phyUpdate = std::make_unique<Sequence>();
+        phyUpdate->childs.emplace_back(std::make_unique<AlignBehaviour>());
+        phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
 
-    /* ATTACK STATE */
-    std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
-    attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
-    attackState->childs.push_back(std::move(attackSelector));
-    attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
+        /* PURSUE STATE */
+        std::unique_ptr<Sequence> pursueState = std::make_unique<Sequence>();
+        pursueState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
+        pursueState->childs.emplace_back(std::move(setGetPursue));
+        pursueState->childs.emplace_back(std::move(phyUpdate));
+    /*-- PURSUE  --*/
 
-/*-- ATTACK  --*/     
+    /*-- ATTACK  --*/ 
+        /* BASIC ATTACK */
+            /* PHY UPDATE */
+            phyUpdate = std::make_unique<Sequence>();
+            phyUpdate->childs.emplace_back(std::make_unique<RangeBasicAttackBehaviour>());
+            phyUpdate->childs.emplace_back(std::make_unique<SeekBehaviour>());
+
+            /* ACTION SELECTOR*/
+            std::unique_ptr<Selector> actionSelector = std::make_unique<Selector>();
+            actionSelector->childs.push_back(std::move(phyUpdate));
+            actionSelector->childs.emplace_back(std::make_unique<BasicAttackBehaviour>());  
+
+            /* ATTACK */
+            std::unique_ptr<Sequence> basicAttack = std::make_unique<Sequence>();
+            basicAttack->childs.emplace_back(std::make_unique<AlignBehaviour>());
+            basicAttack->childs.push_back(std::move(actionSelector));
+        /* BASIC ATTACK */
+
+        /* DEMON BRANCH */
+            /* UPDATE JUMP */
+            std::unique_ptr<Sequence> jumpUpdate = std::make_unique<Sequence>();
+            jumpUpdate->childs.emplace_back(std::make_unique<jumpingBehaviour>());
+            jumpUpdate->childs.emplace_back(std::make_unique<jumpUpdateBehaviour>());
+            jumpUpdate->childs.emplace_back(std::make_unique<jumpDmgBehaviour>());
+
+            /* START JUMP */
+            std::unique_ptr<Sequence> jumpStart = std::make_unique<Sequence>();
+            jumpStart->childs.emplace_back(std::make_unique<tryJumpBehaviour>());
+            jumpStart->childs.emplace_back(std::make_unique<AlignBehaviour>());
+            
+            /* JUMP ATTACK */
+            std::unique_ptr<Selector> jumpAttack = std::make_unique<Selector>();
+            jumpAttack->childs.push_back(std::move(jumpUpdate));
+            jumpAttack->childs.push_back(std::move(jumpStart));
+
+            /* ATTACK */
+            std::unique_ptr<Sequence> demonAttack = std::make_unique<Sequence>();
+            demonAttack->childs.emplace_back(std::make_unique<DemonBehaviour>());
+            demonAttack->childs.push_back(std::move(jumpAttack));
+        /* DEMON BRANCH */
+
+        /* ATTACK SELECTOR */
+        std::unique_ptr<Selector> attackSelector = std::make_unique<Selector>();
+        attackSelector->childs.push_back(std::move(demonAttack));
+        attackSelector->childs.push_back(std::move(basicAttack));
+
+        /* ATTACK STATE */
+        std::unique_ptr<Sequence> attackState = std::make_unique<Sequence>();
+        attackState->childs.emplace_back(std::make_unique<AttackStateBehaviour>());
+        attackState->childs.push_back(std::move(attackSelector));
+        attackState->childs.emplace_back(std::make_unique<DeletePurseBehaviour>());
+
+    /*-- ATTACK  --*/     
 
     root = std::make_unique<Selector>();
     root->childs.emplace_back(std::move(patrolState));
@@ -393,7 +416,7 @@ void AI_System::update(const Context &context, const float deltaTime) {
 	}
 }
 
-//PATHING
+    //PATHING
 std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph) const {
     //index of nodes in graph
     NodeRecord startRecord = NodeRecord();

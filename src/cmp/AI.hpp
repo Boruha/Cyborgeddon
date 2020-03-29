@@ -13,16 +13,17 @@ struct AI : public Component {
 
 	friend std::ostream& operator<<(std::ostream& os, const AI& ai);
 
-	AI_State state { PATROL_STATE };
-
-	//patrol var
+	//PATROL
 	vec3 patrol_position[MAX_PATROL_POSITIONS] { }; // intentar hacer const
 
-  	unsigned patrol_index { 0 };
-  	unsigned max_index 	  { 0 };
-	//pathing var
+  	unsigned patrol_index     { 0 };
+  	unsigned max_index 	      { 0 };
+	//PATROL
+	
+	//PATH
 	int   path_index 	      { -1 };	   //vector<int> index (map).
   	int   path_node           { -1 };	   //graph index.	   
+	//PATROL
 
 	vec3 target_position      { 0 };
 };

@@ -37,11 +37,16 @@ constexpr float     ENEMY_ROTATION_SPEED			= 270.f;
 constexpr float     BULLET_SPEED					= 600.f;
 constexpr float     FACTOR_DIFFERENT_MODE			= 2.f;
 constexpr float     FACTOR_SAME_MODE				= 1.f / FACTOR_DIFFERENT_MODE;
+
 // ATTACK ENEMY
 constexpr float     MELEE_ATTACK_RANGE   		    = 10.f;
 constexpr float     DIST_ATTACK_RANGE   		    = 30.f;
 constexpr float     DIST_ATTACK_RANGE2  		    = DIST_ATTACK_RANGE  * DIST_ATTACK_RANGE;
 constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTACK_RANGE;
+
+//DEMON JUMP
+constexpr float     JUMP_COOLDOWN                   = 3.f;
+constexpr float     JUMP_TIMER                      = 1.f;
 
 
 // NAV GRAPH

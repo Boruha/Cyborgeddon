@@ -12,3 +12,4 @@
 #include <cmp/RigidStaticAABB.hpp>
 #include <cmp/Graph.hpp>
 #include <cmp/Render.hpp>
+#include <cmp/Jump.hpp>

@@ -10,9 +10,7 @@ CharacterData::CharacterData(   const EntityType type,          const EntityID e
                                 health(health),                 switchingCooldown(switchCD),    attackDamage(attackDamage),
                                 attackingCooldown(attackingCD), attackRange(attackingRange),
 								dashSpeed(dashSpeed),           dashingCooldown(dashCD)
-                            {
-
-                            }
+                            { }
 
 std::ostream& operator<<(std::ostream& os, const CharacterData& data) {
 	data.print(os, data.getName())

@@ -2,14 +2,6 @@
 
 #include <cstdint>
 
-enum AI_State : uint8_t
-{
-	PATROL_STATE = 0,
-	PURSUE_STATE = 1,
-	ATTACK_STATE = 2,
-	END_STATE    = 3
-}; // END_STATE debe estar S I E M P R E al final
-
 enum ModeType : uint8_t
 {
 	DEMON   = 0,

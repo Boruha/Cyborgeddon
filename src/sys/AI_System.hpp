@@ -12,12 +12,12 @@ struct AI_System : System
     void update(const Context &context, float deltaTime) final;
 	void reset() final {  }
 
-protected:
+    protected:
     //PATHING
     [[nodiscard]] std::vector<int> calculePath(int, int, const std::vector<MapNode>&) const;
     [[nodiscard]] int nearestNode(const vec3&, const std::vector<MapNode>&) const;
 
-private:
+    private:
     /* Behaviour Tree */
     std::unique_ptr<Selector> root;
 };
@@ -67,4 +67,3 @@ struct Selector : CompoundNode
         return false;
     }
 };
-

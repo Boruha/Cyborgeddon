@@ -1,20 +1,6 @@
 #include <cmp/Storage.hpp>
 
 void Storage::initData(const unsigned maxComponents) {
-/*
-	initVector<AI>(5);
-	initVector<Transformable>(59);
-	initVector<Velocity>(8);
-	initVector<Physics>(9);
-	initVector<BulletData>(2);
-	initVector<CharacterData>(8);
-	initVector<TriggerMovSphere>(6);
-	initVector<TriggerStaticAABB>(16);
-	initVector<RigidStaticAABB>(49);
-	initVector<TriggerFastMov>(2);
-	initVector<Graph>(1);
-	initVector<Render>(68);
-*/
 	initVector<AI>(maxComponents);
 	initVector<Transformable>(maxComponents);
 	initVector<Velocity>(maxComponents);
@@ -27,6 +13,7 @@ void Storage::initData(const unsigned maxComponents) {
 	initVector<TriggerFastMov>(maxComponents);
 	initVector<Graph>(maxComponents);
 	initVector<Render>(maxComponents);
+	initVector<Jump>(maxComponents/2); //crear los justos para demons
 
 	nodes.reserve(maxComponents);
 }
