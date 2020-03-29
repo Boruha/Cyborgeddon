@@ -25,7 +25,7 @@ struct AI_System : System
 /* BEHAVIOUR STRUCTURE DEF */
 struct BehaviourNode : AI_System
 {
-    virtual bool run(AI&, Physics&, CharacterData&, Velocity&, const vec3&, float, const std::unique_ptr<GameContext>&) = 0;
+    virtual bool run(AI&, Physics&, Velocity&, const vec3&, float, const std::unique_ptr<GameContext>&) = 0;
 };
 
 struct CompoundNode : BehaviourNode
@@ -43,11 +43,11 @@ struct CompoundNode : BehaviourNode
 struct Sequence : CompoundNode
 {
     /* FUNCTIONS */
-    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
         for(auto& ref_child : getChilds())
         {
-            if(!ref_child->run(ai, phy, data, vel, player_pos, deltaTime, context))
+            if(!ref_child->run(ai, phy, vel, player_pos, deltaTime, context))
                 return false;
         }
         return true;
@@ -57,11 +57,11 @@ struct Sequence : CompoundNode
 struct Selector : CompoundNode
 {
     /* FUNCTIONS */
-    bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+    bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
     {
         for(auto& ref_child : getChilds())
         {
-            if(ref_child->run(ai, phy, data, vel, player_pos, deltaTime, context))
+            if(ref_child->run(ai, phy, vel, player_pos, deltaTime, context))
                 return true;
         }
         return false;

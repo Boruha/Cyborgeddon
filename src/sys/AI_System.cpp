@@ -8,7 +8,7 @@
 /*  GENERAL BEHAVIOURS  */
     struct SeekBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
             phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
@@ -19,7 +19,7 @@
 
     struct AlignBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             phy.rotation.y = nearestAngle(phy.rotation.y, getRotationYfromXZ(phy.position - ai.target_position));
 
@@ -29,7 +29,7 @@
 
     struct ArriveBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
 
@@ -39,7 +39,7 @@
 
     struct jumpingBehaviour : BehaviourNode //Need previous condition which set jumping to true
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             auto & enemy    = context->getEntityByID(ai.getEntityID());
 			auto & jump     = *enemy.getComponent<Jump>();
@@ -55,13 +55,13 @@
 
     struct jumpUpdateBehaviour : BehaviourNode 
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             auto & enemy    = context->getEntityByID(ai.getEntityID());
 			auto & jump     = *enemy.getComponent<Jump>();
 
             vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
-            phy.velocity  = normalize(vel.direction) * (vel.currentSpeed * 2) * deltaTime;
+            phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
             
             jump.jumpTimer -= deltaTime * 2;
             phy.velocity.y = jump.jumpTimer * (vel.currentSpeed * 2) * deltaTime;  
@@ -82,7 +82,7 @@
 /*  PATROL BEHAVIOURS  */
     struct NextPatrolBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
             ai.target_position = ai.patrol_position[ai.patrol_index];
@@ -93,7 +93,7 @@
 
     struct PatrolStateBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
 
@@ -112,7 +112,7 @@
 /*  PURSE BEHAVIOURS  */
     struct PursueStateBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             auto & enemy    = context->getEntityByID(ai.getEntityID());
 			auto * jump     = enemy.getComponent<Jump>();
@@ -130,7 +130,7 @@
 
     struct HaveRouteBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             if(ai.path_index > -1)
             {
@@ -145,7 +145,7 @@
     //Se deberia comprobar que se genere todo(?)
     struct CreateRouteBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const std::vector<MapNode>& ref_graph = context->getGraph();
 
@@ -163,7 +163,7 @@
 
     struct NextPursePointBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const std::vector<MapNode>& ref_graph = context->getGraph();
             std::vector<int>& ref_path = context->getPath(ai.getEntityID());
@@ -180,7 +180,7 @@
 
     struct DeletePurseBehaviour : BehaviourNode
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             if(ai.path_index != -1)
             {
@@ -196,7 +196,7 @@
 /*  ATTACK BEVAHOIUR  */
     struct AttackStateBehaviour : BehaviourNode //innecesario? ad future puede tener un parametro no distancia. ai.state cambiarlo a una condition? 
     {
-        bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             ai.target_position = player_pos;
             phy.velocity = glm::vec3(0);
@@ -207,8 +207,11 @@
     /*  BASIC ATTACK  */
         struct BasicAttackBehaviour : BehaviourNode 
         {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+            bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
+                auto & enemy    = context->getEntityByID(ai.getEntityID());
+			    auto & data     = *enemy.getComponent<CharacterData>();
+                
                 if(!greater_e(data.currentAttackingCooldown, 0.f)) 
                 {
                     data.attacking = true;
@@ -224,8 +227,11 @@
 
         struct RangeBasicAttackBehaviour : BehaviourNode 
         {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+            bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
+                auto & enemy    = context->getEntityByID(ai.getEntityID());
+			    auto & data     = *enemy.getComponent<CharacterData>();
+                
                 const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
 
                 return greater_e(distance2, data.attackRange);
@@ -236,15 +242,18 @@
     /*  DEMON ATTACK  */
         struct DemonBehaviour : BehaviourNode 
         {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+            bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
+                auto & enemy    = context->getEntityByID(ai.getEntityID());
+			    auto & data     = *enemy.getComponent<CharacterData>();
+                
 	            return data.mode == DEMON;
             }
         };
 
         struct jumpDmgBehaviour : BehaviourNode 
         {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+            bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
                 auto & enemy    = context->getEntityByID(ai.getEntityID());
 			    auto & jump     = *enemy.getComponent<Jump>();
@@ -253,7 +262,7 @@
                 {
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
-                    if( !greater_e(distance2, 400) )
+                    if( !greater_e(distance2, JUMP_AREA_DMG2) )
                         std::cout << "TORNADITO QUE TE METO EN MOVIMIENTO\n";
                 }
                 return true;
@@ -262,15 +271,15 @@
 
         struct tryJumpBehaviour : BehaviourNode 
         {
-            bool run(AI& ai, Physics& phy, CharacterData& data, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+            bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
             {
                 auto & enemy    = context->getEntityByID(ai.getEntityID());
 			    auto & jump     = *enemy.getComponent<Jump>();
                 
-                const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+                const float distance2 = length2({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
 
                 if(!greater_e(distance2, DIST_ATTACK_RANGE2) && greater_e(distance2, MELEE_ATTACK_RANGE2) 
-                && !greater_e(jump.currentJumpCooldown, 0)) 
+                && !greater_e(jump.currentJumpCooldown, 0))
                 {
                     jump.jumpTargetLocation = player_pos;
                     jump.jumping = true;
@@ -397,7 +406,8 @@ void AI_System::init() {
     root->childs.emplace_back(std::move(attackState));
 }
 
-void AI_System::update(const Context &context, const float deltaTime) {
+void AI_System::update(const Context &context, const float deltaTime) 
+{
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
 
 	for (auto & ai : context->getComponents().getComponents<AI>()) 
@@ -405,19 +415,18 @@ void AI_System::update(const Context &context, const float deltaTime) {
 		if (ai) 
         {
 			auto & enemy    = context->getEntityByID(ai.getEntityID());
-
 			auto & physics  = *enemy.getComponent<Physics>();
-			auto & data     = *enemy.getComponent<CharacterData>();
 			auto & velocity = *enemy.getComponent<Velocity>();
 
-            root->run(ai, physics, data, velocity, player_pos,
+            root->run(ai, physics, velocity, player_pos,
                       deltaTime, context);
 		}
 	}
 }
 
-    //PATHING
-std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph) const {
+//PATHING
+std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph) const 
+{
     //index of nodes in graph
     NodeRecord startRecord = NodeRecord();
     NodeRecord* currentRecord = nullptr;
@@ -496,7 +505,8 @@ std::vector<int> AI_System::calculePath(const int start, const int end, const st
     return path;
 }
 
-int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph) const {
+int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph) const 
+{
     //vector diff the player position and each node in the graph
     vec3 nearest     = vec3(graph.front().coord.x - point.x, 0,graph.front().coord.z - point.z);
     //decision value

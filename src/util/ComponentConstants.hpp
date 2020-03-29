@@ -47,7 +47,8 @@ constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTA
 //DEMON JUMP
 constexpr float     JUMP_COOLDOWN                   = 3.f;
 constexpr float     JUMP_TIMER                      = 1.f;
-
+constexpr float     JUMP_AREA_DMG                   = 20.f;
+constexpr float     JUMP_AREA_DMG2                  = JUMP_AREA_DMG * JUMP_AREA_DMG; 
 
 // NAV GRAPH
 constexpr unsigned  MAX_GRAPH_CONN                  = 3;
