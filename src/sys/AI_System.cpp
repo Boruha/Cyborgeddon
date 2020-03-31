@@ -1,9 +1,9 @@
 #include <sys/AI_System.hpp>
 
-#include <Engine/util/Math.hpp>
-
+#include <Engine/util/MathIntersection.hpp>
 #include <util/SystemConstants.hpp>
 #include <util/SoundPaths.hpp>
+#include <util/Pathfinding.hpp>
 
 /*  GENERAL BEHAVIOURS  */
     struct SeekBehaviour : BehaviourNode
@@ -77,6 +77,21 @@
         }
     };
 
+    struct obstacleAvoidanceBehaviour : BehaviourNode
+    {
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        {
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+            auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
+            
+            if(!checkObstacles(phy.position, player_pos, trSphere.radius, context))
+            {
+                std::cout << "NO HAY OBJETOS POR EN MEDIO DE NOSOTROS\n";
+                return true;
+            }   
+            return false;
+        }
+    };
 /*  GENERAL BEHAVIOURS  */
 
 /*  PATROL BEHAVIOURS  */
@@ -118,6 +133,8 @@
 			auto * jump     = enemy.getComponent<Jump>();
 
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+
+            ai.target_position = player_pos;
 
             if(jump)    
                 return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
@@ -294,7 +311,6 @@
 /*  ATTACK BEVAHOIUR  */
 
 
-
 /* FUNCTIONS */
 void AI_System::init() {
 
@@ -331,6 +347,7 @@ void AI_System::init() {
 
         /* SET/GET PURSE */
         std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();
+        setGetPursue->childs.emplace_back(std::make_unique<obstacleAvoidanceBehaviour>());
         setGetPursue->childs.push_back(std::move(getPursue));
         setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
 
@@ -424,112 +441,37 @@ void AI_System::update(const Context &context, const float deltaTime)
 	}
 }
 
-//PATHING
-std::vector<int> AI_System::calculePath(const int start, const int end, const std::vector<MapNode>& graph) const 
+void AI_System::checkObstacles(vec3& ai_pos, vec3& pj_pos, float rad, const std::unique_ptr<GameContext>& context)
 {
-    //index of nodes in graph
-    NodeRecord startRecord = NodeRecord();
-    NodeRecord* currentRecord = nullptr;
-    NodeRecord* nextRecPtr = nullptr;
+    bool  result       = false;
+    auto& rAABB_vector = context->getComponents().getComponents<RigidStaticAABB>();
+	vec3  ecLine       = lineEcByTwoPoints(ai_pos, pj_pos - ai_pos);
+    auto  maxPoint     = vec3();
+    auto  minPoint     = vec3();
 
-    //vectors of records
-    std::vector<NodeRecord> open;
-    std::vector<NodeRecord> close;
-    std::vector<Connection> currentConn;
-    std::vector<int> path;
-    open.reserve(5);
-    close.reserve(5);
+    maxPoint.x = (ai_pos.x > pj_pos.x) ? ai_pos.x : pj_pos.x;
+    maxPoint.z = (ai_pos.z > pj_pos.z) ? ai_pos.z : pj_pos.z;
 
-    //set startRecord
-    startRecord.node = start;
+    minPoint.x = (ai_pos.x < pj_pos.x) ? ai_pos.x : pj_pos.x;
+    minPoint.x = (ai_pos.x < pj_pos.x) ? ai_pos.x : pj_pos.x;
 
-    //insert start node
-    open.push_back(startRecord);
-
-    //var aux
-    int nextNode = -1;
-    int nextCost = 0;
-
-    currentRecord = &open.front();
-
-    while (!open.empty())
+    for(auto& cmp_AABB : rAABB_vector)
     {
-        //cogemos el primer elemento (el de menos coste acumulado) y sus conexiones
-        if(currentRecord->node == end) { break; }
-        currentConn = graph.at(currentRecord->node).connections;
+        if(cmp_AABB.max.x < minP.x) //out -x
+            continue;
+        if(cmp_AABB.max.z < minP.z) //out -z
+            continue;
+        if(cmp_AABB.min.x > maxP.x) //out +x
+            continue;
+        if(cmp_AABB.min.z > maxP.z) //out +z
+            continue;
 
-        for(const auto& conn : currentConn)
+        if( SphereWillIntersectBoxAABB(rad, cmp_AABB.min, cmp_AABB.max, ecLine) )
         {
-            nextNode = conn.nodeTo;
-            nextCost = conn.cost + currentRecord->const_so_far;
-
-            //pasamos a la siguiente conn si esta el nodo en 'close'
-            if(currentRecord->contains(close, nextNode))
-            	continue;
-
-            //comprobamos si esta en la 'open'
-            if(currentRecord->contains(open, nextNode))
-            {
-                nextRecPtr = currentRecord->find(open, nextNode);
-
-                //si el coste existente es menor al actual, pasamos
-                if(nextRecPtr->const_so_far <= nextCost)
-                	continue;
-            } else {
-                //no esta en ninguna lista so creamos record
-                nextRecPtr = &open.emplace_back();
-                nextRecPtr->node = nextNode;
-            }
-            //insert/update
-            nextRecPtr->fromNode = conn.nodeFrom;
-            nextRecPtr->toNode = conn.nodeTo;
-            nextRecPtr->const_so_far = nextCost;
-            nextRecPtr = nullptr;
-        }
-        //move current to close and erase it from open.
-        close.push_back(*currentRecord);
-        open.erase(open.begin());
-        currentRecord->sortNodeRecord(open);
-    }
-    //if we found the solution we set a MapNode path
-    if(currentRecord->node == end)
-    {
-        while (currentRecord->node != start)
-        {
-            path.insert(path.begin(), currentRecord->node);
-            currentRecord = currentRecord->find(close, currentRecord->fromNode);
-        }
-
-        path.insert(path.begin(), currentRecord->node);
-    }
-    return path;
-}
-
-int AI_System::nearestNode(const vec3& point, const std::vector<MapNode>& graph) const 
-{
-    //vector diff the player position and each node in the graph
-    vec3 nearest     = vec3(graph.front().coord.x - point.x, 0,graph.front().coord.z - point.z);
-    //decision value
-    float    small_dist2  = length2(nearest);
-    //index of the nearest node
-    int      small_index = 0;
-    //counter
-    int      i           = -1;
-
-    for(const auto& node : graph)
-    {
-        ++i;
-        nearest.x = node.coord.x - point.x;
-        nearest.z = node.coord.z - point.z;
-
-        const float len2near = length2(nearest);
-
-        if(len2near < small_dist2)
-        {
-            small_dist2  = len2near;
-            small_index = i;
+            result = true;
+            break;
         }
     }
-
-    return small_index;
+    //Si hacer el return dentro desde el for no esta mal, suprimir var 'result'
+    return result;
 }

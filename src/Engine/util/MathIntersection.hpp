@@ -9,11 +9,24 @@ constexpr inline vec3 intersectionPoint(const Plane& p, const Line& l) {
     return l.a + ((l.b - l.a) * ((p.distance - dot(p.normal, l.a)) / dot(p.normal, (l.b - l.a))));
 }
 
-
 // return -> p pertenece al segmento
 inline bool segmentContainsPointXZ(const Line& segment, const vec3& p)
 {
 	return p.x <= fmax(segment.a.x, segment.b.x) && p.x >= fmin(segment.a.x, segment.b.x) && p.z <= fmax(segment.a.z, segment.b.z) && p.z >= fmin(segment.a.z, segment.b.z);
+}
+
+inline float segmentDistancePointXZ(const vec3& r, const vec3& ecLine) //NEW
+{
+	float rInLine = (ecLine.x * r.x) + (ecLine.y * r.z) + ecLine.z;
+	if(rInLine < 0) rInLine = -rInLine;
+
+	return rInLine / std::sqrt((ecLine.x * ecLine.x) + (ecLine.y * ecLine.y));
+}
+
+//Ax + By + C = 0  ||  vX = A, vY = B, vZ = C
+constexpr inline vec3 lineEcByTwoPoints(const vec3& p1, const vec3& vDir) //NEW
+{
+	return vec3(vDir.z, -vDir.x, (-p1.x * vDir.z) + (p1.z * vDir.x));
 }
 
 enum LinePointOrientation { ALIGNED, CLOCKWISE, ANTICLOCKWISE };
@@ -40,6 +53,14 @@ inline bool lineIntersection(const Line& r, const Line& s)
 	// casos especiales
 	return (o1 == 0 && segmentContainsPointXZ(r, s.a)) || (o2 == 0 && segmentContainsPointXZ(r, s.b)) ||
 		   (o3 == 0 && segmentContainsPointXZ(s, r.b)) || (o4 == 0 && segmentContainsPointXZ(s, r.a));
+}
+
+inline bool SphereWillIntersectBoxAABB(const float rad, const vec3& minAABB, const vec3& maxAABB, const vec3& ecLine) //NEW
+{
+	return 		rad > segmentDistancePointXZ(minAABB, ecLine)
+			||  rad > segmentDistancePointXZ(vec3(maxAABB.x, 0, minAABB.z), ecLine);
+		   	||	rad > segmentDistancePointXZ(maxAABB, ecLine) 
+		   	||	rad > segmentDistancePointXZ(vec3(minAABB.x, 0, maxAABB.z), ecLine)
 }
 
 inline bool lineAABBIntersectionXZ(const Line& r, const vec3& aabbMin, const vec3& aabbMax)

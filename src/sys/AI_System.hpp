@@ -12,13 +12,9 @@ struct AI_System : System
     void update(const Context &context, float deltaTime) final;
 	void reset() final {  }
 
-    protected:
-    //PATHING
-    [[nodiscard]] std::vector<int> calculePath(int, int, const std::vector<MapNode>&) const;
-    [[nodiscard]] int nearestNode(const vec3&, const std::vector<MapNode>&) const;
+    void AI_System::checkObstacles(vec3&, vec3&, float, const std::unique_ptr<GameContext>&);
 
     private:
-    /* Behaviour Tree */
     std::unique_ptr<Selector> root;
 };
 
