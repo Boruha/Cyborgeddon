@@ -85,10 +85,8 @@
             auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
             
             if(!checkObstacles(phy.position, player_pos, trSphere.radius, context))
-            {
-                std::cout << "NO HAY OBJETOS POR EN MEDIO DE NOSOTROS\n";
                 return true;
-            }   
+
             return false;
         }
     };
@@ -441,9 +439,8 @@ void AI_System::update(const Context &context, const float deltaTime)
 	}
 }
 
-void AI_System::checkObstacles(vec3& ai_pos, vec3& pj_pos, float rad, const std::unique_ptr<GameContext>& context)
+bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad, const std::unique_ptr<GameContext>& context)
 {
-    bool  result       = false;
     auto& rAABB_vector = context->getComponents().getComponents<RigidStaticAABB>();
 	vec3  ecLine       = lineEcByTwoPoints(ai_pos, pj_pos - ai_pos);
     auto  maxPoint     = vec3();
@@ -453,25 +450,28 @@ void AI_System::checkObstacles(vec3& ai_pos, vec3& pj_pos, float rad, const std:
     maxPoint.z = (ai_pos.z > pj_pos.z) ? ai_pos.z : pj_pos.z;
 
     minPoint.x = (ai_pos.x < pj_pos.x) ? ai_pos.x : pj_pos.x;
-    minPoint.x = (ai_pos.x < pj_pos.x) ? ai_pos.x : pj_pos.x;
+    minPoint.z = (ai_pos.z < pj_pos.z) ? ai_pos.z : pj_pos.z;
 
     for(auto& cmp_AABB : rAABB_vector)
     {
-        if(cmp_AABB.max.x < minP.x) //out -x
+/*
+		std::cout << "MIN_AABB: (" << cmp_AABB.min.x << ", " << cmp_AABB.min.z << ")\t"; 
+		std::cout << "MAX_AABB: (" << cmp_AABB.max.x << ", " << cmp_AABB.max.z << ")\n"; 
+		std::cout << "MIN_p:    (" << minPoint.x << ", " << minPoint.z << ")\t"; 
+		std::cout << "MAX_p:    (" << maxPoint.x << ", " << maxPoint.z << ")\n\n"; 
+*/
+        if(cmp_AABB.max.x < minPoint.x) //out -x
             continue;
-        if(cmp_AABB.max.z < minP.z) //out -z
+        if(cmp_AABB.max.z < minPoint.z) //out -z
             continue;
-        if(cmp_AABB.min.x > maxP.x) //out +x
+        if(cmp_AABB.min.x > maxPoint.x) //out +x
             continue;
-        if(cmp_AABB.min.z > maxP.z) //out +z
+        if(cmp_AABB.min.z > maxPoint.z) //out +z
             continue;
 
         if( SphereWillIntersectBoxAABB(rad, cmp_AABB.min, cmp_AABB.max, ecLine) )
-        {
-            result = true;
-            break;
-        }
+            return true;
     }
-    //Si hacer el return dentro desde el for no esta mal, suprimir var 'result'
-    return result;
+
+    return false;
 }

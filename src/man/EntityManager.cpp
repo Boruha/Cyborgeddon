@@ -541,13 +541,13 @@ void EntityManager::createLevel() {
 	std::vector<vec3> patrol_1 = { graph[9].coord };
 	std::vector<vec3> patrol_2 = { graph[4].coord };
 	std::vector<vec3> patrol_3 = { graph[5].coord };
-	std::vector<vec3> patrol_4 = { graph[7].coord };
+	std::vector<vec3> patrol_4 = { graph[6].coord };
 	std::vector<vec3> patrol_5 = { graph[13].coord, graph[14].coord, graph[11].coord, graph[12].coord };
 
-	createDemon(patrol_2[0], vec3(11), patrol_2);
+	//createDemon(patrol_2[0], vec3(11), patrol_2);
 	//createEnemy(patrol_2[0], vec3(8), patrol_2);
-	createEnemy(patrol_1[0], vec3(8), patrol_1);
-	createEnemy(patrol_3[0], vec3(8), patrol_3);
+	//createEnemy(patrol_1[0], vec3(8), patrol_1);
+	//createEnemy(patrol_3[0], vec3(8), patrol_3);
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
 
