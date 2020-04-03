@@ -33,7 +33,7 @@
         {
             const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
 
-            return greater_e(distance2, ARRIVED_MIN_DISTANCE2);
+            return greater_e(distance2, ARRIVE_MIN_DISTANCE2);
         }
     };
 
@@ -109,11 +109,15 @@
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+            auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
 
-            if (greater_e(distance2, PATROL_MIN_DISTANCE2))
+            if (greater_e(distance2, PATROL_MIN_DISTANCE2) ||
+               (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
+               //(checkObstacles(phy.position, player_pos, trSphere.radius, context)) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
-
+                //std::cout << checkFacing(phy, context) << "\n";
                 return true;
             }
 
@@ -134,11 +138,10 @@
 
             ai.target_position = player_pos;
 
-            if(jump)    
+            if(jump)
                 return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
             else
                 return greater_e(distance2, PURSUE_MIN_DISTANCE2);
-
         }
 
     };
@@ -206,6 +209,17 @@
             return false;
         }
     };
+
+    struct PathConditionBehaviour : BehaviourNode
+    {
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        {
+            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+
+            return !greater_e(distance2, VIEW_MIN_DISTANCE2);
+        }
+    };
+
 /*  PURSE BEHAVIOURS  */
 
 /*  ATTACK BEVAHOIUR  */
@@ -345,9 +359,18 @@ void AI_System::init() {
 
         /* SET/GET PURSE */
         std::unique_ptr<Selector> setGetPursue  = std::make_unique<Selector>();
-        setGetPursue->childs.emplace_back(std::make_unique<obstacleAvoidanceBehaviour>());
         setGetPursue->childs.push_back(std::move(getPursue));
         setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
+
+        /* PATH BRANCH */
+        std::unique_ptr<Sequence> pathBranch  = std::make_unique<Sequence>();
+        pathBranch->childs.emplace_back(std::make_unique<PathConditionBehaviour>());
+        pathBranch->childs.emplace_back(std::move(setGetPursue));
+
+        /* WAY SELECTOR */
+        std::unique_ptr<Selector> waySelector  = std::make_unique<Selector>();
+        waySelector->childs.emplace_back(std::make_unique<obstacleAvoidanceBehaviour>());
+        waySelector->childs.emplace_back(std::move(pathBranch));
 
         /* PHY UPDATE */
         phyUpdate = std::make_unique<Sequence>();
@@ -357,7 +380,7 @@ void AI_System::init() {
         /* PURSUE STATE */
         std::unique_ptr<Sequence> pursueState = std::make_unique<Sequence>();
         pursueState->childs.emplace_back(std::make_unique<PursueStateBehaviour>());
-        pursueState->childs.emplace_back(std::move(setGetPursue));
+        pursueState->childs.emplace_back(std::move(waySelector));
         pursueState->childs.emplace_back(std::move(phyUpdate));
     /*-- PURSUE  --*/
 
@@ -454,12 +477,6 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
 
     for(auto& cmp_AABB : rAABB_vector)
     {
-/*
-		std::cout << "MIN_AABB: (" << cmp_AABB.min.x << ", " << cmp_AABB.min.z << ")\t"; 
-		std::cout << "MAX_AABB: (" << cmp_AABB.max.x << ", " << cmp_AABB.max.z << ")\n"; 
-		std::cout << "MIN_p:    (" << minPoint.x << ", " << minPoint.z << ")\t"; 
-		std::cout << "MAX_p:    (" << maxPoint.x << ", " << maxPoint.z << ")\n\n"; 
-*/
         if(cmp_AABB.max.x < minPoint.x) //out -x
             continue;
         if(cmp_AABB.max.z < minPoint.z) //out -z
@@ -469,9 +486,22 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
         if(cmp_AABB.min.z > maxPoint.z) //out +z
             continue;
 
+        if( lineAABBIntersectionXZ(Line(ai_pos, pj_pos), cmp_AABB.min, cmp_AABB.max) )
+            return true;
+
         if( SphereWillIntersectBoxAABB(rad, cmp_AABB.min, cmp_AABB.max, ecLine) )
             return true;
     }
 
     return false;
+}
+
+bool AI_System::checkFacing(const Physics& ai_phy, const std::unique_ptr<GameContext>& context)
+{
+    auto& pj     = context->getPlayer();
+    auto& pj_phy = *pj.getComponent<Physics>();
+
+    auto vecRot  = getRotationYfromXZ( normalize(pj_phy.position - ai_phy.position) );
+
+    return (vecRot - ai_phy.rotation.y < 5.f && vecRot - ai_phy.rotation.y > -5.f);
 }

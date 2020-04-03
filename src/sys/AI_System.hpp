@@ -13,6 +13,7 @@ struct AI_System : System
 	void reset() final {  }
 
     [[nodiscard]] bool checkObstacles(const vec3&, const vec3&, float, const std::unique_ptr<GameContext>&);
+    [[nodiscard]] bool checkFacing(const Physics&, const std::unique_ptr<GameContext>&);
 
     private:
     std::unique_ptr<Selector> root;

@@ -94,7 +94,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Bot/bot.fbx");
+	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -451,7 +451,7 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 40, 50));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 70, 60));
 	createLight(vec3(30, 60, 20), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
