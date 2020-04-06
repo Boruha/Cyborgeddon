@@ -94,7 +94,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("resources/models/Arc/Arcangel-ZY.obj");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -191,7 +191,6 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	++enemiesLeft;
 }
 
-/*--- TEST ANGEL ENEMY ---*/
 void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	auto& enemy     = createEntity(ENEMY);
 
@@ -219,9 +218,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 
 	++enemiesLeft;
 }
-/*--- TEST ANGEL ENEMY ---*/
 
-/*--- TEST DEMON ENEMY ---*/
 void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
 	auto& enemy     = createEntity(ENEMY);
 	std::cout << "DEMON START\n";
@@ -253,7 +250,6 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 
 	std::cout << "DEMON OKKKKK\n";
 }
-/*--- TEST DEMON ENEMY ---*/
 
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
 	auto& floor = createEntity(FLOOR);
@@ -366,7 +362,6 @@ void EntityManager::setNavConnections(const GraphNode & node, const std::vector<
 	// ordenamos las conexiones por distancia, que es lo que guarda el primer valor del pair
 	std::sort( n.conns, n.conns + n.numConns, ComparePairLessThan() );
 }
-
 
 void EntityManager::createNavigation() {
 	nav = & createEntity(NAV);
