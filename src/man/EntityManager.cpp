@@ -446,7 +446,7 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 128);
 
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 70, 60));
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 120, 70));
 	createLight(vec3(30, 60, 20), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
@@ -538,14 +538,27 @@ void EntityManager::createLevel() {
 	std::vector<vec3> patrol_3 = { graph[5].coord };
 	std::vector<vec3> patrol_4 = { graph[6].coord };
 	std::vector<vec3> patrol_5 = { graph[13].coord, graph[14].coord, graph[11].coord, graph[12].coord };
+	std::vector<vec3> patrol_6 = { graph[13].coord, graph[14].coord };
+	std::vector<vec3> patrol_7 = { graph[11].coord, graph[12].coord };
+	std::vector<vec3> patrol_8 = { graph[12].coord, graph[13].coord };
+	std::vector<vec3> patrol_9 = { graph[14].coord, graph[11].coord };
+	std::vector<vec3> patrol_10 = { graph[7].coord };
+	std::vector<vec3> patrol_11 = { graph[8].coord };
+	std::vector<vec3> patrol_12 = { graph[8].coord };
 
-	//createDemon(patrol_2[0], vec3(11), patrol_2);
-	//createEnemy(patrol_2[0], vec3(8), patrol_2);
-	//createEnemy(patrol_1[0], vec3(8), patrol_1);
-	//createEnemy(patrol_3[0], vec3(8), patrol_3);
+	createDemon(patrol_2[0], vec3(11), patrol_2);
+	createEnemy(patrol_1[0], vec3(8), patrol_1);
+	createEnemy(patrol_3[0], vec3(8), patrol_3);
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
-
+	/*createEnemy(patrol_6[0], vec3(8), patrol_6);
+	createEnemy(patrol_7[0], vec3(8), patrol_7);
+	createEnemy(patrol_8[0], vec3(8), patrol_8);
+	createEnemy(patrol_9[0], vec3(8), patrol_9);
+	createEnemy(patrol_10[0], vec3(8), patrol_10);
+	createEnemy(patrol_11[0], vec3(8), patrol_11);
+	createEnemy(patrol_12[0], vec3(8), patrol_12);
+*/
 	std::cout << componentStorage.getComponents<Transformable>()[0].getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
 	std::cout << componentStorage.getComponents<Physics>()[0].getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
 	std::cout << componentStorage.getComponents<RigidStaticAABB>()[0].getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";

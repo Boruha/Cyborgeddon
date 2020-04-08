@@ -109,15 +109,15 @@
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+
             auto & enemy    = context->getEntityByID(ai.getEntityID());
             auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
 
-            if (greater_e(distance2, PATROL_MIN_DISTANCE2) ||
-               (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
-               //(checkObstacles(phy.position, player_pos, trSphere.radius, context)) )
+            if(greater_e(distance2, PATROL_MIN_DISTANCE2) ||
+              (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
-                //std::cout << checkFacing(phy, context) << "\n";
+                ai.frequecy_state = PATROL_STATE;
                 return true;
             }
 
@@ -134,10 +134,11 @@
             auto & enemy    = context->getEntityByID(ai.getEntityID());
 			auto * jump     = enemy.getComponent<Jump>();
 
-            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-
+            ai.frequecy_state = PURSUE_STATE;
             ai.target_position = player_pos;
 
+            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });            
+            
             if(jump)
                 return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
             else
@@ -227,6 +228,7 @@
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
+            ai.frequecy_state = ATTACK_STATE;
             ai.target_position = player_pos;
             phy.velocity = glm::vec3(0);
             return true;
@@ -245,7 +247,7 @@
                 {
                     data.attacking = true;
                     data.currentAttackingCooldown = data.attackingCooldown;
-                    damageMessages.emplace_back(data.attackDamage);
+                    //damageMessages.emplace_back(data.attackDamage);
                     soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
                     return true;
                 }
@@ -442,16 +444,22 @@ void AI_System::init() {
     root->childs.emplace_back(std::move(patrolState));
     root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));
+
+    frame = 0;
 }
 
 void AI_System::update(const Context &context, const float deltaTime) 
 {
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
+    ++frame;
 
 	for (auto & ai : context->getComponents().getComponents<AI>()) 
     {
 		if (ai) 
         {
+            if(frame % ai.frequecy_state != 0) 
+                continue;
+            //std::cout << "ME LLAMAN: " << frame << ", " << ai.frequecy_state << "\n";
 			auto & enemy    = context->getEntityByID(ai.getEntityID());
 			auto & physics  = *enemy.getComponent<Physics>();
 			auto & velocity = *enemy.getComponent<Velocity>();

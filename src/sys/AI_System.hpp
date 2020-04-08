@@ -17,6 +17,7 @@ struct AI_System : System
 
     private:
     std::unique_ptr<Selector> root;
+    unsigned frame { 0 };
 };
 
 /* BEHAVIOUR STRUCTURE DEF */

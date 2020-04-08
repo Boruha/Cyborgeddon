@@ -18,12 +18,13 @@ struct AI : public Component {
 
   	unsigned patrol_index     { 0 };
   	unsigned max_index 	      { 0 };
-	//PATROL
 	
 	//PATH
-	int   path_index 	      { -1 };	   //vector<int> index (map).
-  	int   path_node           { -1 };	   //graph index.	   
-	//PATROL
+	int      path_index 	  { -1 };	   //vector<int> index (map).
+  	int      path_node        { -1 };	   //graph index.	   
 
-	vec3 target_position      { 0 };
+	vec3     target_position  { 0 };
+
+	//AI_STATE for Scheduling
+	unsigned frequecy_state   { PATROL_STATE };
 };
