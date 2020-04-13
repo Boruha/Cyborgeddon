@@ -5,7 +5,7 @@
 #include <vector>
 
 struct AI : public Component {
-	explicit AI(EntityType e_type, EntityID e_ID, const std::vector<vec3>& patrol);
+	explicit AI(EntityType e_type, EntityID e_ID, const std::vector<vec3>& patrol, unsigned phase);
 
 	[[nodiscard]] std::string_view getName() const override {
 		return "AI";
@@ -27,4 +27,6 @@ struct AI : public Component {
 
 	//AI_STATE for Scheduling
 	unsigned frequecy_state   { PATROL_STATE };
+	unsigned scheduling_phase { 0 };
+	bool     scheduled        { false };
 };

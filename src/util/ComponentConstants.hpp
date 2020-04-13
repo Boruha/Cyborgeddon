@@ -50,7 +50,7 @@ constexpr float     JUMP_TIMER                      = 1.f;
 constexpr float     JUMP_AREA_DMG                   = 20.f;
 constexpr float     JUMP_AREA_DMG2                  = JUMP_AREA_DMG * JUMP_AREA_DMG; 
 
-// NAV GRAPH
+//NAV GRAPH
 constexpr unsigned  MAX_GRAPH_CONN                  = 3;
 
 //AI_STATES FREQUENCY_SCHEDULE

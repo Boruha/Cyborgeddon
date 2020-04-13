@@ -24,6 +24,7 @@ void GameManager::init()
 
 	currentState->registerSystem<InputSystem>();                      // se detecta input del player
 	currentState->registerSystem<AI_System>();                        // se detecta input de los enemigos
+	currentState->registerSystem<SchedulingSystem>();                 // actualizacion phases de IAs (Scheduling)
 	currentState->registerSystem<AttackSystem>();                     // se ejecutan las acciones en funcion del input tanto de player como enemigos
 	currentState->registerSystem<TriggerFastCollisionSystem>();       // se ejecutan las comprobaciones de colision entre balas y resto de cosas relevantes
 	currentState->registerSystem<BulletDataSystem>();                 // se actualizan los datos de las balas comprobadas anteriormente
