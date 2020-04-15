@@ -3,7 +3,7 @@
 #include <Engine/SunlightEngine/SceneInterface/Tree/TreeNode.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Tree/Camera.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Tree/Light.hpp>
-#include <Engine/util/shaders/Shader.hpp>
+
 #include <Engine/util/shaders/ShaderPath.hpp>
 
 struct SunlightEngine;
@@ -29,6 +29,8 @@ struct SceneManager {
 
 	SunlightEngine * getEngine() { return engine; }
 
+	void clearScene() { root->removeAllChildren(); }
+
 private :
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
@@ -44,5 +46,5 @@ private :
 	mat4 view {1};
 
 	SunlightEngine  * engine { nullptr };
-	ResourceManager * resourceManager;
+	ResourceManager * resourceManager { nullptr };
 };

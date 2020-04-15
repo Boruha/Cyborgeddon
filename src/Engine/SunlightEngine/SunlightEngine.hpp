@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Engine/EngineInterface/IEngine.hpp>
-#include <Engine/EngineInterface/SceneInterface/IScene.hpp>
 #include <Engine/util/Mouse.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Resource/ResourceManager.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Tree/SceneManager.hpp>
+#include <Engine/SunlightEngine/SceneInterface/Tree/Video.hpp>
 
 struct GLFWwindow;
 
@@ -18,7 +18,7 @@ struct SunlightEngine final : public virtual IEngine {
 
     void shutdown() const final;
 
-    [[nodiscard]] bool isKeyPressed(KEY_CODE code) const final;
+    [[nodiscard]] bool isKeyPressed(unsigned code) const final;
 
     [[nodiscard]] const Mouse & getMouse() final;
 
@@ -28,9 +28,12 @@ struct SunlightEngine final : public virtual IEngine {
 
     void display() const final;
 
-    glm::vec2 getViewport() { return { windowWidth, windowHeight }; }
+    [[nodiscard]] glm::vec2 getViewport() const { return { windowWidth, windowHeight }; }
 
     void setViewport(const glm::vec2& v) { windowWidth = v.x, windowHeight = v.y; }
+
+	[[nodiscard]] std::unique_ptr<IVideo> loadVideo(const std::string_view path) const override { return std::make_unique<Video>(resourceManager.get(), path); };
+	void unloadVideo(const std::string_view path) const override { resourceManager->removeVideo(path); };
 
 	private :
 		GLFWwindow * window { nullptr };

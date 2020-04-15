@@ -44,15 +44,3 @@ vec3 IrrlichtScene::cursorToWorld(const float x, const float y, const float far)
 
 	return worldPos.w == 0 ? vec3() : vec3(worldPos.x, worldPos.y, worldPos.z) / worldPos.w;
 }
-
-void IrrlichtScene::loadTexture(const std::string_view path) const {
-	sceneManager->getVideoDriver()->getTexture(path.data());
-}
-
-void IrrlichtScene::unloadTexture(const std::string_view path) const {
-	sceneManager->getVideoDriver()->removeTexture(sceneManager->getVideoDriver()->getTexture(path.data()));
-}
-
-void IrrlichtScene::unloadTextures() const {
-	sceneManager->getVideoDriver()->removeAllTextures();
-}

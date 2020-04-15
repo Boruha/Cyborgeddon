@@ -1,5 +1,7 @@
 #include <util/State.hpp>
 #include <src/Engine/util/Math.hpp>
+#include <src/Engine/EngineInterface/SceneInterface/IVideo.hpp>
+#include <zconf.h>
 
 void State::init()
 {
@@ -65,4 +67,51 @@ StateEnum State::pauseNextState(const Context & context) {
 		return INGAME;
 
 	return PAUSE;
+}
+
+StateEnum State::initNextState(const Context & context) {
+	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+
+	std::unique_ptr<IVideo> videoIntro = context->getEngine().loadVideo("resources/videos/intro/1_F.mp4");
+
+	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+
+	std::unique_ptr<IVideo> videoBucle = context->getEngine().loadVideo("resources/videos/intro/2_F_L.mp4");
+
+	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+
+	std::cout << "Hola\n";
+
+	double framesIntro = videoIntro->getNumFrames();
+	unsigned frameCounter {0};
+
+	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+/*
+	while(frameCounter < unsigned(framesIntro)) {
+		context->getEngine().run();
+		videoIntro->render();
+		videoIntro->nextFrame();
+		context->getEngine().display();
+		frameCounter++;
+		system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+	}
+*/
+	videoBucle->setLoop(true);
+
+	while(!context->getEngine().isKeyPressed(KEY_SPACE)) {
+		context->getEngine().run();
+		videoBucle->render();
+		videoBucle->nextFrame();
+		context->getEngine().display();
+		system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+	}
+
+	context->getEngine().unloadVideo("resources/videos/intro/1_F.mp4");
+	context->getEngine().unloadVideo("resources/videos/intro/2_F_L.mp4");
+
+	std::cout << "Hemos descargado el video\n";
+
+	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+
+	return INGAME;
 }

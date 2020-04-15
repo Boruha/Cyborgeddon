@@ -1,3 +1,4 @@
+/*
 #include <Engine/IrrlichtEngine/IrrlichtEngine.hpp>
 
 #include <Engine/util/Color.hpp>
@@ -45,3 +46,4 @@ void IrrlichtEngine::draw() const {
 void IrrlichtEngine::display() const {
 	videoDriver->endScene();
 }
+ */

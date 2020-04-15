@@ -19,9 +19,7 @@ struct SunlightScene : IScene {
 
 	[[nodiscard]] vec3 cursorToWorld(float x, float y, float far) override;
 
-	void loadTexture(std::string_view path) const override {}
-	void unloadTexture(std::string_view path) const override {}
-	void unloadTextures() const override {}
+	void clearScene() override;
 
 private :
 	SceneManager * sceneManager;

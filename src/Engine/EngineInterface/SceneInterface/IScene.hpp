@@ -7,6 +7,7 @@
 struct IObjectNode;
 struct ICameraNode;
 struct INode;
+struct IVideo;
 
 using glm::vec3;
 
@@ -22,12 +23,9 @@ struct IScene {
 	virtual std::unique_ptr<INode> addLightNode() = 0;
 	virtual INode * addFreeLightNode(const vec3& amb, const vec3& diff, const vec3& spe) = 0;
 
+	virtual void clearScene() = 0;
 
 	[[nodiscard]] virtual vec3 cursorToWorld(float, float, float) = 0;
-
-    virtual void loadTexture(std::string_view) 		const = 0;
-    virtual void unloadTexture(std::string_view) 	const = 0; // TODO : debe ser un puntero a clase textura (que hay que hcer en util/Texture)
-	virtual void unloadTextures() 					const = 0;
 
 	ICameraNode * camera { nullptr };
 };

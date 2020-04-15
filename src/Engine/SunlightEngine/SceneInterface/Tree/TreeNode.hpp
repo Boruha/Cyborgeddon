@@ -32,6 +32,7 @@ struct TreeNode final : INode {
 
     TreeNode * addChildren(std::unique_ptr<TreeNode> child);
     void removeChildren(TreeNode * child);
+    void removeAllChildren();
 
     void setEntity(std::unique_ptr<IEntity> ent);
     void setParent(TreeNode * parent);

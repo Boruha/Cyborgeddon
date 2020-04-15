@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/IrrlichtEngine/InputEventReceiver.hpp>
 #include <Engine/IrrlichtEngine/SceneInterface/IrrlichtScene.hpp>
@@ -45,3 +45,4 @@ struct IrrlichtEngine final : public virtual IEngine {
 
         InputEventReceiver          eventReceiver;
 };
+ */

@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Engine/util/glad/glad.h>
+
 Shader::Shader(const std::string_view path [ SHADER_TYPES ])
 {
     std::string content [ SHADER_TYPES ];

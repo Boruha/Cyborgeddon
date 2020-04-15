@@ -116,6 +116,9 @@ glm::mat4 TreeNode::calculateMatrix() {
 }
 
 void TreeNode::remove() {
+	if (!children.empty())
+		removeAllChildren();
+
 	if (parent) {
 		auto * p = parent;
 		p = nullptr;
@@ -131,4 +134,9 @@ void TreeNode::setTarget(const vec3 &tar) {
 		cam->setTarget(tar);
 		sceneManager.getCameraNode()->setTransform(glm::inverse(cam->getViewMatrix()));
 	}
+}
+
+void TreeNode::removeAllChildren() {
+	for (const auto & child : children)
+		child->remove();
 }

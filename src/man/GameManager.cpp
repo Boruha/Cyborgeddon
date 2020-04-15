@@ -12,6 +12,10 @@ void GameManager::init()
 {
 	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
 
+	currentState = &states.emplace(std::make_pair(INIT, State(INIT, entityManager))).first->second;
+
+	currentState->init();
+
 	// PAUSE
 
 	currentState = & states.emplace(std::make_pair(PAUSE, State(PAUSE, entityManager))).first->second;
@@ -40,6 +44,8 @@ void GameManager::init()
 //	textureManager.loadTextures();
 
 	currentState->init();
+
+	currentState = & states.find(INIT)->second;
 }
 
 // TODO: bucle del juego

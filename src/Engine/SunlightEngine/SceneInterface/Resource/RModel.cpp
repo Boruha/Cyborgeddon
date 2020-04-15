@@ -1,5 +1,7 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/RModel.hpp>
 
+#include <Engine/util/glad/glad.h>
+
 #include <Engine/util/ErrorModelLoading.hpp>
 
 extern "C" {

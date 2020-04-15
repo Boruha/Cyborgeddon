@@ -4,16 +4,11 @@
 #include <glm/fwd.hpp>
 #include <vector>
 
-#include <Engine/SunlightEngine/SceneInterface/Resource/IResource.hpp>
-
 #include <Engine/SunlightEngine/SceneInterface/Resource/RMesh.hpp>
 
 #include <Engine/SunlightEngine/SceneInterface/Resource/Vertex.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Resource/Index.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Resource/Texture.hpp>
-
-//#include <Engine/util/shaders/Shader.hpp>
-//#include <Engine/util/shaders/ShaderPath.hpp>
 
 struct aiScene;
 struct aiNode;

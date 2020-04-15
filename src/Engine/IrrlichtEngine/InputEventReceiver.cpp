@@ -36,7 +36,7 @@ bool InputEventReceiver::OnEvent(const irr::SEvent & event) {
 	return false;
 }
 
-bool InputEventReceiver::IsKeyDown(const KEY_CODE keyCode) const {
+bool InputEventReceiver::IsKeyDown(const unsigned keyCode) const {
 	return keyboard.keys[keyCode];
 }
 

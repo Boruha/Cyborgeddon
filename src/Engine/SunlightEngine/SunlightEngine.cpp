@@ -2,17 +2,17 @@
 
 #include <Engine/util/Color.hpp>
 
+#include <Engine/util/Error.hpp>
+#include <Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp>
+
 extern "C" {
 	#include <Engine/util/glad/glad.h>
 	#include <GLFW/glfw3.h>
 }
 
-#include <Engine/util/Error.hpp>
-#include <Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp>
-
 void framebuffer_size_callback(GLFWwindow * const window, const int width, const int height) {
 	glViewport(0, 0, width, height);
-	SunlightEngine * sunlightEngine = static_cast<SunlightEngine*>(glfwGetWindowUserPointer(window));
+	auto * sunlightEngine = static_cast<SunlightEngine*>(glfwGetWindowUserPointer(window));
 
 	sunlightEngine->setViewport( { width, height } );
 }
@@ -50,6 +50,15 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 		error("No se pudo inicializar glad");
 
+/*
+	GLenum err = glewInit(); //  Initialise glew (must occur AFTER window creation or glew will error)
+
+	if (GLEW_OK != err)
+	{
+		std::cout << "GLEW initialisation error: " << glewGetErrorString(err) << "\n";
+		exit(-1);
+	}
+*/
 	// opengl no dibujara lo que este detras de algo ya dibujado
 	glEnable(GL_DEPTH_TEST);
 //	glEnable(GL_CULL_FACE);
@@ -80,7 +89,7 @@ void SunlightEngine::shutdown() const {
 	glfwTerminate();
 }
 
-bool SunlightEngine::isKeyPressed(const KEY_CODE code) const {
+bool SunlightEngine::isKeyPressed(const unsigned code) const {
 	return glfwGetKey(window, code) == GLFW_PRESS;
 }
 

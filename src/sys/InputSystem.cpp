@@ -8,7 +8,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 void InputSystem::init() {
-    for (auto * next = keyMap; next->key != static_cast<KEY_CODE>(0); ++next) {
+    for (auto * next = keyMap; next->key != 0; ++next) {
         switch (next->key) {
             case KEY_W:
                 next->p_func = &InputSystem::w_pressed;

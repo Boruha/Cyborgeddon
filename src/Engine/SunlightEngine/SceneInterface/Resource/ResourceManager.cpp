@@ -4,7 +4,34 @@ const RModel & ResourceManager::getModel(const std::string_view path) {
 	// emplace (key, value) crea el RModel value. Para construir un RModel necesitamos un parametro que en
 	// este caso coincide con la clave, por eso la llamada a la funcion queda asi (despues de la condicion):
 	if (model.count(path.data()) == 0)
-		model.insert(std::make_pair(path.data(), RModel(path)));
+		return model.emplace(
+				std::piecewise_construct,
+				std::forward_as_tuple(path.data()),
+				std::forward_as_tuple(path)
+		).first->second;
 
 	return model.find(path.data())->second;
+}
+
+RVideo & ResourceManager::getVideo(const std::string_view path) {
+	std::cout << "Intentando insertar el video\n";
+
+	if (video.count(path.data()) == 0) {
+		std::cout << "No existe, asi que lo creamos\n";
+		return video.emplace(
+				std::piecewise_construct,
+				std::forward_as_tuple(path.data()),
+				std::forward_as_tuple(path)
+		).first->second;
+	}
+
+	return video.find(path.data())->second;
+}
+
+void ResourceManager::removeModel(const std::string_view path) {
+	model.erase(path.data());
+}
+
+void ResourceManager::removeVideo(const std::string_view path) {
+	video.erase(path.data());
 }

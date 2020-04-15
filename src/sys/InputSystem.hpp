@@ -30,7 +30,7 @@ struct InputSystem : System
 		inline void aim_mouse(const Context& context, Physics& phy, const glm::vec2 &mouse) const;
 
         struct TKey2func {
-            KEY_CODE key;
+            unsigned key;
 	        void (InputSystem::*p_func)(Velocity& velocity, CharacterData& data) const;
         };
 
@@ -42,6 +42,6 @@ struct InputSystem : System
             { KEY_SPACE,                nullptr },
             { KEY_Q,                    nullptr },
 			{ KEY_LSHIFT,               nullptr },
-            { static_cast<KEY_CODE>(0), nullptr }
+            { 0,                        nullptr }
         };
 };
