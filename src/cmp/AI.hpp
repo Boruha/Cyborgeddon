@@ -7,7 +7,7 @@
 struct AI : public Component {
 	explicit AI(EntityType e_type, EntityID e_ID, const std::vector<vec3>& patrol);
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "AI";
 	}
 

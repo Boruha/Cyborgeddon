@@ -30,6 +30,8 @@ struct SunlightEngine final : public virtual IEngine {
 
     glm::vec2 getViewport() { return { windowWidth, windowHeight }; }
 
+    void setViewport(const glm::vec2& v) { windowWidth = v.x, windowHeight = v.y; }
+
 	private :
 		GLFWwindow * window { nullptr };
 		Mouse mouse;

@@ -12,6 +12,9 @@ extern "C" {
 
 void framebuffer_size_callback(GLFWwindow * const window, const int width, const int height) {
 	glViewport(0, 0, width, height);
+	SunlightEngine * sunlightEngine = static_cast<SunlightEngine*>(glfwGetWindowUserPointer(window));
+
+	sunlightEngine->setViewport( { width, height } );
 }
 
 void SunlightEngine::init(const unsigned width, const unsigned height, const std::string_view name) {
@@ -37,6 +40,9 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 		error("No se pudo abrir la ventana");
 
 	glfwMakeContextCurrent(window);
+
+	glfwSetWindowUserPointer(window, this);
+
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// usaremos glad para asegurarnos de que cualquier llamada que hagamos

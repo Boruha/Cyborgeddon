@@ -8,7 +8,7 @@ struct Jump : Component
     explicit Jump(const EntityType, const EntityID, const float, const float);
     ~Jump() = default;
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "Jump Data";
 	}
     

@@ -6,7 +6,7 @@ struct RigidStaticAABB : Component {
 	explicit RigidStaticAABB(const EntityType e_type, const EntityID e_ID, const vec3& pos, const vec3& dim)
 			: Component(e_type, e_ID), min(pos - (dim * 0.5f)), max(pos + (dim * 0.5f)) {  }
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "RigidStaticAABB";
 	}
 

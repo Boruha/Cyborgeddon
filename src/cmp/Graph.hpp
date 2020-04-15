@@ -38,7 +38,7 @@ struct Graph : Component {
 	explicit Graph(const EntityType type, const EntityID id)
 		: Component(type, id) { }
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "Graph";
 	}
 

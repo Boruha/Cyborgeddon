@@ -9,4 +9,5 @@ struct ResourceManager {
 
 	private:
 		std::unordered_map<std::string, RModel> model;
+
 };

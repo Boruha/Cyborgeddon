@@ -7,7 +7,7 @@ struct CharacterData : Component {
 							const float sw_cd, const float dmg, const float dmg_cd,
 							const float dmg_rg, const float dsh, const float dsh_cd);
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "CharacterData";
 	}
 

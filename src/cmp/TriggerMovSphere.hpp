@@ -6,7 +6,7 @@ struct TriggerMovSphere : Component {
     explicit TriggerMovSphere(const EntityType e_type, const EntityID e_ID, const vec3& pos, const float rad, vec3& vel)
             : Component(e_type, e_ID), position(pos), radius(rad), velocity(&vel) {  }
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "TriggerMovSphere";
 	}
 

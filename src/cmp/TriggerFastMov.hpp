@@ -6,7 +6,7 @@ struct TriggerFastMov : Component {
 	explicit TriggerFastMov(const EntityType e_type, const EntityID e_ID, const vec3& pos, vec3& vel)
 			: Component(e_type, e_ID), position(pos), velocity(vel) {  }
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "TriggerFastMov";
 	}
 

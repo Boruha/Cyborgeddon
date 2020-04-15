@@ -72,8 +72,8 @@ ALLCPP    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
 ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
-INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I.
-LIBS 		:= -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lassimp -Wl,-rpath,$(LIBDIR)
+INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I. -I/usr/include/opencv/usr/include
+LIBS 		:= -lIrrlicht -lfmod -lfmodstudio -lglfw -lGLEW -lGL -lpthread -ldl -lassimp -lopencv_highgui -lopencv_core -Wl,-rpath,$(LIBDIR)
 GOLD_OPTION	:= -fuse-ld=gold
 
 # CLEAN

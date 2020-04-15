@@ -546,15 +546,15 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_4[0], vec3(8), patrol_4);
 	createEnemy(patrol_5[0], vec3(8), patrol_5);
 
-	std::cout << componentStorage.getComponents<Transformable>()[0].getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
-	std::cout << componentStorage.getComponents<Physics>()[0].getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
-	std::cout << componentStorage.getComponents<RigidStaticAABB>()[0].getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";
-	std::cout << componentStorage.getComponents<TriggerMovSphere>()[0].getName()  << " " << componentStorage.getComponents<TriggerMovSphere>().size() << "\n";
-	std::cout << componentStorage.getComponents<AI>()[0].getName()                << " " << componentStorage.getComponents<AI>().size() << "\n";
-	std::cout << componentStorage.getComponents<TriggerStaticAABB>()[0].getName() << " " << componentStorage.getComponents<TriggerStaticAABB>().size() << "\n";
-	std::cout << componentStorage.getComponents<Render>()[0].getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
-	std::cout << componentStorage.getComponents<Velocity>()[0].getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
-	std::cout << componentStorage.getComponents<CharacterData>()[0].getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
+	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
+	std::cout << Physics::getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
+	std::cout << RigidStaticAABB::getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";
+	std::cout << TriggerMovSphere::getName()  << " " << componentStorage.getComponents<TriggerMovSphere>().size() << "\n";
+	std::cout << AI::getName()                << " " << componentStorage.getComponents<AI>().size() << "\n";
+	std::cout << TriggerStaticAABB::getName() << " " << componentStorage.getComponents<TriggerStaticAABB>().size() << "\n";
+	std::cout << Render::getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
+	std::cout << Velocity::getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
+	std::cout << CharacterData::getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
 }
 
 void EntityManager::createGraph()

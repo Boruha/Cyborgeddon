@@ -10,7 +10,7 @@ struct Velocity : public Component
 	explicit Velocity(const EntityType e_type, const EntityID e_ID, const vec3& dir, const float defaultSpeed, const float acceleration)
 		: Component(e_type, e_ID), direction(dir), currentSpeed (defaultSpeed), defaultSpeed(defaultSpeed), acceleration(acceleration) {  }
 
-	[[nodiscard]] std::string_view getName() const override {
+	[[nodiscard]] constexpr static std::string_view getName() {
 		return "Velocity";
 	}
 
