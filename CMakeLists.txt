@@ -53,7 +53,7 @@ file (
 
 find_package ( OpenCV REQUIRED )
 
-add_executable(cyborgeddon ${SOURCES} src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.cpp src/Engine/SunlightEngine/SceneInterface/Resource/RVideo.hpp src/Engine/SunlightEngine/SceneInterface/Resource/RVideo.cpp src/Engine/EngineInterface/SceneInterface/IVideo.hpp src/Engine/SunlightEngine/SceneInterface/Tree/Video.hpp src/Engine/SunlightEngine/SceneInterface/Tree/Video.cpp)
+add_executable(cyborgeddon ${SOURCES} src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.cpp src/Engine/SunlightEngine/SceneInterface/Resource/RVideo.hpp src/Engine/SunlightEngine/SceneInterface/Resource/RVideo.cpp src/Engine/EngineInterface/SceneInterface/IVideo.hpp src/Engine/SunlightEngine/SceneInterface/Tree/Video.hpp src/Engine/SunlightEngine/SceneInterface/Tree/Video.cpp src/cmp/Video.hpp src/cmp/Video.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${OpenCV_INCLUDE_DIRS})
 

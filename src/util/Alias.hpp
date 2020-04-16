@@ -21,7 +21,8 @@ enum EntityType : uint16_t
 	FLOOR     = 7,
 	WALL      = 8,
 	NAV       = 9,
-	LIGHT     = 10
+	LIGHT     = 10,
+	VIDEO     = 11
 };
 
 enum StateEnum : uint8_t

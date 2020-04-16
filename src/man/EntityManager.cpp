@@ -71,6 +71,8 @@ void EntityManager::cleanData() {
 	camera = nullptr;						// reiniciamos valor
 
 	componentStorage.cleanData();			// limpiamos el contenido de component storage
+
+	engine.unloadVideos();                  // limpiamos videos del motor si habia alguno en memoria
 }
 
 
@@ -335,6 +337,20 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	key.addComponent(keyRender);
 }
 
+
+void EntityManager::createVideo(const std::string_view path) {
+	auto& video = createEntity(VIDEO);
+
+	auto& cmpVideo = componentStorage.createComponent(Video(video.getType(), video.getID(), path));
+
+	cmpVideo.video = engine.loadVideo(path);
+
+	std::cout << cmpVideo << "\n";
+
+	video.addComponent(cmpVideo);
+}
+
+
 void EntityManager::setNavConnections(const GraphNode & node, const std::vector<const GraphNode *> & conns) const {
 	// MAX_GRAPH_CONN especifica cuantas conexiones puede haber como maximo
 	// si se necesita añadir mas conexiones, ir a util/ComponentConstants.hpp
@@ -444,13 +460,15 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 }
 
 void EntityManager::createLevel() {
+	cleanData();
+
 	initData(128, 16, 128);
 
 	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 70, 60));
 	createLight(vec3(30, 60, 20), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
-
+/*
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys
 	createPairKeyDoor(vec3(0,0,-60), vec3(3), vec3(-37,0,-90), vec3(2,20,10));
@@ -530,7 +548,7 @@ void EntityManager::createLevel() {
 	createWall(vec3(-347.5,0,-277.5), vec3(10,10,145)); //Izq
 	createWall(vec3(-265,0,-277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
-
+*/
 	createGraph();
 	//puntero a vec3? Mejor?
 	std::vector<vec3> patrol_1 = { graph[9].coord };
@@ -632,4 +650,13 @@ bool EntityManager::checkVictory() const {
 
 bool EntityManager::checkDefeat() const {
 	return !greater_e(player->getComponent<CharacterData>()->health, 0.f);
+}
+
+void EntityManager::createIntro() {
+	initData(4, 0, 4);
+
+	createVideo("resources/videos/intro/1_F.mp4");
+	createVideo("resources/videos/intro/2_F_L.mp4");
+
+	std::cout << Video::getName()     << " " << componentStorage.getComponents<Video>().size() << "\n";
 }

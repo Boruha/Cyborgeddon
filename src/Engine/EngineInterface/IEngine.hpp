@@ -20,8 +20,9 @@ struct IEngine {
     virtual void draw()                               const = 0;
     virtual void display()                            const = 0;
 
-	[[nodiscard]] virtual std::unique_ptr<IVideo> loadVideo(std::string_view) const = 0;
-	virtual void unloadVideo(std::string_view)                                const = 0;
+	[[nodiscard]] virtual IVideo* loadVideo(std::string_view)   = 0;
+	virtual void unloadVideo(std::string_view)                  = 0;
+	virtual void unloadVideos()                                 = 0;
 
     std::unique_ptr<IScene> scene { nullptr };
 };

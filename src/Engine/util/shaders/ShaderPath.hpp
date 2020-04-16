@@ -15,5 +15,4 @@ constexpr std::string_view PHONG_BASIC_FRAGMENT {
 constexpr std::string_view PHONG_BASIC_SHADER [SHADER_TYPES] {
 		PHONG_BASIC_VERTEX,
 		PHONG_BASIC_FRAGMENT
-
 };

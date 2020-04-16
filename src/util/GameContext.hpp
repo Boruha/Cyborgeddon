@@ -13,7 +13,8 @@ struct IEngine;
 struct GameContext {
 	virtual ~GameContext() = default;
 
-	virtual void createLevel() = 0;
+	virtual void createIntro()  = 0;
+	virtual void createLevel()  = 0;
 	virtual void createGraph()  = 0;
 	virtual void createBullet() = 0;
 

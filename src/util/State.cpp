@@ -14,10 +14,11 @@ void State::init()
 			break;
 		case INIT :
 			next_state = &State::initNextState;
+			context->createIntro();
 			break;
 		case INGAME :
 			next_state = &State::ingameNextState;
-			context->createLevel();
+//			context->createLevel();
 			break;
 		case PAUSE :
 			next_state = &State::pauseNextState;
@@ -70,8 +71,8 @@ StateEnum State::pauseNextState(const Context & context) {
 }
 
 StateEnum State::initNextState(const Context & context) {
-	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-
+//	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+/*
 	std::unique_ptr<IVideo> videoIntro = context->getEngine().loadVideo("resources/videos/intro/1_F.mp4");
 
 	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
@@ -86,7 +87,7 @@ StateEnum State::initNextState(const Context & context) {
 	unsigned frameCounter {0};
 
 	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-/*
+
 	while(frameCounter < unsigned(framesIntro)) {
 		context->getEngine().run();
 		videoIntro->render();
@@ -95,7 +96,7 @@ StateEnum State::initNextState(const Context & context) {
 		frameCounter++;
 		system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
 	}
-*/
+
 	videoBucle->setLoop(true);
 
 	while(!context->getEngine().isKeyPressed(KEY_SPACE)) {
@@ -112,6 +113,9 @@ StateEnum State::initNextState(const Context & context) {
 	std::cout << "Hemos descargado el video\n";
 
 	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+*/
+
+	context->createLevel();
 
 	return INGAME;
 }

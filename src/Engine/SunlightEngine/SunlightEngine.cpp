@@ -50,15 +50,6 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 		error("No se pudo inicializar glad");
 
-/*
-	GLenum err = glewInit(); //  Initialise glew (must occur AFTER window creation or glew will error)
-
-	if (GLEW_OK != err)
-	{
-		std::cout << "GLEW initialisation error: " << glewGetErrorString(err) << "\n";
-		exit(-1);
-	}
-*/
 	// opengl no dibujara lo que este detras de algo ya dibujado
 	glEnable(GL_DEPTH_TEST);
 //	glEnable(GL_CULL_FACE);

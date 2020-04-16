@@ -8,9 +8,7 @@ Video::Video(ResourceManager * const resManager, const std::string_view path) : 
 }
 
 void Video::setVideo(const std::string_view path) {
-	std::cout << "Se va a guardar el video en el manager de recursos\n";
 	video = &resourceManager.getVideo(path);
-	std::cout << "Hemos obtenido el video\n";
 }
 
 void Video::render() const {

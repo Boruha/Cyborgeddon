@@ -32,8 +32,17 @@ struct SunlightEngine final : public virtual IEngine {
 
     void setViewport(const glm::vec2& v) { windowWidth = v.x, windowHeight = v.y; }
 
-	[[nodiscard]] std::unique_ptr<IVideo> loadVideo(const std::string_view path) const override { return std::make_unique<Video>(resourceManager.get(), path); };
-	void unloadVideo(const std::string_view path) const override { resourceManager->removeVideo(path); };
+	[[nodiscard]] IVideo * loadVideo(const std::string_view path) override {
+		return static_cast<IVideo *>(&video.emplace(
+				std::piecewise_construct,
+				std::forward_as_tuple(path.data()),
+				std::forward_as_tuple(resourceManager.get(), path)
+		).first->second);
+    };
+
+	void unloadVideo(const std::string_view path) override { video.erase(path.data()); resourceManager->removeVideo(path); };
+
+	void unloadVideos() override { for (const auto& pair : video) resourceManager->removeVideo(pair.first); video.clear(); };
 
 	private :
 		GLFWwindow * window { nullptr };
@@ -42,4 +51,6 @@ struct SunlightEngine final : public virtual IEngine {
 
 		std::unique_ptr<ResourceManager> resourceManager;
 		std::unique_ptr<SceneManager> sceneManager;
+
+		std::unordered_map<std::string, Video> video {};
 };

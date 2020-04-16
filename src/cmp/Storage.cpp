@@ -13,7 +13,8 @@ void Storage::initData(const unsigned maxComponents) {
 	initVector<TriggerFastMov>(maxComponents);
 	initVector<Graph>(maxComponents);
 	initVector<Render>(maxComponents);
-	initVector<Jump>(maxComponents/2); //crear los justos para demons
+	initVector<Jump>(maxComponents); //crear los justos para demons
+	initVector<Video>(maxComponents);
 
 	nodes.reserve(maxComponents);
 }

@@ -14,10 +14,7 @@ const RModel & ResourceManager::getModel(const std::string_view path) {
 }
 
 RVideo & ResourceManager::getVideo(const std::string_view path) {
-	std::cout << "Intentando insertar el video\n";
-
 	if (video.count(path.data()) == 0) {
-		std::cout << "No existe, asi que lo creamos\n";
 		return video.emplace(
 				std::piecewise_construct,
 				std::forward_as_tuple(path.data()),

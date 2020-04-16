@@ -9,6 +9,8 @@ struct EntityManager : GameContext {
 	explicit EntityManager(IEngine * const _engine) : engine(*_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override = default;
 
+	void createIntro() override;
+
 	void createLevel() override;
 	void createGraph() override;
 	void createBullet () override;
@@ -60,17 +62,19 @@ struct EntityManager : GameContext {
 		void setNavConnections (const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
 		void createNavigation  ();
 
+		void createVideo(std::string_view);
+
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
 		Entity * nav    { nullptr };
 
-		std::vector<MapNode> graph;
-		std::unordered_map<EntityID, std::vector<int>> paths;
+		std::vector<MapNode> graph {};
+		std::unordered_map<EntityID, std::vector<int>> paths {};
 
 		IEngine& engine;
 
-	    std::vector<EntityID> toDelete;
-	    std::unordered_map<EntityID, Entity> entities;
+	    std::vector<EntityID> toDelete {};
+	    std::unordered_map<EntityID, Entity> entities {};
 
 		int enemiesLeft { 0 };	// de momento esta es la condicion de "victoria" que nos hace pasar (reiniciar en este caso) de nivel
 
