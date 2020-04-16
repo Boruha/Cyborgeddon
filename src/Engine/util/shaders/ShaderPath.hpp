@@ -2,6 +2,7 @@
 
 #include <Engine/util/shaders/Shader.hpp>
 
+constexpr unsigned max_light_size = 7;
 
 //Phong basic
 constexpr std::string_view PHONG_BASIC_VERTEX {

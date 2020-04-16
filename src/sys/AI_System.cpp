@@ -453,14 +453,17 @@ void AI_System::update(const Context &context, const float deltaTime)
 {
     using namespace std::chrono;
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
-
     ++frame;
-    scheduler(context);
+
+    setPhase(context);
+    setInQueue(context);
+
     duration<double> timer { 50us };
+    steady_clock::time_point t1 { };
 
 	while( timer > 0us && !schedule.empty() )
     {
-        steady_clock::time_point t1 { steady_clock::now() };
+        t1 = steady_clock::now();
 
         auto & ai       = *(schedule.front());
         auto & enemy    = context->getEntityByID(ai.getEntityID());
@@ -476,7 +479,33 @@ void AI_System::update(const Context &context, const float deltaTime)
 	}
 }
 
-void AI_System::scheduler(const std::unique_ptr<GameContext>& context)
+//Scheduling 
+void AI_System::setPhase(const std::unique_ptr<GameContext>& context)
+{
+    unsigned phase_patrol_counter = 0;
+    unsigned phase_pursue_counter = 0;
+    unsigned phase_attack_counter = 0;
+
+    for (auto & ai : context->getComponents().getComponents<AI>()) 
+    {
+		if (ai) 
+        {
+            switch (ai.frequecy_state)
+            {
+                case 2: ai.scheduling_phase = ++phase_attack_counter;
+                break;
+
+                case 3: ai.scheduling_phase = ++phase_pursue_counter;
+                break;
+            
+                case 7: ai.scheduling_phase = ++phase_patrol_counter;
+                break;
+            }
+        }
+    }
+}
+
+void AI_System::setInQueue(const std::unique_ptr<GameContext>& context)
 {
     for(auto& ai : context->getComponents().getComponents<AI>())
     {
@@ -488,13 +517,13 @@ void AI_System::scheduler(const std::unique_ptr<GameContext>& context)
             if( (frame + ai.scheduling_phase) % ai.frequecy_state != 0 )
                 continue;
 
-            //std::cout << "ME PUSHEA\n";
             schedule.push(&ai);
             ai.scheduled = true;
         }
     }
 }
 
+//Obstacle Avoidance
 bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad, const std::unique_ptr<GameContext>& context)
 {
     auto& rAABB_vector = context->getComponents().getComponents<RigidStaticAABB>();

@@ -15,7 +15,8 @@ struct AI_System : System
 
     [[nodiscard]] bool checkObstacles(const vec3&, const vec3&, float, const std::unique_ptr<GameContext>&);
     [[nodiscard]] bool checkFacing(const Physics&, const std::unique_ptr<GameContext>&);
-                  void scheduler(const std::unique_ptr<GameContext>&);
+                  void setPhase(const std::unique_ptr<GameContext>&);
+                  void setInQueue(const std::unique_ptr<GameContext>&);
 
     private:
     std::unique_ptr<Selector> root;

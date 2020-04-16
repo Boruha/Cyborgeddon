@@ -11,7 +11,7 @@ void SceneManager::render() {
 	viewProjection = camera->getViewProjectionMatrix();
 	
 	shader.enable();
-	shader.vec3Uniform("light.position", lightNode->getPosition());
+	setLights();
 
 	root->render(glm::mat4(1), shader);
 }
@@ -46,12 +46,42 @@ TreeNode * SceneManager::addCameraNode() {
 }
 
 TreeNode * SceneManager::addLightNode(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) {
+	
 	auto tree_ptr   = std::make_unique<TreeNode>(*this);
 	auto light_ptr  = std::make_unique<Light>(amb, diff, spe);
 
-	light = light_ptr.get();
-	tree_ptr->setEntity(std::move(light_ptr));
-	lightNode = tree_ptr.get();
+	//light = light_ptr.get();
+	//lightNode = tree_ptr.get();
+
+	if(lights_index < max_light_size)
+	{
+		lights[lights_index]     = light_ptr.get();
+		lightNodes[lights_index] = tree_ptr.get();
+		++lights_index;
+
+		tree_ptr->setEntity(std::move(light_ptr));
+	} 
+	else
+		std::cout << "Alv esa luz\n";
 
 	return root->addChildren(std::move(tree_ptr));
+}
+
+void SceneManager::setLights()
+{
+	std::string name;
+
+	for(std::size_t i=0; i<lights_index; ++i)
+	{
+		if(!lights[i] || !lightNodes[i]) continue;
+
+    	std::string name = "lights[" + std::to_string(lights[i]->getID()) + "]";
+
+		shader.vec3Uniform(name + ".position", lightNodes[i]->getPosition());
+    	shader.vec3Uniform(name + ".ambient" , lights[i]->getAmbient());
+    	shader.vec3Uniform(name + ".diffuse" , lights[i]->getDiffuse());
+    	shader.vec3Uniform(name + ".specular", lights[i]->getSpecular());
+	}
+    shader.intUniform("light_index", lights_index);
+
 }

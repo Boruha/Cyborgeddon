@@ -14,4 +14,3 @@
 #include <sys/DeathSystem.hpp>
 #include <sys/SoundSystem.hpp>
 #include <sys/RenderSystem.hpp>
-#include <sys/SchedulingSystem.hpp>
