@@ -24,12 +24,15 @@ struct SceneManager {
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera   * getCamera()     const { return camera;     }
 
-	[[nodiscard]] TreeNode * getLightNode()  const { return lightNode;  }
-	[[nodiscard]] Light    * getLight()      const { return light;      }
+	[[nodiscard]] std::array<TreeNode*, max_light_size> getLightNode() const { return lightNodes;  }
+	[[nodiscard]] std::array<Light*,    max_light_size> getLight()     const { return lights;      }
 
 	SunlightEngine * getEngine() { return engine; }
 
 private :
+
+	void setLights();
+
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
 	Shader shader { PHONG_BASIC_SHADER }; //TODO: add a shader selector;
@@ -37,8 +40,13 @@ private :
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };
 
-	TreeNode * lightNode  { nullptr };
-	Light    * light      { nullptr };
+	//deprecate
+	//TreeNode * lightNode  { nullptr };
+	//Light    * light      { nullptr };
+
+	std::array<TreeNode*, max_light_size> lightNodes;
+	std::array<Light*, max_light_size>    lights;
+	std::size_t lights_index { 0 };
 
 	mat4 viewProjection {1};
 	mat4 view {1};

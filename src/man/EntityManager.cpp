@@ -111,7 +111,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 
 	camera = & createEntity(CAMERA);
 
-	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3()));
+	auto& cameraPhysics = componentStorage.createComponent(Physics(camera->getType(), camera->getID(), posCamera, physics.velocity, vec3(0)));
 	auto& cameraRender	= componentStorage.createComponent(Render(camera->getType(), camera->getID(), &cameraPhysics.position, &cameraPhysics.rotation, &cameraPhysics.scale, true));
 
 	cameraRender.node   = componentStorage.createCamera();
@@ -129,14 +129,12 @@ void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& di
 {
 	auto* light = & createEntity(LIGHT);
 
-	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(), vec3()));
+	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(0), vec3(0)));
 	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, false));
 
 	render.node   = componentStorage.createLight(amb, diff, spe);
 	
 	render.node->setPosition(phy.position);
-	render.node->setPosition(phy.rotation);
-	render.node->setPosition(phy.scale);
 
 	light->addComponent(phy);
 	light->addComponent(render);
@@ -163,14 +161,14 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	wall.addComponent(render);
 }
 
-void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
+void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase) {
 	auto& enemy     = createEntity(ENEMY);
 
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
-	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
@@ -191,14 +189,14 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	++enemiesLeft;
 }
 
-void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
+void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase) {
 	auto& enemy     = createEntity(ENEMY);
 
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), ANGEL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, DIST_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
-	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
@@ -219,15 +217,14 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	++enemiesLeft;
 }
 
-void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol) {
+void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase) {
 	auto& enemy     = createEntity(ENEMY);
-	std::cout << "DEMON START\n";
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), DEMON, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& jump 		= componentStorage.createComponent(Jump(enemy.getType(), enemy.getID(), JUMP_COOLDOWN, JUMP_TIMER));
-	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
@@ -247,8 +244,6 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(render);
 
 	++enemiesLeft;
-
-	std::cout << "DEMON OKKKKK\n";
 }
 
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
@@ -444,10 +439,11 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 }
 
 void EntityManager::createLevel() {
-	initData(128, 16, 128);
-
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 70, 60));
-	createLight(vec3(30, 60, 20), vec3(0.1), vec3(0.6), vec3(0.2));
+	initData(128, 16, 150);
+	
+	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 120, 70));
+	createLight(vec3(0, 60, 0), vec3(0.2), vec3(0.8), vec3(0.5));
+	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
 
@@ -538,13 +534,28 @@ void EntityManager::createLevel() {
 	std::vector<vec3> patrol_3 = { graph[5].coord };
 	std::vector<vec3> patrol_4 = { graph[6].coord };
 	std::vector<vec3> patrol_5 = { graph[13].coord, graph[14].coord, graph[11].coord, graph[12].coord };
+	std::vector<vec3> patrol_6 = { graph[13].coord, graph[14].coord };
+	std::vector<vec3> patrol_7 = { graph[11].coord, graph[12].coord };
+	std::vector<vec3> patrol_8 = { graph[12].coord, graph[13].coord };
+	std::vector<vec3> patrol_9 = { graph[14].coord, graph[11].coord };
+	std::vector<vec3> patrol_10 = { graph[7].coord };
+	std::vector<vec3> patrol_11 = { graph[8].coord };
+	std::vector<vec3> patrol_12 = { graph[8].coord };
 
-	//createDemon(patrol_2[0], vec3(11), patrol_2);
-	//createEnemy(patrol_2[0], vec3(8), patrol_2);
-	//createEnemy(patrol_1[0], vec3(8), patrol_1);
-	//createEnemy(patrol_3[0], vec3(8), patrol_3);
-	createEnemy(patrol_4[0], vec3(8), patrol_4);
-	createEnemy(patrol_5[0], vec3(8), patrol_5);
+	unsigned scheduling_AI_counter = 0;
+
+	createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
+	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
+	createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
+	createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
+	createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
+	createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
+	createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
+	createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
+	createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
 
 	std::cout << componentStorage.getComponents<Transformable>()[0].getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
 	std::cout << componentStorage.getComponents<Physics>()[0].getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";

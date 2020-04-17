@@ -14,9 +14,11 @@ struct Light : IEntity {
     void setDiffuse(const glm::vec3& nDif)  { diffuse  = nDif; }
     void setSpecular(const glm::vec3& nSpe) { specular = nSpe; }
 
-    [[nodiscard]] const glm::vec3& getAmbient() const { return ambient;  }
-    [[nodiscard]] const glm::vec3& getDiffuse() const { return diffuse;  }
-    [[nodiscard]] const glm::vec3& getValue()   const { return specular; }
+    [[nodiscard]] const glm::vec3& getAmbient()  const { return ambient;  }
+    [[nodiscard]] const glm::vec3& getDiffuse()  const { return diffuse;  }
+    [[nodiscard]] const glm::vec3& getSpecular() const { return specular; }
+
+    std::size_t getID() { return ID; }
 
 private:
     //Intensity of the different parts of light
@@ -25,4 +27,7 @@ private:
     glm::vec3 ambient  { 0.f };
     glm::vec3 diffuse  { 0.f };
     glm::vec3 specular { 0.f };
+
+    std::size_t ID { nextID++ };
+	inline static std::size_t nextID { 0 };
 };

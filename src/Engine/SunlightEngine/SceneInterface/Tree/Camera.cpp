@@ -9,7 +9,7 @@
 void Camera::render(const glm::mat4& m, Shader shader)
 {
 	//shader.mat4Uniform("viewMatrix", view);
-};
+}
 
 void Camera::setPerspective(const float near, const float far, const float fov) {
 	projection = glm::perspective(glm::radians(fov), float(WINDOW_WIDTH) / float(WINDOW_HEIGHT), near, far);
@@ -29,7 +29,7 @@ void Camera::setViewMatrix(const glm::mat4 & m) {
 
 const glm::vec3& Camera::getTarget() const {
 	return target;
-};
+}
 
 const glm::mat4& Camera::getViewMatrix() const {
 	return view;

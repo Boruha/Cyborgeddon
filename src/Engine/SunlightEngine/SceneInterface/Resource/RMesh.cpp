@@ -41,7 +41,7 @@ RMesh::~RMesh() = default;
 void RMesh::render(const glm::mat4 & m, Shader shader) const {
 	unsigned diffuse {0}, specular {0}, normal {0}, height {0};
 
-	for (int i = 0; i < textures.size(); ++i) {
+	for (std::size_t i = 0; i<textures.size(); ++i) {
 		glActiveTexture(GL_TEXTURE0 + i);
 
 		std::string name = textures[i].type;
