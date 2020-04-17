@@ -11,12 +11,13 @@ struct Light
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-    //bool used;
 };
 
 /*------  UNIFORMS  ------*/ 
 uniform Light[7]  lights;
 uniform int       light_index; 
+
+uniform vec3      camera_pos;
 
 uniform sampler2D texture_diffuse0;
 uniform sampler2D texture_normal0;
@@ -41,19 +42,20 @@ void main() {
     {
         vec3  vec_obj_light  = lights[i].position - view_Pos;
         float dist_obj_light = length(vec_obj_light);
+        vec3 f_amb           = lights[i].ambient * vec_tex;
+
         
         if(dist_obj_light < 300)
         {
             vec_obj_light     = normalize(vec_obj_light);
             float attenuation = 1/(1 + (att_Linear * dist_obj_light) + (att_quadra * dist_obj_light * dist_obj_light));
 
-            vec3 f_amb  = lights[i].ambient * vec_tex;
             vec3 f_diff = lights[i].diffuse * max(dot(vec_obj_light, vec_normal), 0.0) * vec_tex;
             vec3 f_spec = vec3(0);
 
             if(has_normal)
             {
-                vec3 vec_view  = normalize(-view_Pos); //Camera in 0.0
+                vec3 vec_view  = normalize(camera_pos - view_Pos); 
                 vec3 vec_spec  = reflect(-vec_obj_light, vec_normal);
                 vec3 vec_tex2  = vec3(texture(texture_normal0, TexCoords));
 

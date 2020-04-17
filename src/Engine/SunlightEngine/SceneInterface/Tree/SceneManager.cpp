@@ -9,8 +9,9 @@ void SceneManager::render() {
 	camera->setViewMatrix(glm::lookAt(cameraNode->getPosition(), camera->getTarget(), glm::vec3(0, 1, 0)));
 	view = camera->getViewMatrix();
 	viewProjection = camera->getViewProjectionMatrix();
-	
+	shader.vec3Uniform("camera_pos", cameraNode->getPosition());
 	shader.enable();
+
 	setLights();
 
 	root->render(glm::mat4(1), shader);
@@ -49,9 +50,6 @@ TreeNode * SceneManager::addLightNode(const glm::vec3& amb, const glm::vec3& dif
 	
 	auto tree_ptr   = std::make_unique<TreeNode>(*this);
 	auto light_ptr  = std::make_unique<Light>(amb, diff, spe);
-
-	//light = light_ptr.get();
-	//lightNode = tree_ptr.get();
 
 	if(lights_index < max_light_size)
 	{
