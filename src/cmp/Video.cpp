@@ -13,8 +13,14 @@ Video::Video(const EntityType e_type, const EntityID e_ID, const std::string_vie
 
 std::ostream & operator<<(std::ostream & os, const Video & vid) {
 	vid.print(os, vid.getName())
-	<< "\n\tIVideo: "       << vid.video
-	<< "\n\tName: "         << vid.name;
+	<< "\n\tIVideo: "                       << vid.video
+	<< "\n\tName: "                         << vid.name
+//	<< "\n\tSound: "                        << vid.sound
+	<< "\n\tFrames: "                       << vid.numFrames
+	<< "\n\tFrame actual: "                 << vid.frameCounter
+	<< "\n\tTiempo por frame: "             << vid.timePerFrame
+	<< "\n\tTiempo desde el ultimo frame: " << vid.timeSinceLastFrame
+	<< "\n\tBucle: " << std::boolalpha      << vid.loop;
 
 	return os;
 }

@@ -4,7 +4,7 @@ void DeathSystem::init(){
     deathMessages.reserve(16);
 }
 
-void DeathSystem::update(const Context &context, const float deltaTime) {
+void DeathSystem::fixedUpdate(const Context &context, float deltaTime) {
 
     for(const auto & message : deathMessages)
         context->addToDestroy(message.ID);

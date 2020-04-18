@@ -18,6 +18,8 @@ struct GameContext {
 	virtual void createGraph()  = 0;
 	virtual void createBullet() = 0;
 
+	virtual void nextVideo() = 0;
+
 	[[nodiscard]] virtual bool checkVictory() const = 0;
 	[[nodiscard]] virtual bool checkDefeat()  const = 0;
 
@@ -39,6 +41,8 @@ struct GameContext {
 
 	[[nodiscard]] virtual const Storage& getComponents() const = 0;
 	[[nodiscard]] virtual 		Storage& getComponents() 	   = 0;
+
+	[[nodiscard]] virtual unsigned getVideoIndex() const = 0;
 
 	virtual void addToDestroy(EntityID) = 0;
 

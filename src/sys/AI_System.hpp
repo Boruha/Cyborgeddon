@@ -9,7 +9,8 @@ struct AI_System : System
 	~AI_System() override = default;
 
 	void init() final;
-    void update(const Context &context, float deltaTime) final;
+    void fixedUpdate(const Context &context, float deltaTime) final;
+	void update(const Context &context, float deltaTime) override {};
 	void reset() final {  }
 
     [[nodiscard]] bool checkObstacles(const vec3&, const vec3&, float, const std::unique_ptr<GameContext>&);

@@ -1,6 +1,6 @@
 #include <sys/MovementSystem.hpp>
 
-void MovementSystem::update(const Context &context, const float deltaTime) {
+void MovementSystem::fixedUpdate(const Context &context, float deltaTime) {
 	// A la camara hay que darle la velocidad en funcion de la del jugador tras ser modificada por otros sistemas
 	auto * camPhysics = context->getCamera().getComponent<Physics>();
 	const auto * plaPhysics = context->getPlayer().getComponent<Physics>();

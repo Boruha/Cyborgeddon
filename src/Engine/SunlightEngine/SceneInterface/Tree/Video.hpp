@@ -20,6 +20,8 @@ struct Video : IVideo {
 
 	void nextFrame() override;
 
+	double getCurrentFrame() override;
+
 	double getNumFrames() override;
 
 	double getFPS() override;

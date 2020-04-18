@@ -1,10 +1,9 @@
 #pragma once
 
 #include <cmp/Component.hpp>
-#include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
 #include <string>
-#include <memory>
-#include <iostream>
+
+struct IVideo;
 
 struct Video : public Component
 {
@@ -18,4 +17,13 @@ struct Video : public Component
 
 	IVideo * video { nullptr };
 	std::string name {};
+
+//	SoundParameter sound { NO_SOUND };
+
+	unsigned numFrames          {0};
+	unsigned frameCounter       {0};
+	float    timePerFrame       {0};
+	float    timeSinceLastFrame {0};
+
+	bool     loop {false};
 };

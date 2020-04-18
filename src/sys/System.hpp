@@ -10,6 +10,7 @@ struct System {
 	virtual ~System() = default;
 
 	virtual void init() = 0;
+	virtual void fixedUpdate(const Context &context, float fixedDeltaTime) = 0;
 	virtual void update(const Context &context, float deltaTime) = 0;
 	virtual	void reset() = 0;
 

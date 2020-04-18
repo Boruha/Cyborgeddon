@@ -18,9 +18,12 @@ struct RVideo : IResource {
 
 	double getNumFrames() { return capture.get(CV_CAP_PROP_FRAME_COUNT); }
 
+	double getCurrentFrame() { return capture.get(CV_CAP_PROP_POS_FRAMES); };
+
 	double getFPS() { return capture.get(CV_CAP_PROP_FPS); };
 
 	void setLoop(const bool loop) { loopVideo = loop; }
+
 
 	private :
 		cv::VideoCapture capture {};

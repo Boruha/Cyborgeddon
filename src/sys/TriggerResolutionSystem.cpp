@@ -4,7 +4,7 @@
 
 // TODO : refactorizar codigo !!!!!!
 
-void TriggerResolutionSystem::update(const Context &context, float deltaTime) {
+void TriggerResolutionSystem::fixedUpdate(const Context &context, float deltaTime) {
     for (const auto & message : triggerMessages) {
         if (message.type1 == PLAYER) {
             if (message.type2 == KEY) {

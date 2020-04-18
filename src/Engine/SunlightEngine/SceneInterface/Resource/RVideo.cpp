@@ -71,8 +71,6 @@ void RVideo::reset() {
 }
 
 void RVideo::nextFrame() {
-	std::cout << capture.get(CV_CAP_PROP_POS_FRAMES) << "\n";
-
 	if (capture.get(CV_CAP_PROP_POS_FRAMES) == capture.get(CV_CAP_PROP_FRAME_COUNT)) {
 		if (loopVideo)
 			reset();

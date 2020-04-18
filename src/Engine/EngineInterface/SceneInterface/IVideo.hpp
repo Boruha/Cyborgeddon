@@ -9,6 +9,8 @@ struct IVideo {
 
 	virtual void nextFrame() = 0;
 
+	virtual double getCurrentFrame() = 0;
+
 	virtual double getNumFrames() = 0;
 
 	virtual double getFPS() = 0;

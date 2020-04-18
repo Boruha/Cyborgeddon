@@ -1,7 +1,7 @@
 #include <sys/RigidBodySystem.hpp>
 #include <Engine/util/MathIntersection.hpp>
 
-void RigidBodySystem::update(const Context &context, float deltaTime) {
+void RigidBodySystem::fixedUpdate(const Context &context, float deltaTime) {
 	for (auto& sphere : context->getComponents().getComponents<TriggerMovSphere>()) {
 		if (sphere) {
 			vec3& velocity = *sphere.velocity;

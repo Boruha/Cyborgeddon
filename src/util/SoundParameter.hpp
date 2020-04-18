@@ -3,6 +3,7 @@
 #include <util/SoundPaths.hpp>
 
 enum SoundParameter {
+	NO_SOUND,
 	//PLAYER
 	ATTACK_PLAYER_DEMON,
 	ATTACK_PLAYER_ANGEL,
@@ -29,10 +30,12 @@ using event_parameter_value = std::tuple<std::string_view, parameter_value>;
 
 constexpr parameter_value getParameterValue(const SoundParameter p) {
 	switch(p) {
-		//EN EL RETURN se devuelven 3 valores:
-		// 1--> NOMBRE DEL EVENTO REAL (DECLARADO EN soundpaths.hpp y soundsystem.cpp)
-		// 2--> NOMBRE DEL NOMBRE PARAMETRO DEL EVENTO (Ir viendo en FMOD).
-		// 3--> El valor del parametro. Hace que suene un sonido u otro del evento.
+		//EN EL RETURN se devuelven 2 valores:
+		// 1--> NOMBRE DEL NOMBRE PARAMETRO DEL EVENTO (Ir viendo en FMOD).
+		// 2--> El valor del parametro. Hace que suene un sonido u otro del evento.
+
+		case NO_SOUND :
+			return { "", -1 };
 
 		//PLAYER
 		case ATTACK_PLAYER_DEMON :
@@ -79,10 +82,8 @@ constexpr std::string_view getEvent(const SoundParameter p)
 {
     switch(p)
     {
-        //EN EL RETURN se devuelven 3 valores:
-        // 1--> NOMBRE DEL EVENTO REAL (DECLARADO EN soundpaths.hpp y soundsystem.cpp)
-        // 2--> NOMBRE DEL NOMBRE PARAMETRO DEL EVENTO (Ir viendo en FMOD).
-        // 3--> El valor del parametro. Hace que suene un sonido u otro del evento.
+    	case NO_SOUND :
+    		return "";
 
         //PLAYER
         case ATTACK_PLAYER_DEMON :

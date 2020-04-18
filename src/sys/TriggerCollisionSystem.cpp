@@ -5,7 +5,7 @@ void TriggerCollisionSystem::init() {
     triggerMessages.reserve(16);
 }
 
-void TriggerCollisionSystem::update(const Context &context, const float deltaTime) {
+void TriggerCollisionSystem::fixedUpdate(const Context &context, float deltaTime) {
 	for (auto & sphere : context->getComponents().getComponents<TriggerMovSphere>()) {
 		if (sphere) {
 			for (const auto & aabb : context->getComponents().getComponents<TriggerStaticAABB>())

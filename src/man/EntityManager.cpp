@@ -9,6 +9,8 @@
 #include <src/Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 
+#include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
+
 void EntityManager::initData(const int maxEntities, const int maxToDelete, const int maxComponents) {
 	cleanData();								// si no es la primera vez que llamamos a esta funcion, hay que limpiar vectores, reiniciar variables...
 	toDelete.reserve(maxToDelete);				// reservamos para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
@@ -66,6 +68,8 @@ void EntityManager::cleanData() {
 	paths.clear();                          // limpiamos caminos
 
 	enemiesLeft = 0;						// reiniciamos valor
+
+	idxVideo = 0;                           // reiniciamos valor
 
 	player = nullptr;						// reiniciamos valor
 	camera = nullptr;						// reiniciamos valor
@@ -338,12 +342,20 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 }
 
 
-void EntityManager::createVideo(const std::string_view path) {
+void EntityManager::createVideo(const std::string_view path, const bool isLoop) {
 	auto& video = createEntity(VIDEO);
 
 	auto& cmpVideo = componentStorage.createComponent(Video(video.getType(), video.getID(), path));
 
 	cmpVideo.video = engine.loadVideo(path);
+
+	cmpVideo.frameCounter = 0;
+	cmpVideo.numFrames = unsigned(cmpVideo.video->getNumFrames());
+	cmpVideo.timePerFrame = float(1.f / cmpVideo.video->getFPS());
+
+	cmpVideo.loop = isLoop;
+
+	cmpVideo.video->setLoop(cmpVideo.loop);
 
 	std::cout << cmpVideo << "\n";
 
@@ -655,8 +667,12 @@ bool EntityManager::checkDefeat() const {
 void EntityManager::createIntro() {
 	initData(4, 0, 4);
 
-	createVideo("resources/videos/intro/1_F.mp4");
-	createVideo("resources/videos/intro/2_F_L.mp4");
+	createVideo("resources/videos/intro/1_F.mp4", false);
+	createVideo("resources/videos/intro/2_F_L.mp4", true);
 
 	std::cout << Video::getName()     << " " << componentStorage.getComponents<Video>().size() << "\n";
+}
+
+void EntityManager::nextVideo() {
+	idxVideo++;
 }

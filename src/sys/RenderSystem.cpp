@@ -1,7 +1,7 @@
 #include <sys/RenderSystem.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-void RenderSystem::update(const Context& context, const float deltaTime) {
+void RenderSystem::fixedUpdate(const Context& context, float deltaTime) {
 	const auto * playerPhysics = context->getPlayer().getComponent<Physics>();
 	const auto & cameraNode    = context->getCamera().getComponent<Render>()->node;
 

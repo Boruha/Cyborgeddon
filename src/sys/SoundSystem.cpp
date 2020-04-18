@@ -61,7 +61,7 @@ void SoundSystem::init() {
 	startBackgroundMusic();
 }
 
-void SoundSystem::update(const Context& context, const float deltaTime) {
+void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
 
 	while (!soundMessages.empty()) {
 		const auto parameter = soundMessages.back().parameter;

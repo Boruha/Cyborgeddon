@@ -23,6 +23,10 @@ void Video::nextFrame() {
 	video->nextFrame();
 }
 
+double Video::getCurrentFrame() {
+	return video->getCurrentFrame();
+}
+
 double Video::getNumFrames() {
 	return video->getNumFrames();
 }

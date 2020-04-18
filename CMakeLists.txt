@@ -53,8 +53,8 @@ file (
 
 find_package ( OpenCV REQUIRED )
 
-add_executable(cyborgeddon ${SOURCES} src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp src/Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.cpp src/Engine/SunlightEngine/SceneInterface/Resource/RVideo.hpp src/Engine/SunlightEngine/SceneInterface/Resource/RVideo.cpp src/Engine/EngineInterface/SceneInterface/IVideo.hpp src/Engine/SunlightEngine/SceneInterface/Tree/Video.hpp src/Engine/SunlightEngine/SceneInterface/Tree/Video.cpp src/cmp/Video.hpp src/cmp/Video.cpp)
+add_executable(cyborgeddon ${SOURCES})
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${OpenCV_INCLUDE_DIRS})
 
-target_link_libraries(cyborgeddon -lIrrlicht -lfmod -lfmodL -lfmodstudio -lfmodstudioL -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl -lassimp -lGLEW ${OpenCV_LIBS})
+target_link_libraries(cyborgeddon -lIrrlicht -lfmod -lfmodstudio -lglfw -lGLEW -lGL -lpthread -ldl -lassimp -lopencv_highgui -lopencv_core)

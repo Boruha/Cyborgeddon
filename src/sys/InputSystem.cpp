@@ -38,7 +38,7 @@ void InputSystem::init() {
 
 // TODO: revisar los punteros a funcion. Problema -> distintos parametros para distintas acciones
 //  	 posible solucion: usar gamecontext para lo necesario en cada funcion
-void InputSystem::update(const Context& context, const float deltaTime) {
+void InputSystem::fixedUpdate(const Context& context, float deltaTime) {
 
 	auto & player    = context->getPlayer();
 

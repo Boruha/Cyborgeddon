@@ -38,8 +38,10 @@ StateEnum State::update() {
 	for (auto & s : systems) {
 		s.delta += elapsed;
 
+		s.system->update(context, float(elapsed));
+
 		if (s.delta >= s.fixed) {
-			s.system->update(context, float(s.fixed));
+			s.system->fixedUpdate(context, float(s.fixed));
 			s.delta -= elapsed;
 		}
 	}
@@ -115,7 +117,10 @@ StateEnum State::initNextState(const Context & context) {
 	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
 */
 
-	context->createLevel();
+	if (context->getVideoIndex() > 0 && context->isKeyPressed(KEY_SPACE)) {
+		context->createLevel();
+		return INGAME;
+	}
 
-	return INGAME;
+	return INIT;
 }

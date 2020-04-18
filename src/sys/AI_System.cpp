@@ -444,7 +444,7 @@ void AI_System::init() {
     root->childs.emplace_back(std::move(attackState));
 }
 
-void AI_System::update(const Context &context, const float deltaTime) 
+void AI_System::fixedUpdate(const Context &context, float deltaTime)
 {
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
 

@@ -9,6 +9,8 @@ struct EntityManager : GameContext {
 	explicit EntityManager(IEngine * const _engine) : engine(*_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override = default;
 
+	void nextVideo() override;
+
 	void createIntro() override;
 
 	void createLevel() override;
@@ -43,6 +45,8 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const Storage& getComponents() const override { return componentStorage; }
 	[[nodiscard]] 		Storage& getComponents() 	   override { return componentStorage; }
 
+	[[nodiscard]] unsigned getVideoIndex() const override { return idxVideo; }
+
 	private:
 
 		void initData(int maxEntities, int maxToDelete, int maxComponents);
@@ -62,7 +66,7 @@ struct EntityManager : GameContext {
 		void setNavConnections (const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
 		void createNavigation  ();
 
-		void createVideo(std::string_view);
+		void createVideo(std::string_view, bool);
 
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
@@ -70,6 +74,8 @@ struct EntityManager : GameContext {
 
 		std::vector<MapNode> graph {};
 		std::unordered_map<EntityID, std::vector<int>> paths {};
+
+		unsigned idxVideo {0};
 
 		IEngine& engine;
 

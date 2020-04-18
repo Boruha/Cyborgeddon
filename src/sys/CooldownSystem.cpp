@@ -1,7 +1,7 @@
 #include <sys/CooldownSystem.hpp>
 #include <Engine/util/Math.hpp>
 
-void CooldownSystem::update(const Context& context, const float deltaTime) {
+void CooldownSystem::fixedUpdate(const Context& context, float deltaTime) {
 	auto& storage = context->getComponents();
 	
 	for (auto& data : storage.getComponents<CharacterData>()) 

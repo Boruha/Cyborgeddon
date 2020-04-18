@@ -16,7 +16,7 @@ float getSquareDistanceXZ(const vec3& origin, const vec3& end) {
 	return manhattan( { origin.x, origin.z } , { end.x, end.z } );
 }
 
-void TriggerFastCollisionSystem::update(const Context &context, const float deltaTime) {
+void TriggerFastCollisionSystem::fixedUpdate(const Context &context, float deltaTime) {
 	for (auto & fast : context->getComponents().getComponents<TriggerFastMov>()) {
 		if (fast) {
 			// todas las operaciones que utilizaremos sobre la distancia seran al cuadrado para

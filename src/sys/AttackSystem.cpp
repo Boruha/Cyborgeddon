@@ -1,7 +1,7 @@
 #include <sys/AttackSystem.hpp>
 #include <Engine/util/Math.hpp>
 
-void AttackSystem::update(const Context& context, const float deltaTime) {
+void AttackSystem::fixedUpdate(const Context& context, float deltaTime) {
 	float enemyDamage = 0.f;	// daño total que recibira el jugador despues de procesar todos los ataques
 
 	while (!damageMessages.empty()) {

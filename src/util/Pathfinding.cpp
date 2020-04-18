@@ -56,7 +56,7 @@ std::vector<int> calculePath(const int start, const int end, const std::vector<M
                 nextRecPtr = &open.emplace_back();
                 nextRecPtr->node = nextNode;
             }
-            //insert/update
+            //insert/fixedUpdate
             nextRecPtr->fromNode = conn.nodeFrom;
             nextRecPtr->toNode = conn.nodeTo;
             nextRecPtr->const_so_far = nextCost;
