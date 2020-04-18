@@ -5,6 +5,9 @@
 #include <util/SoundPaths.hpp>
 #include <util/Pathfinding.hpp>
 
+#include <chrono>
+#include <ratio>
+
 /*  GENERAL BEHAVIOURS  */
     struct SeekBehaviour : BehaviourNode
     {
@@ -109,15 +112,12 @@
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-            auto & enemy    = context->getEntityByID(ai.getEntityID());
-            auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
-
-            if (greater_e(distance2, PATROL_MIN_DISTANCE2) ||
-               (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
-               //(checkObstacles(phy.position, player_pos, trSphere.radius, context)) )
+            
+            if(greater_e(distance2, PATROL_MIN_DISTANCE2) ||
+              (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
-                //std::cout << checkFacing(phy, context) << "\n";
+                ai.frequecy_state = PATROL_STATE;
                 return true;
             }
 
@@ -134,10 +134,11 @@
             auto & enemy    = context->getEntityByID(ai.getEntityID());
 			auto * jump     = enemy.getComponent<Jump>();
 
-            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-
+            ai.frequecy_state = PURSUE_STATE;
             ai.target_position = player_pos;
 
+            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });            
+            
             if(jump)
                 return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
             else
@@ -227,6 +228,7 @@
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
+            ai.frequecy_state = ATTACK_STATE;
             ai.target_position = player_pos;
             phy.velocity = glm::vec3(0);
             return true;
@@ -245,7 +247,7 @@
                 {
                     data.attacking = true;
                     data.currentAttackingCooldown = data.attackingCooldown;
-                    damageMessages.emplace_back(data.attackDamage);
+                    //damageMessages.emplace_back(data.attackDamage);
                     soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
                     return true;
                 }
@@ -324,7 +326,8 @@
 
 
 /* FUNCTIONS */
-void AI_System::init() {
+void AI_System::init() 
+{
 
     /*-- PATROL  --*/     
         /* PATROL UPDATE */
@@ -442,26 +445,85 @@ void AI_System::init() {
     root->childs.emplace_back(std::move(patrolState));
     root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));
+
+    frame = 0;
 }
 
 void AI_System::fixedUpdate(const Context &context, float deltaTime)
 {
+    using namespace std::chrono;
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
+    ++frame;
 
-	for (auto & ai : context->getComponents().getComponents<AI>()) 
+    setPhase(context);
+    setInQueue(context);
+
+    duration<double> timer { 50us };
+    steady_clock::time_point t1 { };
+
+	while( timer > 0us && !schedule.empty() )
     {
-		if (ai) 
-        {
-			auto & enemy    = context->getEntityByID(ai.getEntityID());
-			auto & physics  = *enemy.getComponent<Physics>();
-			auto & velocity = *enemy.getComponent<Velocity>();
+        t1 = steady_clock::now();
 
-            root->run(ai, physics, velocity, player_pos,
-                      deltaTime, context);
-		}
+        auto & ai       = *(schedule.front());
+        auto & enemy    = context->getEntityByID(ai.getEntityID());
+        auto & physics  = *enemy.getComponent<Physics>();
+        auto & velocity = *enemy.getComponent<Velocity>();
+
+        root->run(ai, physics, velocity, player_pos, deltaTime, context);
+        
+        ai.scheduled = false;
+        schedule.pop();
+        
+        timer -= duration_cast<duration<double>>(steady_clock::now() - t1);
 	}
 }
 
+//Scheduling 
+void AI_System::setPhase(const std::unique_ptr<GameContext>& context)
+{
+    unsigned phase_patrol_counter = 0;
+    unsigned phase_pursue_counter = 0;
+    unsigned phase_attack_counter = 0;
+
+    for (auto & ai : context->getComponents().getComponents<AI>()) 
+    {
+		if (ai) 
+        {
+            switch (ai.frequecy_state)
+            {
+                case 2: ai.scheduling_phase = ++phase_attack_counter;
+                break;
+
+                case 3: ai.scheduling_phase = ++phase_pursue_counter;
+                break;
+            
+                case 7: ai.scheduling_phase = ++phase_patrol_counter;
+                break;
+            }
+        }
+    }
+}
+
+void AI_System::setInQueue(const std::unique_ptr<GameContext>& context)
+{
+    for(auto& ai : context->getComponents().getComponents<AI>())
+    {
+        if (ai) 
+        {
+            if( ai.scheduled ) 
+                continue;
+
+            if( (frame + ai.scheduling_phase) % ai.frequecy_state != 0 )
+                continue;
+
+            schedule.push(&ai);
+            ai.scheduled = true;
+        }
+    }
+}
+
+//Obstacle Avoidance
 bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad, const std::unique_ptr<GameContext>& context)
 {
     auto& rAABB_vector = context->getComponents().getComponents<RigidStaticAABB>();

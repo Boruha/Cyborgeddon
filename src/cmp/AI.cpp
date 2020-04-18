@@ -2,7 +2,9 @@
 #include <glm/gtx/string_cast.hpp>
 #include <iostream>
 
-AI::AI(const EntityType e_type, const EntityID e_ID, const std::vector<vec3>& patrol) : Component(e_type, e_ID), max_index(patrol.size()) {
+AI::AI(const EntityType e_type, const EntityID e_ID, const std::vector<vec3>& patrol, unsigned phase) 
+: Component(e_type, e_ID), max_index(patrol.size()), scheduling_phase(phase)
+{
 	if (max_index <= MAX_PATROL_POSITIONS) {
 		for (unsigned int i = 0; i < max_index; ++i)
 			patrol_position[i] = patrol[i];
