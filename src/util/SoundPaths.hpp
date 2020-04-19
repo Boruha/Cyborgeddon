@@ -21,5 +21,16 @@ constexpr std::string_view ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled"
 constexpr std::string_view KEY_DOOR_EVENT           = "event:/objects/action_key_door";
 constexpr std::string_view DAMAGE_EVENT             = "event:/objects/damage";
 
-//AMBIENT
+//VIDEOS
+
+// parametro 0 -> Video de cuando empieza el juego (Sunlight Logo + Animacion Cyborgeddon) (Musica + Voces)
+// parametro 1 -> Video de la primera cinematica (Cuando le damos a "Play", justo antes de empezar a jugar) (Musica +
+// parametro 2 -> Video de la segunda cinemática (Cuando completamos el juego, Video Final + Creditos) (Musica + Voces)
+// parametro 3 -> Video del tutorial de Cyborgeddon (Musica + voces)
+constexpr std::string_view VIDEO_SOUND_EVENT       = "event:/video/video_sound";
+
+
+
+
+
 

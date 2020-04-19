@@ -50,7 +50,13 @@ void SoundSystem::init() {
 
 			//ACTION SOUNDS
 			ACTION_GET_KEY,
-			ACTION_OPEN_DOOR
+			ACTION_OPEN_DOOR,
+
+			//VIDEO SOUNDS
+			VIDEO_INTRO_GAME,
+			VIDEO_CINEMATICA_1,
+			//VIDEO_CINEMATICA_2,
+			VIDEO_TUTORIAL
 	};
 
 	for (const auto & param : parameters)

@@ -21,7 +21,17 @@ enum SoundParameter {
 	//ACTION SOUNDS
 	ACTION_GET_KEY,
 	ACTION_OPEN_DOOR,
-	NUM_MAX_PARAMETERS
+
+
+	//VIDEOS
+	VIDEO_INTRO_GAME,
+	VIDEO_CINEMATICA_1,
+    //VIDEO_CINEMATICA_2,
+    VIDEO_TUTORIAL,
+
+
+    NUM_MAX_PARAMETERS
+
 };
 
 using parameter_value = std::tuple<std::string_view, int>;
@@ -71,8 +81,22 @@ constexpr parameter_value getParameterValue(const SoundParameter p) {
 			return { "", -1 };
 		case ATTACK_ENEMY_ANGEL :
 			return { "", -1 };
-		case NUM_MAX_PARAMETERS :
-			return { "", -1 };
+
+			//VIDEO SOUNDS
+	    case VIDEO_INTRO_GAME :
+            return { "song", 0 };
+        case VIDEO_CINEMATICA_1 :
+            return { "song", 1 };
+        //case VIDEO_CINEMATICA_2 :
+            //return { "song", 2 };
+        case VIDEO_TUTORIAL :
+            return { "song", 3 };
+
+
+
+        case NUM_MAX_PARAMETERS :
+            return { "", -1 };
+
 	}
 
 	return { "", -1 };
@@ -120,8 +144,22 @@ constexpr std::string_view getEvent(const SoundParameter p)
         case ATTACK_ENEMY_ANGEL :
 			return "";
 
-	    case NUM_MAX_PARAMETERS :
-			return "";
+
+			//VIDEO SOUNDS
+        case VIDEO_INTRO_GAME :
+            return { VIDEO_SOUND_EVENT };
+        case VIDEO_CINEMATICA_1 :
+            return { VIDEO_SOUND_EVENT };
+        //case VIDEO_CINEMATICA_2 :
+           //return { VIDEO_SOUND_EVENT };
+        case VIDEO_TUTORIAL:
+            return { VIDEO_SOUND_EVENT };
+
+
+
+        case NUM_MAX_PARAMETERS :
+            return "";
+
     }
 
     return "";
