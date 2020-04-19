@@ -55,7 +55,7 @@ void main() {
 
             if(has_normal)
             {
-                vec3 vec_view  = normalize(-view_Pos); 
+                vec3 vec_view  = normalize(camera_pos - view_Pos); 
                 vec3 vec_spec  = reflect(-vec_obj_light, vec_normal);
                 vec3 vec_tex2  = vec3(texture(texture_normal0, TexCoords));
 
