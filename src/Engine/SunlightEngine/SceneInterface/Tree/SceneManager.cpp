@@ -5,16 +5,10 @@
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
 
-void SceneManager::render() {
-	camera->setViewMatrix(glm::lookAt(cameraNode->getPosition(), camera->getTarget(), glm::vec3(0, 1, 0)));
-	view = camera->getViewMatrix();
-	viewProjection = camera->getViewProjectionMatrix();
-
-	shader.enable();
-	shader.vec3Uniform("camera_pos", cameraNode->getPosition());
-	setLights();
-
-	root->render(glm::mat4(1), shader);
+void SceneManager::render() 
+{
+	renderShadows();
+	renderScene();
 }
 
 glm::mat4 SceneManager::getViewProjection() const {
@@ -81,5 +75,24 @@ void SceneManager::setLights()
     	shader.vec3Uniform(name + ".specular", lights[i]->getSpecular());
 	}
     shader.intUniform("light_index", lights_index);
+
+}
+
+void SceneManager::renderScene()
+{
+	camera->setViewMatrix(glm::lookAt(cameraNode->getPosition(), camera->getTarget(), glm::vec3(0, 1, 0)));
+	
+	view           = camera->getViewMatrix();
+	viewProjection = camera->getViewProjectionMatrix();
+
+	shaders[0].enable();
+	shaders[0].vec3Uniform("camera_pos", cameraNode->getPosition());
+	setLights();
+
+	root->render(glm::mat4(1), shaders[0]);
+}
+
+void SceneManager::renderShadows()
+{
 
 }

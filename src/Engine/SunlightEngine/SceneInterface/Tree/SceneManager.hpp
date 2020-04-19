@@ -13,6 +13,8 @@ struct SceneManager {
 	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
 
 	void render();
+	void renderShadows();
+	void renderScene();
 
 	[[nodiscard]] glm::mat4 getViewProjection() const;
 	[[nodiscard]] glm::mat4 getView()           const;
@@ -24,8 +26,8 @@ struct SceneManager {
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera   * getCamera()     const { return camera;     }
 
-	[[nodiscard]] std::array<TreeNode*, max_light_size> getLightNode() const { return lightNodes;  }
-	[[nodiscard]] std::array<Light*,    max_light_size> getLight()     const { return lights;      }
+	[[nodiscard]] std::array<TreeNode*, MAX_LIGHT_SIZE> getLightNode() const { return lightNodes;  }
+	[[nodiscard]] std::array<Light*,    MAX_LIGHT_SIZE> getLight()     const { return lights;      }
 
 	SunlightEngine * getEngine() { return engine; }
 
@@ -36,20 +38,17 @@ private :
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
 	Shader shader { PHONG_BASIC_SHADER }; //TODO: add a shader selector;
+	Shader shaders[NUM_SHADERS] { Shader{PHONG_BASIC_SHADER}, Shader{ SHADOWS_BASIC_SHADER } };
 
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };
 
-	//deprecate
-	//TreeNode * lightNode  { nullptr };
-	//Light    * light      { nullptr };
-
-	std::array<TreeNode*, max_light_size> lightNodes;
-	std::array<Light*, max_light_size>    lights;
+	std::array<TreeNode*, MAX_LIGHT_SIZE> lightNodes;
+	std::array<Light*   , MAX_LIGHT_SIZE> lights;
 	std::size_t lights_index { 0 };
 
-	mat4 viewProjection {1};
-	mat4 view {1};
+	mat4 viewProjection { 1 };
+	mat4 view           { 1 };
 
 	SunlightEngine  * engine { nullptr };
 	ResourceManager * resourceManager;

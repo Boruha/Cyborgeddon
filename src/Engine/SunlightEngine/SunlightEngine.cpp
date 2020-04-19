@@ -46,7 +46,7 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 
 	// opengl no dibujara lo que este detras de algo ya dibujado
 	glEnable(GL_DEPTH_TEST);
-//	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	resourceManager = std::make_unique<ResourceManager>();
 	sceneManager = std::make_unique<SceneManager>(this, resourceManager.get());
