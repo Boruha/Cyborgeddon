@@ -441,9 +441,9 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 120, 70));
-	createLight(vec3(0, 60, 0), vec3(0.2), vec3(0.8), vec3(0.5));
-	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
+	createPairPlayerCamera(vec3(0), vec3(6.f), vec3(20, 70, 30));
+	createLight(vec3(15, 30, 20), vec3(0.0), vec3(0.9), vec3(0.8));
+	//createLight(vec3(-50,60,-260), vec3(0.0), vec3(1), vec3(0.8));
 
 	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
 

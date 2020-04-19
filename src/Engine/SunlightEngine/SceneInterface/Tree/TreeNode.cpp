@@ -39,10 +39,10 @@ void TreeNode::render(const glm::mat4& m, Shader shader) {
 	if (allowCalculateMatrix)
 		transform = calculateMatrix();
 
-	modelView = sceneManager.getView() * transform; //View no cambia(?) pasar al if.	
+	//modelView = sceneManager.getView() * transform; //View no cambia(?) pasar al if.	
 	m_normal  = glm::transpose( glm::inverse(modelView) );
 	
-	shader.mat4Uniform("m_MV"    , modelView);
+	shader.mat4Uniform("m_Model", transform);
 	shader.mat4Uniform("m_Normal", m_normal);
 
     const glm::mat4 newMatrix = m * transform;

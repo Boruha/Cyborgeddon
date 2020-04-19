@@ -9,9 +9,9 @@ void SceneManager::render() {
 	camera->setViewMatrix(glm::lookAt(cameraNode->getPosition(), camera->getTarget(), glm::vec3(0, 1, 0)));
 	view = camera->getViewMatrix();
 	viewProjection = camera->getViewProjectionMatrix();
-	shader.vec3Uniform("camera_pos", cameraNode->getPosition());
-	shader.enable();
 
+	shader.enable();
+	shader.vec3Uniform("camera_pos", cameraNode->getPosition());
 	setLights();
 
 	root->render(glm::mat4(1), shader);
