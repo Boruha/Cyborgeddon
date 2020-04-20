@@ -32,11 +32,17 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	windowHeight = height;
 
 	window = glfwCreateWindow(int(width), int(height), name.data(), nullptr, nullptr);
-
+	
 	if (!window)
-		error("No se pudo abrir la ventana");
+		error("No se pudo abrir la ventana principal");
 
-	glfwMakeContextCurrent(window);
+	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); //segundo plano
+	offscreen = glfwCreateWindow(SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, "", nullptr, nullptr);
+
+	if (!offscreen)
+		error("No se pudo abrir la ventana en segundo plano");
+
+	setContext(true);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// usaremos glad para asegurarnos de que cualquier llamada que hagamos
@@ -72,6 +78,14 @@ bool SunlightEngine::run() const {
 
 void SunlightEngine::shutdown() const {
 	glfwTerminate();
+}
+
+void SunlightEngine::setContext(bool mode)
+{
+	if(mode)
+		glfwMakeContextCurrent(window);
+	else
+		glfwMakeContextCurrent(offscreen);	
 }
 
 bool SunlightEngine::isKeyPressed(const KEY_CODE code) const {

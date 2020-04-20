@@ -10,7 +10,7 @@ struct SunlightEngine;
 struct ResourceManager;
 
 struct SceneManager {
-	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
+	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager);
 
 	void render();
 	void renderShadows();
@@ -34,11 +34,13 @@ struct SceneManager {
 private :
 
 	void setLights();
+	void setShadows();
 
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
-	Shader shader { PHONG_BASIC_SHADER }; //TODO: add a shader selector;
-	Shader shaders[NUM_SHADERS] { Shader{PHONG_BASIC_SHADER}, Shader{ SHADOWS_BASIC_SHADER } };
+	Shader   shaders[NUM_SHADERS] { Shader{PHONG_BASIC_SHADER}, Shader{ SHADOWS_BASIC_SHADER } };
+	unsigned shadowFBO;
+	unsigned shadowSceneTexture;
 
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };

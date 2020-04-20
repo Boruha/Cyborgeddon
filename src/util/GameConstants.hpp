@@ -10,7 +10,4 @@ constexpr double    FIXED_DELTA_TIME    = 1.0 / UPDATES_PER_SECOND;
 constexpr unsigned  VIEWPORT_WIDTH      = 1280;
 constexpr unsigned  VIEWPORT_HEIGHT     = 720;
 
-constexpr unsigned  SHADOW_VP_WIDTH     = 1024;
-constexpr unsigned  SHADOW_VP_HEIGHT    = 1024;
-
 constexpr Color     BACKGROUND_COLOR    = Color(0x330044FF);

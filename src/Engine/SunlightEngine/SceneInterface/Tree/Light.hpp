@@ -20,6 +20,9 @@ struct Light : IEntity {
 
     std::size_t getID() { return ID; }
 
+    glm::mat4 projection { 1 };
+    glm::mat4 view       { 1 };
+
 private:
     //Intensity of the different parts of light
     //can be all the same value but maybe we need

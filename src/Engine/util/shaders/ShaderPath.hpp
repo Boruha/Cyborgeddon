@@ -2,8 +2,10 @@
 
 #include <Engine/util/shaders/Shader.hpp>
 
-constexpr unsigned MAX_LIGHT_SIZE = 7;
-constexpr unsigned NUM_SHADERS    = 2;
+constexpr unsigned MAX_LIGHT_SIZE   = 7;
+constexpr unsigned NUM_SHADERS      = 2;
+constexpr unsigned SHADOW_VP_WIDTH  = 1024;
+constexpr unsigned SHADOW_VP_HEIGHT = 1024;
 
 //Phong basic
 constexpr std::string_view PHONG_BASIC_VERTEX 
