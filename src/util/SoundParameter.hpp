@@ -26,7 +26,7 @@ enum SoundParameter {
 	//VIDEOS
 	VIDEO_INTRO_GAME,
 	VIDEO_CINEMATICA_1,
-    //VIDEO_CINEMATICA_2,
+    VIDEO_CINEMATICA_2,
     VIDEO_TUTORIAL,
 
 
@@ -87,8 +87,8 @@ constexpr parameter_value getParameterValue(const SoundParameter p) {
             return { "song", 0 };
         case VIDEO_CINEMATICA_1 :
             return { "song", 1 };
-        //case VIDEO_CINEMATICA_2 :
-            //return { "song", 2 };
+        case VIDEO_CINEMATICA_2 :
+            return { "song", 2 };
         case VIDEO_TUTORIAL :
             return { "song", 3 };
 
@@ -150,8 +150,8 @@ constexpr std::string_view getEvent(const SoundParameter p)
             return { VIDEO_SOUND_EVENT };
         case VIDEO_CINEMATICA_1 :
             return { VIDEO_SOUND_EVENT };
-        //case VIDEO_CINEMATICA_2 :
-           //return { VIDEO_SOUND_EVENT };
+        case VIDEO_CINEMATICA_2 :
+           return { VIDEO_SOUND_EVENT };
         case VIDEO_TUTORIAL:
             return { VIDEO_SOUND_EVENT };
 
