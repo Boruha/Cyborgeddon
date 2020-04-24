@@ -8,7 +8,7 @@ struct Light : IEntity {
     Light(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) : ambient(amb), diffuse(diff), specular(spe) {}
     ~Light() override = default;
 
-    void render(const glm::mat4& m, Shader shader) override;
+    void render(const glm::mat4& m, Shader shader, bool visualShader) override;
 
     void setAmbinet(const glm::vec3& nAmb)  { ambient  = nAmb; }
     void setDiffuse(const glm::vec3& nDif)  { diffuse  = nDif; }

@@ -14,7 +14,7 @@ struct RMesh : IResource {
 	explicit RMesh(std::vector<Vertex> _vertices, std::vector<Index> _indices, std::vector<Texture> _textures);
     ~RMesh() override;
 
-	void render(const glm::mat4& m, Shader shader) const;
+	void render(const glm::mat4& m, Shader shader, bool visualShader) const;
 
     private :
 

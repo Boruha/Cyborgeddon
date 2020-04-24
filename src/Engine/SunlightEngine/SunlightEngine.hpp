@@ -28,13 +28,10 @@ struct SunlightEngine final : public virtual IEngine {
 
     void display() const final;
 
-    void setContext(bool mode);
-
     glm::vec2 getViewport() { return { windowWidth, windowHeight }; }
 
 	private :
 		GLFWwindow * window    { nullptr };
-		GLFWwindow * offscreen { nullptr };
 		Mouse mouse;
 		unsigned windowWidth, windowHeight;
 

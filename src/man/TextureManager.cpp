@@ -4,6 +4,9 @@
 
 #include <Engine/EngineInterface/IEngine.hpp>
 
+#include <GL/glew.h>
+
+
 void TextureManager::loadTextures() const {
     engine.scene->loadTexture(WALL_TEXTURE);
     engine.scene->loadTexture(DOOR_TEXTURE);

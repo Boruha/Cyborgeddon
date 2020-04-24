@@ -4,4 +4,4 @@
 #include <string>
 #include <iostream>
 
-void Light::render(const glm::mat4& m, Shader shader) { }
+void Light::render(const glm::mat4& m, Shader shader, bool visualShader) { }

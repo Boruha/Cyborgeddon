@@ -1,5 +1,7 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/RModel.hpp>
 
+#include <GL/glew.h>
+
 #include <Engine/util/ErrorModelLoading.hpp>
 
 extern "C" {
@@ -52,9 +54,9 @@ RModel::~RModel() {
 		glDeleteTextures(1, &t.ID);
 }
 
-void RModel::render(const glm::mat4 & m, Shader shader) const {
+void RModel::render(const glm::mat4 & m, Shader shader, bool visualShader) const {
 	for (const auto & mesh : modelMeshes)
-		mesh.render(m, shader);
+		mesh.render(m, shader, visualShader);
 }
 
 void RModel::processNode(aiNode * node, const aiScene * scene) {
@@ -181,6 +183,7 @@ unsigned RModel::loadTexture(const std::string & path) const {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	//glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(textureData);
 
 	return ID;

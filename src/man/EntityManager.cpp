@@ -100,7 +100,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	render.node->setRotation(physics.rotation);
 	render.node->setScale(physics.scale / 2.f);
 
-	render.node->setTexture(DEMON_TEXTURE);
+	//render.node->setTexture(DEMON_TEXTURE);
 
 	player->addComponent(velocity);
 	player->addComponent(physics);
@@ -249,16 +249,16 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
 	auto& floor = createEntity(FLOOR);
 
-	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(-90, 0, 0), vec3(1)));
+	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos, vec3(0), dim));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Ciudad/ciudad.fbx");
+	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
 	render.node->setScale(transformable.scale * 2.f);
 
-	render.node->setTexture(tex.data());
+	//render.node->setTexture(tex.data());
 
 	floor.addComponent(transformable);
 	floor.addComponent(render);
@@ -441,11 +441,11 @@ Entity& EntityManager::getEntityByID(const EntityID id) {
 void EntityManager::createLevel() {
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(0), vec3(6.f), vec3(20, 70, 30));
-	createLight(vec3(15, 30, 20), vec3(0.0), vec3(0.9), vec3(0.8));
+	createPairPlayerCamera(vec3(0), vec3(6.f), vec3(30, 120, 70));
+	createLight(vec3(-15, 30, 20), vec3(0.3), vec3(0.9), vec3(0.8));
 	//createLight(vec3(-50,60,-260), vec3(0.0), vec3(1), vec3(0.8));
 
-	//createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
+	createFloor(CONTROLS_TEXTURE, vec3(0,-3,-5), vec3(160,1,135)); //Controls
 
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys

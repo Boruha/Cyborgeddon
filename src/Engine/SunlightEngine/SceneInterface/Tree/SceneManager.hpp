@@ -16,6 +16,7 @@ struct SceneManager {
 	void renderShadows();
 	void renderScene();
 
+	[[nodiscard]] glm::mat4 getLightViewProjection() const;	
 	[[nodiscard]] glm::mat4 getViewProjection() const;
 	[[nodiscard]] glm::mat4 getView()           const;
 
@@ -38,9 +39,12 @@ private :
 
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 
-	Shader   shaders[NUM_SHADERS] { Shader{PHONG_BASIC_SHADER}, Shader{ SHADOWS_BASIC_SHADER } };
-	unsigned shadowFBO;
-	unsigned shadowSceneTexture;
+	Shader   shaders[NUM_SHADERS] { Shader{ PHONG_BASIC_SHADER }, Shader{ SHADOWS_BASIC_SHADER }, Shader{ TEST_BASIC_SHADER } };
+
+	unsigned int shadowFBO;
+	unsigned int shadowSceneTexture;
+
+	mat4 lightViewProjection  { 1 };
 
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };
@@ -54,4 +58,7 @@ private :
 
 	SunlightEngine  * engine { nullptr };
 	ResourceManager * resourceManager;
+
+	unsigned int quadVAO { 0 };
+	unsigned int quadVBO;
 };

@@ -6,45 +6,46 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <iostream>
+#include <GL/glew.h>
 
 SceneManager::SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) {
-	//pasamos al context segundo plano para setar la config de las sombras
-	engine->setContext(false);
+	//SHADOW FBO
+	glGenFramebuffers(1, &shadowFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 
-	//creation and config the shadow map
+	//SHADOW TEXTURE
 	glGenTextures(1, &shadowSceneTexture);
 	glBindTexture(GL_TEXTURE_2D, shadowSceneTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	
-	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	GLfloat color[] = { 1.f, 1.f, 1.f, 1.f };
-	glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, *color);
 
-	//Creation and config of framebuffer that will work w/shadows
-	glGenBuffers(1, &shadowFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowSceneTexture, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float border_color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D , shadowSceneTexture, 0);
+	
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
-
-	if(!(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE))
+	
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		std::cout << "ER BUFFER EHPLOTÓ\n";
 		exit(-1);
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
-	//volvemos context principal
-	engine->setContext(true);
 }
 
 void SceneManager::render() {
 	renderShadows();
 	renderScene();
+}
+
+glm::mat4 SceneManager::getLightViewProjection() const {
+	return lightViewProjection;
 }
 
 glm::mat4 SceneManager::getViewProjection() const {
@@ -87,7 +88,7 @@ TreeNode * SceneManager::addLightNode(const glm::vec3& amb, const glm::vec3& dif
 		lightNodes[lights_index] = tree_ptr.get();
 		++lights_index;
 
-		light_ptr->projection = glm::ortho(-10.f, 10.f, -10.f, 10.f, 0.1f, 1000.f);
+		light_ptr->projection = glm::ortho<float>(-100, 100, -100, 100, 0.1, 300);
 
 		tree_ptr->setEntity(std::move(light_ptr));
 	}
@@ -123,40 +124,43 @@ void SceneManager::renderScene() {
 
 	shaders[0].enable();
 	shaders[0].vec3Uniform("camera_pos", cameraNode->getPosition());
+	shaders[0].mat4Uniform("m_LightVP", lightViewProjection);
+
 	setLights();
 
-	root->render(glm::mat4(1), shaders[0]);
+	glActiveTexture(GL_TEXTURE2);
+	shaders[0].intUniform("shadow_map", 2);
+	glBindTexture(GL_TEXTURE_2D, shadowSceneTexture);
+
+	root->render(glm::mat4(1), shaders[0], true);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void SceneManager::setShadows(){
-	std::string name;
+	lights[0]->view = glm::lookAt(glm::vec3(lightNodes[0]->getPosition()),
+								glm::vec3(0.f),
+								glm::vec3(0.f, 1.f, 0.f));
 
-	for(std::size_t i=0; i<lights_index; ++i)
-	{
-		if(!lights[i] || !lightNodes[i]) continue;
-
-		lights[i]->view = glm::lookAt(glm::vec3(lightNodes[i]->getPosition()),
-									  glm::vec3(0.f),
-									  glm::vec3(0.f, 1.f, 0.f));
-
-    	std::string name = "lights[" + std::to_string(lights[i]->getID()) + "]";
-
-		//shaders[0].vec3Uniform(name + ".position", lightNodes[i]->getPosition());
-    	//shaders[0].vec3Uniform(name + ".ambient" , lights[i]->getAmbient());
-    	//shaders[0].vec3Uniform(name + ".diffuse" , lights[i]->getDiffuse());
-    	//shaders[0].vec3Uniform(name + ".specular", lights[i]->getSpecular());
-	}
-    //shaders[1].intUniform("light_index", lights_index);
+	lightViewProjection = lights[0]->projection * lights[0]->view;
 }
 
 void SceneManager::renderShadows() {
-	engine->setContext(false);
 
-	glBindBuffer(GL_FRAMEBUFFER, shadowFBO);
+	shaders[1].enable();
+	
+	glViewport(0, 0, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	//setLightMatrices();
-	//root->render(glm::mat4(1), shaders[1]);
-	glBindBuffer(GL_FRAMEBUFFER, 0);
+	glCullFace(GL_BACK);
 
-	engine->setContext(true);
+	setShadows();
+	root->render(glm::mat4(1), shaders[1], false);
+
+	glCullFace(GL_FRONT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, 1280, 720);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 }

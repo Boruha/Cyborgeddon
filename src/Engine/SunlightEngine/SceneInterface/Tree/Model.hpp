@@ -9,7 +9,7 @@ struct Model : IEntity {
 
     ~Model() override = default;
 
-    void render(const glm::mat4& m, Shader shader) override;
+    void render(const glm::mat4& m, Shader shader, bool visualShader) override;
 
     void setModel(std::string_view path);
 

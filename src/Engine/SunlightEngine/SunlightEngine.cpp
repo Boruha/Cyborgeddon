@@ -3,7 +3,8 @@
 #include <Engine/util/Color.hpp>
 
 extern "C" {
-	#include <Engine/util/glad/glad.h>
+	//#include <Engine/util/glad/glad.h>
+	#include <GL/glew.h>
 	#include <GLFW/glfw3.h>
 }
 
@@ -15,17 +16,11 @@ void framebuffer_size_callback(GLFWwindow * const window, const int width, const
 }
 
 void SunlightEngine::init(const unsigned width, const unsigned height, const std::string_view name) {
+	
 	// permitimos editar glfw
 	glfwInit();
-
-	// le decimos la version de opengl que debe soportar
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-
-	// como ya hemos establecido la version de opengl que debe soportar,
-	// al usar core profile, no va a controlar si lo que hagamos lo va a
-	// soportar o no porque nosotros le decimos explicitamente que es lo
-	// que queremos que soporte al establecer la version
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	windowWidth = width;
@@ -34,30 +29,20 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	window = glfwCreateWindow(int(width), int(height), name.data(), nullptr, nullptr);
 	
 	if (!window)
-		error("No se pudo abrir la ventana principal");
+		error("No se pudo abrir la ventana");
 
-	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); //segundo plano
-	offscreen = glfwCreateWindow(SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, "", nullptr, nullptr);
-
-	if (!offscreen)
-		error("No se pudo abrir la ventana en segundo plano");
-
-	setContext(true);
+	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	// usaremos glad para asegurarnos de que cualquier llamada que hagamos
-	// a opengl es la especifica de nuestro sistema operativo
-	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
-		error("No se pudo inicializar glad");
+	glewExperimental = true;
+	if(glewInit() != GLEW_OK)
+		error("No se pudo inicializar GLEW");
 
-	// opengl no dibujara lo que este detras de algo ya dibujado
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
 
 	resourceManager = std::make_unique<ResourceManager>();
-	sceneManager = std::make_unique<SceneManager>(this, resourceManager.get());
-
-	scene = std::make_unique<SunlightScene>(sceneManager.get());
+	sceneManager    = std::make_unique<SceneManager>(this, resourceManager.get());
+	scene           = std::make_unique<SunlightScene>(sceneManager.get());
 }
 
 bool SunlightEngine::run() const {
@@ -78,14 +63,6 @@ bool SunlightEngine::run() const {
 
 void SunlightEngine::shutdown() const {
 	glfwTerminate();
-}
-
-void SunlightEngine::setContext(bool mode)
-{
-	if(mode)
-		glfwMakeContextCurrent(window);
-	else
-		glfwMakeContextCurrent(offscreen);	
 }
 
 bool SunlightEngine::isKeyPressed(const KEY_CODE code) const {
@@ -109,7 +86,7 @@ const Mouse & SunlightEngine::getMouse() {
 
 void SunlightEngine::clear(const Color color) const {
 	glClearColor(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f, float(color.a) / 255.f);
-	glClear(unsigned(GL_COLOR_BUFFER_BIT) | unsigned(GL_DEPTH_BUFFER_BIT));
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void SunlightEngine::draw() const {

@@ -4,10 +4,12 @@
 #include <iostream>
 #include <sstream>
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 Shader::Shader(const std::string_view path [ SHADER_TYPES ])
 {
+    
     std::string content [ SHADER_TYPES ];
     std::ifstream file  [ SHADER_TYPES ];
 
