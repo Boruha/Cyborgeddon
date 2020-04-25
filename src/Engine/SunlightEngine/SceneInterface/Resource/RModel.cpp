@@ -1,6 +1,5 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/RModel.hpp>
 
-#include <GL/glew.h>
 
 #include <Engine/util/ErrorModelLoading.hpp>
 

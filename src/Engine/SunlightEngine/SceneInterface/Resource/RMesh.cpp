@@ -1,10 +1,7 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/RMesh.hpp>
+
 #include <Engine/util/WindowParameters.hpp>
-
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
-#include <GL/glew.h>
-
 
 RMesh::RMesh(std::vector<Vertex> _vertices, std::vector<Index> _indices, std::vector<Texture> _textures)
 	: vertices(std::move(_vertices)), indices(std::move(_indices)), textures(std::move(_textures))

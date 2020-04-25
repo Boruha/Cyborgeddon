@@ -6,13 +6,9 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <iostream>
-#include <GL/glew.h>
+
 
 SceneManager::SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) {
-	//SHADOW FBO
-	glGenFramebuffers(1, &shadowFBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-
 	//SHADOW TEXTURE
 	glGenTextures(1, &shadowSceneTexture);
 	glBindTexture(GL_TEXTURE_2D, shadowSceneTexture);
@@ -25,16 +21,14 @@ SceneManager::SceneManager(SunlightEngine * _engine, ResourceManager * _resource
 	float border_color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
 
+	//SHADOW FBO
+	glGenFramebuffers(1, &shadowFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D , shadowSceneTexture, 0);
-	
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "ER BUFFER EHPLOTÓ\n";
-		exit(-1);
-	}
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)  { exit(-1); }
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -88,12 +82,12 @@ TreeNode * SceneManager::addLightNode(const glm::vec3& amb, const glm::vec3& dif
 		lightNodes[lights_index] = tree_ptr.get();
 		++lights_index;
 
-		light_ptr->projection = glm::ortho<float>(-100, 100, -100, 100, 0.1, 300);
+		light_ptr->projection = glm::ortho<float>(-100, 100, -100, 100, 0.1, 350);
 
 		tree_ptr->setEntity(std::move(light_ptr));
 	}
 	else
-		std::cout << "Alv esa luz\n";
+		std::cout << "Máximo de luces posibles ya creadas\n";
 
 	return root->addChildren(std::move(tree_ptr));
 }

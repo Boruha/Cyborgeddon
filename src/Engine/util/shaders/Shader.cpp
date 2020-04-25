@@ -3,8 +3,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 Shader::Shader(const std::string_view path [ SHADER_TYPES ])

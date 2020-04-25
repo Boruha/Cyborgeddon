@@ -1,11 +1,7 @@
 #include <man/TextureManager.hpp>
 
 #include <util/TexturePaths.hpp>
-
 #include <Engine/EngineInterface/IEngine.hpp>
-
-#include <GL/glew.h>
-
 
 void TextureManager::loadTextures() const {
     engine.scene->loadTexture(WALL_TEXTURE);

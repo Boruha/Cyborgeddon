@@ -3,8 +3,7 @@
 #include <Engine/util/Color.hpp>
 
 extern "C" {
-	//#include <Engine/util/glad/glad.h>
-	#include <GL/glew.h>
+	#include <Engine/util/glad/glad.h>
 	#include <GLFW/glfw3.h>
 }
 
@@ -34,9 +33,11 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	glewExperimental = true;
-	if(glewInit() != GLEW_OK)
-		error("No se pudo inicializar GLEW");
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+   		std::cout << "Failed to initialize GLAD\n";
+    	std::terminate();
+	} 
 
 	glEnable(GL_DEPTH_TEST);
 

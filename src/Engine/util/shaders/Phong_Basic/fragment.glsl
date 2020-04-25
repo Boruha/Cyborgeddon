@@ -21,8 +21,9 @@ uniform vec3      camera_pos;
 
 uniform sampler2D texture_diffuse0;
 uniform sampler2D texture_normal0;
-uniform sampler2D shadow_map;
 uniform bool      has_normal;
+
+uniform sampler2D shadow_map;
 
 /*-------  INPUTS  -------*/
 in vec2 TexCoords;
@@ -33,6 +34,7 @@ in vec4 light_pos;
 /*-------  OUTPUTS  ------*/
 layout (location = 0) out vec4 FragColor;
 
+/*-------  FUNTIONS ------*/
 float ShadowCalculation(float cos_light){
     vec3 projCoords = light_pos.xyz / light_pos.w;  
     projCoords = projCoords * 0.5 + 0.5;              
@@ -40,7 +42,7 @@ float ShadowCalculation(float cos_light){
     float closestDepth = texture(shadow_map, projCoords.xy).r;   
     float currentDepth = projCoords.z;               
 
-    float bias = 0.005;//max(0.05 * (1.0 - cos_light), 0.005);
+    float bias = 0.005; //max(0.05 * (1.0 - cos_light), 0.005); *USAR SI LOS ANGULOS DAN PROBLEMA*
     float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;              
 
     if(projCoords.z > 1.0)
@@ -64,9 +66,9 @@ void main() {
         {
             vec_obj_light     = normalize(vec_obj_light);
             float attenuation = 1/(1 + (att_Linear * dist_obj_light) + (att_quadra * dist_obj_light * dist_obj_light));
-            float cos_light = max(dot(vec_obj_light, vec_normal), 0.0);
-            vec3 f_diff = lights[i].diffuse * cos_light * vec_tex;
-            vec3 f_spec = vec3(0);
+            float cos_light   = max(dot(vec_obj_light, vec_normal), 0.0);
+            vec3 f_diff       = lights[i].diffuse * cos_light * vec_tex;
+            vec3 f_spec       = vec3(0);
 
             if(has_normal)
             {
@@ -78,10 +80,10 @@ void main() {
             }
 
             float shadow = ShadowCalculation(cos_light);
-            phong = (1.0 - shadow) * (f_diff + f_spec) * attenuation;
+            phong        = (1.0 - shadow) * (f_diff + f_spec) * attenuation;
         }
         
     }
-    phong += f_amb;
+    phong    += f_amb;
     FragColor = vec4(phong, 1.0);
 }

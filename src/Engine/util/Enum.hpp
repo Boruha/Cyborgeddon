@@ -3,8 +3,7 @@
 #include <irrlicht/Keycodes.h>
 
 extern "C" {
-	//#include <Engine/util/glad/glad.h>
-    #include <GL/glew.h>
+	#include <Engine/util/glad/glad.h>
 	#include <GLFW/glfw3.h>
 }
 
