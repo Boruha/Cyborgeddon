@@ -111,18 +111,17 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 }
 // Shoot
 void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
-	if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f))
-	{
-		data.attacking = true;
-		data.currentAttackingCooldown = data.attackingCooldown;
+    if (!greater_e(data.currentSwitchingCooldown, 0)) {
+        data.switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
+        data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
+        data.currentSwitchingCooldown = data.switchingCooldown;
 
-        if (data.mode == DEMON)
-            soundMessages.emplace_back(ATTACK_PLAYER_DEMON);
+        if (data.mode == 0)
+            soundMessages.emplace_back(SWITCH_MODE_DEMON);
         else
-            soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
+            soundMessages.emplace_back(SWITCH_MODE_ANGEL);
 
     }
-	std::cout << "Space\n";
 }
 
 // Switch Mode

@@ -25,7 +25,7 @@ struct CharacterData : Component {
 	float 		attackDamage				{   50.f  };
 	float 		attackingCooldown			{    0.f  };
 	float  		currentAttackingCooldown   	{	 0.f  };
-	float 		attackRange 				{    0.f  }; //NEW
+	float 		attackRange 				{    0.f  }; //NEWk
 
 	float 		dashSpeed					{    0.f  };
 	float 		dashingCooldown				{	 0.f  };
