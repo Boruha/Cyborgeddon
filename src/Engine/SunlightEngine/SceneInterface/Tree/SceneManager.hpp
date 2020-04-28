@@ -11,10 +11,7 @@ struct ResourceManager;
 
 struct SceneManager {
 	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager);
-
 	void render();
-	void renderShadows();
-	void renderScene();
 
 	[[nodiscard]] glm::mat4 getLightViewProjection() const;	
 	[[nodiscard]] glm::mat4 getViewProjection() const;
@@ -22,7 +19,7 @@ struct SceneManager {
 
 	TreeNode * addMeshNode(std::string_view);
 	TreeNode * addCameraNode();
-	TreeNode * addLightNode(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe);
+	TreeNode * addLightNode(const glm::vec3& diff, const glm::vec3& spe);
 
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera   * getCamera()     const { return camera;     }
@@ -33,32 +30,30 @@ struct SceneManager {
 	SunlightEngine * getEngine() { return engine; }
 
 private :
-
-	void setLights();
-	void setShadows();
+	void renderOffcreen();
+	void renderShadow(size_t index);
+	void renderScene();
+	void sendLightsData2ShaderScene();
+	void genShadowTexture(size_t index);
 
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
-
-	Shader   shaders[NUM_SHADERS] { Shader{ PHONG_BASIC_SHADER }, Shader{ SHADOWS_BASIC_SHADER }, Shader{ TEST_BASIC_SHADER } };
-
-	unsigned int shadowFBO;
-	unsigned int shadowSceneTexture;
-
-	mat4 lightViewProjection  { 1 };
+	Shader shaders[NUM_SHADERS] { Shader{ PHONG_BASIC_SHADER }, Shader{ SHADOWS_BASIC_SHADER }, Shader{ TEST_BASIC_SHADER } };
 
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };
 
 	std::array<TreeNode*, MAX_LIGHT_SIZE> lightNodes;
 	std::array<Light*   , MAX_LIGHT_SIZE> lights;
-	std::size_t lights_index { 0 };
+	std::array<unsigned , MAX_LIGHT_SIZE> shadowFBOs;
+	std::array<unsigned , MAX_LIGHT_SIZE> shadowSceneTextures;
 
-	mat4 viewProjection { 1 };
-	mat4 view           { 1 };
+	std::size_t lights_index {  0  };
+    vec3        ambient      { 0.2f };
+
+	mat4 viewProjection      { 1 };
+	mat4 view                { 1 };
+	mat4 lightViewProjection { 1 };
 
 	SunlightEngine  * engine { nullptr };
 	ResourceManager * resourceManager;
-
-	unsigned int quadVAO { 0 };
-	unsigned int quadVBO;
 };

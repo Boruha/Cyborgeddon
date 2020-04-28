@@ -59,7 +59,7 @@ void RMesh::render(const glm::mat4 & m, Shader shader, bool visualShader) const 
 
 			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
 		}
-		shader.boolUniform("has_normal", normal_tex);
+		shader.boolUniform("have_normal", normal_tex);
 	}
 
 	shader.mat4Uniform("m_MVP", m);

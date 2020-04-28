@@ -4,32 +4,27 @@
 
 struct Light : IEntity {
 
-    Light() = default;
-    Light(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe) : ambient(amb), diffuse(diff), specular(spe) {}
+    explicit Light(const glm::vec3& diff, const glm::vec3& spe) : diffuse(diff), specular(spe) {}
     ~Light() override = default;
 
     void render(const glm::mat4& m, Shader shader, bool visualShader) override;
 
-    void setAmbinet(const glm::vec3& nAmb)  { ambient  = nAmb; }
     void setDiffuse(const glm::vec3& nDif)  { diffuse  = nDif; }
     void setSpecular(const glm::vec3& nSpe) { specular = nSpe; }
+    void setProjection(const glm::mat4& mP) { projection = mP; }
+    void setVProject_m(const glm::mat4& vP) { viewProj_m = vP; }
 
-    [[nodiscard]] const glm::vec3& getAmbient()  const { return ambient;  }
-    [[nodiscard]] const glm::vec3& getDiffuse()  const { return diffuse;  }
-    [[nodiscard]] const glm::vec3& getSpecular() const { return specular; }
-
-    std::size_t getID() { return ID; }
-
-    glm::mat4 projection { 1 };
-    glm::mat4 view       { 1 };
+    [[nodiscard]] const glm::vec3&  getDiffuse()    const { return diffuse;    }
+    [[nodiscard]] const glm::vec3&  getSpecular()   const { return specular;   }
+    [[nodiscard]] const glm::mat4&  getProjection() const { return projection; }
+    [[nodiscard]] const glm::mat4&  getVProject_m() const { return viewProj_m; }
+    [[nodiscard]] const std::size_t getID()         const { return ID; }
 
 private:
-    //Intensity of the different parts of light
-    //can be all the same value but maybe we need
-    //modify a specific parameter in future ver. .
-    glm::vec3 ambient  { 0.f };
-    glm::vec3 diffuse  { 0.f };
-    glm::vec3 specular { 0.f };
+    glm::vec3 diffuse        { 0.f };
+    glm::vec3 specular       { 0.f };
+    glm::mat4 projection     {  1  };
+    glm::mat4 viewProj_m     {  1  };
 
     std::size_t ID { nextID++ };
 	inline static std::size_t nextID { 0 };

@@ -41,7 +41,7 @@ void TreeNode::render(const glm::mat4& m, Shader shader, bool visualShader) {
 
     const glm::mat4 newMatrix = m * transform;
 
-	if(visualShader) //render scene
+	if(visualShader) //scene
 	{
 		m_normal  = glm::transpose( glm::inverse(transform) );
 		shader.mat4Uniform("m_Model", transform);
@@ -50,10 +50,10 @@ void TreeNode::render(const glm::mat4& m, Shader shader, bool visualShader) {
     	if (entity)
         	entity->render(sceneManager.getViewProjection() * newMatrix, shader, visualShader);
 	}
-	else 
+	else //shadow
 	{
-		if (entity) //render shadow
-        	entity->render(sceneManager.getLightViewProjection() * newMatrix, shader, visualShader); //cambiar a light VP
+		if (entity) 
+        	entity->render(sceneManager.getLightViewProjection() * newMatrix, shader, visualShader);
 	}
 	
 	if (!children.empty())

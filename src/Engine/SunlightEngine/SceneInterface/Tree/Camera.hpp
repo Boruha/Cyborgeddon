@@ -8,7 +8,7 @@ struct Camera : IEntity {
 
     ~Camera() override = default;
 
-    void render(const glm::mat4& m, Shader shader, bool) override;
+    void render(const glm::mat4& m, Shader shader, bool visualShader) override;
 
     void setPerspective(float near, float far, float fov = 45.f);
 
