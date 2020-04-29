@@ -143,4 +143,9 @@ constexpr inline float distance(const vec2& a, const vec2& b) {
 constexpr inline float distance(const vec3& a, const vec3& b) {
 	return length(b - a);
 }
+
+constexpr inline vec3 projectVectorUV(const vec3& u, const vec3& v) {
+	return (dot(u,v) / length2(v)) * v;
+}
+
 // TODO: precalcular cosas necesarias y recurrentes

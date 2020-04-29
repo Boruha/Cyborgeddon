@@ -14,3 +14,5 @@
 #include <cmp/Render.hpp>
 #include <cmp/Jump.hpp>
 #include <cmp/Video.hpp>
+#include <cmp/CircleBounding.hpp>
+#include <cmp/TriangleOBB.hpp>

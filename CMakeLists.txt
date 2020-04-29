@@ -53,7 +53,7 @@ file (
 
 find_package ( OpenCV REQUIRED )
 
-add_executable(cyborgeddon ${SOURCES})
+add_executable(cyborgeddon ${SOURCES} src/cmp/CircleBounding.hpp src/cmp/CircleBounding.cpp src/sys/CollisionSystem.hpp src/sys/CollisionSystem.cpp src/util/ColliderLoader.hpp src/cmp/TriangleOBB.hpp src/cmp/TriangleOBB.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${OpenCV_INCLUDE_DIRS})
 

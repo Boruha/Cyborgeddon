@@ -15,3 +15,4 @@
 #include <sys/SoundSystem.hpp>
 #include <sys/RenderSystem.hpp>
 #include <sys/VideoSystem.hpp>
+#include <sys/CollisionSystem.hpp>

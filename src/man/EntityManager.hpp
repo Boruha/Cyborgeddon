@@ -5,6 +5,10 @@
 
 struct IEngine;
 
+struct aiMesh;
+struct aiScene;
+struct aiNode;
+
 struct EntityManager : GameContext {
 	explicit EntityManager(IEngine * const _engine) : engine(*_engine), componentStorage(_engine) {  } // mientras player y camera sean independientes hay que eliminar sus nodos manualmente
 	~EntityManager() override = default;
@@ -67,6 +71,12 @@ struct EntityManager : GameContext {
 		void createNavigation  ();
 
 		void createVideo(std::string_view, bool);
+
+		// lector de colliders
+		void processNode(aiNode * node, const aiScene * scene);
+		void processMesh(aiMesh * mesh);
+		void readColliderFile(std::string_view);
+		// lector de colliders
 
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
