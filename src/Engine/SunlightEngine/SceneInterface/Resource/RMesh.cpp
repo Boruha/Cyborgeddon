@@ -43,7 +43,6 @@ void RMesh::render(const glm::mat4 & m, Shader shader, bool visualShader) const 
 	if(visualShader)
 	{
 		for (std::size_t i = 0; i<textures.size(); ++i) {
-			glActiveTexture(GL_TEXTURE0 + i);
 			std::string name = textures[i].type;
 
 			if (std::string_view(name) == DIFFUSE)
@@ -55,14 +54,13 @@ void RMesh::render(const glm::mat4 & m, Shader shader, bool visualShader) const 
 			else if (std::string_view(name) == HEIGHT)
 				name += std::to_string(height++);
 			
+			glActiveTexture(GL_TEXTURE0 + i);
 			shader.intUniform(name, i);
-
 			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
 		}
 		shader.boolUniform("have_normal", normal_tex);
+		shader.mat4Uniform("m_MVP", m);
 	}
-
-	shader.mat4Uniform("m_MVP", m);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, reinterpret_cast<void *>(0));

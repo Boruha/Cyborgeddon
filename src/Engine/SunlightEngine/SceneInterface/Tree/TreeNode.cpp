@@ -43,17 +43,22 @@ void TreeNode::render(const glm::mat4& m, Shader shader, bool visualShader) {
 
 	if(visualShader) //scene
 	{
-		m_normal  = glm::transpose( glm::inverse(transform) );
-		shader.mat4Uniform("m_Model", transform);
-		shader.mat4Uniform("m_Normal", m_normal);
-
     	if (entity)
+		{
+			m_normal = glm::transpose( glm::inverse(transform) );
+			shader.mat4Uniform("m_Normal", m_normal);
+			shader.mat4Uniform("m_Model", transform);
         	entity->render(sceneManager.getViewProjection() * newMatrix, shader, visualShader);
+		}
 	}
 	else //shadow
 	{
-		if (entity) 
-        	entity->render(sceneManager.getLightViewProjection() * newMatrix, shader, visualShader);
+		if (entity)
+		{ 
+			shader.mat4Uniform("m_Model", transform);
+			shader.mat4Uniform("m_VP", sceneManager.getLightViewProjection());
+        	entity->render(newMatrix, shader, visualShader);
+		}
 	}
 	
 	if (!children.empty())
