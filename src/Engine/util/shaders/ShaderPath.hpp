@@ -21,6 +21,7 @@ constexpr std::string_view PHONG_BASIC_FRAGMENT
 constexpr std::string_view PHONG_BASIC_SHADER [SHADER_TYPES] 
 {
 		PHONG_BASIC_VERTEX,
+		"",
 		PHONG_BASIC_FRAGMENT
 };
 
@@ -35,9 +36,15 @@ constexpr std::string_view SHADOWS_BASIC_FRAGMENT
 		"src/Engine/util/shaders/Shadows_Basic/fragment.glsl"
 };
 
+constexpr std::string_view SHADOWS_BASIC_GEOMETRY
+{
+		"src/Engine/util/shaders/Shadows_Basic/geometry.glsl"
+};
+
 constexpr std::string_view SHADOWS_BASIC_SHADER [SHADER_TYPES] 
 {
 		SHADOWS_BASIC_VERTEX,
+		"",
 		SHADOWS_BASIC_FRAGMENT
 };
 
@@ -55,5 +62,6 @@ constexpr std::string_view TEST_BASIC_FRAGMENT
 constexpr std::string_view TEST_BASIC_SHADER [SHADER_TYPES] 
 {
 		TEST_BASIC_VERTEX,
+		"",
 		TEST_BASIC_FRAGMENT
 };

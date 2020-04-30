@@ -1,14 +1,13 @@
 #include <Engine/SunlightEngine/SunlightEngine.hpp>
 
-#include <Engine/util/Color.hpp>
-
 extern "C" {
 	#include <Engine/util/glad/glad.h>
 	#include <GLFW/glfw3.h>
 }
 
-#include <Engine/util/Error.hpp>
 #include <Engine/SunlightEngine/SceneInterface/Tree/SunlightScene.hpp>
+#include <Engine/util/Color.hpp>
+#include <Engine/util/Error.hpp>
 
 void framebuffer_size_callback(GLFWwindow * const window, const int width, const int height) {
 	glViewport(0, 0, width, height);
@@ -31,7 +30,6 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 		error("No se pudo abrir la ventana");
 
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -96,4 +94,10 @@ void SunlightEngine::draw() const {
 
 void SunlightEngine::display() const {
 	glfwSwapBuffers(window);
+}
+
+void SunlightEngine::setViewport(){
+	glfwGetWindowSize(window, (int*)&windowWidth, (int*)&windowHeight);
+	glViewport(0, 0, windowWidth, windowHeight);
+
 }
