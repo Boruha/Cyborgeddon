@@ -1,9 +1,13 @@
 #version 330 core
 
-/*-------  OUTPUTS  ------*/
-//layout (location = 0) out float FragDepth;
+/*-------  INPUTS  ------*/
+in vec4 FragPos;
+
+/*-------  UNIFORMS  ------*/
+uniform vec3  lightPos;
+uniform float far;
 
 void main() 
 {
-    //FragDepth = gl_FragCoord.z;
+    gl_FragDepth = length(FragPos.xyz - lightPos) / far;
 }

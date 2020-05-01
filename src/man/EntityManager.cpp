@@ -16,7 +16,6 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 	graph.reserve(20);
 }
 
-
 /*		DESTROY ENTITIES	*/
 
 // aqui recibimos los IDS de las entidades que queremos destruir
@@ -72,8 +71,6 @@ void EntityManager::cleanData() {
 
 	componentStorage.cleanData();			// limpiamos el contenido de component storage
 }
-
-
 
 /*		CREATE ENTITIES		*/
 
@@ -437,9 +434,9 @@ void EntityManager::createLevel() {
 	initData(128, 16, 150);
 	
 	createPairPlayerCamera(vec3(0), vec3(6.f), vec3(30, 120, 70));
-	createLight(vec3(-15, 30, 20), vec3(0.8), vec3(0.0));
-	createLight(vec3(-50,30,-260), vec3(0.6), vec3(0.0));
-	createLight(vec3(50,30,-150), vec3(0.7), vec3(0.0));
+	createLight(vec3(-15, 30, 20), vec3(0.8), vec3(0.2));
+	//createLight(vec3(-50,30,-260), vec3(0.6), vec3(0.0));
+	//createLight(vec3(50,30,-150), vec3(0.7), vec3(0.0));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,-3,-5), vec3(160,1,135)); //Controls
 

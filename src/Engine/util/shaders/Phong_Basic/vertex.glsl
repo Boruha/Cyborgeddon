@@ -13,13 +13,13 @@ uniform mat4 m_Normal;
 
 /*-------  OUTPUTS  ------*/
 out vec2 TexCoords;
-out vec3 cameraSpace_pos;
-out vec3 cameraSpace_normal;
+out vec3 FragPos;
+out vec3 FragNormal;
 
 
 void main() {
-    cameraSpace_pos    = vec3(m_Model * vec4(aPos, 1.0));
-    cameraSpace_normal = normalize( vec3(m_Normal * vec4(aNormal, 1.0)) );
+    FragPos    = vec3(m_Model * vec4(aPos, 1.0));
+    FragNormal = normalize( vec3(m_Normal * vec4(aNormal, 1.0)) );
 
     TexCoords   = aTexCoords;
     gl_Position = m_MVP * vec4(aPos, 1.0);

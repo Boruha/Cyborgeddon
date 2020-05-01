@@ -11,10 +11,13 @@ struct Light : IEntity {
 
     [[nodiscard]] const std::size_t getID()         const { return ID; }
 
-    glm::vec3 diffuse        { 0.f };
-    glm::vec3 specular       { 0.f };
-    glm::mat4 projection     {  1  };
-    glm::mat4 viewProj_m     {  1  };
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+    glm::mat4 projection;
+    glm::mat4 m_VPs[6];
+
+    float near { 1.f };
+    float far  { 100 };
 
     unsigned FBO;
     unsigned shadow_map;

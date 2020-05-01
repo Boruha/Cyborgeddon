@@ -56,7 +56,7 @@ void TreeNode::render(const glm::mat4& m, Shader shader, bool visualShader) {
 		if (entity)
 		{ 
 			shader.mat4Uniform("m_Model", transform);
-			shader.mat4Uniform("m_VP", sceneManager.getLightViewProjection());
+			//shader.mat4Uniform("m_VP", sceneManager.getLightViewProjection());
         	entity->render(newMatrix, shader, visualShader);
 		}
 	}
