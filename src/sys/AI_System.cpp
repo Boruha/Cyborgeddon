@@ -6,7 +6,14 @@
 #include <util/Pathfinding.hpp>
 
 #include <chrono>
-#include <ratio>
+#include <thread>
+#include <algorithm>
+
+using namespace std::chrono;
+
+constexpr std::chrono::duration<double> patrol_period ( 10us );
+constexpr std::chrono::duration<double> pursue_period ( 20us );
+constexpr std::chrono::duration<double> attack_period ( 10us );
 
 /*  GENERAL BEHAVIOURS  */
     struct SeekBehaviour : BehaviourNode
@@ -451,32 +458,41 @@ void AI_System::init()
 
 void AI_System::fixedUpdate(const Context &context, float deltaTime)
 {
-    using namespace std::chrono;
+    //using namespace std::chrono;
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
     ++frame;
 
-    setPhase(context);
-    setInQueue(context);
+    //setPhase(context);
+    setInList(context);
 
-    duration<double> timer { 50us };
-    steady_clock::time_point t1 { };
+    duration<double> timer { 60us };
 
 	while( timer > 0us && !schedule.empty() )
     {
-        t1 = steady_clock::now();
+        auto & ai = *(schedule.front());
 
-        auto & ai       = *(schedule.front());
-        auto & enemy    = context->getEntityByID(ai.getEntityID());
-        auto & physics  = *enemy.getComponent<Physics>();
-        auto & velocity = *enemy.getComponent<Velocity>();
+        if(ai)
+        {
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+            auto & physics  = *enemy.getComponent<Physics>();
+            auto & velocity = *enemy.getComponent<Velocity>();
 
-        root->run(ai, physics, velocity, player_pos, deltaTime, context);
+            root->run(ai, physics, velocity, player_pos, deltaTime, context);
         
-        ai.scheduled = false;
-        schedule.pop();
-        
-        timer -= duration_cast<duration<double>>(steady_clock::now() - t1);
+            switch (ai.frequecy_state)
+            {
+                case 2: timer -= patrol_period;   break;
+                case 3: timer -= pursue_period;   break;
+                case 7: timer -= attack_period;   break;
+            }
+
+            ai.scheduled = false;
+            schedule.pop_front();
+        }
 	}
+
+    if(timer > 0us && schedule.empty())
+        std::this_thread::sleep_for(timer);
 }
 
 //Scheduling 
@@ -505,7 +521,7 @@ void AI_System::setPhase(const std::unique_ptr<GameContext>& context)
     }
 }
 
-void AI_System::setInQueue(const std::unique_ptr<GameContext>& context)
+void AI_System::setInList(const std::unique_ptr<GameContext>& context)
 {
     for(auto& ai : context->getComponents().getComponents<AI>())
     {
@@ -517,9 +533,18 @@ void AI_System::setInQueue(const std::unique_ptr<GameContext>& context)
             if( (frame + ai.scheduling_phase) % ai.frequecy_state != 0 )
                 continue;
 
-            schedule.push(&ai);
+            schedule.push_back(&ai);
             ai.scheduled = true;
         }
+    }
+    //sacar los enemigos que van a morir
+    for(auto it=schedule.begin(); it!=schedule.end(); ++it)
+    {
+        auto & enemy    = context->getEntityByID((*it)->getEntityID());
+        auto * cData    = enemy.getComponent<CharacterData>();
+
+        if(!greater_e(cData->health, 0))
+            it = schedule.erase(it);
     }
 }
 
