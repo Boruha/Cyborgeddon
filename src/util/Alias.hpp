@@ -22,7 +22,8 @@ enum EntityType : uint16_t
 	WALL      = 8,
 	NAV       = 9,
 	LIGHT     = 10,
-	VIDEO     = 11
+	VIDEO     = 11,
+	COLLIDER  = 12
 };
 
 enum StateEnum : uint8_t

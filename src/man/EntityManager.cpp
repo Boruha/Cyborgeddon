@@ -11,6 +11,10 @@
 
 #include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
 void EntityManager::initData(const int maxEntities, const int maxToDelete, const int maxComponents) {
 	cleanData();								// si no es la primera vez que llamamos a esta funcion, hay que limpiar vectores, reiniciar variables...
 	toDelete.reserve(maxToDelete);				// reservamos para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
@@ -79,6 +83,52 @@ void EntityManager::cleanData() {
 	engine.unloadVideos();                  // limpiamos videos del motor si habia alguno en memoria
 }
 
+static unsigned numColliders = 0;
+
+void EntityManager::processMesh(aiMesh * mesh) {
+	if (mesh->mNumVertices != 3) {
+		std::cerr << "En el obj hay un objeto que no es un triangulo\n";
+	} else {
+		std::array<vec3, 3> vertices {};
+
+		for (unsigned i = 0; i < 3; ++i)
+			vertices[i] = glm::vec3(mesh->mVertices[i].x, 0, mesh->mVertices[i].z);
+
+		auto & collider = createEntity(COLLIDER);
+
+		auto & obb   = componentStorage.createComponent(TriangleOBB(collider.getType(), collider.getID(), vertices));
+//		auto & trans = componentStorage.createComponent(Transformable(collider.getType(), collider.getID(), (obb.min + obb.max) / 2.f, vec3(0), vec3((obb.min + obb.max) / 4.f)));
+//		auto & render = componentStorage.createComponent(Render(collider.getType(), collider.getID(), &trans.position, &trans.rotation, &trans.scale, false));
+
+//		render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+
+//		render.node->setPosition(trans.position);
+//		render.node->setRotation(trans.rotation);
+//		render.node->setScale(trans.scale);
+
+		// ALGO QUE HAY QUE HACER
+
+		collider.addComponent(obb);
+//		collider.addComponent(trans);
+//		collider.addComponent(render);
+	}
+}
+
+void EntityManager::processNode(aiNode * node, const aiScene * scene) {
+	for (unsigned i = 0; i < node->mNumMeshes; ++i)
+		processMesh(scene->mMeshes[node->mMeshes[i]]);
+	for (unsigned i = 0; i < node->mNumChildren; ++i)
+		processNode(node->mChildren[i], scene);
+}
+
+void EntityManager::readColliderFile(const std::string_view path) {
+	Assimp::Importer importer;
+
+	const aiScene * scene = importer.ReadFile(path.data(), 0);
+
+	if (scene)
+		processNode(scene->mRootNode, scene);
+}
 
 
 /*		CREATE ENTITIES		*/
@@ -95,22 +145,24 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	player = & createEntity(PLAYER);
 
 	auto& velocity 	= componentStorage.createComponent(Velocity(player->getType(), player->getID(), PLAYER_SPEED, PLAYER_ACCELERATION));
-	auto& physics  	= componentStorage.createComponent(Physics(player->getType(), player->getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
-	auto& trigger  	= componentStorage.createComponent(TriggerMovSphere(player->getType(), player->getID(), physics.position, 4, physics.velocity));
+	auto& physics  	= componentStorage.createComponent(Physics(player->getType(), player->getID(), pos, vec3(), vec3(), dim));
+	auto& trigger  	= componentStorage.createComponent(TriggerMovSphere(player->getType(), player->getID(), physics.position, 2.f, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(player->getType(), player->getID(), physics.position, 2.f, physics.velocity));
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Arc/Arcangel-ZY.obj");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale / 2.f);
+	render.node->setScale(physics.scale);
 
 	render.node->setTexture(DEMON_TEXTURE);
 
 	player->addComponent(velocity);
 	player->addComponent(physics);
 	player->addComponent(trigger);
+	player->addComponent(circleBounding);
 	player->addComponent(data);
 	player->addComponent(render);
 
@@ -173,11 +225,12 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -188,6 +241,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(physics);
 	enemy.addComponent(velocity);
 	enemy.addComponent(trigger);
+	enemy.addComponent(circleBounding);
 	enemy.addComponent(data);
 	enemy.addComponent(ai);
 	enemy.addComponent(render);
@@ -201,6 +255,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), ANGEL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, DIST_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
@@ -216,6 +271,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(physics);
 	enemy.addComponent(velocity);
 	enemy.addComponent(trigger);
+	enemy.addComponent(circleBounding);
 	enemy.addComponent(data);
 	enemy.addComponent(ai);
 	enemy.addComponent(render);
@@ -228,12 +284,13 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0, dim.y / 2, 0), vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), DEMON, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& jump 		= componentStorage.createComponent(Jump(enemy.getType(), enemy.getID(), JUMP_COOLDOWN, JUMP_TIMER));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -244,6 +301,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(physics);
 	enemy.addComponent(velocity);
 	enemy.addComponent(trigger);
+	enemy.addComponent(circleBounding);
 	enemy.addComponent(data);
 	enemy.addComponent(jump);
 	enemy.addComponent(ai);
@@ -255,14 +313,14 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 void EntityManager::createFloor(const std::string_view tex, const vec3& pos, const vec3& dim) {
 	auto& floor = createEntity(FLOOR);
 
-	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, dim.y / 2, 0), vec3(-90, 0, 0), vec3(1)));
+	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, 0, 0), vec3(0, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Ciudad/ciudad.obj");
+	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale * 2.f);
+	render.node->setScale(transformable.scale);
 
 	render.node->setTexture(tex.data());
 
@@ -282,7 +340,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -351,8 +409,6 @@ void EntityManager::createVideo(const std::string_view path, const bool isLoop) 
 	cmpVideo.loop = isLoop;
 
 	cmpVideo.video->setLoop(cmpVideo.loop);
-
-	std::cout << cmpVideo << "\n";
 
 	video.addComponent(cmpVideo);
 }
@@ -471,11 +527,13 @@ void EntityManager::createLevel() {
 
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(), vec3(6.f), vec3(30, 120, 70));
+	createPairPlayerCamera(vec3(), vec3(2.f), vec3(30, 120, 70));
 	createLight(vec3(0, 60, 0), vec3(0.2), vec3(0.8), vec3(0.5));
 	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
 
-	createFloor(CONTROLS_TEXTURE, vec3(0,0,-5), vec3(60,0,35)); //Controls
+	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
+
+	readColliderFile("../resources/models/Ciudad/colisiones.obj");
 /*
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys
@@ -678,8 +736,8 @@ bool EntityManager::checkDefeat() const {
 void EntityManager::createIntro() {
 	initData(4, 0, 4);
 
-	createVideo("resources/videos/intro/1_F.mp4", false);
-	createVideo("resources/videos/intro/2_F_L.mp4", true);
+	createVideo("../resources/videos/intro/1_F.mp4", false);
+	createVideo("../resources/videos/intro/2_F_L.mp4", true);
 
 	std::cout << Video::getName()     << " " << componentStorage.getComponents<Video>().size() << "\n";
 }
