@@ -73,7 +73,7 @@ ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
 INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I. -I/usr/include/opencv/usr/include
-LIBS 		:= -lIrrlicht -lfmod -lfmodstudio -lglfw -lGLEW -lGL -lpthread -ldl -lassimp -lopencv_highgui -lopencv_core -Wl,-rpath,$(LIBDIR)
+LIBS 		:= -lIrrlicht -lfmod -lfmodstudio -lglfw -lGL -lpthread -ldl -lassimp -lopencv_highgui -lopencv_core -Wl,-rpath,$(LIBDIR)
 GOLD_OPTION	:= -fuse-ld=gold
 
 # CLEAN
