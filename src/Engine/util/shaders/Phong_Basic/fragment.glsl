@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 /*------  CONST    -------*/ 
 const float att_Linear = 0.0017;
@@ -16,7 +16,7 @@ struct Light
 
 /*------  UNIFORMS  ------*/ 
 uniform Light[7]  lights;
-uniform int       light_index; 
+uniform int       lights_index; 
 
 uniform vec3      camera_pos;
 uniform vec3      l_Ambient;
@@ -53,6 +53,7 @@ void main()
     vec3 vec_tex    = vec3(texture(texture_diffuse0, TexCoords));
     vec3 vec_normal = normalize(FragNormal);
     vec3 f_amb      = l_Ambient * vec_tex;
+    const int conta = 2;
     //DIFFUSE
     vec3  vecObj2Light  = vec3(0.0);
     float distObj2Light = 0.0;
@@ -63,12 +64,13 @@ void main()
     vec3 vec_spec = vec3(0.0);
     vec3 vec_tex2 = vec3(0.0);
     vec3 f_spec   = vec3(0.0);
-    //SHADOW
-    float shadow  = 0.0;
+    //FX
+    float attenuation = 0.0;
+    float shadow      = 0.0;
     //FINAL
     vec3  phong   = vec3(0.0);
-
-    for(int i=0; i<light_index; ++i)
+    //por algún motivo el loop no va si itera más de una vez.
+    for(int i=1; i<1; i++)
     {
         vecObj2Light  = lights[i].position - FragPos;
         distObj2Light = length(vecObj2Light);
@@ -77,9 +79,10 @@ void main()
         {
             vecObj2Light = normalize(vecObj2Light);
             cos_light    = max(dot(vecObj2Light, vec_normal), 0.0);
-            f_diff       = lights[i].diffuse * cos_light;
+            f_diff       = lights[i].diffuse * cos_light * vec_tex;
 
-            shadow = ShadowCalculation(i);
+            attenuation  = 1/(1 + (att_Linear * distObj2Light) + (att_quadra * distObj2Light * distObj2Light));
+            shadow       = ShadowCalculation(i);
 
             if(have_normal)
             {
@@ -90,9 +93,9 @@ void main()
                 f_spec    = lights[i].specular * pow(max(dot(vec_spec, vec_view), 0.0), 0.2) * vec_tex2;
             }
         }
-        //phong += (1.0) * (f_diff + f_spec);
-        phong += (1.0 - shadow);
+        phong += (f_diff + f_spec) * (1.0 - shadow) * attenuation;
     }
-    //phong     = (f_amb + phong) * vec_tex;
+    
+    phong    += f_amb;
     FragColor = vec4(phong, 1.0);
 }

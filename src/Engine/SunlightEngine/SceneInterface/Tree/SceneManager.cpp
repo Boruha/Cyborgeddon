@@ -148,7 +148,7 @@ void SceneManager::sendLightsData2ShaderScene() {
 		if(!lights[i] || !lightNodes[i]) continue;
 
     	std::string name = "lights[" + std::to_string(i) + "]";
-
+		std::cout << name << "\n";
 		glActiveTexture(GL_TEXTURE2 + i);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->shadow_map);
 		shaders[0].intUniform(name + ".shadow_map", 2 + i);
@@ -158,7 +158,9 @@ void SceneManager::sendLightsData2ShaderScene() {
     	shaders[0].vec3Uniform(name + ".diffuse" , lights[i]->diffuse);
     	shaders[0].vec3Uniform(name + ".specular", lights[i]->specular);
 	}
-    shaders[0].intUniform("light_index", lights_index);
+    shaders[0].intUniform("lights_index", lights_index);
+	std::cout << lights_index << "\n\n";
+
 }
 
 //OFF-SCREEN 

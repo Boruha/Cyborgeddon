@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 /*-----  ATTRIBUTES  -----*/
 layout (location = 0) in vec3 aPos;         
@@ -20,7 +20,7 @@ out vec3 FragNormal;
 void main() {
     FragPos    = vec3(m_Model * vec4(aPos, 1.0));
     FragNormal = normalize( vec3(m_Normal * vec4(aNormal, 1.0)) );
-
-    TexCoords   = aTexCoords;
+    TexCoords  = aTexCoords;
+    
     gl_Position = m_MVP * vec4(aPos, 1.0);
 }

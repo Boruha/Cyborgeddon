@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 /*-------  INPUTS  ------*/
 in vec4 FragPos;
