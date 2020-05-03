@@ -526,8 +526,12 @@ void EntityManager::createLevel() {
 	cleanData();
 
 	initData(128, 16, 150);
+	//Camaras
+	//(20, 10, 10)
+	//(20, 70, 20)
+	//(20, 60, 30)
 	
-	createPairPlayerCamera(vec3(), vec3(2.f), vec3(30, 120, 70));
+	createPairPlayerCamera(vec3(), vec3(2.f), vec3(20, 70, 20)); //x= , y= , z=    <------> antes: vec3(30, 120, 70)
 	createLight(vec3(0, 60, 0), vec3(0.2), vec3(0.8), vec3(0.5));
 	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
 
@@ -632,6 +636,28 @@ void EntityManager::createLevel() {
 
 	unsigned scheduling_AI_counter = 0;
 
+	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
+	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
+
+    createEnemy(vec3(5,0,-32), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-22,0,-28), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-40,0,-33), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-47,0,-27), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+
+
+	/*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
+	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
+	createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
+	createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
+	createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
+	createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
+	createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
+	createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
+	createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
+
 	createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
 	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
 	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
@@ -645,6 +671,33 @@ void EntityManager::createLevel() {
 	createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
 	createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
 
+	createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
+	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
+	createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
+	createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
+	createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
+	createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
+	createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
+	createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
+	createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
+
+	createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
+	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
+	createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
+	createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
+	createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
+	createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
+	createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
+	createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
+	createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
+	*/
+/*
 	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
 	std::cout << Physics::getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
 	std::cout << RigidStaticAABB::getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";
@@ -654,6 +707,7 @@ void EntityManager::createLevel() {
 	std::cout << Render::getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
 	std::cout << Velocity::getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
 	std::cout << CharacterData::getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
+*/
 }
 
 void EntityManager::createGraph()

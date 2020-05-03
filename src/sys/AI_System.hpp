@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sys/System.hpp>
-#include <queue>
+#include <list>
 
 struct Selector;
 
@@ -13,17 +13,17 @@ struct AI_System : System
     void fixedUpdate(const Context &context, float deltaTime) final;
 	void update(const Context &context, float deltaTime) override {};
 	void reset() final {  }
-
+    
+protected:
     [[nodiscard]] bool checkObstacles(const vec3&, const vec3&, float, const std::unique_ptr<GameContext>&);
     [[nodiscard]] bool checkFacing(const Physics&, const std::unique_ptr<GameContext>&);
                   void setPhase(const std::unique_ptr<GameContext>&);
-                  void setInQueue(const std::unique_ptr<GameContext>&);
+                  void setInList(const std::unique_ptr<GameContext>&);
 
-    private:
     std::unique_ptr<Selector> root;
 
     unsigned frame { 0 };
-    std::queue<AI*> schedule;
+    std::list<AI*> schedule;
 };
 
 /* BEHAVIOUR STRUCTURE DEF */
