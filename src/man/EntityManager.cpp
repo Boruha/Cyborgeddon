@@ -230,7 +230,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Cube/CuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -639,6 +639,7 @@ void EntityManager::createLevel() {
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
 
+	//ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
     createEnemy(vec3(5,0,-32), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
@@ -649,6 +650,14 @@ void EntityManager::createLevel() {
     createEnemy(vec3(-77,0,-23), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-80,0,-35), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-87,0,-27), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    //Puente
+    createEnemy(vec3(-72,0,-65), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-83,0,-75), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-75,0,-85), vec3(3), vector<vec3>(0), scheduling_AI_counter);//duda
+    createEnemy(vec3(-86,0,-87), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-100), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-74,0,-102), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+
 
 	/*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
 	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
