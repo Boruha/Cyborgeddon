@@ -34,7 +34,20 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	windowWidth = width;
 	windowHeight = height;
 
-	window = glfwCreateWindow(int(width), int(height), name.data(), nullptr, nullptr);
+	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
+
+	if (!monitor)
+		error("No se detectó el monitor");
+
+	const GLFWvidmode * videoMode = glfwGetVideoMode(monitor);
+
+	if (!videoMode)
+		error("No se pudo identificar el modo del video");
+
+	windowWidth = videoMode->width;
+	windowHeight = videoMode->height;
+
+	window = glfwCreateWindow(int(windowWidth), int(windowHeight), name.data(), monitor, nullptr);
 
 	if (!window)
 		error("No se pudo abrir la ventana");
