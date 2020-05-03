@@ -1,9 +1,9 @@
 
 #include <man/GameManager.hpp>
+
 #include <zconf.h>
 
 #include <Engine/util/Math.hpp>
-#include <glm/gtx/string_cast.hpp>
 
 int main()
 {

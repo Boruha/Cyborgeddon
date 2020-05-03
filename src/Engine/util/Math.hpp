@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <iostream>
 
 using glm::vec2;
 using glm::vec3;
@@ -9,7 +10,7 @@ constexpr double PI = 3.141592653589793238463;
 constexpr double DEG2RAD = PI / 180.0;
 constexpr double RAD2DEG = 180.0 / PI;
 
-constexpr float  EPSILON = 0.001f;
+constexpr float  EPSILON = 0.0001f;
 
 constexpr inline bool equal_e(const float value, const float toCompare) { return std::abs(value - toCompare) < EPSILON; }
 constexpr inline bool greater_e(const float value, const float toCompare) { return (value - toCompare) > EPSILON; }
@@ -146,6 +147,11 @@ constexpr inline float distance(const vec3& a, const vec3& b) {
 
 constexpr inline vec3 projectVectorUV(const vec3& u, const vec3& v) {
 	return (dot(u,v) / length2(v)) * v;
+}
+
+inline float triangleArea(const vec3& a, const vec3& b, const vec3& c) {
+	std::cout << a.x << " " << a.z << "   " << b.x << " " << b.z << "   " << c.x << " " << c.z << "   " << "\n";
+	return std::abs((a.x * (b.z - c.z) + b.x * (c.z - a.z) + c.x * (a.z - b.z)) / 2.f);
 }
 
 // TODO: precalcular cosas necesarias y recurrentes
