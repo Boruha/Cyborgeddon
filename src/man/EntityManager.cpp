@@ -227,7 +227,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
 	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
-	//auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
@@ -243,7 +243,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(trigger);
 	enemy.addComponent(circleBounding);
 	enemy.addComponent(data);
-	//enemy.addComponent(ai);
+	enemy.addComponent(ai);
 	enemy.addComponent(render);
 
 	++enemiesLeft;
@@ -257,7 +257,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
 	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), ANGEL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, DIST_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
-	//auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
@@ -273,7 +273,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(trigger);
 	enemy.addComponent(circleBounding);
 	enemy.addComponent(data);
-	//enemy.addComponent(ai);
+	enemy.addComponent(ai);
 	enemy.addComponent(render);
 
 	++enemiesLeft;
@@ -287,7 +287,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), DEMON, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& jump 		= componentStorage.createComponent(Jump(enemy.getType(), enemy.getID(), JUMP_COOLDOWN, JUMP_TIMER));
-	//auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
+	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
@@ -304,7 +304,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	enemy.addComponent(circleBounding);
 	enemy.addComponent(data);
 	enemy.addComponent(jump);
-	//enemy.addComponent(ai);
+	enemy.addComponent(ai);
 	enemy.addComponent(render);
 
 	++enemiesLeft;
