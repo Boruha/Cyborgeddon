@@ -12,7 +12,7 @@ bool segmentCutsCircle(const vec3& a, const vec3& b, const vec3& center, const f
 
 	const vec3 projection = a + (ab * (dot(ac, ab) / dot(ab, ab)));
 
-	std::cout << "\nProjection: " << glm::to_string(projection) << "\n";
+	//std::cout << "\nProjection: " << glm::to_string(projection) << "\n";
 
 	return segmentContainsPointXZ(Line(a, b), projection) && less_e(manhattan(projection, center), radius * radius);
 }
@@ -35,7 +35,7 @@ bool intersectionCircleTriangle(const CircleBounding& circle, const TriangleOBB&
 	// si algun segmento corta al circulo
 	for (unsigned i = 0; i < 3; ++i)
 		if (segmentContainsPointXZ(seg[i], proj[i]) && less_e(manhattan(proj[i], circle.center), circle.radius * circle.radius)) {
-			std::cout << "Segmento " << glm::to_string(seg[i].a) << " --- " << glm::to_string(seg[i].b) << " contiene a punto " << glm::to_string(proj[i]) << " del circulo con centro en " << glm::to_string(circle.center) << " y radio " << circle.radius << "\n";
+			//std::cout << "Segmento " << glm::to_string(seg[i].a) << " --- " << glm::to_string(seg[i].b) << " contiene a punto " << glm::to_string(proj[i]) << " del circulo con centro en " << glm::to_string(circle.center) << " y radio " << circle.radius << "\n";
 			return true;
 		}
 
@@ -46,7 +46,7 @@ bool intersectionCircleTriangle(const CircleBounding& circle, const TriangleOBB&
 		triangleInsideCircle &= less_e(manhattan(proj[i], circle.center), circle.radius * circle.radius);
 
 	if (triangleInsideCircle) {
-		std::cout << "El triangulo " << triangle << " esta completamente dentro del circulo " << circle << "\n";
+		//std::cout << "El triangulo " << triangle << " esta completamente dentro del circulo " << circle << "\n";
 		return true;
 	}
 
@@ -63,10 +63,10 @@ bool intersectionCircleTriangle(const CircleBounding& circle, const TriangleOBB&
 
 	const float area_of_triangle = triangleArea(v[0], v[1], v[2]);
 
-	std::cout << "\nArea del triangulo " << triangle << " \n" << area_of_triangle << "\n";
+	/*std::cout << "\nArea del triangulo " << triangle << " \n" << area_of_triangle << "\n";
 	std::cout << "Areas de los triangulos formados por la vaina " << area[0] << " " << area[1] << " " << area[2] << "\n";
 	std::cout << "Suma: " << area[0] + area[1] + area[2] << "\n";
-	std::cout << "Circle position " << glm::to_string(circle.center) << "\n";
+	std::cout << "Circle position " << glm::to_string(circle.center) << "\n";*/
 
 	if (equal_e(area_of_triangle, area[0] + area[1] + area[2]))
 		return true;

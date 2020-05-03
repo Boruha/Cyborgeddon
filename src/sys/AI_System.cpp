@@ -15,6 +15,17 @@ constexpr std::chrono::duration<double> patrol_period ( 10us );
 constexpr std::chrono::duration<double> pursue_period ( 20us );
 constexpr std::chrono::duration<double> attack_period ( 10us );
 
+/*
+    TODO:
+    - Calcular cantidad de desplazamiento por frame aprox (si cambian las constantes, recalcular)
+    - Anyadir un tier de distancia para ejecurtar patrol y comprobaciones
+    - Metodo que haga:
+        -. Teletransporte
+        -. Calcular numero de frames hasta el siguiente TP.
+        -. Mirar de crear un ratio de update (LoD) para estas entidades (11 frames posible)
+
+*/
+
 /*  GENERAL BEHAVIOURS  */
     struct SeekBehaviour : BehaviourNode
     {
@@ -107,8 +118,14 @@ constexpr std::chrono::duration<double> attack_period ( 10us );
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
-            ai.patrol_index = (ai.patrol_index + 1) % ai.max_index;
+            ai.patrol_index    = (ai.patrol_index + 1) % ai.max_index;
             ai.target_position = ai.patrol_position[ai.patrol_index];
+            
+            if(ai.getEntityID() == 249)
+            {
+                std::cout << "LAST FRAME: " << ai.lastFrameEjecuted << ", NOW:  " << frame << "\n";
+                std::cout << "VOY: " << ai.target_position.x << ", " << ai.target_position.z << "\n\n";
+            }
 
             return true;
         }
@@ -458,7 +475,6 @@ void AI_System::init()
 
 void AI_System::fixedUpdate(const Context &context, float deltaTime)
 {
-    //using namespace std::chrono;
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
     ++frame;
 
@@ -473,6 +489,11 @@ void AI_System::fixedUpdate(const Context &context, float deltaTime)
 
         if(ai)
         {
+            if(ai.getEntityID() == 249)
+            {
+                ai.lastFrameEjecuted = frame;
+            }
+
             auto & enemy    = context->getEntityByID(ai.getEntityID());
             auto & physics  = *enemy.getComponent<Physics>();
             auto & velocity = *enemy.getComponent<Velocity>();

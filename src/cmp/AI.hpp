@@ -22,11 +22,12 @@ struct AI : public Component {
 	//PATH
 	int      path_index 	  { -1 };	   //vector<int> index (map).
   	int      path_node        { -1 };	   //graph index.	   
-
+	  
 	vec3     target_position  { 0 };
 
 	//AI_STATE for Scheduling
-	unsigned frequecy_state   { PATROL_STATE };
-	unsigned scheduling_phase { 0 };
-	bool     scheduled        { false };
+	unsigned frequecy_state    { PATROL_STATE };
+	unsigned scheduling_phase  { 0 };
+	unsigned lastFrameEjecuted { 0 };
+	bool     scheduled         { false };
 };
