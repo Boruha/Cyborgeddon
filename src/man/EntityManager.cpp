@@ -642,7 +642,7 @@ void EntityManager::createLevel() {
     createEnemy(vec3(5,0,-32), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-22,0,-28), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-40,0,-33), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-45,0,-30), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-47,0,-27), vec3(3), vector<vec3>(0), scheduling_AI_counter);
 
 
 	/*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
