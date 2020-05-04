@@ -15,6 +15,8 @@ constexpr std::chrono::duration<double> patrol_period ( 10us );
 constexpr std::chrono::duration<double> pursue_period ( 20us );
 constexpr std::chrono::duration<double> attack_period ( 10us );
 
+constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
+
 /*
     TODO:
     - Calcular cantidad de desplazamiento por frame aprox (si cambian las constantes, recalcular)
@@ -119,12 +121,17 @@ constexpr std::chrono::duration<double> attack_period ( 10us );
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             ai.patrol_index    = (ai.patrol_index + 1) % ai.max_index;
+            vec3 myPos = ai.target_position;
             ai.target_position = ai.patrol_position[ai.patrol_index];
             
-            if(ai.getEntityID() == 249)
+            if(ai.getEntityID() == 60)
             {
-                std::cout << "LAST FRAME: " << ai.lastFrameEjecuted << ", NOW:  " << frame << "\n";
-                std::cout << "VOY: " << ai.target_position.x << ", " << ai.target_position.z << "\n\n";
+                float distance2 = length2({ myPos.x - ai.target_position.x, myPos.z - ai.target_position.z });
+                distance2 = std::sqrt(distance2);
+
+                std::cout << "LAST FRAME INTERVAL: " << ai.frameCounter - ai.lastFrameEjecuted << "\n\n";
+                ai.lastFrameEjecuted = ai.frameCounter;
+                std::cout << "DISTANCIA : " << distance2 << "\n";
             }
 
             return true;
@@ -489,9 +496,9 @@ void AI_System::fixedUpdate(const Context &context, float deltaTime)
 
         if(ai)
         {
-            if(ai.getEntityID() == 249)
+            if(ai.getEntityID() == 60)
             {
-                ai.lastFrameEjecuted = frame;
+                ai.frameCounter = frame;
             }
 
             auto & enemy    = context->getEntityByID(ai.getEntityID());

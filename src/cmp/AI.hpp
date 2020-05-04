@@ -29,5 +29,6 @@ struct AI : public Component {
 	unsigned frequecy_state    { PATROL_STATE };
 	unsigned scheduling_phase  { 0 };
 	unsigned lastFrameEjecuted { 0 };
+	unsigned frameCounter      { 0 };
 	bool     scheduled         { false };
 };

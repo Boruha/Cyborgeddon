@@ -183,8 +183,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	camera->addComponent(cameraRender);
 }
 
-void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& diff, const vec3& spe)
-{
+void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& diff, const vec3& spe){
 	auto* light = & createEntity(LIGHT);
 
 	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(0), vec3(0)));
@@ -528,19 +527,13 @@ void EntityManager::createLevel() {
 	cleanData();
 
 	initData(128, 16, 150);
-	//Camaras
-	//(20, 10, 10)
-	//(20, 70, 20)
-	//(20, 60, 30)
 	
-	createPairPlayerCamera(vec3(), vec3(2.f), vec3(20, 70, 20)); //x= , y= , z=    <------> antes: vec3(30, 120, 70)
+	createPairPlayerCamera(vec3(), vec3(2.f), vec3(80, 220, 80));
 	createLight(vec3(0, 60, 0), vec3(0.2), vec3(0.8), vec3(0.5));
-	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
 
-	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
+	//createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
+	//readColliderFile("resources/models/Ciudad/colisiones.obj");
 
-	readColliderFile("resources/models/Ciudad/colisiones.obj");
-/*
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys
 	createPairKeyDoor(vec3(0,0,-60), vec3(3), vec3(-37,0,-90), vec3(2,20,10));
@@ -620,7 +613,7 @@ void EntityManager::createLevel() {
 	createWall(vec3(-347.5,0,-277.5), vec3(10,10,145)); //Izq
 	createWall(vec3(-265,0,-277.5), vec3(60,20,55)); //Pilar
 	//------------------------------------  END MAPA  ---------------------------------------------------------------
-*/
+
 	createGraph();
 	//puntero a vec3? Mejor?
 	std::vector<vec3> patrol_1 = { graph[9].coord };
