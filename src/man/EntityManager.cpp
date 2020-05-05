@@ -260,7 +260,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -653,12 +653,22 @@ void EntityManager::createLevel() {
     //Puente
     createEnemy(vec3(-72,0,-65), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-83,0,-75), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-75,0,-85), vec3(3), vector<vec3>(0), scheduling_AI_counter);//duda
+    createEnemy(vec3(-75,0,-85), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-86,0,-87), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-87,0,-100), vec3(3), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-74,0,-102), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-
-
+    createEnemy(vec3(-82,0,-113), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-79,0,-120), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-77,0,-125), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-88,0,-132), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-71,0,-146), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-85,0,-153), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-79,0,-156), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-82,0,-169), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-180), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-80,0,-190), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-203), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-75,0,-203), vec3(3), vector<vec3>(0), scheduling_AI_counter);
 	/*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
 	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
 	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
