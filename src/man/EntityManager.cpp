@@ -634,10 +634,71 @@ void EntityManager::createLevel() {
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
 
-    createEnemy(patrol_5[0], vec3(3), patrol_5, scheduling_AI_counter);
-    createEnemy(patrol_2[0], vec3(3), patrol_2, scheduling_AI_counter);
-    createEnemy(patrol_9[0], vec3(3), patrol_9, scheduling_AI_counter);
-    createEnemy(patrol_4[0], vec3(3), patrol_4, scheduling_AI_counter);
+    createEnemy(patrol_5[0], vec3(3), patrol_5, ++scheduling_AI_counter);
+/*  createEnemy(patrol_2[0], vec3(3), patrol_2, ++scheduling_AI_counter);
+    createEnemy(patrol_9[0], vec3(3), patrol_9, ++scheduling_AI_counter);
+    createEnemy(patrol_4[0], vec3(3), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(3), patrol_1, ++scheduling_AI_counter);
+    createEnemy(patrol_3[0], vec3(3), patrol_3, ++scheduling_AI_counter);
+    createEnemy(patrol_6[0], vec3(3), patrol_6, ++scheduling_AI_counter);
+    createEnemy(patrol_7[0], vec3(3), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(3), patrol_8, ++scheduling_AI_counter);
+    createEnemy(patrol_10[0], vec3(3), patrol_10, ++scheduling_AI_counter);
+    createEnemy(patrol_11[0], vec3(3), patrol_11, ++scheduling_AI_counter);
+    createEnemy(patrol_12[0], vec3(3), patrol_12, ++scheduling_AI_counter);
+
+	createEnemy(patrol_5[0], vec3(3), patrol_5, ++scheduling_AI_counter);
+    createEnemy(patrol_2[0], vec3(3), patrol_2, ++scheduling_AI_counter);
+    createEnemy(patrol_9[0], vec3(3), patrol_9, ++scheduling_AI_counter);
+    createEnemy(patrol_4[0], vec3(3), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(3), patrol_1, ++scheduling_AI_counter);
+    createEnemy(patrol_3[0], vec3(3), patrol_3, ++scheduling_AI_counter);
+    createEnemy(patrol_6[0], vec3(3), patrol_6, ++scheduling_AI_counter);
+    createEnemy(patrol_7[0], vec3(3), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(3), patrol_8, ++scheduling_AI_counter);
+    createEnemy(patrol_10[0], vec3(3), patrol_10, ++scheduling_AI_counter);
+    createEnemy(patrol_11[0], vec3(3), patrol_11, ++scheduling_AI_counter);
+    createEnemy(patrol_12[0], vec3(3), patrol_12, ++scheduling_AI_counter);
+
+	createEnemy(patrol_5[0], vec3(3), patrol_5, ++scheduling_AI_counter);
+    createEnemy(patrol_2[0], vec3(3), patrol_2, ++scheduling_AI_counter);
+    createEnemy(patrol_9[0], vec3(3), patrol_9, ++scheduling_AI_counter);
+    createEnemy(patrol_4[0], vec3(3), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(3), patrol_1, ++scheduling_AI_counter);
+    createEnemy(patrol_3[0], vec3(3), patrol_3, ++scheduling_AI_counter);
+    createEnemy(patrol_6[0], vec3(3), patrol_6, ++scheduling_AI_counter);
+    createEnemy(patrol_7[0], vec3(3), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(3), patrol_8, ++scheduling_AI_counter);
+    createEnemy(patrol_10[0], vec3(3), patrol_10, ++scheduling_AI_counter);
+    createEnemy(patrol_11[0], vec3(3), patrol_11, ++scheduling_AI_counter);
+    createEnemy(patrol_12[0], vec3(3), patrol_12, ++scheduling_AI_counter);
+
+	createEnemy(patrol_5[0], vec3(3), patrol_5, ++scheduling_AI_counter);
+    createEnemy(patrol_2[0], vec3(3), patrol_2, ++scheduling_AI_counter);
+    createEnemy(patrol_9[0], vec3(3), patrol_9, ++scheduling_AI_counter);
+    createEnemy(patrol_4[0], vec3(3), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(3), patrol_1, ++scheduling_AI_counter);
+    createEnemy(patrol_3[0], vec3(3), patrol_3, ++scheduling_AI_counter);
+    createEnemy(patrol_6[0], vec3(3), patrol_6, ++scheduling_AI_counter);
+    createEnemy(patrol_7[0], vec3(3), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(3), patrol_8, ++scheduling_AI_counter);
+    createEnemy(patrol_10[0], vec3(3), patrol_10, ++scheduling_AI_counter);
+    createEnemy(patrol_11[0], vec3(3), patrol_11, ++scheduling_AI_counter);
+    createEnemy(patrol_12[0], vec3(3), patrol_12, ++scheduling_AI_counter);
+
+	createEnemy(patrol_5[0], vec3(3), patrol_5, ++scheduling_AI_counter);
+    createEnemy(patrol_2[0], vec3(3), patrol_2, ++scheduling_AI_counter);
+    createEnemy(patrol_9[0], vec3(3), patrol_9, ++scheduling_AI_counter);
+    createEnemy(patrol_4[0], vec3(3), patrol_4, ++scheduling_AI_counter);
+	createEnemy(patrol_1[0], vec3(3), patrol_1, ++scheduling_AI_counter);
+    createEnemy(patrol_3[0], vec3(3), patrol_3, ++scheduling_AI_counter);
+    createEnemy(patrol_6[0], vec3(3), patrol_6, ++scheduling_AI_counter);
+    createEnemy(patrol_7[0], vec3(3), patrol_7, ++scheduling_AI_counter);
+	createEnemy(patrol_8[0], vec3(3), patrol_8, ++scheduling_AI_counter);
+    createEnemy(patrol_10[0], vec3(3), patrol_10, ++scheduling_AI_counter);
+    createEnemy(patrol_11[0], vec3(3), patrol_11, ++scheduling_AI_counter);
+    createEnemy(patrol_12[0], vec3(3), patrol_12, ++scheduling_AI_counter);
+*/
 
 /*
 	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
@@ -669,10 +730,10 @@ void EntityManager::createGraph()
 	auto& node_9  = graph.emplace_back(MapNode(-160, -270));
 	//square
 	auto& node_10 = graph.emplace_back(MapNode(-200, -275));
-	auto& node_11 = graph.emplace_back(MapNode(-210, -320));
-	auto& node_12 = graph.emplace_back(MapNode(-210, -230));
-	auto& node_13 = graph.emplace_back(MapNode(-315, -230));
-	auto& node_14 = graph.emplace_back(MapNode(-315, -320));
+	auto& node_11 = graph.emplace_back(MapNode(-220, -340));
+	auto& node_12 = graph.emplace_back(MapNode(-220, -250));
+	auto& node_13 = graph.emplace_back(MapNode(-310, -220));
+	auto& node_14 = graph.emplace_back(MapNode(-310, -340));
 
 	node_0.connections.emplace_back(0, 1, 5);
 

@@ -11,15 +11,15 @@
 
 using namespace std::chrono;
 
-constexpr std::chrono::duration<double> patrol_period ( 10us );
-constexpr std::chrono::duration<double> pursue_period ( 20us );
-constexpr std::chrono::duration<double> attack_period ( 10us );
+constexpr std::chrono::duration<double> LOD_PA_PERIOD (  5us );
+constexpr std::chrono::duration<double> PATROL_PERIOD ( 10us );
+constexpr std::chrono::duration<double> PURSUE_PERIOD ( 20us );
+constexpr std::chrono::duration<double> ATTACK_PERIOD ( 10us );
 
 constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
 
 /*
     TODO:
-    - Calcular cantidad de desplazamiento por frame aprox (si cambian las constantes, recalcular)
     - Anyadir un tier de distancia para ejecurtar patrol y comprobaciones
     - Metodo que haga:
         -. Teletransporte
@@ -115,6 +115,52 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     };
 /*  GENERAL BEHAVIOURS  */
 
+/*  LOD PA  BEHAVIORS   */
+    struct NextTeletransportBehaviour : BehaviourNode
+    {
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        {            
+            //LOOK FORWARD
+            unsigned future_index = (ai.patrol_index + 1) % ai.max_index;
+            vec3     future_pos   = ai.patrol_position[future_index];
+                        
+            //CHECK FRAME INTERVAL
+            float distance2 = length2({ future_pos.x - ai.target_position.x, future_pos.z - ai.target_position.z });
+            distance2       = std::sqrt(distance2);
+            
+            if( (ai.frameCounter - ai.lastFrameEjecuted) > movement_per_frame * distance2 )
+            {
+                std::cout << "FRAME: " << ai.frameCounter << "\n";
+                std::cout << "DIFF:  " << ai.frameCounter - ai.lastFrameEjecuted << "\n";
+                std::cout << "CALC:  " << movement_per_frame * distance2 << "\n\n";
+                //TP
+                ai.patrol_index      = future_index;
+                phy.position         = future_pos;
+                ai.lastFrameEjecuted = ai.frameCounter;
+            }            
+
+            return true;
+        }
+    };
+
+    struct LODStateBehaviour : BehaviourNode
+    {
+        bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
+        {
+            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
+            
+            if(greater_e(distance2, PATROL_MIN_DISTANCE2))
+            {
+                ai.target_position = ai.patrol_position[ai.patrol_index];
+                ai.frequecy_state = LOD_PA_STATE;
+                return true;
+            }
+
+            return false;
+        }
+    };
+/*  LOD PA  BEHAVIORS   */
+
 /*  PATROL BEHAVIOURS  */
     struct NextPatrolBehaviour : BehaviourNode
     {
@@ -131,7 +177,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
 
                 std::cout << "LAST FRAME INTERVAL: " << ai.frameCounter - ai.lastFrameEjecuted << "\n\n";
                 ai.lastFrameEjecuted = ai.frameCounter;
-                std::cout << "DISTANCIA : " << distance2 << "\n";
+                std::cout << "DISTANCIA : " << distance2 << ",  FRAMES QUE ESPERARÉ: " << distance2 * movement_per_frame << "\n";
             }
 
             return true;
@@ -359,6 +405,12 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
 /* FUNCTIONS */
 void AI_System::init() 
 {
+    /*-- LOD PA  --*/
+        std::unique_ptr<Sequence> lodPatrolState = std::make_unique<Sequence>();
+        lodPatrolState->childs.emplace_back(std::make_unique<LODStateBehaviour>());
+        lodPatrolState->childs.emplace_back(std::make_unique<NextTeletransportBehaviour>());
+
+    /*-- LOD PA  --*/
 
     /*-- PATROL  --*/     
         /* PATROL UPDATE */
@@ -473,6 +525,7 @@ void AI_System::init()
     /*-- ATTACK  --*/     
 
     root = std::make_unique<Selector>();
+    root->childs.emplace_back(std::move(lodPatrolState));
     root->childs.emplace_back(std::move(patrolState));
     root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));
@@ -485,7 +538,7 @@ void AI_System::fixedUpdate(const Context &context, float deltaTime)
 	const vec3& player_pos = context->getPlayer().getComponent<Physics>()->position;
     ++frame;
 
-    //setPhase(context);
+    setPhase(context);
     setInList(context);
 
     duration<double> timer { 60us };
@@ -496,10 +549,7 @@ void AI_System::fixedUpdate(const Context &context, float deltaTime)
 
         if(ai)
         {
-            if(ai.getEntityID() == 60)
-            {
-                ai.frameCounter = frame;
-            }
+            ai.frameCounter = frame;
 
             auto & enemy    = context->getEntityByID(ai.getEntityID());
             auto & physics  = *enemy.getComponent<Physics>();
@@ -509,9 +559,9 @@ void AI_System::fixedUpdate(const Context &context, float deltaTime)
         
             switch (ai.frequecy_state)
             {
-                case 2: timer -= patrol_period;   break;
-                case 3: timer -= pursue_period;   break;
-                case 7: timer -= attack_period;   break;
+                case 2: timer -= PATROL_PERIOD;   break;
+                case 3: timer -= PURSUE_PERIOD;   break;
+                case 7: timer -= ATTACK_PERIOD;   break;
             }
 
             ai.scheduled = false;
