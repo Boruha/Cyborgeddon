@@ -151,13 +151,13 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Dex/Static/0.obj");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
 	render.node->setScale(physics.scale);
 
-	render.node->setTexture(DEMON_TEXTURE);
+	render.node->setTexture(DEX_DEMONIC_TEXTURE);
 
 	player->addComponent(velocity);
 	player->addComponent(physics);
@@ -260,13 +260,13 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Angel/Static/0.obj");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
 	render.node->setScale(physics.scale / 2.f);
 
-	render.node->setTexture(ENEMY_TEXTURE);
+	render.node->setTexture(ANGEL_TEXTURE);
 
 	enemy.addComponent(physics);
 	enemy.addComponent(velocity);
@@ -290,13 +290,13 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Demon/Static/0.obj");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
 	render.node->setScale(physics.scale / 2.f);
 
-	render.node->setTexture(ENEMY_TEXTURE);
+	render.node->setTexture(DEMON_TEXTURE);
 
 	enemy.addComponent(physics);
 	enemy.addComponent(velocity);
@@ -531,8 +531,8 @@ void EntityManager::createLevel() {
 	//(20, 70, 20)
 	//(20, 60, 30)
 	
-	createPairPlayerCamera(vec3(), vec3(2.f), vec3(10, 50, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70)
-	createLight(vec3(0, 60, 0), vec3(0.2), vec3(0.8), vec3(0.5));
+	createPairPlayerCamera(vec3(), vec3(1.f), vec3(10, 50, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70)
+	createLight(vec3(0, 60, 0), vec3(0.5), vec3(0.8), vec3(0.5)); //Antes estaba la difusa a 0.2
 	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
@@ -641,34 +641,34 @@ void EntityManager::createLevel() {
 
 	//ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
-    createEnemy(vec3(5,0,-32), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(5,0,-32), vec3(1.5), vector<vec3>(0), scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
-    createEnemy(vec3(-22,0,-28), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-40,0,-33), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-50,0,-27), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-22,0,-28), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-40,0,-33), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-50,0,-27), vec3(2), vector<vec3>(0), scheduling_AI_counter);
     //Tercer pasillo (girar a la derecha)
-    createEnemy(vec3(-77,0,-23), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-80,0,-35), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-27), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-77,0,-23), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-80,0,-35), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-27), vec3(2), vector<vec3>(0), scheduling_AI_counter);
     //Puente
-    createEnemy(vec3(-72,0,-65), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-83,0,-75), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-75,0,-85), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-86,0,-87), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-100), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-74,0,-102), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-82,0,-113), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-79,0,-120), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-77,0,-125), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-88,0,-132), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-71,0,-146), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-85,0,-153), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-79,0,-156), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-82,0,-169), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-180), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-80,0,-190), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-203), vec3(3), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-75,0,-203), vec3(3), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-72,0,-65), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-83,0,-75), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-75,0,-85), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-86,0,-87), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-100), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-74,0,-102), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-82,0,-113), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-79,0,-120), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-77,0,-125), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-88,0,-132), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-71,0,-146), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-85,0,-153), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-79,0,-156), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-82,0,-169), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-180), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-80,0,-190), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-203), vec3(2), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-75,0,-203), vec3(2), vector<vec3>(0), scheduling_AI_counter);
 	/*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
 	createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
 	createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
