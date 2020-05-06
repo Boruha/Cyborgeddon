@@ -23,6 +23,7 @@ bool intersectionCircleTriangle(const CircleBounding& circle, const TriangleOBB&
 	// si algun segmento corta al circulo
 	for (unsigned i = 0; i < 3; ++i)
 		if (segmentContainsPointXZ(seg[i], proj[i]) && less_e(manhattan(proj[i], circle.center), circle.radius * circle.radius))
+
 			return true;
 
 	// si el triangulo esta completamente dentro del circulo

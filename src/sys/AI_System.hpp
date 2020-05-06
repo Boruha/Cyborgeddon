@@ -14,6 +14,8 @@ struct AI_System : System
 	void update(const Context &context, float deltaTime) override {};
 	void reset() final {  }
     
+    unsigned frame { 0 };
+
 protected:
     [[nodiscard]] bool checkObstacles(const vec3&, const vec3&, float, const std::unique_ptr<GameContext>&);
     [[nodiscard]] bool checkFacing(const Physics&, const std::unique_ptr<GameContext>&);
@@ -22,7 +24,6 @@ protected:
 
     std::unique_ptr<Selector> root;
 
-    unsigned frame { 0 };
     std::list<AI*> schedule;
 };
 

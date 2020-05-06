@@ -54,6 +54,7 @@ constexpr float     JUMP_AREA_DMG2                  = JUMP_AREA_DMG * JUMP_AREA_
 constexpr unsigned  MAX_GRAPH_CONN                  = 3;
 
 //AI_STATES FREQUENCY_SCHEDULE
+constexpr unsigned  LOD_PA_STATE                    = 11;
 constexpr unsigned  PATROL_STATE                    = 7;
 constexpr unsigned  PURSUE_STATE                    = 3;
 constexpr unsigned  ATTACK_STATE                    = 2;

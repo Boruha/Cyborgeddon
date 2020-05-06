@@ -150,7 +150,7 @@ constexpr inline vec3 projectVectorUV(const vec3& u, const vec3& v) {
 }
 
 inline float triangleArea(const vec3& a, const vec3& b, const vec3& c) {
-	std::cout << a.x << " " << a.z << "   " << b.x << " " << b.z << "   " << c.x << " " << c.z << "   " << "\n";
+	//std::cout << a.x << " " << a.z << "   " << b.x << " " << b.z << "   " << c.x << " " << c.z << "   " << "\n";
 	return std::abs((a.x * (b.z - c.z) + b.x * (c.z - a.z) + c.x * (a.z - b.z)) / 2.f);
 }
 
