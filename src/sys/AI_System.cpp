@@ -130,9 +130,9 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             
             if( (ai.frameCounter - ai.lastFrameEjecuted) > movement_per_frame * distance2 )
             {
-                std::cout << "FRAME: " << ai.frameCounter << "\n";
-                std::cout << "DIFF:  " << ai.frameCounter - ai.lastFrameEjecuted << "\n";
-                std::cout << "CALC:  " << movement_per_frame * distance2 << "\n\n";
+                //std::cout << "FRAME: " << ai.frameCounter << "\n";
+                //std::cout << "DIFF:  " << ai.frameCounter - ai.lastFrameEjecuted << "\n";
+                //std::cout << "CALC:  " << movement_per_frame * distance2 << "\n\n";
                 //TP
                 ai.patrol_index      = future_index;
                 phy.position         = future_pos;
@@ -149,7 +149,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
             
-            if(greater_e(distance2, PATROL_MIN_DISTANCE2))
+            if(greater_e(distance2, LOD_PA_MIN_DISTANCE2))
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
                 ai.frequecy_state = LOD_PA_STATE;
@@ -525,7 +525,7 @@ void AI_System::init()
     /*-- ATTACK  --*/     
 
     root = std::make_unique<Selector>();
-    root->childs.emplace_back(std::move(lodPatrolState));
+    //root->childs.emplace_back(std::move(lodPatrolState));
     root->childs.emplace_back(std::move(patrolState));
     root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));

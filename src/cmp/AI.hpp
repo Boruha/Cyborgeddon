@@ -26,7 +26,7 @@ struct AI : public Component {
 	vec3     target_position  { 0 };
 
 	//AI_STATE for Scheduling
-	unsigned frequecy_state    { PATROL_STATE };
+	unsigned frequecy_state    { LOD_PA_STATE };
 	unsigned scheduling_phase  { 0 };
 	unsigned lastFrameEjecuted { 0 };
 	unsigned frameCounter      { 0 };
