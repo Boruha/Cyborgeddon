@@ -18,16 +18,6 @@ constexpr std::chrono::duration<double> ATTACK_PERIOD ( 10us );
 
 constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
 
-/*
-    TODO:
-    - Anyadir un tier de distancia para ejecurtar patrol y comprobaciones
-    - Metodo que haga:
-        -. Teletransporte
-        -. Calcular numero de frames hasta el siguiente TP.
-        -. Mirar de crear un ratio de update (LoD) para estas entidades (11 frames posible)
-
-*/
-
 /*  GENERAL BEHAVIOURS  */
     struct SeekBehaviour : BehaviourNode
     {
@@ -130,10 +120,6 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             
             if( (ai.frameCounter - ai.lastFrameEjecuted) > movement_per_frame * distance2 )
             {
-                //std::cout << "FRAME: " << ai.frameCounter << "\n";
-                //std::cout << "DIFF:  " << ai.frameCounter - ai.lastFrameEjecuted << "\n";
-                //std::cout << "CALC:  " << movement_per_frame * distance2 << "\n\n";
-                //TP
                 ai.patrol_index      = future_index;
                 phy.position         = future_pos;
                 ai.lastFrameEjecuted = ai.frameCounter;
@@ -525,7 +511,7 @@ void AI_System::init()
     /*-- ATTACK  --*/     
 
     root = std::make_unique<Selector>();
-    //root->childs.emplace_back(std::move(lodPatrolState));
+    root->childs.emplace_back(std::move(lodPatrolState));
     root->childs.emplace_back(std::move(patrolState));
     root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));
