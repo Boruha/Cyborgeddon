@@ -19,7 +19,7 @@ void RenderSystem::fixedUpdate(const Context& context, float deltaTime) {
 
 	const auto& iengine = context->getEngine();
 
-	iengine.clear(BACKGROUND_COLOR);
+	iengine.clear(BACKGROUND_COLOR, true);
 	iengine.draw();
 	iengine.display();
 }

@@ -8,6 +8,7 @@ struct IObjectNode;
 struct ICameraNode;
 struct INode;
 struct IVideo;
+struct ITexture;
 
 using glm::vec3;
 

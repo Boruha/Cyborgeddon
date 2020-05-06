@@ -14,6 +14,7 @@ void GameManager::init()
 
 	currentState = &states.emplace(std::make_pair(INIT, State(INIT, entityManager))).first->second;
 
+	currentState->registerSystem<HUDintroSystem>();
 	currentState->registerSystem<VideoSystem>();
 
 	currentState->init();

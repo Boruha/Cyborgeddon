@@ -27,6 +27,8 @@ struct EntityManager : GameContext {
 	void addToDestroy(EntityID ID) override;
 
 	[[nodiscard]] bool isKeyPressed(const unsigned key) const override { return engine.isKeyPressed(key); };
+	[[nodiscard]] bool isKeyTextInput(const unsigned key) const override { return engine.isKeyTextInput(key); };
+
 	[[nodiscard]] const Mouse& getMouse()   const override { return engine.getMouse(); };
 	[[nodiscard]] vec3 getWorldPosFromCursor(const float x, const float y, const float depth) const override { return engine.scene->cursorToWorld(x, y, depth); };
 	[[nodiscard]] IEngine& getEngine() const override { return engine; };
@@ -71,6 +73,7 @@ struct EntityManager : GameContext {
 		void createNavigation  ();
 
 		void createVideo(std::string_view, bool);
+		void createTexture(std::string_view, unsigned, unsigned);
 
 		// lector de colliders
 		void processNode(aiNode * node, const aiScene * scene);

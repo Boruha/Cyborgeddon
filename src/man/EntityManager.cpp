@@ -10,6 +10,7 @@
 #include <src/Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 
 #include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
+#include <Engine/EngineInterface/SceneInterface/ITexture.hpp>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -81,9 +82,8 @@ void EntityManager::cleanData() {
 	componentStorage.cleanData();			// limpiamos el contenido de component storage
 
 	engine.unloadVideos();                  // limpiamos videos del motor si habia alguno en memoria
+	engine.unloadTextures();
 }
-
-static unsigned numColliders = 0;
 
 void EntityManager::processMesh(aiMesh * mesh) {
 	if (mesh->mNumVertices != 3) {
@@ -97,20 +97,8 @@ void EntityManager::processMesh(aiMesh * mesh) {
 		auto & collider = createEntity(COLLIDER);
 
 		auto & obb   = componentStorage.createComponent(TriangleOBB(collider.getType(), collider.getID(), vertices));
-//		auto & trans = componentStorage.createComponent(Transformable(collider.getType(), collider.getID(), (obb.min + obb.max) / 2.f, vec3(0), vec3((obb.min + obb.max) / 4.f)));
-//		auto & render = componentStorage.createComponent(Render(collider.getType(), collider.getID(), &trans.position, &trans.rotation, &trans.scale, false));
-
-//		render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
-
-//		render.node->setPosition(trans.position);
-//		render.node->setRotation(trans.rotation);
-//		render.node->setScale(trans.scale);
-
-		// ALGO QUE HAY QUE HACER
 
 		collider.addComponent(obb);
-//		collider.addComponent(trans);
-//		collider.addComponent(render);
 	}
 }
 
@@ -411,6 +399,18 @@ void EntityManager::createVideo(const std::string_view path, const bool isLoop) 
 	cmpVideo.video->setLoop(cmpVideo.loop);
 
 	video.addComponent(cmpVideo);
+}
+
+void EntityManager::createTexture(const std::string_view path, const unsigned x, const unsigned y) {
+	auto& texture = createEntity(TEXTURE);
+
+	auto& cmpTexture = componentStorage.createComponent(TextureCmp(texture.getType(), texture.getID()));
+
+	cmpTexture.texture = engine.loadTexture(path);
+
+	cmpTexture.texture->setPosition(x,y);
+
+	texture.addComponent(cmpTexture);
 }
 
 
@@ -788,12 +788,20 @@ bool EntityManager::checkDefeat() const {
 }
 
 void EntityManager::createIntro() {
-	initData(4, 0, 4);
+	initData(8, 0, 8);
 
 	createVideo("../resources/videos/intro/1_F.mp4", false);
 	createVideo("../resources/videos/intro/2_F_L.mp4", true);
 
+	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
+
+
 	std::cout << Video::getName()     << " " << componentStorage.getComponents<Video>().size() << "\n";
+	std::cout << TextureCmp::getName()     << " " << componentStorage.getComponents<TextureCmp>().size() << "\n";
+
 }
 
 void EntityManager::nextVideo() {

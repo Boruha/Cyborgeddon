@@ -5,7 +5,7 @@
 #include <Engine/util/ErrorModelLoading.hpp>
 
 extern "C" {
-	#define STB_IMAGE_IMPLEMENTATION
+//	#define STB_IMAGE_IMPLEMENTATION // se define en otro .hpp, si no se encuentran los simbolos del archivo, descomentar esta linea
 	#include <Engine/util/stb_image/stb_image.h>
 }
 

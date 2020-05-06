@@ -47,6 +47,7 @@ struct GameContext {
 	virtual void addToDestroy(EntityID) = 0;
 
 	[[nodiscard]] virtual bool isKeyPressed(unsigned) const = 0;
+	[[nodiscard]] virtual bool isKeyTextInput(unsigned) const = 0;
 	[[nodiscard]] virtual const Mouse& getMouse() const = 0;
 	[[nodiscard]] virtual vec3 getWorldPosFromCursor(float, float, float) const = 0;
 

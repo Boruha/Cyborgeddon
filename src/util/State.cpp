@@ -1,7 +1,7 @@
 #include <util/State.hpp>
 #include <src/Engine/util/Math.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/IVideo.hpp>
-#include <zconf.h>
+#include <src/Engine/EngineInterface/SceneInterface/ITexture.hpp>
 
 void State::init()
 {
@@ -115,6 +115,26 @@ StateEnum State::initNextState(const Context & context) {
 	std::cout << "Hemos descargado el video\n";
 
 	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
+*/
+/*
+//	ITexture * texture = context->getEngine().loadTexture("../resources/menu/pause/fondo.png");
+//	ITexture * texture1 = context->getEngine().loadTexture("../resources/menu/pause/pausa_continue.png");
+	ITexture * texture = context->getEngine().loadTexture("../resources/menu/main_menu/op_menu_1.png");
+	IVideo * video = context->getEngine().loadVideo("../resources/videos/intro/1_F.mp4");
+//	texture->setPosition(10,10);
+//	texture->setSize(1, 1);
+
+	context->getEngine().clear(Color(BLACK));
+
+//	texture2->render();
+//	texture1->render();
+	texture->render();
+
+	video->nextFrame();
+	video->render();
+
+
+	context->getEngine().display();
 */
 
 	if (context->getVideoIndex() > 0 && context->isKeyPressed(KEY_SPACE)) {

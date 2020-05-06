@@ -5,6 +5,8 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/IResource.hpp>
 
 #include <opencv2/opencv.hpp>
+#include <src/Engine/util/shaders/Shader.hpp>
+#include <Engine/util/shaders/ShaderPath.hpp>
 
 struct RVideo : IResource {
 	explicit RVideo(std::string_view);
@@ -29,7 +31,9 @@ struct RVideo : IResource {
 		cv::VideoCapture capture {};
 		cv::Mat frame {};
 
-		unsigned FBO {};
+		unsigned FBO {}, VAO {}, VBO {};
+
+		Shader shader { TEXTURE_SHADERS };
 
 		bool loopVideo = false;
 
