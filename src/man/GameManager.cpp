@@ -39,7 +39,7 @@ void GameManager::init()
 	currentState->registerSystem<MovementSystem>();                   // se ejecuta el movimiento (unificar este sistema y el de abajo uniendo velocidad y fisicas)
 	currentState->registerSystem<VelocitySystem>();                   // se actualiza la velocidad en funcion de la aceleracion (unificar este sistema con el de arriba pasando atributos de velocidad al cmp de fisicas)
 	currentState->registerSystem<CooldownSystem>();                   // se actualizan los cooldowns
-	//currentState->registerSystem<AI_System>();                        // se detecta input de los enemigos
+	currentState->registerSystem<AI_System>();                        // se detecta input de los enemigos
 	currentState->registerSystem<DeathSystem>();                      // se comprueba si algo tiene que morir y ser eliminado
 	currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 	currentState->registerSystem<RenderSystem>();
