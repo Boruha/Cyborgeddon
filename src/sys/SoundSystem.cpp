@@ -52,6 +52,9 @@ void SoundSystem::init() {
 			ACTION_GET_KEY,
 			ACTION_OPEN_DOOR,
 
+			//MENU SOUNDS
+            MENU_CHANGE_OPTION,
+
 			//VIDEO SOUNDS
 			VIDEO_INTRO_GAME,
 			VIDEO_CINEMATICA_1,

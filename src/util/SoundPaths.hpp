@@ -21,6 +21,9 @@ constexpr std::string_view ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled"
 constexpr std::string_view KEY_DOOR_EVENT           = "event:/objects/action_key_door";
 constexpr std::string_view DAMAGE_EVENT             = "event:/objects/damage";
 
+//MENU
+constexpr std::string_view MENU_SOUND_EVENT         = "event:/menu/menu_sounds";
+
 //VIDEOS
 
 // parametro 0 -> Video de cuando empieza el juego (Sunlight Logo + Animacion Cyborgeddon) (Musica + Voces)

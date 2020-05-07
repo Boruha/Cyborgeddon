@@ -22,6 +22,9 @@ enum SoundParameter {
 	ACTION_GET_KEY,
 	ACTION_OPEN_DOOR,
 
+	//MENU SOUNDS
+    MENU_CHANGE_OPTION,
+
 
 	//VIDEOS
 	VIDEO_INTRO_GAME,
@@ -81,6 +84,11 @@ constexpr parameter_value getParameterValue(const SoundParameter p) {
 			return { "", -1 };
 		case ATTACK_ENEMY_ANGEL :
 			return { "", -1 };
+
+
+            //MENU SOUNDS
+	    case MENU_CHANGE_OPTION :
+	        return {"mode", 0};
 
 			//VIDEO SOUNDS
 	    case VIDEO_INTRO_GAME :
@@ -143,6 +151,11 @@ constexpr std::string_view getEvent(const SoundParameter p)
             return "";
         case ATTACK_ENEMY_ANGEL :
 			return "";
+
+
+			//MENU SOUNDS
+        case  MENU_CHANGE_OPTION:
+            return { MENU_SOUND_EVENT };
 
 
 			//VIDEO SOUNDS
