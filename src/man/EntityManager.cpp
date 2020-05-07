@@ -699,13 +699,26 @@ void EntityManager::createLevel() {
     createEnemy(vec3(-230,0,-268), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-230,0,-278), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createAngel(vec3(-243,0,-273), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-262,0,-284), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-262,0,-273), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-262,0,-260), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     //Zona Inferior (mesa con velas)
     createEnemy(vec3(-246,0,-250), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-258,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-246,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-232,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-245,0,-232), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-
-
+    //Zona Superior (Organo/Piano pa la musiquita jijiji)
+    createEnemy(vec3(-246,0,-315), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-258,0,-305), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-246,0,-305), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-232,0,-305), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-245,0,-297), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Altar (Donde esta la llave)
+    createEnemy(vec3(-277,0,-263), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-277,0,-280), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-288,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-305,0,-274), vec3(1), vector<vec3>(0), scheduling_AI_counter);
 
     //DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
     /*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
