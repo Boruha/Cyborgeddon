@@ -13,9 +13,15 @@ void VideoSystem::update(const Context &context, const float deltaTime) {
 			}
 		}
 
-		video.video->render();
+//		video.video->render();
 		video.video->nextFrame();
-
-		context->getEngine().display();
 	}
+}
+
+void VideoSystem::fixedUpdate(const Context &context, float deltaTime) {
+	auto & video = context->getComponents().getComponents<Video>()[context->getVideoIndex()];
+
+	video.video->render();
+
+	context->getEngine().display();
 }

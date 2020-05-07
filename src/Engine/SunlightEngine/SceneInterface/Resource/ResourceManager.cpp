@@ -25,10 +25,26 @@ RVideo & ResourceManager::getVideo(const std::string_view path) {
 	return video.find(path.data())->second;
 }
 
+RTexture & ResourceManager::getTexture(const std::string_view path) {
+	if (texture.count(path.data()) == 0) {
+		return texture.emplace(
+				std::piecewise_construct,
+				std::forward_as_tuple(path.data()),
+				std::forward_as_tuple(path)
+		).first->second;
+	}
+
+	return texture.find(path.data())->second;
+}
+
 void ResourceManager::removeModel(const std::string_view path) {
 	model.erase(path.data());
 }
 
 void ResourceManager::removeVideo(const std::string_view path) {
 	video.erase(path.data());
+}
+
+void ResourceManager::removeTexture(const std::string_view path) {
+	texture.erase(path.data());
 }

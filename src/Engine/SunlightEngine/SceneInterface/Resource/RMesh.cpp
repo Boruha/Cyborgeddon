@@ -1,5 +1,4 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/RMesh.hpp>
-#include <Engine/util/WindowParameters.hpp>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>

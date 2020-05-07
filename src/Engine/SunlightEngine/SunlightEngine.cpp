@@ -17,6 +17,18 @@ void framebuffer_size_callback(GLFWwindow * const window, const int width, const
 	sunlightEngine->setViewport( { width, height } );
 }
 
+void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
+{
+	auto * sunlightEngine = static_cast<SunlightEngine*>(glfwGetWindowUserPointer(window));
+
+	if (action == GLFW_PRESS) {
+		if (key >= 97 && key <= 122)
+			sunlightEngine->setTextKeyInput(key - 32);
+		else
+			sunlightEngine->setTextKeyInput(key);
+	}
+}
+
 void SunlightEngine::init(const unsigned width, const unsigned height, const std::string_view name) {
 	// permitimos editar glfw
 	glfwInit();
@@ -31,8 +43,7 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	// que queremos que soporte al establecer la version
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	windowWidth = width;
-	windowHeight = height;
+	setViewport( { width, height } );
 
 	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
 
@@ -42,10 +53,9 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	const GLFWvidmode * videoMode = glfwGetVideoMode(monitor);
 
 	if (!videoMode)
-		error("No se pudo identificar el modo del video");
-
-	windowWidth = videoMode->width;
-	windowHeight = videoMode->height;
+		error("No se pudo identificar el modo de video");
+	else
+		setViewport( { videoMode->width, videoMode->height } );
 
 	window = glfwCreateWindow(int(windowWidth), int(windowHeight), name.data(), monitor, nullptr);
 
@@ -57,6 +67,8 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	glfwSetWindowUserPointer(window, this);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	glfwSetKeyCallback(window, key_callback);
 
 	// usaremos glad para asegurarnos de que cualquier llamada que hagamos
 	// a opengl es la especifica de nuestro sistema operativo
@@ -71,9 +83,14 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	sceneManager = std::make_unique<SceneManager>(this, resourceManager.get());
 
 	scene = std::make_unique<SunlightScene>(sceneManager.get());
+
+	textKeyInput = GLFW_KEY_UNKNOWN;
 }
 
-bool SunlightEngine::run() const {
+bool SunlightEngine::run() {
+
+	textKeyInput = GLFW_KEY_UNKNOWN;
+
 	glfwPollEvents();
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -112,9 +129,11 @@ const Mouse & SunlightEngine::getMouse() {
 	return mouse;
 }
 
-void SunlightEngine::clear(const Color color) const {
+void SunlightEngine::clear(const Color color, const bool depth) const {
 	glClearColor(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f, float(color.a) / 255.f);
-	glClear(unsigned(GL_COLOR_BUFFER_BIT) | unsigned(GL_DEPTH_BUFFER_BIT));
+	glClear(unsigned(GL_COLOR_BUFFER_BIT));
+	if (depth)
+		glClear(unsigned(GL_DEPTH_BUFFER_BIT));
 }
 
 void SunlightEngine::draw() const {
@@ -123,4 +142,8 @@ void SunlightEngine::draw() const {
 
 void SunlightEngine::display() const {
 	glfwSwapBuffers(window);
+}
+
+bool SunlightEngine::isKeyTextInput(const unsigned int code) {
+	return textKeyInput == code;
 }
