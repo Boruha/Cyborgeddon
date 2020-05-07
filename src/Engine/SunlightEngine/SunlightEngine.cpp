@@ -17,14 +17,16 @@ void framebuffer_size_callback(GLFWwindow * const window, const int width, const
 	sunlightEngine->setViewport( { width, height } );
 }
 
-void character_callback(GLFWwindow* window, const unsigned int codepoint)
+void key_callback(GLFWwindow* window, const int key, const int scancode, const int action, const int mods)
 {
 	auto * sunlightEngine = static_cast<SunlightEngine*>(glfwGetWindowUserPointer(window));
 
-	if (codepoint >= 97 && codepoint <= 122)
-		sunlightEngine->setTextKeyInput(codepoint - 32);
-	else
-		sunlightEngine->setTextKeyInput(codepoint);
+	if (action == GLFW_PRESS) {
+		if (key >= 97 && key <= 122)
+			sunlightEngine->setTextKeyInput(key - 32);
+		else
+			sunlightEngine->setTextKeyInput(key);
+	}
 }
 
 void SunlightEngine::init(const unsigned width, const unsigned height, const std::string_view name) {
@@ -66,7 +68,7 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	glfwSetCharCallback(window, character_callback);
+	glfwSetKeyCallback(window, key_callback);
 
 	// usaremos glad para asegurarnos de que cualquier llamada que hagamos
 	// a opengl es la especifica de nuestro sistema operativo
@@ -86,6 +88,9 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 }
 
 bool SunlightEngine::run() {
+
+	textKeyInput = GLFW_KEY_UNKNOWN;
+
 	glfwPollEvents();
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -140,9 +145,5 @@ void SunlightEngine::display() const {
 }
 
 bool SunlightEngine::isKeyTextInput(const unsigned int code) {
-	const bool input = textKeyInput == code;
-
-	textKeyInput = GLFW_KEY_UNKNOWN;
-
-	return input;
+	return textKeyInput == code;
 }

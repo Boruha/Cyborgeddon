@@ -24,7 +24,8 @@ enum EntityType : uint16_t
 	LIGHT     = 10,
 	VIDEO     = 11,
 	COLLIDER  = 12,
-	TEXTURE   = 13
+	TEXTURE   = 13,
+	MENU_OPTIONS = 14
 };
 
 enum StateEnum : uint8_t

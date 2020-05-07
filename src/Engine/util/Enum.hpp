@@ -16,6 +16,8 @@ enum
 	KEY_P           = GLFW_KEY_P,
 	KEY_INTRO       = GLFW_KEY_ENTER,
 	KEY_W 			= GLFW_KEY_W,
+	KEY_LEFT        = GLFW_KEY_LEFT,
+	KEY_RIGHT       = GLFW_KEY_RIGHT,
 	KEY_CODE_COUNT 	= GLFW_KEY_LAST
 };
 

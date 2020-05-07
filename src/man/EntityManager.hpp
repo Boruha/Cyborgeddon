@@ -75,6 +75,8 @@ struct EntityManager : GameContext {
 		void createVideo(std::string_view, bool);
 		void createTexture(std::string_view, unsigned, unsigned);
 
+		void createMenuOptions(unsigned, unsigned);
+
 		// lector de colliders
 		void processNode(aiNode * node, const aiScene * scene);
 		void processMesh(aiMesh * mesh);

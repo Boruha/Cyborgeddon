@@ -17,3 +17,4 @@
 #include <cmp/CircleBounding.hpp>
 #include <cmp/TriangleOBB.hpp>
 #include <cmp/TextureCmp.hpp>
+#include <cmp/MenuOption.hpp>

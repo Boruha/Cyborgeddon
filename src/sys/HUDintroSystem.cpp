@@ -7,21 +7,11 @@
 void HUDintroSystem::fixedUpdate(const Context &context, const float deltaTime) {
 	context->getEngine().clear(Color(BLACK), true);
 
-	if (context->getVideoIndex() > 0)
-		for (const auto & texture : context->getComponents().getComponents<TextureCmp>())
-			texture.texture->render();
-/*
-	auto & video = context->getComponents().getComponents<Video>()[context->getVideoIndex()];
+	if (context->getVideoIndex() > 0) {
+		auto& menu_option  = context->getComponents().getComponents<MenuOption>()[0];
 
-	if (!video.loop) {                                                  // solamente si el video NO se reproduce en bucle
-		if (video.numFrames <= ++video.frameCounter) {                  // controlamos si hemos llegado al final o no
-			context->nextVideo();
-		}
+		auto& texture = context->getComponents().getComponents<TextureCmp>()[menu_option.option];
+
+		texture.texture->render();
 	}
-
-	video.video->render();
-	video.video->nextFrame();
-
-	context->getEngine().display();
- */
 }

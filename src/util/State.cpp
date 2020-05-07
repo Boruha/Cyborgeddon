@@ -137,7 +137,7 @@ StateEnum State::initNextState(const Context & context) {
 	context->getEngine().display();
 */
 
-	if (context->getVideoIndex() > 0 && context->isKeyPressed(KEY_SPACE)) {
+	if (context->getVideoIndex() > 0 && context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyPressed(KEY_SPACE) || context->isKeyPressed(KEY_INTRO))) {
 		context->createLevel();
 		return INGAME;
 	}

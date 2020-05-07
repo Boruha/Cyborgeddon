@@ -17,3 +17,4 @@
 #include <sys/VideoSystem.hpp>
 #include <sys/CollisionSystem.hpp>
 #include <sys/HUDintroSystem.hpp>
+#include <sys/IntroInputSystem.hpp>

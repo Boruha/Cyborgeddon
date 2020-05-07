@@ -194,7 +194,7 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -212,8 +212,8 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos, vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
-	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
-	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
+	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 1, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 1.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), NEUTRAL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
@@ -306,7 +306,7 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, 0, 0), vec3(0, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Ciudad/ciudad.obj");
+	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -330,7 +330,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -352,7 +352,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -371,7 +371,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	keyRender.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
@@ -413,6 +413,14 @@ void EntityManager::createTexture(const std::string_view path, const unsigned x,
 	cmpTexture.texture->setPosition(x,y);
 
 	texture.addComponent(cmpTexture);
+}
+
+void EntityManager::createMenuOptions(const unsigned int firstOption, const unsigned int maxOptions) {
+	auto& menu_options = createEntity(MENU_OPTIONS);
+
+	auto& options = componentStorage.createComponent(MenuOption(menu_options.getType(), menu_options.getID(), int(firstOption), maxOptions));
+
+	menu_options.addComponent(options);
 }
 
 
@@ -534,7 +542,7 @@ void EntityManager::createLevel() {
 	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
-	readColliderFile("resources/models/Ciudad/colisiones.obj");
+	readColliderFile("../resources/models/Ciudad/colisiones.obj");
 /*
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys
@@ -638,7 +646,7 @@ void EntityManager::createLevel() {
 
 	//ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
-    createEnemy(vec3(5,0,-32), vec3(1.5), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(5,0,-32), vec3(2), vector<vec3>(0), scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
     createEnemy(vec3(-22,0,-28), vec3(2), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-40,0,-33), vec3(2), vector<vec3>(0), scheduling_AI_counter);
@@ -812,8 +820,10 @@ bool EntityManager::checkDefeat() const {
 void EntityManager::createIntro() {
 	initData(8, 0, 8);
 
-	createVideo("resources/videos/intro/1_F.mp4", false);
-	createVideo("resources/videos/intro/2_F_L.mp4", true);
+	createMenuOptions(0, 4);
+
+	createVideo("../resources/videos/intro/1_F.mp4", false);
+	createVideo("../resources/videos/intro/2_F_L.mp4", true);
 
 	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
 	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
