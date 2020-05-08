@@ -1,7 +1,5 @@
 #include <sys/IntroInputSystem.hpp>
 
-
-
 void IntroInputSystem::fixedUpdate(const Context &context, const float deltaTime) {
 
 	if (context->getVideoIndex() > 0) {

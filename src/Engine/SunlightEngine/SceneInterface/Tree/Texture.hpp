@@ -14,7 +14,7 @@ namespace Sun {
 
 		void render() const override;
 
-		void setPosition(unsigned, unsigned) override;
+		void setPosition(int, int) override;
 
 		[[maybe_unused]] void setWidth(unsigned) override;
 

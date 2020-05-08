@@ -13,7 +13,7 @@ struct GameManager {
 
 	void init();
 	void run();
-	void terminate();
+	void terminate() const;
 
 
 	EngineManager engineManager { SUNLIGHT };

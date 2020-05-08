@@ -403,7 +403,7 @@ void EntityManager::createVideo(const std::string_view path, const bool isLoop) 
 	video.addComponent(cmpVideo);
 }
 
-void EntityManager::createTexture(const std::string_view path, const unsigned x, const unsigned y) {
+void EntityManager::createTexture(const std::string_view path, const int x, const int y) {
 	auto& texture = createEntity(TEXTURE);
 
 	auto& cmpTexture = componentStorage.createComponent(TextureCmp(texture.getType(), texture.getID()));
@@ -543,6 +543,14 @@ void EntityManager::createLevel() {
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile("../resources/models/Ciudad/colisiones.obj");
+
+	createTexture("../resources/hud/llave_2.png", 558, 52);
+	createTexture("../resources/hud/llave_1.png", 517, 52);
+	createTexture("../resources/hud/marco_negro.png", 0, 35);
+	createTexture("../resources/hud/barra_vida_azul.png", -140, 78);
+	createTexture("../resources/hud/barra_vida_roja.png", 0, 78);
+	createTexture("../resources/hud/fondo_blanco.png", 0, 78);
+
 /*
 	//------------ Creacion del escenario para las Christmas ------------------------------------------
 	// Doors and keys

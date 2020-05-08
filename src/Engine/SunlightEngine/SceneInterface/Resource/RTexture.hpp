@@ -15,7 +15,7 @@ struct RTexture : IResource {
 
 	void render() const;
 
-	void setPosition(unsigned, unsigned);
+	void setPosition(int, int);
 
 	[[maybe_unused]] void setWidth(unsigned);
 	[[maybe_unused]] void setHeight(unsigned);
@@ -26,8 +26,8 @@ struct RTexture : IResource {
 
 		void setupTexture() const;
 
-		unsigned int VAO {0}, VBO{0}, x{0}, y{0};
-		int width{0}, height{0};
+		unsigned int VAO {0}, VBO{0};
+		int x{0}, y{0}, width{0}, height{0};
 
 		Texture texture {};
 

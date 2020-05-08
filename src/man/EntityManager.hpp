@@ -73,7 +73,7 @@ struct EntityManager : GameContext {
 		void createNavigation  ();
 
 		void createVideo(std::string_view, bool);
-		void createTexture(std::string_view, unsigned, unsigned);
+		void createTexture(std::string_view, int, int);
 
 		void createMenuOptions(unsigned, unsigned);
 

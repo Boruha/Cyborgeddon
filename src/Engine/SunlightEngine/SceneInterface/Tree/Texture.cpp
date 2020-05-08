@@ -12,7 +12,7 @@ namespace Sun {
 		texture->render();
 	}
 
-	void Texture::setPosition(const unsigned int x, const unsigned int y) {
+	void Texture::setPosition(const int x, const int y) {
 		texture->setPosition(x, y);
 	}
 
