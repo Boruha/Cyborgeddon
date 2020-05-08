@@ -1,8 +1,8 @@
 #pragma once
 
 // SOUND BANKS
-constexpr std::string_view MASTER_BANK				= "./resources/sounds/banks/Master.bank";
-constexpr std::string_view MASTER_STRINGS_BANK 		= "./resources/sounds/banks/Master.strings.bank";
+constexpr std::string_view MASTER_BANK				= "../resources/sounds/banks/Master.bank";
+constexpr std::string_view MASTER_STRINGS_BANK 		= "../resources/sounds/banks/Master.strings.bank";
 
 // SOUND EVENTS
 
