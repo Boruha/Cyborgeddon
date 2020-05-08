@@ -347,16 +347,16 @@ void EntityManager::createBullet() {
 void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
 	Entity& door 		    = createEntity(DOOR);
 //TODO: quitar la mierda de  "+ vec3 (0, y/2, 0) en transformable mas adelante"
-	auto& transformable     = componentStorage.createComponent(Transformable(door.getType(), door.getID(), doorPos + vec3(0, doorDim.y / 2, 0), vec3(), doorDim));
+	auto& transformable     = componentStorage.createComponent(Transformable(door.getType(), door.getID(), doorPos + vec3(0, 0, 0), vec3(), doorDim));
 	auto& trigger           = componentStorage.createComponent(TriggerStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale, false));
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Objetos/Puerta/0.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale / 2.f);
+	render.node->setScale(transformable.scale);
 
 	render.node->setTexture(DOOR_TEXTURE);
 
@@ -367,17 +367,17 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 
 	Entity& key 		    = createEntity(KEY);
 
-	auto& keyTransformable  = componentStorage.createComponent(Transformable(key.getType(), key.getID(), keyPos + vec3(0, keyDim.y / 2, 0), vec3(), keyDim));
+	auto& keyTransformable  = componentStorage.createComponent(Transformable(key.getType(), key.getID(), keyPos + vec3(0, 0, 0), vec3(), keyDim));
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	keyRender.node = componentStorage.createMesh("../resources/models/Objetos/Llave_demoniaca/0.obj");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
-	keyRender.node->setScale(keyTransformable.scale / 2.f);
+	keyRender.node->setScale(keyTransformable.scale);
 
-	keyRender.node->setTexture(KEY_TEXTURE);
+	keyRender.node->setTexture(DEMONIC_KEY_TEXTURE);
 
 	key.addComponent(keyTransformable);
 	key.addComponent(keyTrigger);
@@ -641,6 +641,10 @@ void EntityManager::createLevel() {
 
 	unsigned scheduling_AI_counter = 0;
 
+	//CREACION DE LAS LLAVES
+    //createPairKeyDoor(vec3(0,0,-20), vec3(1), vec3(0,0,-10), vec3(1));
+
+
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
 
@@ -724,6 +728,22 @@ void EntityManager::createLevel() {
     createEnemy(vec3(-277,0,-280), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-288,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createAngel(vec3(-305,0,-274), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    //ZONA 3 -> ZONA DE DEMONIOS (PASILLO + ZONA PENTAGRAMA)
+    //Pasillo (Antes de llegar a la zona pentagrama)
+    createEnemy(vec3(-55,0,-270), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-50,0,-277), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-50,0,-265), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-43,0,-275), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-25,0,-267), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(-15,0,-279), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-7,0,-274), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-2,0,-267), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Cruce de caminos(caminos cortados arriba y debajo)
+    createAngel(vec3(8,0,-287), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(18,0,-282), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(7,0,-257), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(14,0,-254), vec3(1), vector<vec3>(0), scheduling_AI_counter);
 
     //DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
     /*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
