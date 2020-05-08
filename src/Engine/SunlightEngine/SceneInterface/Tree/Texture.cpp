@@ -28,4 +28,8 @@ namespace Sun {
 		texture->setSize(w, h);
 	}
 
+	glm::vec2 Texture::getSize() const {
+		return texture->getSize();
+	}
+
 };

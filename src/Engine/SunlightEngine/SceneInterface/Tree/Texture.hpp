@@ -2,6 +2,7 @@
 
 #include <string_view>
 #include <Engine/EngineInterface/SceneInterface/ITexture.hpp>
+#include <glm/glm.hpp>
 
 struct RTexture;
 struct ResourceManager;
@@ -21,6 +22,8 @@ namespace Sun {
 		[[maybe_unused]] void setHeight(unsigned) override;
 
 		[[maybe_unused]] void setSize(unsigned, unsigned) override;
+
+		[[nodiscard]] glm::vec2 getSize() const override;
 
 	private :
 		RTexture * texture { nullptr };

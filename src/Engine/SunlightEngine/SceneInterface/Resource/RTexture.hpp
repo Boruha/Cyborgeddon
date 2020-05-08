@@ -9,6 +9,8 @@
 #include <Engine/util/shaders/Shader.hpp>
 #include <Engine/util/shaders/ShaderPath.hpp>
 
+#include <glm/glm.hpp>
+
 struct RTexture : IResource {
 	explicit RTexture(std::string_view);
 	~RTexture() override;
@@ -21,6 +23,8 @@ struct RTexture : IResource {
 	[[maybe_unused]] void setHeight(unsigned);
 
 	[[maybe_unused]] void setSize(unsigned, unsigned);
+
+	[[nodiscard]] glm::vec2 getSize() const { return { width, height }; }
 
 	private:
 
