@@ -48,10 +48,7 @@ bool intersectionCircleTriangle(const CircleBounding& circle, const TriangleOBB&
 
 	const float area_of_triangle = triangleArea(v[0], v[1], v[2]);
 
-	if (equal_e(area_of_triangle, area[0] + area[1] + area[2]))
-		return true;
-
-	return false;
+	return equal_e(area_of_triangle, area[0] + area[1] + area[2]);
 }
 
 bool intersectCircleTriangle(const CircleBounding& circle, const TriangleOBB& triangle) {
@@ -61,7 +58,7 @@ bool intersectCircleTriangle(const CircleBounding& circle, const TriangleOBB& tr
 void CollisionSystem::fixedUpdate(const Context &context, const float deltaTime) {
 
 	for (auto & bounding : context->getComponents().getComponents<CircleBounding>()) {
-		if (bounding && bounding.getEntityType() == PLAYER) {
+		if (bounding) {
 
 			vec3& velocity = *bounding.velocity;
 
