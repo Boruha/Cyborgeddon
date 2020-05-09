@@ -547,8 +547,8 @@ void EntityManager::createLevel() {
 	createTexture("../resources/hud/llave_2.png", 558, 52);
 	createTexture("../resources/hud/llave_1.png", 517, 52);
 	createTexture("../resources/hud/marco_negro.png", 0, 35);
-	createTexture("../resources/hud/barra_vida_azul.png", -140, 78);
-	createTexture("../resources/hud/barra_vida_roja.png", 0, 78);
+	createTexture("../resources/hud/barra_vida_azul.png", 0, 86);
+	createTexture("../resources/hud/barra_vida_roja.png", 0, 86);
 	createTexture("../resources/hud/fondo_blanco.png", 0, 78);
 
 	createGraph();
