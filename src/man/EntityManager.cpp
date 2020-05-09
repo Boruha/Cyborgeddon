@@ -120,14 +120,14 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	camera->addComponent(cameraRender);
 }
 
-void EntityManager::createLight(const vec3& pos, const vec3& diff, const vec3& spe)
+void EntityManager::createLight(const vec3& pos, const vec3& dir, const vec3& diff, const vec3& spe)
 {
 	auto* light = & createEntity(LIGHT);
 
 	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(0), vec3(0)));
 	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, false));
 
-	render.node   = componentStorage.createLight(diff, spe);
+	render.node   = componentStorage.createLight(diff, spe, dir);
 	render.node->setPosition(phy.position);
 
 	light->addComponent(phy);
@@ -434,9 +434,8 @@ void EntityManager::createLevel() {
 	initData(128, 16, 150);
 	
 	createPairPlayerCamera(vec3(0), vec3(6.f), vec3(30, 120, 70));
-	createLight(vec3(0, 30, 20), vec3(0.7), vec3(0.0));
-	//createLight(vec3(-50,30,-260), vec3(0.6), vec3(0.0));
-	//createLight(vec3(50,30,-150), vec3(0.7), vec3(0.0));
+	createLight(vec3(0, 30, 20), vec3(1.0, -1.0, -1.0), vec3(0.7), vec3(0.0));
+	createLight(vec3(50,30, 20), vec3(-1.0, -1.0, -1.0), vec3(0.7), vec3(0.0));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,-3,-5), vec3(160,1,135)); //Controls
 

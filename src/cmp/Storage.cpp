@@ -72,18 +72,18 @@ INode * Storage::createCamera() {
 	return returnValue;
 }
 
-INode * Storage::createLight(const glm::vec3& diff, const glm::vec3& spe) {
+INode * Storage::createLight(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir) {
 	INode * returnValue { nullptr };
 
 	for (auto & node : nodes) {
 		if (node == nullptr) {
-			returnValue = node = engine.scene->addFreeLightNode(diff, spe);
+			returnValue = node = engine.scene->addFreeLightNode(diff, spe, dir);
 			break;
 		}
 	}
 	
 	if (!returnValue)
-		returnValue = nodes.emplace_back(engine.scene->addFreeLightNode(diff, spe));
+		returnValue = nodes.emplace_back(engine.scene->addFreeLightNode(diff, spe, dir));
 
 	return returnValue;
 }

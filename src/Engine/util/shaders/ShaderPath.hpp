@@ -44,7 +44,7 @@ constexpr std::string_view SHADOWS_BASIC_GEOMETRY
 constexpr std::string_view SHADOWS_BASIC_SHADER [SHADER_TYPES] 
 {
 		SHADOWS_BASIC_VERTEX,
-		SHADOWS_BASIC_GEOMETRY,
+		"",
 		SHADOWS_BASIC_FRAGMENT
 };
 

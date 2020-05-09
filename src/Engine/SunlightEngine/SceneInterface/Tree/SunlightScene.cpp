@@ -42,6 +42,6 @@ INode * SunlightScene::addFreeCameraNode() {
 	return sceneManager->addCameraNode();
 }
 
-INode * SunlightScene::addFreeLightNode(const glm::vec3& diff, const glm::vec3& spe) {
-	return sceneManager->addLightNode(diff, spe);
+INode * SunlightScene::addFreeLightNode(const glm::vec3& diff, const glm::vec3& spe, const vec3& dir) {
+	return sceneManager->addLightNode(diff, spe, dir);
 }

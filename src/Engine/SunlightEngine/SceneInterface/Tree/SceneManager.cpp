@@ -18,23 +18,32 @@ void SceneManager::render() {
 }
 
 void SceneManager::firstTimeRenderConfig(){
+	/*
+		for(std::size_t i=0; i<lights_index; ++i)
+		{
+			if(!lights[i] || !lightNodes[i]) continue;
+
+			const vec3& lightPos     = lightNodes[i]->getPosition();
+			const mat4& m_Projection = lights[i]->projection;
+
+			lights[i]->m_VPs[0] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0));
+			lights[i]->m_VPs[1] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0));
+			lights[i]->m_VPs[2] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
+			lights[i]->m_VPs[3] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,-1.0, 0.0), glm::vec3(0.0, 0.0,-1.0));
+			lights[i]->m_VPs[4] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 0.0, 1.0), glm::vec3(0.0,-1.0, 0.0));
+			lights[i]->m_VPs[5] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 0.0,-1.0), glm::vec3(0.0,-1.0, 0.0));
+		}
+	*/
 
 	for(std::size_t i=0; i<lights_index; ++i)
 	{
 		if(!lights[i] || !lightNodes[i]) continue;
 
-		const vec3& lightPos     = lightNodes[i]->getPosition();
-		const mat4& m_Projection = lights[i]->projection;
-
-		lights[i]->m_VPs[0] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0));
-		lights[i]->m_VPs[1] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0));
-		lights[i]->m_VPs[2] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
-		lights[i]->m_VPs[3] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,-1.0, 0.0), glm::vec3(0.0, 0.0,-1.0));
-		lights[i]->m_VPs[4] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 0.0, 1.0), glm::vec3(0.0,-1.0, 0.0));
-		lights[i]->m_VPs[5] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 0.0,-1.0), glm::vec3(0.0,-1.0, 0.0));
+		const vec3& lightPos = lightNodes[i]->getPosition();
+		lights[i]->m_VP      = lights[i]->projection * glm::lookAt(lightPos, lightPos + lights[i]->direccion, glm::vec3(0.0, 1.0, 0.0));
 	}
-	firstTime = false;
 
+	firstTime = false;
 }
 
 glm::mat4 SceneManager::getLightViewProjection() const {
@@ -71,7 +80,7 @@ TreeNode * SceneManager::addCameraNode() {
 }
 
 //LIGHT N SHADOW CREATION
-TreeNode * SceneManager::addLightNode(const glm::vec3& diff, const glm::vec3& spe) {
+TreeNode * SceneManager::addLightNode(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir) {
 	auto tree_ptr   = std::make_unique<TreeNode>(*this);
 	auto light_ptr  = std::make_unique<Light>(diff, spe);
 
@@ -82,7 +91,9 @@ TreeNode * SceneManager::addLightNode(const glm::vec3& diff, const glm::vec3& sp
 		genShadowTexture();
 		++lights_index;
 
-		light_ptr->projection = glm::perspective(glm::radians(90.f), (float)SHADOW_VP_WIDTH / (float)SHADOW_VP_HEIGHT, light_ptr->near, light_ptr->far);
+		light_ptr->direccion  = dir;
+		light_ptr->projection = glm::ortho(-100.f, 100.f, -100.f, 100.f, light_ptr->near, light_ptr->far);
+		//light_ptr->projection = glm::perspective(glm::radians(90.f), (float)SHADOW_VP_WIDTH / (float)SHADOW_VP_HEIGHT, light_ptr->near, light_ptr->far);
 		tree_ptr->setEntity(std::move(light_ptr));
 	}
 	else
@@ -94,27 +105,36 @@ TreeNode * SceneManager::addLightNode(const glm::vec3& diff, const glm::vec3& sp
 void SceneManager::genShadowTexture() {
 	//SHADOW TEX
 	glGenTextures(1, &lights[lights_index]->shadow_map);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, lights[lights_index]->shadow_map);
-	for(unsigned i=0; i<6; ++i)
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glBindTexture(GL_TEXTURE_2D, lights[lights_index]->shadow_map);
 
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
-	
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float border_color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
+
 	/*
-		- SE USA SI TRABAJAMOS EN EL SHADER CON SAMPLER_SHADOW_CUBE, SINO COMENTAR LAS 2 LINEAS
-		- GL_TEXTURE_COMPARE_MODE -> ESTABLECE QUE FORMA DE COMPARAR INTERNA TENDRÁ. SOLO PARA TEXTURES DEPTH_ATTATCH.
-		- GL_LEQUAL  result={1.0  r <= Dt
-		                    {0.0  r  > Dt
-			Siendo r  = el valor del fragmento que creamos para comparar.
-			Siendo Dt = el valor almacenado en la textura para unas coords dadas.
-	*/
+		for(unsigned i=0; i<6; ++i)
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+		
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+		
+			- SE USA SI TRABAJAMOS EN EL SHADER CON SAMPLER_SHADOW_CUBE, SINO COMENTAR LAS 2 LINEAS
+			- GL_TEXTURE_COMPARE_MODE -> ESTABLECE QUE FORMA DE COMPARAR INTERNA TENDRÁ. SOLO PARA TEXTURES DEPTH_ATTATCH.
+			- GL_LEQUAL  result={1.0  r <= Dt
+								{0.0  r  > Dt
+				Siendo r  = el valor del fragmento que creamos para comparar.
+				Siendo Dt = el valor almacenado en la textura para unas coords dadas.
+	*/
 	//SHADOW FBO
 	glGenFramebuffers(1, &lights[lights_index]->FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, lights[lights_index]->FBO);
@@ -147,7 +167,7 @@ void SceneManager::renderScene() {
 	for(std::size_t i=0; i<lights_index; ++i)
 	{
 		glActiveTexture(GL_TEXTURE2 + i);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
@@ -161,10 +181,10 @@ void SceneManager::sendLightsData2ShaderScene() {
     	std::string name = "lights[" + std::to_string(i) + "]";
 		
 		glActiveTexture(GL_TEXTURE2 + i);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->shadow_map);
+		glBindTexture(GL_TEXTURE_2D, lights[i]->shadow_map);
 		shaders[0].intUniform(name + ".shadow_map", 2 + i);
 
-		shaders[0].floatUniform(name + ".far", lights[i]->far);
+		shaders[0].mat4Uniform(name + ".m_VP_Light", lights[i]->m_VP);
 		shaders[0].vec3Uniform(name + ".position", lightNodes[i]->getPosition());
     	shaders[0].vec3Uniform(name + ".diffuse" , lights[i]->diffuse);
     	shaders[0].vec3Uniform(name + ".specular", lights[i]->specular);
@@ -194,20 +214,17 @@ void SceneManager::renderShadow(size_t index) {
 	glBindFramebuffer(GL_FRAMEBUFFER, lights[index]->FBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	//glm::mat4 view = glm::lookAt(lightNodes[index]->getPosition(), glm::vec3(0.0), glm::vec3(0, 1, 0));
-	//glm::mat4 m_VP = lights[index]->projection * view;
-	//lights[index]->viewProj_m = m_VP;
-	//lightViewProjection = m_VP;
-
-    std::string name;
-	for(std::size_t i=0; i<6; ++i)
-	{
-		name = "m_VP[" + std::to_string(i) + "]";
-		shaders[1].mat4Uniform(name, lights[index]->m_VPs[i]);
-	}
-	shaders[1].vec3Uniform("lightPos", lightNodes[index]->getPosition());
-	shaders[1].floatUniform("far", lights[index]->far);
-
+	/*
+		std::string name;
+		for(std::size_t i=0; i<6; ++i)
+		{
+			name = "m_VP[" + std::to_string(i) + "]";
+			shaders[1].mat4Uniform(name, lights[index]->m_VPs[i]);
+		}
+		shaders[1].vec3Uniform("lightPos", lightNodes[index]->getPosition());
+		shaders[1].floatUniform("far", lights[index]->far);
+	*/
+	shaders[1].mat4Uniform("m_VP", lights[index]->m_VP);
 	
 	root->render(glm::mat4(1), shaders[1], false);
 

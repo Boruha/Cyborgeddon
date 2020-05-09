@@ -54,7 +54,7 @@ struct EntityManager : GameContext {
 		void createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase);
 		void createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase);
 		
-		void createLight(const vec3& pos, const vec3& diff, const vec3& spe);
+		void createLight(const vec3& pos, const vec3& dir, const vec3& diff, const vec3& spe);
 		void createWall (const vec3& pos, const vec3& dim);
 		void createFloor(std::string_view tex, const vec3& pos, const vec3& dim);
 

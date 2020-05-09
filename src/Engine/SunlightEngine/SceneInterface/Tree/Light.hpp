@@ -11,10 +11,11 @@ struct Light : IEntity {
 
     [[nodiscard]] const std::size_t getID() const { return ID; }
 
+    glm::vec3 direccion;
     glm::vec3 diffuse;
     glm::vec3 specular;
     glm::mat4 projection;
-    glm::mat4 m_VPs[6];
+    glm::mat4 m_VP;
 
     float near { 1.f };
     float far  { 300 };

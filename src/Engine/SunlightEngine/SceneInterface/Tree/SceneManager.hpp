@@ -19,7 +19,7 @@ struct SceneManager {
 
 	TreeNode * addMeshNode(std::string_view);
 	TreeNode * addCameraNode();
-	TreeNode * addLightNode(const glm::vec3& diff, const glm::vec3& spe);
+	TreeNode * addLightNode(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir);
 
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera   * getCamera()     const { return camera;     }
