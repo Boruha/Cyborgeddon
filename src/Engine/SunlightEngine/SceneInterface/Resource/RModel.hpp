@@ -19,11 +19,9 @@ struct RModel : IResource {
 	explicit RModel (std::string_view path);
 	~RModel() override;
 
-	void render(const glm::mat4 & m, Shader shader) const;
+	void render(const glm::mat4 & m, Shader shader, bool visualShader) const;
 
 	private :
-		//Shader shader { MODEL_SHADER_PATH };
-
 		std::vector<RMesh> modelMeshes;
 		std::vector<Texture> modelTextures;
 		std::string directory;

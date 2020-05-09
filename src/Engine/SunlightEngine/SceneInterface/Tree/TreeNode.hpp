@@ -22,7 +22,7 @@ struct TreeNode final : INode {
 
 	explicit operator bool() const override { return true; };
 
-    void render(const mat4& m, Shader shader);
+    void render(const mat4& m, Shader shader, bool visualShader);
 
 	void remove() override;
 
@@ -40,21 +40,17 @@ struct TreeNode final : INode {
     void setPosition(const vec3& pos) override;
     void setRotation(const vec3& rot) override;
     void setScale(const vec3& sca) override;
-
     void setTransform(const mat4& m);
 
-    [[nodiscard]] IEntity * getEntity() const;
+    [[nodiscard]] IEntity  * getEntity() const;
     [[nodiscard]] TreeNode * getParent() const;
 
 
-    [[nodiscard]] const vec3& getPosition() const override;
-    [[nodiscard]] const vec3& getRotation() const override;
-    [[nodiscard]] const vec3& getScale() const override;
-
+    [[nodiscard]] const vec3& getPosition()  const override;
+    [[nodiscard]] const vec3& getRotation()  const override;
+    [[nodiscard]] const vec3& getScale()     const override;
     [[nodiscard]] const mat4& getTransform() const;
-
-
-	[[nodiscard]] const vec3& getTarget() const override { return vec3(); }
+	[[nodiscard]] const vec3& getTarget()    const override { return vec3(); }
 
 	// setters
 	void setTarget(const vec3& tar) override;
@@ -62,8 +58,7 @@ struct TreeNode final : INode {
 	// set texture
 	void setTexture(std::string_view) const override {};
 
-	// sets if light should affect a node
-	void affectedByLight(bool) const override {/*TODO: SERA UN UNIFORM*/};
+	void affectedByLight(bool) const override { };
 
 	void calculateTransform() { transform = calculateMatrix(); }
 
@@ -81,7 +76,6 @@ struct TreeNode final : INode {
 		vec3 scale       { 1 };
 
 		mat4 transform   { 1 };
-        mat4 modelView   { 1 };
         mat4 m_normal    { 1 };
 
 		bool allowCalculateMatrix { true };

@@ -18,7 +18,7 @@ struct IrrlichtScene final : IScene {
 	INode * addFreeCameraNode() override { return nullptr; }
 
     std::unique_ptr<INode> addLightNode() override;
-	INode * addFreeLightNode(const vec3& amb, const vec3& diff, const vec3& spe) override { return nullptr; }
+	INode * addFreeLightNode(const vec3& diff, const vec3& spe, const vec3& dir) override { return nullptr; }
 
 
 

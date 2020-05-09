@@ -3,13 +3,13 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
 #include <glm/glm.hpp>
 
 #include <Engine/util/glad/glad.h>
 
 Shader::Shader(const std::string_view path [ SHADER_TYPES ])
 {
+    
     std::string content [ SHADER_TYPES ];
     std::ifstream file  [ SHADER_TYPES ];
 
@@ -18,7 +18,7 @@ Shader::Shader(const std::string_view path [ SHADER_TYPES ])
     int successOperation;
     char infoLog [ 512 ];
 
-    const int opengl_shader_type [] { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER };
+    const int opengl_shader_type [] { GL_VERTEX_SHADER, GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER };
 
     ID = glCreateProgram();
 

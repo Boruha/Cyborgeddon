@@ -1,7 +1,7 @@
 #include <Engine/SunlightEngine/SceneInterface/Resource/RMesh.hpp>
 
+#include <Engine/util/WindowParameters.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
 
 #include <Engine/util/glad/glad.h>
 
@@ -39,33 +39,37 @@ RMesh::RMesh(std::vector<Vertex> _vertices, std::vector<Index> _indices, std::ve
 
 RMesh::~RMesh() = default;
 
-void RMesh::render(const glm::mat4 & m, Shader shader) const {
+void RMesh::render(const glm::mat4 & m, Shader shader, bool visualShader) const {
 	unsigned diffuse {0}, specular {0}, normal {0}, height {0};
 
-	for (std::size_t i = 0; i<textures.size(); ++i) {
-		glActiveTexture(GL_TEXTURE0 + i);
+	if(visualShader)
+	{
+		for (std::size_t i = 0; i<textures.size(); ++i) {
+			std::string name = textures[i].type;
 
-		std::string name = textures[i].type;
-
-		if (std::string_view(name) == DIFFUSE)
-			name += std::to_string(diffuse++);
-		else if (std::string_view(name) == SPECULAR)
-			name += std::to_string(specular++);
-		else if (std::string_view(name) == NORMAL)
-			name += std::to_string(normal++);
-		else if (std::string_view(name) == HEIGHT)
-			name += std::to_string(height++);
-		
-		shader.intUniform(name, i);
-
-		glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+			if (std::string_view(name) == DIFFUSE)
+				name += std::to_string(diffuse++);
+			else if (std::string_view(name) == SPECULAR)
+				name += std::to_string(specular++);
+			else if (std::string_view(name) == NORMAL)
+				name += std::to_string(normal++);
+			else if (std::string_view(name) == HEIGHT)
+				name += std::to_string(height++);
+			
+			glActiveTexture(GL_TEXTURE0 + i);
+			shader.intUniform(name, i);
+			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+		}
+		shader.boolUniform("have_normal", normal_tex);
+		shader.mat4Uniform("m_MVP", m);
 	}
-
-	shader.boolUniform("has_normal", normal_tex);
-	shader.mat4Uniform("m_MVP", m);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, reinterpret_cast<void *>(0));
-
 	glBindVertexArray(0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

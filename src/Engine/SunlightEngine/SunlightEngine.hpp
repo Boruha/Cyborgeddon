@@ -15,21 +15,17 @@ struct SunlightEngine final : public virtual IEngine {
 
     void init(unsigned width, unsigned height, std::string_view name) final;
 
-    [[nodiscard]] bool run() final;
-
-    void shutdown() const final;
-
+    [[nodiscard]] bool run()                             final;
     [[nodiscard]] bool isKeyPressed(unsigned code) const final;
+	[[nodiscard]] bool isKeyTextInput(unsigned)          final;
+	[[nodiscard]] const Mouse & getMouse()               final;
 
-	[[nodiscard]] bool isKeyTextInput(unsigned) final;
-
-	[[nodiscard]] const Mouse & getMouse() final;
-
+    void shutdown()               const final;
     void clear(Color color, bool) const final;
+    void draw()                   const final;
+    void display()                const final;
 
-    void draw() const final;
-
-    void display() const final;
+    void setViewport();
 
     [[nodiscard]] glm::vec2 getViewport() const { return { windowWidth, windowHeight }; }
 

@@ -61,16 +61,18 @@ struct EntityManager : GameContext {
         Entity& createEntity(EntityType type);
 
 		void createPairPlayerCamera(const vec3& pos, const vec3& dim, const vec3& posCamera);
-		void createLight(const vec3& pos, const vec3& amb, const vec3& diff, const vec3& spe);
+
 		void createEnemy(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase);
 		void createAngel(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase);
 		void createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase);
+		
+		void createLight(const vec3& pos, const vec3& dir, const vec3& diff, const vec3& spe);
+		void createWall (const vec3& pos, const vec3& dim);
+		void createFloor(std::string_view tex, const vec3& pos, const vec3& dim);
 
-		void createWall        (const vec3& pos, const vec3& dim);
-		void createFloor       (std::string_view tex, const vec3& pos, const vec3& dim);
-		void createPairKeyDoor (const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
-		void setNavConnections (const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
-		void createNavigation  ();
+		void createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
+		void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
+		void createNavigation();
 
 		void createVideo(std::string_view, bool);
 		void createTexture(std::string_view, int, int);

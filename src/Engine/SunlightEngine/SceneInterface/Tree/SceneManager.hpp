@@ -10,48 +10,53 @@ struct SunlightEngine;
 struct ResourceManager;
 
 struct SceneManager {
-	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
-
+	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager);
 	void render();
 
+	[[nodiscard]] glm::mat4 getLightViewProjection() const;	
 	[[nodiscard]] glm::mat4 getViewProjection() const;
 	[[nodiscard]] glm::mat4 getView()           const;
 
 	TreeNode * addMeshNode(std::string_view);
 	TreeNode * addCameraNode();
-	TreeNode * addLightNode(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe);
+	TreeNode * addLightNode(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir);
 
 	[[nodiscard]] TreeNode * getCameraNode() const { return cameraNode; }
 	[[nodiscard]] Camera   * getCamera()     const { return camera;     }
 
-	[[nodiscard]] std::array<TreeNode*, max_light_size> getLightNode() const { return lightNodes;  }
-	[[nodiscard]] std::array<Light*,    max_light_size> getLight()     const { return lights;      }
+	[[nodiscard]] std::array<TreeNode*, MAX_LIGHT_SIZE> getLightNode() const { return lightNodes;  }
+	[[nodiscard]] std::array<Light*,    MAX_LIGHT_SIZE> getLight()     const { return lights;      }
 
 	SunlightEngine * getEngine() { return engine; }
 
 	void clearScene() { root->removeAllChildren(); }
 
 private :
-
-	void setLights();
+	void renderOffcreen();
+	void renderShadow(size_t index);
+	void renderScene();
+	void sendLightsData2ShaderScene();
+	void genShadowTexture();
+	void firstTimeRenderConfig();
 
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
-
-	Shader shader { PHONG_BASIC_SHADER }; //TODO: add a shader selector;
+	Shader shaders[NUM_SHADERS] { Shader{ PHONG_BASIC_SHADER }, Shader{ SHADOWS_BASIC_SHADER } };
+	bool firstTime { true };
 
 	TreeNode * cameraNode { nullptr };
 	Camera   * camera     { nullptr };
 
-	//deprecate
-	//TreeNode * lightNode  { nullptr };
-	//Light    * light      { nullptr };
+	std::array<TreeNode*, MAX_LIGHT_SIZE> lightNodes;
+	std::array<Light*   , MAX_LIGHT_SIZE> lights;
+	//std::array<unsigned , MAX_LIGHT_SIZE> shadowFBOs;
+	//std::array<unsigned , MAX_LIGHT_SIZE> shadowSceneTextures;
 
-	std::array<TreeNode*, max_light_size> lightNodes;
-	std::array<Light*, max_light_size>    lights;
-	std::size_t lights_index { 0 };
+	std::size_t lights_index {  0  };
+    vec3        ambient      { 0.2f };
 
-	mat4 viewProjection {1};
-	mat4 view {1};
+	mat4 viewProjection      { 1 };
+	mat4 view                { 1 };
+	mat4 lightViewProjection { 1 };
 
 	SunlightEngine  * engine { nullptr };
 	ResourceManager * resourceManager { nullptr };

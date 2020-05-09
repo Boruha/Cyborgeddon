@@ -1,7 +1,6 @@
 #include <man/TextureManager.hpp>
 
 #include <util/TexturePaths.hpp>
-
 #include <Engine/EngineInterface/IEngine.hpp>
 
 void TextureManager::loadTextures() const {

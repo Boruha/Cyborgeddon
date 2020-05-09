@@ -62,9 +62,6 @@ struct Storage {
 
 		auto * cmpVector  = dynamic_cast<ComponentVector<T>*>(it->second.get());
 
-//		std::cout << "\n\n" << cmp.getName() << "\n";
-//		printVecInfo(cmpVector->components);
-
 		for (auto& item : cmpVector->components)
 			if (!item)
 				return item = std::forward<T>(cmp);
@@ -75,7 +72,7 @@ struct Storage {
 	INode * createMesh(std::string_view mesh);
 
 	INode * createCamera();
-	INode * createLight(const glm::vec3& amb, const glm::vec3& diff, const glm::vec3& spe);
+	INode * createLight(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir);
 
 	void removeNode(const INode * n);
 

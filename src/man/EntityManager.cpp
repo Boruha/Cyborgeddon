@@ -23,7 +23,6 @@ void EntityManager::initData(const int maxEntities, const int maxToDelete, const
 	graph.reserve(20);
 }
 
-
 /*		DESTROY ENTITIES	*/
 
 // aqui recibimos los IDS de las entidades que queremos destruir
@@ -118,7 +117,6 @@ void EntityManager::readColliderFile(const std::string_view path) {
 		processNode(scene->mRootNode, scene);
 }
 
-
 /*		CREATE ENTITIES		*/
 
 Entity & EntityManager::createEntity(const EntityType type) {
@@ -139,7 +137,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Dex/Static/0.obj");
+	render.node = componentStorage.createMesh("resources/models/Dex/Static/0.obj");
 
 
 	render.node->setPosition(physics.position);
@@ -172,14 +170,13 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	camera->addComponent(cameraRender);
 }
 
-void EntityManager::createLight(const vec3& pos, const vec3& amb, const vec3& diff, const vec3& spe){
+void EntityManager::createLight(const vec3& pos, const vec3& dir, const vec3& diff, const vec3& spe){
 	auto* light = & createEntity(LIGHT);
 
 	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(0), vec3(0)));
 	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, false));
 
-	render.node   = componentStorage.createLight(amb, diff, spe);
-	
+	render.node   = componentStorage.createLight(diff, spe, dir);
 	render.node->setPosition(phy.position);
 
 	light->addComponent(phy);
@@ -194,7 +191,7 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -218,7 +215,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Bot/Static/0.obj");
+	render.node = componentStorage.createMesh("resources/models/Bot/Static/0.obj");
 
 
 	render.node->setPosition(physics.position);
@@ -249,7 +246,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Angel/Static/0.obj");
+	render.node = componentStorage.createMesh("resources/models/Angel/Static/0.obj");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -279,7 +276,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Demon/Static/0.obj");
+	render.node = componentStorage.createMesh("resources/models/Demon/Static/0.obj");
 
 
 	render.node->setPosition(physics.position);
@@ -306,13 +303,11 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, 0, 0), vec3(0, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.obj");
+	render.node = componentStorage.createMesh("resources/models/Ciudad/ciudad.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
 	render.node->setScale(transformable.scale);
-
-	render.node->setTexture(tex.data());
 
 	floor.addComponent(transformable);
 	floor.addComponent(render);
@@ -330,7 +325,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -346,13 +341,13 @@ void EntityManager::createBullet() {
 
 void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
 	Entity& door 		    = createEntity(DOOR);
-//TODO: quitar la mierda de  "+ vec3 (0, y/2, 0) en transformable mas adelante"
+	//TODO: quitar la mierda de  "+ vec3 (0, y/2, 0) en transformable mas adelante"
 	auto& transformable     = componentStorage.createComponent(Transformable(door.getType(), door.getID(), doorPos + vec3(0, 0, 0), vec3(), doorDim));
 	auto& trigger           = componentStorage.createComponent(TriggerStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale, false));
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Objetos/Puerta/0.obj");
+	render.node = componentStorage.createMesh("resources/models/Objetos/Puerta/0.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -371,7 +366,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createMesh("../resources/models/Objetos/Llave_demoniaca/0.obj");
+	keyRender.node = componentStorage.createMesh("resources/models/Objetos/Llave_demoniaca/0.obj");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
@@ -422,7 +417,6 @@ void EntityManager::createMenuOptions(const unsigned int firstOption, const unsi
 
 	menu_options.addComponent(options);
 }
-
 
 void EntityManager::setNavConnections(const GraphNode & node, const std::vector<const GraphNode *> & conns) const {
 	// MAX_GRAPH_CONN especifica cuantas conexiones puede haber como maximo
@@ -538,18 +532,18 @@ void EntityManager::createLevel() {
 	initData(128, 16, 150);
 	
 	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 50, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
-	createLight(vec3(0, 60, 0), vec3(0.5), vec3(0.8), vec3(0.5)); //Antes estaba la difusa a 0.2
-	//createLight(vec3(-150,60,-272.5), vec3(0.1), vec3(0.6), vec3(0.2));
+	createLight(vec3(0, 30, 20), vec3(1.0, -1.0, -1.0), vec3(0.6), vec3(0.5)); 
+	createLight(vec3(20,20, 20), vec3(-1.0, -1.0, -1.0), vec3(0.6), vec3(0.2));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
-	readColliderFile("../resources/models/Ciudad/colisiones.obj");
+	readColliderFile("resources/models/Ciudad/colisiones.obj");
 
-	createTexture("../resources/hud/llave_2.png", 558, 52);
-	createTexture("../resources/hud/llave_1.png", 517, 52);
-	createTexture("../resources/hud/marco_negro.png", 0, 35);
-	createTexture("../resources/hud/barra_vida_azul.png", 0, 86);
-	createTexture("../resources/hud/barra_vida_roja.png", 0, 86);
-	createTexture("../resources/hud/fondo_blanco.png", 0, 78);
+	createTexture("resources/hud/llave_2.png", 558, 52);
+	createTexture("resources/hud/llave_1.png", 517, 52);
+	createTexture("resources/hud/marco_negro.png", 0, 35);
+	createTexture("resources/hud/barra_vida_azul.png", 0, 86);
+	createTexture("resources/hud/barra_vida_roja.png", 0, 86);
+	createTexture("resources/hud/fondo_blanco.png", 0, 78);
 
 	createGraph();
 	//puntero a vec3? Mejor?
@@ -577,158 +571,103 @@ void EntityManager::createLevel() {
 
 	//ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
-    createEnemy(vec3(5,0,-32), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(5,0,-32), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
-    createEnemy(vec3(-22,0,-28), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-40,0,-33), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-50,0,-27), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-22,0,-28), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-40,0,-33), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-50,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Tercer pasillo (girar a la derecha)
-    createEnemy(vec3(-77,0,-23), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-80,0,-35), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-27), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-77,0,-23), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-80,0,-35), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Puente 1 (Antes de abrir la puerta con las llaves)
-    createEnemy(vec3(-72,0,-65), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-83,0,-75), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-75,0,-85), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-100), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-74,0,-102), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-82,0,-113), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-77,0,-125), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-88,0,-132), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-71,0,-146), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-85,0,-153), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-79,0,-156), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-82,0,-168), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-87,0,-180), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-80,0,-190), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-75,0,-205), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-83,0,-210), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(-83,0,-220), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-85,0,-230), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-76,0,-235), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-85,0,-246), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(-75,0,-251), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-72,0,-65), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-83,0,-75), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-75,0,-85), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-100), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-74,0,-102), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-82,0,-113), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-77,0,-125), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-88,0,-132), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-71,0,-146), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-85,0,-153), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-79,0,-156), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-82,0,-168), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-180), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-80,0,-190), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-75,0,-205), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-83,0,-210), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(-83,0,-220), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-85,0,-230), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-76,0,-235), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-85,0,-246), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(-75,0,-251), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Rellano entre zona Angelical y demoniaca (Justo despues del primer puente).
-    createEnemy(vec3(-95,0,-260), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-105,0,-253), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-100,0,-273), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(-94,0,-291), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-110,0,-283), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(-74,0,-285), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-82,0,-270), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-95,0,-260), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-105,0,-253), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-100,0,-273), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(-94,0,-291), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-110,0,-283), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(-74,0,-285), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-82,0,-270), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
 
     //ZONA 2 -> CATEDRAL IGLESIA
     //Pasillo Principal
-    createEnemy(vec3(-142,0,-285), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-152,0,-270), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-165,0,-270), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-178,0,-262), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-186,0,-258), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-193,0,-285), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-200,0,-270), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-207,0,-285), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-225,0,-283), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-225,0,-260), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-230,0,-268), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-230,0,-278), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-243,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-262,0,-284), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-262,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-262,0,-260), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-142,0,-285), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-152,0,-270), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-165,0,-270), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-178,0,-262), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-186,0,-258), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-193,0,-285), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-200,0,-270), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-207,0,-285), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-225,0,-283), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-225,0,-260), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-230,0,-268), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-230,0,-278), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-243,0,-272), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-262,0,-284), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-262,0,-272), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-262,0,-260), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Zona Inferior (mesa con velas)
-    createEnemy(vec3(-246,0,-250), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-258,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-246,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-232,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-245,0,-232), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-246,0,-250), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-258,0,-240), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-246,0,-240), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-232,0,-240), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-245,0,-232), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Zona Superior (Organo/Piano pa la musiquita jijiji)
-    createEnemy(vec3(-246,0,-315), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-258,0,-305), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-246,0,-305), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-232,0,-305), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-245,0,-297), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-246,0,-315), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-258,0,-305), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-246,0,-305), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-232,0,-305), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-245,0,-297), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Altar (Donde esta la llave)
-    createEnemy(vec3(-277,0,-263), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-277,0,-280), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-288,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-303,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-277,0,-263), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-277,0,-280), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-288,0,-271), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-303,0,-272), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
 
     //ZONA 3 -> ZONA DE DEMONIOS (PASILLO + ZONA PENTAGRAMA)
     //Pasillo PT1 (Antes de llegar a la zona pentagrama)
-    createEnemy(vec3(-55,0,-270), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-50,0,-265), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(-42,0,-275), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-25,0,-267), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(-15,0,-279), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-7,0,-274), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(-2,0,-267), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-55,0,-270), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-50,0,-265), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(-42,0,-275), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-25,0,-267), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(-15,0,-279), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-7,0,-274), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-2,0,-267), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Cruce de caminos(caminos cortados arriba y debajo)
-    createAngel(vec3(8,0,-287), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(18,0,-282), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(7,0,-257), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(14,0,-254), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(8,0,-287), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(18,0,-282), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(7,0,-257), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(14,0,-254), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Pasillo PT2
-    createEnemy(vec3(27,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(41,0,-278), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createDemon(vec3(41,0,-264), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createAngel(vec3(55,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    createEnemy(vec3(68,0,-267), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(27,0,-272), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(41,0,-278), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createDemon(vec3(41,0,-264), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createAngel(vec3(55,0,-271), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(68,0,-267), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
 
-
-
-    //DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
-    /*createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
-    createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
-    createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
-    createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
-    createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
-    createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
-    createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
-    createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
-    createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
-    createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
-    createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
-    createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
-
-    createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
-    createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
-    createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
-    createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
-    createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
-    createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
-    createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
-    createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
-    createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
-    createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
-    createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
-    createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
-
-    createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
-    createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
-    createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
-    createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
-    createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
-    createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
-    createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
-    createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
-    createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
-    createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
-    createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
-    createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
-
-    createDemon(patrol_2[0], vec3(11), patrol_2, ++scheduling_AI_counter);
-    createEnemy(patrol_1[0], vec3(8), patrol_1, ++scheduling_AI_counter);
-    createEnemy(patrol_3[0], vec3(8), patrol_3, ++scheduling_AI_counter);
-    createEnemy(patrol_4[0], vec3(8), patrol_4, ++scheduling_AI_counter);
-    createEnemy(patrol_5[0], vec3(8), patrol_5, ++scheduling_AI_counter);
-    createEnemy(patrol_6[0], vec3(8), patrol_6, ++scheduling_AI_counter);
-    createEnemy(patrol_7[0], vec3(8), patrol_7, ++scheduling_AI_counter);
-    createEnemy(patrol_8[0], vec3(8), patrol_8, ++scheduling_AI_counter);
-    createEnemy(patrol_9[0], vec3(8), patrol_9, ++scheduling_AI_counter);
-    createEnemy(patrol_10[0], vec3(8), patrol_10, ++scheduling_AI_counter);
-    createEnemy(patrol_11[0], vec3(8), patrol_11, ++scheduling_AI_counter);
-    createEnemy(patrol_12[0], vec3(8), patrol_12, ++scheduling_AI_counter);
-    */
 /*
 	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
 	std::cout << Physics::getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
@@ -824,13 +763,13 @@ void EntityManager::createIntro() {
 
 	createMenuOptions(0, 4);
 
-	createVideo("../resources/videos/intro/1_F.mp4", false);
-	createVideo("../resources/videos/intro/2_F_L.mp4", true);
+	createVideo("resources/videos/intro/1_F.mp4", false);
+	createVideo("resources/videos/intro/2_F_L.mp4", true);
 
-	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_1.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_2.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_3.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_4.png", 0, 0);
 
 
 	std::cout << Video::getName()     << " " << componentStorage.getComponents<Video>().size() << "\n";
