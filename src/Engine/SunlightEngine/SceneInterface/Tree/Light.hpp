@@ -9,7 +9,7 @@ struct Light : IEntity {
 
     void render(const glm::mat4& m, Shader shader, bool visualShader) override;
 
-    [[nodiscard]] const std::size_t getID()         const { return ID; }
+    [[nodiscard]] const std::size_t getID() const { return ID; }
 
     glm::vec3 diffuse;
     glm::vec3 specular;
@@ -17,7 +17,7 @@ struct Light : IEntity {
     glm::mat4 m_VPs[6];
 
     float near { 1.f };
-    float far  { 100 };
+    float far  { 300 };
 
     unsigned FBO;
     unsigned shadow_map;

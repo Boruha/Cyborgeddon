@@ -96,7 +96,7 @@ void SceneManager::genShadowTexture() {
 	glGenTextures(1, &lights[lights_index]->shadow_map);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, lights[lights_index]->shadow_map);
 	for(unsigned i=0; i<6; ++i)
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, SHADOW_VP_WIDTH, SHADOW_VP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -104,6 +104,17 @@ void SceneManager::genShadowTexture() {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 	
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	/*
+		- SE USA SI TRABAJAMOS EN EL SHADER CON SAMPLER_SHADOW_CUBE, SINO COMENTAR LAS 2 LINEAS
+		- GL_TEXTURE_COMPARE_MODE -> ESTABLECE QUE FORMA DE COMPARAR INTERNA TENDRÁ. SOLO PARA TEXTURES DEPTH_ATTATCH.
+		- GL_LEQUAL  result={1.0  r <= Dt
+		                    {0.0  r  > Dt
+			Siendo r  = el valor del fragmento que creamos para comparar.
+			Siendo Dt = el valor almacenado en la textura para unas coords dadas.
+	*/
+
 	//SHADOW FBO
 	glGenFramebuffers(1, &lights[lights_index]->FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, lights[lights_index]->FBO);
@@ -148,7 +159,7 @@ void SceneManager::sendLightsData2ShaderScene() {
 		if(!lights[i] || !lightNodes[i]) continue;
 
     	std::string name = "lights[" + std::to_string(i) + "]";
-		std::cout << name << "\n";
+		
 		glActiveTexture(GL_TEXTURE2 + i);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->shadow_map);
 		shaders[0].intUniform(name + ".shadow_map", 2 + i);
@@ -159,7 +170,6 @@ void SceneManager::sendLightsData2ShaderScene() {
     	shaders[0].vec3Uniform(name + ".specular", lights[i]->specular);
 	}
     shaders[0].intUniform("lights_index", lights_index);
-	std::cout << lights_index << "\n\n";
 
 }
 
