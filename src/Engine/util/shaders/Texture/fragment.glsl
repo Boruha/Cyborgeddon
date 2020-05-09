@@ -10,6 +10,6 @@ void main()
 {
    FragColor = texture(uTexture, TexCoord);
 
-   if (FragColor.a < 0.8)
+   if (FragColor.a < 0.5)
       discard;
 }

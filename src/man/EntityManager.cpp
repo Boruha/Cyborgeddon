@@ -403,7 +403,7 @@ void EntityManager::createVideo(const std::string_view path, const bool isLoop) 
 	video.addComponent(cmpVideo);
 }
 
-void EntityManager::createTexture(const std::string_view path, const unsigned x, const unsigned y) {
+void EntityManager::createTexture(const std::string_view path, const int x, const int y) {
 	auto& texture = createEntity(TEXTURE);
 
 	auto& cmpTexture = componentStorage.createComponent(TextureCmp(texture.getType(), texture.getID()));
@@ -543,87 +543,14 @@ void EntityManager::createLevel() {
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile("../resources/models/Ciudad/colisiones.obj");
-/*
-	//------------ Creacion del escenario para las Christmas ------------------------------------------
-	// Doors and keys
-	createPairKeyDoor(vec3(0,0,-60), vec3(3), vec3(-37,0,-90), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,-90), vec3(3), vec3(37,0,0), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,0), vec3(3), vec3(-37,0,0), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,0), vec3(3), vec3(37,0,-190), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,-190), vec3(3), vec3(-37,0,-190), vec3(2,20,10));
-	createPairKeyDoor(vec3(-70,0,-190), vec3(3), vec3(37,0,-90), vec3(2,20,10));
-	createPairKeyDoor(vec3(70,0,-90), vec3(3), vec3(152.5,0,-300), vec3(45,10,10));
-	createPairKeyDoor(vec3(158,0,-320), vec3(3), vec3(-180,0,-272.5), vec3(10,10,45));
 
-	//Pasillo inicial
+	createTexture("../resources/hud/llave_2.png", 558, 52);
+	createTexture("../resources/hud/llave_1.png", 517, 52);
+	createTexture("../resources/hud/marco_negro.png", 0, 35);
+	createTexture("../resources/hud/barra_vida_azul.png", -140, 78);
+	createTexture("../resources/hud/barra_vida_roja.png", 0, 78);
+	createTexture("../resources/hud/fondo_blanco.png", 0, 78);
 
-	//Derecha
-	createWall(vec3(40,0,27.5), vec3(10,10,45));
-	createWall(vec3(40,0,-45), vec3(10,10,80));
-	createWall(vec3(40,0,-140), vec3(10,10,90));
-	createWall(vec3(40,0,-222.5), vec3(10,10,55));
-
-	//Izquierda
-	createWall(vec3(-40,0,27.5), vec3(10,10,45));
-	createWall(vec3(-40,0,-45), vec3(10,10,80));
-	createWall(vec3(-40,0,-140), vec3(10,10,90));
-	createWall(vec3(-40,0,-222.5), vec3(10,10,55));
-
-	createWall(vec3(0,0,45), vec3(70,10,10));      //Cierre inferior
-
-	//Salas del pasillo
-
-	//Sala 1
-	createWall(vec3(75,0,30), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,-30), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,0), vec3(10,10,50));    //Cierre
-
-	//Sala 2
-	createWall(vec3(-75,0,30), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,-30), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,0), vec3(10,10,50));    //Cierre
-
-	//Sala 3
-	createWall(vec3(75,0,-60), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,-120), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,-90), vec3(10,10,50));    //Cierre
-
-	//Sala 4
-	createWall(vec3(-75,0,-60), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,-120), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,-90), vec3(10,10,50));    //Cierre
-
-	//Sala 5
-	createWall(vec3(-75,0,-160), vec3(60,10,10));    //Abajo
-	createWall(vec3(-75,0,-220), vec3(60,10,10));    //Arriba
-	createWall(vec3(-100,0,-190), vec3(10,10,50));    //Cierre
-
-	//Sala 6
-	createWall(vec3(75,0,-160), vec3(60,10,10));    //Abajo
-	createWall(vec3(75,0,-220), vec3(60,10,10));    //Arriba
-	createWall(vec3(100,0,-190), vec3(10,10,50));    //Cierre
-
-	//Pasillo Horizontal
-	createWall(vec3(-115,0,-245), vec3(140,10,10));    //Inferior izda
-	createWall(vec3(115,0,-245), vec3(140,10,10));     //Inderior dcha
-	createWall(vec3(-27.5,0,-300), vec3(315,10,10));   //Superior
-	createWall(vec3(180,0,-277.5), vec3(10,10,55));  //Derecha
-
-	//Sala llave principal
-	createWall(vec3(200,0,-300), vec3(30,10,10));
-	createWall(vec3(210,0,-345), vec3(10,10,80));
-	createWall(vec3(100,0,-345), vec3(10,10,80));
-	createWall(vec3(157.5,0,-380), vec3(105,10,10));
-
-	//Zona patrulla
-	createWall(vec3(-180,0,-227.5), vec3(10,10,45)); //Inf der
-	createWall(vec3(-180,0,-327.5), vec3(10,10,45)); //Sup der
-	createWall(vec3(-262.5,0,-345), vec3(160,10,10)); //Sup
-	createWall(vec3(-262.5,0,-210), vec3(160,10,10)); //Inf
-	createWall(vec3(-347.5,0,-277.5), vec3(10,10,145)); //Izq
-	createWall(vec3(-265,0,-277.5), vec3(60,20,55)); //Pilar
-	//------------------------------------  END MAPA  ---------------------------------------------------------------
-*/
 	createGraph();
 	//puntero a vec3? Mejor?
 	std::vector<vec3> patrol_1 = { graph[9].coord };

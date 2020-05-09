@@ -70,7 +70,7 @@ RTexture::~RTexture() {
 	glDeleteBuffers(1, &VBO);
 }
 
-void RTexture::setPosition(const unsigned int _x, const unsigned int _y) {
+void RTexture::setPosition(const int _x, const int _y) {
 	x = _x;
 	y = _y;
 

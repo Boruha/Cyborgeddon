@@ -1,9 +1,5 @@
 #include <man/GameManager.hpp>
 #include <sys/Systems.hpp>
-#include <Engine/EngineInterface/SceneInterface/IScene.hpp>
-#include <Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
-#include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
-#include <Engine/util/Timer.hpp>
 
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
@@ -45,6 +41,7 @@ void GameManager::init()
 	currentState->registerSystem<DeathSystem>();                      // se comprueba si algo tiene que morir y ser eliminado
 	currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 	currentState->registerSystem<RenderSystem>();
+	currentState->registerSystem<HUDingameSystem>();
 
 //	textureManager.loadTextures();
 
@@ -64,7 +61,7 @@ void GameManager::run()
 	}
 }
 
-void GameManager::terminate() {
+void GameManager::terminate() const {
 //	textureManager.unloadTextures();
     engine->shutdown();
 }

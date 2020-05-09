@@ -18,3 +18,4 @@
 #include <sys/CollisionSystem.hpp>
 #include <sys/HUDintroSystem.hpp>
 #include <sys/IntroInputSystem.hpp>
+#include <sys/HUDingameSystem.hpp>

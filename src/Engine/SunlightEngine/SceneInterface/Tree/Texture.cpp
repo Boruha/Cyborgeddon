@@ -12,7 +12,7 @@ namespace Sun {
 		texture->render();
 	}
 
-	void Texture::setPosition(const unsigned int x, const unsigned int y) {
+	void Texture::setPosition(const int x, const int y) {
 		texture->setPosition(x, y);
 	}
 
@@ -26,6 +26,10 @@ namespace Sun {
 
 	void Texture::setSize(const unsigned int w, const unsigned int h) {
 		texture->setSize(w, h);
+	}
+
+	glm::vec2 Texture::getSize() const {
+		return texture->getSize();
 	}
 
 };
