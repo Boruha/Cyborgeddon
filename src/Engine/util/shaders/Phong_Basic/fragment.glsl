@@ -67,6 +67,8 @@ void main()
     {
         vec3  vecObj2Light  = lights[i].position - FragPos;
         float distObj2Light = length(vecObj2Light);
+        vec3 eachLight      = vec3(0.0);
+
 
         if(distObj2Light < 300)
         {
@@ -75,7 +77,7 @@ void main()
             vecObj2Light    = normalize(vecObj2Light);
             float cos_light = max(dot(vecObj2Light, vec_normal), 0.0);
             vec3  f_diff    = lights[i].diffuse * cos_light * vec_tex;
-            phong          += f_diff;
+            eachLight      += f_diff * attenuation;
 
             if(have_normal)
             {
@@ -83,12 +85,13 @@ void main()
                 vec3 vec_spec  = reflect(-vecObj2Light, vec_normal);
                 vec3 vec_tex2  = vec3(texture(texture_normal0, TexCoords));
                 vec3 f_spec    = lights[i].specular * pow(max(dot(vec_spec, vec_view), 0.0), 0.2) * vec_tex2;
-                phong         += f_spec;
+                eachLight     += f_spec * attenuation;
             }
 
             float shadow = ShadowCalculation(lights[i], FragPos);
-            phong *= (1.0 - shadow);
-            phong *= attenuation;
+            eachLight *= ((1.0 - shadow) * attenuation);
+
+            phong += eachLight;
         }
     }
 
