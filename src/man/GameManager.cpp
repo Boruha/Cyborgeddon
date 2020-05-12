@@ -20,6 +20,9 @@ void GameManager::init()
 
 	currentState = & states.emplace(std::make_pair(PAUSE, State(PAUSE, entityManager))).first->second;
 
+	currentState->registerSystem<PauseInputSystem>();
+	currentState->registerSystem<HUDpauseSystem>();
+
 	currentState->init();
 
 	// INGAME

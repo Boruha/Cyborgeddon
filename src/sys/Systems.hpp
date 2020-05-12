@@ -1,5 +1,15 @@
 #pragma once
 
+// INTRO
+#include <sys/VideoSystem.hpp>
+#include <sys/HUDintroSystem.hpp>
+#include <sys/IntroInputSystem.hpp>
+
+// PAUSE
+#include <sys/PauseInputSystem.hpp>
+#include <sys/HUDpauseSystem.hpp>
+
+// INGAME
 #include <sys/VelocitySystem.hpp>
 #include <sys/InputSystem.hpp>
 #include <sys/MovementSystem.hpp>
@@ -14,8 +24,6 @@
 #include <sys/DeathSystem.hpp>
 #include <sys/SoundSystem.hpp>
 #include <sys/RenderSystem.hpp>
-#include <sys/VideoSystem.hpp>
 #include <sys/CollisionSystem.hpp>
-#include <sys/HUDintroSystem.hpp>
-#include <sys/IntroInputSystem.hpp>
 #include <sys/HUDingameSystem.hpp>
+

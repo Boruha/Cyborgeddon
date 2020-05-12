@@ -1,7 +1,6 @@
 #include <sys/HUDintroSystem.hpp>
 
 #include <Engine/EngineInterface/SceneInterface/ITexture.hpp>
-#include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
 
 
 void HUDintroSystem::fixedUpdate(const Context &context, const float deltaTime) {

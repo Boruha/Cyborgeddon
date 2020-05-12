@@ -66,7 +66,8 @@ StateEnum State::ingameNextState(const Context& context) {
 }
 
 StateEnum State::pauseNextState(const Context & context) {
-	if (context->isKeyPressed(KEY_INTRO))
+
+	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO)))
 		return INGAME;
 
 	return PAUSE;
@@ -137,7 +138,7 @@ StateEnum State::initNextState(const Context & context) {
 	context->getEngine().display();
 */
 
-	if (context->getVideoIndex() > 0 && context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyPressed(KEY_SPACE) || context->isKeyPressed(KEY_INTRO))) {
+	if (context->getVideoIndex() > 0 && context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
 		context->createLevel();
 		return INGAME;
 	}

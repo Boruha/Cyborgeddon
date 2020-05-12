@@ -4,6 +4,7 @@
 
 #include <util/ComponentConstants.hpp>
 #include <util/TexturePaths.hpp>
+#include <util/HUDPaths.hpp>
 
 #include <Engine/util/Math.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
@@ -539,12 +540,12 @@ void EntityManager::createLevel() {
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile("resources/models/Ciudad/colisiones.obj");
 
-	createTexture("resources/hud/llave_2.png", 558, 52);
-	createTexture("resources/hud/llave_1.png", 517, 52);
-	createTexture("resources/hud/marco_negro.png", 0, 35);
-	createTexture("resources/hud/barra_vida_azul.png", 0, 86);
-	createTexture("resources/hud/barra_vida_roja.png", 0, 86);
-	createTexture("resources/hud/fondo_blanco.png", 0, 78);
+	createTexture(KEY_2, 558, 52);
+	createTexture(KEY_1, 517, 52);
+	createTexture(MAIN_HUD, 0, 35);
+	createTexture(ANGEL_LIFEBAR, 0, 86);
+	createTexture(DEMON_LIFEBAR, 0, 86);
+	createTexture(BACKGROUND_LIFEBAR, 0, 78);
 
 	createGraph();
 	//puntero a vec3? Mejor?
@@ -668,6 +669,17 @@ void EntityManager::createLevel() {
     createDemon(vec3(41,0,-264), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createAngel(vec3(55,0,-271), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(68,0,-267), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+
+    // PAUSE
+
+	createMenuOptions(0, NUM_PAUSE_OPTIONS);
+
+
+	createTexture(PAUSE_CONTINUE, 0, 0);
+	createTexture(PAUSE_OPTIONS, 0, 0);
+	createTexture(PAUSE_EXIT, 0, 0);
+
+	createTexture(PAUSE_TEXTURE, 0, 0);
 
 /*
 	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
