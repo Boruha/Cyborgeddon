@@ -580,7 +580,7 @@ void EntityManager::createLevel() {
     createEnemy(vec3(-77,0,-23), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(-80,0,-35), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(-87,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    //Puente 1 (Antes de abrir la puerta con las llaves)
+   /* //Puente 1 (Antes de abrir la puerta con las llaves)
     createEnemy(vec3(-72,0,-65), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(-83,0,-75), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(-75,0,-85), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
@@ -753,11 +753,10 @@ void EntityManager::createLevel() {
     createAngel(vec3(-90,0,-576), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-82,0,-573), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createDemon(vec3(-74,0,-576), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    */
 
     // PAUSE
-
 	createMenuOptions(0, NUM_PAUSE_OPTIONS);
-
 
 	createTexture(PAUSE_CONTINUE, 0, 0);
 	createTexture(PAUSE_OPTIONS, 0, 0);
