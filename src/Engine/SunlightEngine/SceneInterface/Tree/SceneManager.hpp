@@ -37,7 +37,7 @@ private :
 	void renderScene();
 	void sendLightsData2ShaderScene();
 	void genShadowTexture();
-	void firstTimeRenderConfig();
+	void lightMatrixConfig();
 
 	std::unique_ptr<TreeNode> root { std::make_unique<TreeNode>(*this) };
 	Shader shaders[NUM_SHADERS] { Shader{ PHONG_BASIC_SHADER }, Shader{ SHADOWS_BASIC_SHADER } };

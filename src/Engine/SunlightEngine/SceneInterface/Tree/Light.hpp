@@ -18,7 +18,7 @@ struct Light : IEntity {
     glm::mat4 m_VP;
 
     float near { 1.f };
-    float far  { 300 };
+    float far  { 600 };
 
     unsigned FBO;
     unsigned shadow_map;

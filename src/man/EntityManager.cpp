@@ -171,10 +171,10 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 }
 
 void EntityManager::createLight(const vec3& pos, const vec3& dir, const vec3& diff, const vec3& spe){
-	auto* light = & createEntity(LIGHT);
+	light = & createEntity(LIGHT);
 
 	auto& phy     = componentStorage.createComponent(Physics(light->getType(), light->getID(), pos, vec3(0), vec3(0)));
-	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, false));
+	auto& render  = componentStorage.createComponent(Render(light->getType(), light->getID(), &phy.position, &phy.rotation, &phy.scale, true));
 
 	render.node   = componentStorage.createLight(diff, spe, dir);
 	render.node->setPosition(phy.position);
@@ -532,8 +532,9 @@ void EntityManager::createLevel() {
 	initData(128, 16, 150);
 	
 	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 50, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
-	createLight(vec3(0, 30, 20), vec3(1.0, -1.0, -1.0), vec3(0.6), vec3(0.5)); 
-	createLight(vec3(20,20, 20), vec3(-1.0, -1.0, -1.0), vec3(0.6), vec3(0.2));
+	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(0.8), vec3(0.0));
+	//createLight(vec3(0, 30, 20), vec3(1.0, -1.0, -1.0), vec3(0.6), vec3(0.5)); 
+	//createLight(vec3(20,20, 20), vec3(-1.0, -1.0, -1.0), vec3(0.6), vec3(0.2));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile("resources/models/Ciudad/colisiones.obj");

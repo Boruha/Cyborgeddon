@@ -3,9 +3,11 @@
 void MovementSystem::fixedUpdate(const Context &context, float deltaTime) {
 	// A la camara hay que darle la velocidad en funcion de la del jugador tras ser modificada por otros sistemas
 	auto * camPhysics = context->getCamera().getComponent<Physics>();
+	auto * ligPhysics = context->getLight().getComponent<Physics>();
 	const auto * plaPhysics = context->getPlayer().getComponent<Physics>();
 
 	camPhysics->velocity = plaPhysics->velocity;
+	ligPhysics->velocity = plaPhysics->velocity;
 
 	for (auto& cmp : context->getComponents().getComponents<Physics>()) {
 		if (cmp) {

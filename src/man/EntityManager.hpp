@@ -35,8 +35,12 @@ struct EntityManager : GameContext {
 
 	[[nodiscard]] const Entity& getPlayer() const override { return *player; }
 	[[nodiscard]] 		Entity& getPlayer() 	  override { return *player; }
+
 	[[nodiscard]] const Entity& getCamera() const override { return *camera; }
 	[[nodiscard]] 		Entity& getCamera() 	  override { return *camera; }
+
+	[[nodiscard]] const Entity& getLight() const override { return *light; }
+	[[nodiscard]] 		Entity& getLight() 	     override { return *light; }
 
 	[[nodiscard]] const std::vector<MapNode>& getGraph() const override { return graph; }
 	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
@@ -87,6 +91,7 @@ struct EntityManager : GameContext {
 
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
+		Entity * light  { nullptr };
 		Entity * nav    { nullptr };
 
 		std::vector<MapNode> graph {};

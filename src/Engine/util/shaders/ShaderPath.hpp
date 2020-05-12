@@ -4,8 +4,8 @@
 
 constexpr unsigned MAX_LIGHT_SIZE   = 7;
 constexpr unsigned NUM_SHADERS      = 2;
-constexpr unsigned SHADOW_VP_WIDTH  = 8192;
-constexpr unsigned SHADOW_VP_HEIGHT = 8192;
+constexpr unsigned SHADOW_VP_WIDTH  = 4096;
+constexpr unsigned SHADOW_VP_HEIGHT = 4096;
 
 //Phong basic
 constexpr std::string_view PHONG_BASIC_VERTEX 

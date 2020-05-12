@@ -1,8 +1,8 @@
 #version 330 core
 
 /*------  CONST    -------*/ 
-const float att_Linear = 0.0017;
-const float att_quadra = 0.0002;
+const float att_Linear = 0.0014;
+const float att_quadra = 0.000007;
 const float bias       = 0.001;
 
 

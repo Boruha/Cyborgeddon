@@ -29,6 +29,9 @@ struct GameContext {
 	[[nodiscard]] virtual const Entity& getCamera() const = 0;
 	[[nodiscard]] virtual 		Entity& getCamera() 	  = 0;
 
+	[[nodiscard]] virtual const Entity& getLight() const = 0;
+	[[nodiscard]] virtual 		Entity& getLight() 	     = 0;
+
 	[[nodiscard]] virtual const std::vector<MapNode>& getGraph() const = 0;
 	[[nodiscard]] virtual 		std::vector<MapNode>& getGraph()	   = 0;
 

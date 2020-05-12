@@ -11,40 +11,12 @@
 SceneManager::SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
 
 void SceneManager::render() {
-	if(firstTime)
-		firstTimeRenderConfig();
+	//if(firstTime)
+		//firstTimeRenderConfig();
 
+	lightMatrixConfig();
 	renderOffcreen();
 	renderScene();
-}
-
-void SceneManager::firstTimeRenderConfig(){
-	/*
-		for(std::size_t i=0; i<lights_index; ++i)
-		{
-			if(!lights[i] || !lightNodes[i]) continue;
-
-			const vec3& lightPos     = lightNodes[i]->getPosition();
-			const mat4& m_Projection = lights[i]->projection;
-
-			lights[i]->m_VPs[0] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0));
-			lights[i]->m_VPs[1] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0,-1.0, 0.0));
-			lights[i]->m_VPs[2] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
-			lights[i]->m_VPs[3] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,-1.0, 0.0), glm::vec3(0.0, 0.0,-1.0));
-			lights[i]->m_VPs[4] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 0.0, 1.0), glm::vec3(0.0,-1.0, 0.0));
-			lights[i]->m_VPs[5] = m_Projection * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, 0.0,-1.0), glm::vec3(0.0,-1.0, 0.0));
-		}
-	*/
-
-	for(std::size_t i=0; i<lights_index; ++i)
-	{
-		if(!lights[i] || !lightNodes[i]) continue;
-
-		const vec3& lightPos = lightNodes[i]->getPosition();
-		lights[i]->m_VP      = lights[i]->projection * glm::lookAt(lightPos, lightPos + lights[i]->direccion, glm::vec3(0.0, 1.0, 0.0));
-	}
-
-	firstTime = false;
 }
 
 glm::mat4 SceneManager::getLightViewProjection() const {
@@ -150,6 +122,17 @@ void SceneManager::genShadowTexture() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void SceneManager::lightMatrixConfig(){
+
+	for(std::size_t i=0; i<lights_index; ++i)
+	{
+		if(!lights[i] || !lightNodes[i]) continue;
+
+		const vec3& lightPos = lightNodes[i]->getPosition();
+		lights[i]->m_VP      = lights[i]->projection * glm::lookAt(lightPos, lightPos + lights[i]->direccion, glm::vec3(0.0, 1.0, 0.0));
+	}
+}
+
 //MAIN SCENE
 void SceneManager::renderScene() {
 	camera->setViewMatrix(glm::lookAt(cameraNode->getPosition(), camera->getTarget(), glm::vec3(0, 1, 0)));
@@ -215,16 +198,6 @@ void SceneManager::renderShadow(size_t index) {
 	glBindFramebuffer(GL_FRAMEBUFFER, lights[index]->FBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	/*
-		std::string name;
-		for(std::size_t i=0; i<6; ++i)
-		{
-			name = "m_VP[" + std::to_string(i) + "]";
-			shaders[1].mat4Uniform(name, lights[index]->m_VPs[i]);
-		}
-		shaders[1].vec3Uniform("lightPos", lightNodes[index]->getPosition());
-		shaders[1].floatUniform("far", lights[index]->far);
-	*/
 	shaders[1].mat4Uniform("m_VP", lights[index]->m_VP);
 	
 	root->render(glm::mat4(1), shaders[1], false);
