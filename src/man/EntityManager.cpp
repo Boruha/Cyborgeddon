@@ -532,10 +532,8 @@ void EntityManager::createLevel() {
 
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 50, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
+	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 40, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(0.8), vec3(0.0));
-	//createLight(vec3(0, 30, 20), vec3(1.0, -1.0, -1.0), vec3(0.6), vec3(0.5)); 
-	//createLight(vec3(20,20, 20), vec3(-1.0, -1.0, -1.0), vec3(0.6), vec3(0.2));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile("resources/models/Ciudad/colisiones.obj");
@@ -571,7 +569,7 @@ void EntityManager::createLevel() {
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
 
-	//ZONA 1 -> AMP. CITY
+    //ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
     createEnemy(vec3(5,0,-32), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
@@ -664,11 +662,97 @@ void EntityManager::createLevel() {
     createDemon(vec3(7,0,-257), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(14,0,-254), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Pasillo PT2
-    createEnemy(vec3(27,0,-272), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    createDemon(vec3(41,0,-278), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    createDemon(vec3(41,0,-264), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    createAngel(vec3(55,0,-271), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    createEnemy(vec3(68,0,-267), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(27,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(41,0,-278), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(41,0,-264), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(55,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(68,0,-267), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Zona demoniaca (Pentagrama) (Primera mitad)
+    createDemon(vec3(110,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(108,0,-250), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(108,0,-292), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(123,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(145,0,-320), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(123,0,-316), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(167,0,-331), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(150,0,-308), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(128,0,-295), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(107,0,-311), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(129,0,-280), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(144,0,-299), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(127,0,-247), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(129,0,-263), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(143,0,-245), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(107,0,-233), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(145,0,-225), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(124,0,-228), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(149,0,-236), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(166,0,-213), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(175,0,-230), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(181,0,-209), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(182,0,-247), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(160,0,-240), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Demonios alrededor de estatua gigante de Lucyborg
+    createDemon(vec3(154,0,-292), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(137,0,-271), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(154,0,-250), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(179,0,-259), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(180,0,-284), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Zona demoniaca (Pentagrama) (Segunda mitad)
+    createDemon(vec3(175,0,-314), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(159,0,-304), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(181,0,-297), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(181,0,-333), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(203,0,-304), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(192,0,-325), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(192,0,-294), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(220,0,-284), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(203,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(190,0,-286), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(226,0,-272), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(191,0,-260), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(203,0,-242), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(191,0,-250), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(220,0,-259), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(191,0,-222), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    //Zona del caos (Zona final)
+    //Bots al entrar
+    createEnemy(vec3(-105,0,-461), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-92,0,-479), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-73,0,-479), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-59,0,-461), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Bots del centro
+    createEnemy(vec3(-82,0,-504), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-82,0,-531), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-95,0,-518), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-68,0,-518), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Demonios alrededor del centro
+    createDemon(vec3(-112,0,-507), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(-51,0,-507), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(-82,0,-548), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    //Angeles alrededor del centro
+    createAngel(vec3(-112,0,-528), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-51,0,-528), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-82,0,-484), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createDemon(vec3(-135,0,-494), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(-135,0,-539), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createAngel(vec3(-30,0,-494), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createAngel(vec3(-30,0,-539), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+
+    createAngel(vec3(-90,0,-576), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createEnemy(vec3(-82,0,-573), vec3(1), vector<vec3>(0), scheduling_AI_counter);
+    createDemon(vec3(-74,0,-576), vec3(1), vector<vec3>(0), scheduling_AI_counter);
 
     // PAUSE
 
