@@ -571,15 +571,15 @@ void EntityManager::createLevel() {
 
     //ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
-    //createEnemy(vec3(5,0,-32), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(5,0,-32), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
-    //createEnemy(vec3(-22,0,-28), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    //createEnemy(vec3(-40,0,-33), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    //createEnemy(vec3(-50,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-22,0,-28), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-40,0,-33), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-50,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Tercer pasillo (girar a la derecha)
-    //createEnemy(vec3(-77,0,-23), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
-    createEnemy(vec3(-80,0,-35), vec3(1), patrol_1, ++scheduling_AI_counter);
-    /*createEnemy(vec3(-87,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-77,0,-23), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-80,0,-35), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
+    createEnemy(vec3(-87,0,-27), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     //Puente 1 (Antes de abrir la puerta con las llaves)
     createEnemy(vec3(-83,0,-75), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
     createEnemy(vec3(-75,0,-85), vec3(1), vector<vec3>(0), ++scheduling_AI_counter);
@@ -711,7 +711,7 @@ void EntityManager::createLevel() {
     createAngel(vec3(-90,0,-576), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createEnemy(vec3(-82,0,-573), vec3(1), vector<vec3>(0), scheduling_AI_counter);
     createDemon(vec3(-74,0,-576), vec3(1), vector<vec3>(0), scheduling_AI_counter);
-    */
+
 
     // PAUSE
 	createMenuOptions(0, NUM_PAUSE_OPTIONS);
@@ -807,7 +807,7 @@ void EntityManager::createGraph()
     auto& node_58  = graph.emplace_back(MapNode(-288, -271));
     auto& node_59  = graph.emplace_back(MapNode(-277, -263));
     //ZONA 3 -> ZONA DE DEMONIOS (PASILLO + ZONA PENTAGRAMA)
-    //Pasillo PT1 (Antes de llegar a la zona pentagrama)
+    //Pasillo (Antes de llegar a la zona pentagrama)
     auto& node_60  = graph.emplace_back(MapNode(-55, -270));
     auto& node_61  = graph.emplace_back(MapNode(-40, -267));
     auto& node_62  = graph.emplace_back(MapNode(-42, -275));
@@ -908,7 +908,7 @@ void EntityManager::createGraph()
     auto& node_154  = graph.emplace_back(MapNode(-135, -494));
     auto& node_155  = graph.emplace_back(MapNode(-131, -504));
     auto& node_156  = graph.emplace_back(MapNode(-122, -504));
-    auto& node_157  = graph.emplace_back(MapNode(-122, -595));
+    auto& node_157  = graph.emplace_back(MapNode(-122, -495));
     auto& node_158  = graph.emplace_back(MapNode(-105, -461));
     auto& node_159  = graph.emplace_back(MapNode(-100, -472));
     auto& node_160  = graph.emplace_back(MapNode(-92, -463));
@@ -916,6 +916,7 @@ void EntityManager::createGraph()
     auto& node_162  = graph.emplace_back(MapNode(-92, -479));
 
     //CONEXIONES ENTRE NODOS
+    //ZONA 1 -> AMP. CITY
     node_0.connections.emplace_back(0, 1, length(node_0.coord - node_1.coord));
 
     node_1.connections.emplace_back(1, 0, length(node_1.coord - node_0.coord));
@@ -941,6 +942,588 @@ void EntityManager::createGraph()
     node_6.connections.emplace_back(6, 7, length(node_6.coord - node_7.coord));
 
     node_7.connections.emplace_back(7, 6, length(node_7.coord - node_6.coord));
+    node_7.connections.emplace_back(7, 8, length(node_7.coord - node_8.coord));
+    node_7.connections.emplace_back(7, 9, length(node_7.coord - node_9.coord));
+
+    //Puente 1 (Antes de abrir la puerta con las llaves)
+    node_8.connections.emplace_back(8, 7, length(node_8.coord - node_7.coord));
+    node_8.connections.emplace_back(8, 9, length(node_8.coord - node_9.coord));
+    node_8.connections.emplace_back(8, 10, length(node_8.coord - node_10.coord));
+
+    node_9.connections.emplace_back(9, 7, length(node_9.coord - node_7.coord));
+    node_9.connections.emplace_back(9, 8, length(node_9.coord - node_8.coord));
+    node_9.connections.emplace_back(9, 11, length(node_9.coord - node_11.coord));
+
+    node_10.connections.emplace_back(10, 8, length(node_10.coord - node_8.coord));
+    node_10.connections.emplace_back(10, 11, length(node_10.coord - node_11.coord));
+
+    node_11.connections.emplace_back(11, 9, length(node_11.coord - node_9.coord));
+    node_11.connections.emplace_back(11, 10, length(node_11.coord - node_10.coord));
+    node_11.connections.emplace_back(11, 12, length(node_11.coord - node_12.coord));
+    node_11.connections.emplace_back(11, 14, length(node_11.coord - node_14.coord));
+
+    node_12.connections.emplace_back(12, 11, length(node_12.coord - node_11.coord));
+    node_12.connections.emplace_back(12, 13, length(node_12.coord - node_13.coord));
+
+    node_13.connections.emplace_back(13, 12, length(node_13.coord - node_12.coord));
+    node_13.connections.emplace_back(13, 15, length(node_13.coord - node_15.coord));
+
+    node_14.connections.emplace_back(14, 11, length(node_14.coord - node_11.coord));
+    node_14.connections.emplace_back(14, 15, length(node_14.coord - node_15.coord));
+
+    node_15.connections.emplace_back(15, 13, length(node_15.coord - node_13.coord));
+    node_15.connections.emplace_back(15, 14, length(node_15.coord - node_14.coord));
+    node_15.connections.emplace_back(15, 16, length(node_15.coord - node_16.coord));
+    node_15.connections.emplace_back(15, 17, length(node_15.coord - node_17.coord));
+
+    node_16.connections.emplace_back(16, 15, length(node_16.coord - node_15.coord));
+    node_16.connections.emplace_back(16, 17, length(node_16.coord - node_17.coord));
+
+    node_17.connections.emplace_back(17, 15, length(node_17.coord - node_15.coord));
+    node_17.connections.emplace_back(17, 16, length(node_17.coord - node_16.coord));
+    node_17.connections.emplace_back(17, 18, length(node_17.coord - node_18.coord));
+
+    node_18.connections.emplace_back(18, 17, length(node_18.coord - node_17.coord));
+    node_18.connections.emplace_back(18, 19, length(node_18.coord - node_19.coord));
+
+    node_19.connections.emplace_back(19, 18, length(node_19.coord - node_18.coord));
+    node_19.connections.emplace_back(19, 20, length(node_19.coord - node_20.coord));
+    node_19.connections.emplace_back(19, 21, length(node_19.coord - node_21.coord));
+
+    node_20.connections.emplace_back(20, 19, length(node_20.coord - node_19.coord));
+    node_20.connections.emplace_back(20, 21, length(node_20.coord - node_21.coord));
+    node_20.connections.emplace_back(20, 22, length(node_20.coord - node_22.coord));
+
+    node_21.connections.emplace_back(21, 19, length(node_21.coord - node_19.coord));
+    node_21.connections.emplace_back(21, 20, length(node_21.coord - node_20.coord));
+    node_21.connections.emplace_back(21, 22, length(node_21.coord - node_22.coord));
+
+    node_22.connections.emplace_back(22, 20, length(node_22.coord - node_20.coord));
+    node_22.connections.emplace_back(22, 21, length(node_22.coord - node_21.coord));
+    node_22.connections.emplace_back(22, 23, length(node_22.coord - node_23.coord));
+    node_22.connections.emplace_back(22, 24, length(node_22.coord - node_24.coord));
+
+    node_23.connections.emplace_back(23, 22, length(node_23.coord - node_22.coord));
+    node_23.connections.emplace_back(23, 24, length(node_23.coord - node_24.coord));
+    node_23.connections.emplace_back(23, 27, length(node_23.coord - node_27.coord));
+
+    node_24.connections.emplace_back(24, 22, length(node_24.coord - node_22.coord));
+    node_24.connections.emplace_back(24, 23, length(node_24.coord - node_23.coord));
+    node_24.connections.emplace_back(24, 27, length(node_24.coord - node_27.coord));
+    node_24.connections.emplace_back(24, 29, length(node_24.coord - node_29.coord));
+
+    //Rellano entre zona Angelical y demoniaca (Justo despues del primer puente).
+    node_25.connections.emplace_back(25, 26, length(node_25.coord - node_26.coord));
+    node_25.connections.emplace_back(25, 28, length(node_25.coord - node_28.coord));
+
+    node_26.connections.emplace_back(26, 25, length(node_26.coord - node_25.coord));
+    node_26.connections.emplace_back(26, 27, length(node_26.coord - node_27.coord));
+    node_26.connections.emplace_back(26, 28, length(node_26.coord - node_28.coord));
+
+    node_27.connections.emplace_back(27, 23, length(node_27.coord - node_23.coord));
+    node_27.connections.emplace_back(27, 24, length(node_27.coord - node_24.coord));
+    node_27.connections.emplace_back(27, 26, length(node_27.coord - node_26.coord));
+    node_27.connections.emplace_back(27, 28, length(node_27.coord - node_28.coord));
+    node_27.connections.emplace_back(27, 29, length(node_27.coord - node_29.coord));
+    node_27.connections.emplace_back(27, 31, length(node_27.coord - node_31.coord));
+
+    node_28.connections.emplace_back(28, 25, length(node_28.coord - node_25.coord));
+    node_28.connections.emplace_back(28, 26, length(node_28.coord - node_26.coord));
+    node_28.connections.emplace_back(28, 27, length(node_28.coord - node_27.coord));
+    node_28.connections.emplace_back(28, 30, length(node_28.coord - node_30.coord));
+    node_28.connections.emplace_back(28, 33, length(node_28.coord - node_33.coord));
+
+    node_29.connections.emplace_back(29, 24, length(node_29.coord - node_24.coord));
+    node_29.connections.emplace_back(29, 27, length(node_29.coord - node_27.coord));
+    node_29.connections.emplace_back(29, 32, length(node_29.coord - node_32.coord));
+    node_29.connections.emplace_back(29, 60, length(node_29.coord - node_60.coord));
+
+    node_30.connections.emplace_back(30, 28, length(node_30.coord - node_28.coord));
+    node_30.connections.emplace_back(30, 31, length(node_30.coord - node_31.coord));
+
+    node_31.connections.emplace_back(31, 27, length(node_31.coord - node_27.coord));
+    node_31.connections.emplace_back(31, 30, length(node_31.coord - node_30.coord));
+    node_31.connections.emplace_back(31, 32, length(node_31.coord - node_32.coord));
+
+    node_32.connections.emplace_back(32, 29, length(node_32.coord - node_29.coord));
+    node_32.connections.emplace_back(32, 31, length(node_32.coord - node_31.coord));
+    node_32.connections.emplace_back(32, 102, length(node_32.coord - node_102.coord));
+
+    //ZONA 2 -> CATEDRAL IGLESIA
+    //Pasillo Principal
+    node_33.connections.emplace_back(33, 28, length(node_33.coord - node_28.coord));
+    node_33.connections.emplace_back(33, 34, length(node_33.coord - node_34.coord));
+    node_33.connections.emplace_back(33, 35, length(node_33.coord - node_35.coord));
+
+    node_34.connections.emplace_back(34, 33, length(node_34.coord - node_33.coord));
+    node_34.connections.emplace_back(34, 35, length(node_34.coord - node_35.coord));
+
+    node_35.connections.emplace_back(35, 33, length(node_35.coord - node_33.coord));
+    node_35.connections.emplace_back(35, 34, length(node_35.coord - node_34.coord));
+    node_35.connections.emplace_back(35, 36, length(node_35.coord - node_36.coord));
+
+    node_36.connections.emplace_back(36, 35, length(node_36.coord - node_35.coord));
+    node_36.connections.emplace_back(36, 37, length(node_36.coord - node_37.coord));
+    node_36.connections.emplace_back(35, 39, length(node_36.coord - node_39.coord));
+
+    node_37.connections.emplace_back(37, 36, length(node_37.coord - node_36.coord));
+    node_37.connections.emplace_back(37, 38, length(node_37.coord - node_38.coord));
+
+    node_38.connections.emplace_back(38, 37, length(node_38.coord - node_37.coord));
+
+    node_39.connections.emplace_back(39, 36, length(node_39.coord - node_36.coord));
+    node_39.connections.emplace_back(39, 40, length(node_39.coord - node_40.coord));
+    node_39.connections.emplace_back(39, 41, length(node_39.coord - node_41.coord));
+
+    node_40.connections.emplace_back(40, 39, length(node_40.coord - node_39.coord));
+
+    node_41.connections.emplace_back(41, 39, length(node_41.coord - node_39.coord));
+    node_41.connections.emplace_back(41, 42, length(node_41.coord - node_42.coord));
+    node_41.connections.emplace_back(41, 43, length(node_41.coord - node_43.coord));
+    node_41.connections.emplace_back(41, 44, length(node_41.coord - node_44.coord));
+
+    node_42.connections.emplace_back(42, 41, length(node_42.coord - node_41.coord));
+
+    node_43.connections.emplace_back(43, 41, length(node_43.coord - node_41.coord));
+    node_43.connections.emplace_back(43, 47, length(node_43.coord - node_47.coord));
+    node_43.connections.emplace_back(43, 49, length(node_43.coord - node_49.coord));
+
+    node_44.connections.emplace_back(44, 41, length(node_44.coord - node_41.coord));
+    node_44.connections.emplace_back(44, 46, length(node_44.coord - node_46.coord));
+    node_44.connections.emplace_back(44, 54, length(node_44.coord - node_54.coord));
+
+    node_45.connections.emplace_back(45, 46, length(node_45.coord - node_46.coord));
+
+    node_46.connections.emplace_back(46, 44, length(node_46.coord - node_44.coord));
+    node_46.connections.emplace_back(46, 45, length(node_46.coord - node_45.coord));
+    node_46.connections.emplace_back(46, 59, length(node_46.coord - node_59.coord));
+
+    node_47.connections.emplace_back(47, 43, length(node_47.coord - node_43.coord));
+    node_47.connections.emplace_back(47, 48, length(node_47.coord - node_48.coord));
+    node_47.connections.emplace_back(47, 57, length(node_47.coord - node_57.coord));
+
+    node_48.connections.emplace_back(48, 47, length(node_48.coord - node_47.coord));
+
+    //Zona Inferior (mesa con velas)
+    node_49.connections.emplace_back(49, 43, length(node_49.coord - node_43.coord));
+    node_49.connections.emplace_back(49, 50, length(node_49.coord - node_50.coord));
+
+    node_50.connections.emplace_back(50, 49, length(node_50.coord - node_49.coord));
+    node_50.connections.emplace_back(50, 51, length(node_50.coord - node_51.coord));
+    node_50.connections.emplace_back(50, 52, length(node_50.coord - node_52.coord));
+
+    node_51.connections.emplace_back(51, 50, length(node_51.coord - node_50.coord));
+
+    node_52.connections.emplace_back(52, 50, length(node_52.coord - node_50.coord));
+
+    //Zona Superior (Organo/Piano pa la musiquita jijiji)
+    node_53.connections.emplace_back(53, 54, length(node_53.coord - node_54.coord));
+
+    node_54.connections.emplace_back(54, 44, length(node_54.coord - node_44.coord));
+    node_54.connections.emplace_back(54, 53, length(node_54.coord - node_53.coord));
+    node_54.connections.emplace_back(54, 55, length(node_54.coord - node_55.coord));
+    node_54.connections.emplace_back(54, 56, length(node_54.coord - node_56.coord));
+
+    node_55.connections.emplace_back(55, 54, length(node_55.coord - node_54.coord));
+
+    node_56.connections.emplace_back(56, 54, length(node_56.coord - node_54.coord));
+
+    //Altar (Donde esta la llave)
+    node_57.connections.emplace_back(57, 47, length(node_57.coord - node_47.coord));
+    node_57.connections.emplace_back(57, 58, length(node_57.coord - node_58.coord));
+
+    node_58.connections.emplace_back(58, 57, length(node_58.coord - node_57.coord));
+    node_58.connections.emplace_back(58, 59, length(node_58.coord - node_59.coord));
+
+    node_59.connections.emplace_back(59, 46, length(node_59.coord - node_46.coord));
+    node_59.connections.emplace_back(59, 58, length(node_59.coord - node_58.coord));
+
+    //ZONA 3 -> ZONA DE DEMONIOS (PASILLO + ZONA PENTAGRAMA)
+    //Pasillo (Antes de llegar a la zona pentagrama)
+    node_60.connections.emplace_back(60, 29, length(node_60.coord - node_29.coord));
+    node_60.connections.emplace_back(60, 61, length(node_60.coord - node_61.coord));
+
+    node_61.connections.emplace_back(61, 60, length(node_61.coord - node_60.coord));
+    node_61.connections.emplace_back(61, 62, length(node_61.coord - node_62.coord));
+    node_61.connections.emplace_back(61, 63, length(node_61.coord - node_63.coord));
+
+    node_62.connections.emplace_back(62, 61, length(node_62.coord - node_61.coord));
+
+    node_63.connections.emplace_back(63, 61, length(node_63.coord - node_61.coord));
+    node_63.connections.emplace_back(63, 64, length(node_63.coord - node_64.coord));
+    node_63.connections.emplace_back(63, 65, length(node_63.coord - node_65.coord));
+
+    node_64.connections.emplace_back(64, 63, length(node_64.coord - node_63.coord));
+    node_64.connections.emplace_back(64, 65, length(node_64.coord - node_65.coord));
+
+    node_65.connections.emplace_back(65, 63, length(node_65.coord - node_63.coord));
+    node_65.connections.emplace_back(65, 64, length(node_65.coord - node_64.coord));
+    node_65.connections.emplace_back(65, 66, length(node_65.coord - node_66.coord));
+
+    node_66.connections.emplace_back(66, 65, length(node_66.coord - node_65.coord));
+    node_66.connections.emplace_back(66, 67, length(node_66.coord - node_67.coord));
+    node_66.connections.emplace_back(66, 68, length(node_66.coord - node_68.coord));
+    node_66.connections.emplace_back(66, 69, length(node_66.coord - node_69.coord));
+
+    node_67.connections.emplace_back(67, 66, length(node_67.coord - node_66.coord));
+    node_67.connections.emplace_back(67, 68, length(node_67.coord - node_68.coord));
+
+    node_68.connections.emplace_back(68, 66, length(node_68.coord - node_66.coord));
+    node_68.connections.emplace_back(68, 67, length(node_68.coord - node_67.coord));
+    node_68.connections.emplace_back(68, 72, length(node_68.coord - node_72.coord));
+
+    node_69.connections.emplace_back(69, 66, length(node_69.coord - node_66.coord));
+    node_69.connections.emplace_back(69, 70, length(node_69.coord - node_70.coord));
+    node_69.connections.emplace_back(69, 72, length(node_69.coord - node_72.coord));
+
+    node_70.connections.emplace_back(70, 69, length(node_70.coord - node_69.coord));
+    node_70.connections.emplace_back(70, 71, length(node_70.coord - node_71.coord));
+
+    node_71.connections.emplace_back(71, 70, length(node_71.coord - node_70.coord));
+    node_71.connections.emplace_back(71, 72, length(node_71.coord - node_72.coord));
+
+    node_72.connections.emplace_back(72, 68, length(node_72.coord - node_68.coord));
+    node_72.connections.emplace_back(72, 69, length(node_72.coord - node_69.coord));
+    node_72.connections.emplace_back(72, 70, length(node_72.coord - node_70.coord));
+    node_72.connections.emplace_back(72, 71, length(node_72.coord - node_71.coord));
+
+    node_73.connections.emplace_back(73, 72, length(node_73.coord - node_72.coord));
+    node_73.connections.emplace_back(73, 74, length(node_73.coord - node_74.coord));
+    node_73.connections.emplace_back(73, 75, length(node_73.coord - node_75.coord));
+
+    node_74.connections.emplace_back(74, 73, length(node_74.coord - node_73.coord));
+    node_74.connections.emplace_back(74, 76, length(node_74.coord - node_76.coord));
+
+    node_75.connections.emplace_back(75, 73, length(node_75.coord - node_73.coord));
+    node_75.connections.emplace_back(75, 76, length(node_75.coord - node_76.coord));
+    node_75.connections.emplace_back(75, 79, length(node_75.coord - node_79.coord));
+
+    node_76.connections.emplace_back(76, 74, length(node_76.coord - node_74.coord));
+    node_76.connections.emplace_back(76, 75, length(node_76.coord - node_75.coord));
+    node_76.connections.emplace_back(76, 83, length(node_76.coord - node_83.coord));
+
+    //Zona demoniaca (Pentagrama)
+    node_77.connections.emplace_back(77, 78, length(node_77.coord - node_78.coord));
+    node_77.connections.emplace_back(77, 79, length(node_77.coord - node_79.coord));
+    node_77.connections.emplace_back(77, 80, length(node_77.coord - node_80.coord));
+
+    node_78.connections.emplace_back(78, 77, length(node_78.coord - node_77.coord));
+
+    node_79.connections.emplace_back(79, 75, length(node_79.coord - node_75.coord));
+    node_79.connections.emplace_back(79, 77, length(node_79.coord - node_77.coord));
+    node_79.connections.emplace_back(79, 101, length(node_79.coord - node_101.coord));
+
+    node_80.connections.emplace_back(80, 79, length(node_80.coord - node_79.coord));
+    node_80.connections.emplace_back(80, 97, length(node_80.coord - node_97.coord));
+
+    node_81.connections.emplace_back(81, 82, length(node_81.coord - node_82.coord));
+    node_81.connections.emplace_back(81, 83, length(node_81.coord - node_83.coord));
+    node_81.connections.emplace_back(81, 84, length(node_81.coord - node_84.coord));
+
+    node_82.connections.emplace_back(82, 81, length(node_82.coord - node_81.coord));
+
+    node_83.connections.emplace_back(83, 76, length(node_83.coord - node_76.coord));
+    node_83.connections.emplace_back(83, 81, length(node_83.coord - node_81.coord));
+    node_83.connections.emplace_back(83, 101, length(node_83.coord - node_101.coord));
+
+    node_84.connections.emplace_back(84, 81, length(node_84.coord - node_81.coord));
+    node_84.connections.emplace_back(84, 100, length(node_84.coord - node_100.coord));
+
+    node_85.connections.emplace_back(85, 86, length(node_85.coord - node_86.coord));
+    node_85.connections.emplace_back(85, 87, length(node_85.coord - node_87.coord));
+    node_85.connections.emplace_back(85, 88, length(node_85.coord - node_88.coord));
+
+    node_86.connections.emplace_back(86, 85, length(node_86.coord - node_85.coord));
+
+    node_87.connections.emplace_back(87, 85, length(node_87.coord - node_85.coord));
+    node_87.connections.emplace_back(87, 97, length(node_87.coord - node_97.coord));
+
+    node_88.connections.emplace_back(88, 85, length(node_88.coord - node_85.coord));
+    node_88.connections.emplace_back(88, 98, length(node_88.coord - node_98.coord));
+
+    node_89.connections.emplace_back(89, 90, length(node_89.coord - node_90.coord));
+    node_89.connections.emplace_back(89, 91, length(node_89.coord - node_91.coord));
+    node_89.connections.emplace_back(89, 92, length(node_89.coord - node_92.coord));
+
+    node_90.connections.emplace_back(90, 89, length(node_90.coord - node_89.coord));
+
+    node_91.connections.emplace_back(91, 89, length(node_91.coord - node_89.coord));
+    node_91.connections.emplace_back(91, 98, length(node_91.coord - node_98.coord));
+
+    node_92.connections.emplace_back(92, 89, length(node_92.coord - node_89.coord));
+    node_92.connections.emplace_back(92, 99, length(node_92.coord - node_99.coord));
+
+    node_93.connections.emplace_back(93, 94, length(node_93.coord - node_94.coord));
+    node_93.connections.emplace_back(93, 95, length(node_93.coord - node_95.coord));
+    node_93.connections.emplace_back(93, 96, length(node_93.coord - node_96.coord));
+
+    node_94.connections.emplace_back(94, 93, length(node_94.coord - node_93.coord));
+
+    node_95.connections.emplace_back(95, 93, length(node_95.coord - node_93.coord));
+    node_95.connections.emplace_back(95, 99, length(node_95.coord - node_99.coord));
+
+    node_96.connections.emplace_back(96, 93, length(node_96.coord - node_93.coord));
+    node_96.connections.emplace_back(96, 100, length(node_96.coord - node_100.coord));
+
+    //Demonios alrededor de estatua gigante de Lucyborg
+    node_97.connections.emplace_back(97, 80, length(node_97.coord - node_80.coord));
+    node_97.connections.emplace_back(97, 87, length(node_97.coord - node_87.coord));
+    node_97.connections.emplace_back(97, 98, length(node_97.coord - node_98.coord));
+    node_97.connections.emplace_back(97, 101, length(node_97.coord - node_101.coord));
+
+    node_98.connections.emplace_back(98, 88, length(node_98.coord - node_88.coord));
+    node_98.connections.emplace_back(98, 91, length(node_98.coord - node_91.coord));
+    node_98.connections.emplace_back(98, 97, length(node_98.coord - node_97.coord));
+    node_98.connections.emplace_back(98, 99, length(node_98.coord - node_99.coord));
+
+    node_99.connections.emplace_back(99, 92, length(node_99.coord - node_92.coord));
+    node_99.connections.emplace_back(99, 95, length(node_99.coord - node_95.coord));
+    node_99.connections.emplace_back(99, 98, length(node_99.coord - node_98.coord));
+    node_99.connections.emplace_back(99, 100, length(node_99.coord - node_100.coord));
+
+    node_100.connections.emplace_back(100, 84, length(node_100.coord - node_84.coord));
+    node_100.connections.emplace_back(100, 96, length(node_100.coord - node_96.coord));
+    node_100.connections.emplace_back(100, 99, length(node_100.coord - node_99.coord));
+    node_100.connections.emplace_back(100, 101, length(node_100.coord - node_101.coord));
+
+    node_101.connections.emplace_back(101, 79, length(node_101.coord - node_79.coord));
+    node_101.connections.emplace_back(101, 83, length(node_101.coord - node_83.coord));
+    node_101.connections.emplace_back(101, 97, length(node_101.coord - node_97.coord));
+    node_101.connections.emplace_back(101, 100, length(node_101.coord - node_100.coord));
+
+    //ZONA 4 -> Zona del caos (Zona final)
+    node_102.connections.emplace_back(102, 32, length(node_102.coord - node_32.coord));
+    node_102.connections.emplace_back(102, 103, length(node_102.coord - node_103.coord));
+    node_102.connections.emplace_back(102, 117, length(node_102.coord - node_117.coord));
+    node_102.connections.emplace_back(102, 162, length(node_102.coord - node_162.coord));
+
+    node_103.connections.emplace_back(103, 102, length(node_103.coord - node_102.coord));
+    node_103.connections.emplace_back(103, 104, length(node_103.coord - node_104.coord));
+
+    node_104.connections.emplace_back(104, 103, length(node_104.coord - node_103.coord));
+    node_104.connections.emplace_back(104, 105, length(node_104.coord - node_105.coord));
+    node_104.connections.emplace_back(104, 107, length(node_104.coord - node_107.coord));
+
+    node_105.connections.emplace_back(105, 104, length(node_105.coord - node_104.coord));
+    node_105.connections.emplace_back(105, 106, length(node_105.coord - node_106.coord));
+
+    node_106.connections.emplace_back(106, 105, length(node_106.coord - node_105.coord));
+    node_106.connections.emplace_back(106, 107, length(node_106.coord - node_107.coord));
+    node_106.connections.emplace_back(106, 108, length(node_106.coord - node_108.coord));
+
+    node_107.connections.emplace_back(107, 104, length(node_107.coord - node_104.coord));
+    node_107.connections.emplace_back(107, 106, length(node_107.coord - node_106.coord));
+
+    node_108.connections.emplace_back(108, 106, length(node_108.coord - node_106.coord));
+    node_108.connections.emplace_back(108, 109, length(node_108.coord - node_109.coord));
+    node_108.connections.emplace_back(108, 111, length(node_108.coord - node_111.coord));
+    node_108.connections.emplace_back(108, 132, length(node_108.coord - node_132.coord));
+
+    node_109.connections.emplace_back(109, 108, length(node_109.coord - node_108.coord));
+    node_109.connections.emplace_back(109, 110, length(node_109.coord - node_110.coord));
+
+    node_110.connections.emplace_back(110, 109, length(node_110.coord - node_109.coord));
+    node_110.connections.emplace_back(110, 111, length(node_110.coord - node_111.coord));
+    node_110.connections.emplace_back(110, 112, length(node_110.coord - node_112.coord));
+
+    node_111.connections.emplace_back(111, 108, length(node_111.coord - node_108.coord));
+    node_111.connections.emplace_back(111, 110, length(node_111.coord - node_110.coord));
+
+    node_112.connections.emplace_back(112, 110, length(node_112.coord - node_110.coord));
+    node_112.connections.emplace_back(112, 113, length(node_112.coord - node_113.coord));
+    node_112.connections.emplace_back(112, 128, length(node_112.coord - node_128.coord));
+
+    node_113.connections.emplace_back(113, 112, length(node_113.coord - node_116.coord));
+    node_113.connections.emplace_back(113, 114, length(node_113.coord - node_114.coord));
+    node_113.connections.emplace_back(113, 116, length(node_113.coord - node_116.coord));
+
+    node_114.connections.emplace_back(114, 113, length(node_114.coord - node_113.coord));
+    node_114.connections.emplace_back(114, 115, length(node_114.coord - node_115.coord));
+
+    node_115.connections.emplace_back(115, 114, length(node_115.coord - node_114.coord));
+    node_115.connections.emplace_back(115, 116, length(node_115.coord - node_116.coord));
+
+    node_116.connections.emplace_back(116, 113, length(node_116.coord - node_113.coord));
+    node_116.connections.emplace_back(116, 115, length(node_116.coord - node_115.coord));
+    node_116.connections.emplace_back(116, 117, length(node_116.coord - node_117.coord));
+
+    node_117.connections.emplace_back(117, 102, length(node_117.coord - node_102.coord));
+    node_117.connections.emplace_back(117, 116, length(node_117.coord - node_116.coord));
+    node_117.connections.emplace_back(117, 118, length(node_117.coord - node_118.coord));
+    node_117.connections.emplace_back(117, 121, length(node_117.coord - node_121.coord));
+    node_117.connections.emplace_back(117, 128, length(node_117.coord - node_128.coord));
+
+    node_118.connections.emplace_back(118, 117, length(node_118.coord - node_117.coord));
+    node_118.connections.emplace_back(118, 119, length(node_118.coord - node_119.coord));
+    node_118.connections.emplace_back(118, 121, length(node_118.coord - node_121.coord));
+
+    node_119.connections.emplace_back(119, 118, length(node_119.coord - node_118.coord));
+    node_119.connections.emplace_back(119, 120, length(node_119.coord - node_120.coord));
+
+    node_120.connections.emplace_back(120, 119, length(node_120.coord - node_119.coord));
+    node_120.connections.emplace_back(120, 121, length(node_120.coord - node_121.coord));
+    node_120.connections.emplace_back(120, 156, length(node_120.coord - node_156.coord));
+
+    node_121.connections.emplace_back(121, 117, length(node_121.coord - node_117.coord));
+    node_121.connections.emplace_back(121, 118, length(node_121.coord - node_118.coord));
+    node_121.connections.emplace_back(121, 120, length(node_121.coord - node_120.coord));
+    node_121.connections.emplace_back(121, 122, length(node_121.coord - node_122.coord));
+    node_121.connections.emplace_back(121, 149, length(node_121.coord - node_149.coord));
+
+    node_122.connections.emplace_back(122, 121, length(node_122.coord - node_121.coord));
+    node_122.connections.emplace_back(122, 123, length(node_122.coord - node_123.coord));
+    node_122.connections.emplace_back(122, 128, length(node_122.coord - node_128.coord));
+    node_122.connections.emplace_back(122, 143, length(node_122.coord - node_143.coord));
+    node_122.connections.emplace_back(122, 153, length(node_122.coord - node_153.coord));
+
+    node_123.connections.emplace_back(123, 122, length(node_123.coord - node_122.coord));
+    node_123.connections.emplace_back(123, 124, length(node_123.coord - node_124.coord));
+    node_123.connections.emplace_back(123, 126, length(node_123.coord - node_126.coord));
+
+    node_124.connections.emplace_back(124, 123, length(node_124.coord - node_123.coord));
+    node_124.connections.emplace_back(124, 125, length(node_124.coord - node_125.coord));
+
+    node_125.connections.emplace_back(125, 124, length(node_125.coord - node_124.coord));
+    node_125.connections.emplace_back(125, 126, length(node_125.coord - node_126.coord));
+
+    node_126.connections.emplace_back(126, 123, length(node_126.coord - node_123.coord));
+    node_126.connections.emplace_back(126, 125, length(node_126.coord - node_125.coord));
+    node_126.connections.emplace_back(126, 127, length(node_126.coord - node_127.coord));
+
+    node_127.connections.emplace_back(127, 126, length(node_127.coord - node_126.coord));
+    node_127.connections.emplace_back(127, 128, length(node_127.coord - node_128.coord));
+    node_127.connections.emplace_back(127, 129, length(node_127.coord - node_129.coord));
+
+    node_128.connections.emplace_back(128, 112, length(node_128.coord - node_112.coord));
+    node_128.connections.emplace_back(128, 117, length(node_128.coord - node_117.coord));
+    node_128.connections.emplace_back(128, 122, length(node_128.coord - node_122.coord));
+    node_128.connections.emplace_back(128, 127, length(node_128.coord - node_127.coord));
+
+    node_129.connections.emplace_back(129, 127, length(node_129.coord - node_127.coord));
+    node_129.connections.emplace_back(129, 130, length(node_129.coord - node_130.coord));
+    node_129.connections.emplace_back(129, 131, length(node_129.coord - node_131.coord));
+
+    node_130.connections.emplace_back(130, 129, length(node_130.coord - node_129.coord));
+    node_130.connections.emplace_back(130, 132, length(node_130.coord - node_132.coord));
+
+    node_131.connections.emplace_back(131, 129, length(node_131.coord - node_129.coord));
+    node_131.connections.emplace_back(131, 132, length(node_131.coord - node_132.coord));
+
+    node_132.connections.emplace_back(132, 108, length(node_132.coord - node_108.coord));
+    node_132.connections.emplace_back(132, 130, length(node_132.coord - node_130.coord));
+    node_132.connections.emplace_back(132, 131, length(node_132.coord - node_131.coord));
+    node_132.connections.emplace_back(132, 133, length(node_132.coord - node_133.coord));
+
+    node_133.connections.emplace_back(133, 132, length(node_133.coord - node_132.coord));
+    node_133.connections.emplace_back(133, 134, length(node_133.coord - node_134.coord));
+    node_133.connections.emplace_back(133, 136, length(node_133.coord - node_136.coord));
+
+    node_134.connections.emplace_back(134, 133, length(node_134.coord - node_133.coord));
+    node_134.connections.emplace_back(134, 135, length(node_134.coord - node_135.coord));
+
+    node_135.connections.emplace_back(135, 134, length(node_135.coord - node_134.coord));
+    node_135.connections.emplace_back(135, 136, length(node_135.coord - node_136.coord));
+    node_135.connections.emplace_back(135, 143, length(node_135.coord - node_143.coord));
+
+    node_136.connections.emplace_back(136, 133, length(node_136.coord - node_133.coord));
+    node_136.connections.emplace_back(136, 135, length(node_136.coord - node_135.coord));
+    node_136.connections.emplace_back(136, 137, length(node_136.coord - node_137.coord));
+
+    node_137.connections.emplace_back(137, 136, length(node_137.coord - node_136.coord));
+    node_137.connections.emplace_back(137, 138, length(node_137.coord - node_138.coord));
+
+    node_138.connections.emplace_back(138, 137, length(node_138.coord - node_137.coord));
+    node_138.connections.emplace_back(138, 139, length(node_138.coord - node_139.coord));
+    node_138.connections.emplace_back(138, 143, length(node_138.coord - node_143.coord));
+
+    node_139.connections.emplace_back(139, 138, length(node_139.coord - node_138.coord));
+    node_139.connections.emplace_back(139, 140, length(node_139.coord - node_140.coord));
+
+    node_140.connections.emplace_back(140, 139, length(node_140.coord - node_139.coord));
+    node_140.connections.emplace_back(140, 141, length(node_140.coord - node_141.coord));
+    node_140.connections.emplace_back(140, 144, length(node_140.coord - node_144.coord));
+
+    node_141.connections.emplace_back(141, 140, length(node_141.coord - node_140.coord));
+    node_141.connections.emplace_back(141, 142, length(node_141.coord - node_142.coord));
+    node_141.connections.emplace_back(141, 143, length(node_141.coord - node_143.coord));
+
+    node_142.connections.emplace_back(142, 141, length(node_142.coord - node_141.coord));
+    node_142.connections.emplace_back(142, 144, length(node_142.coord - node_144.coord));
+
+    node_143.connections.emplace_back(143, 122, length(node_143.coord - node_122.coord));
+    node_143.connections.emplace_back(143, 135, length(node_143.coord - node_135.coord));
+    node_143.connections.emplace_back(143, 138, length(node_143.coord - node_138.coord));
+    node_143.connections.emplace_back(143, 141, length(node_143.coord - node_141.coord));
+
+    node_144.connections.emplace_back(144, 140, length(node_144.coord - node_140.coord));
+    node_144.connections.emplace_back(144, 142, length(node_144.coord - node_142.coord));
+    node_144.connections.emplace_back(144, 145, length(node_144.coord - node_145.coord));
+
+    node_145.connections.emplace_back(145, 144, length(node_145.coord - node_144.coord));
+    node_145.connections.emplace_back(145, 146, length(node_145.coord - node_146.coord));
+    node_145.connections.emplace_back(145, 147, length(node_145.coord - node_147.coord));
+    node_145.connections.emplace_back(145, 154, length(node_145.coord - node_154.coord));
+
+    node_146.connections.emplace_back(146, 145, length(node_146.coord - node_145.coord));
+    node_146.connections.emplace_back(146, 148, length(node_146.coord - node_148.coord));
+
+    node_147.connections.emplace_back(147, 145, length(node_147.coord - node_145.coord));
+    node_147.connections.emplace_back(147, 148, length(node_147.coord - node_148.coord));
+
+    node_148.connections.emplace_back(148, 146, length(node_148.coord - node_146.coord));
+    node_148.connections.emplace_back(148, 147, length(node_148.coord - node_147.coord));
+    node_148.connections.emplace_back(148, 149, length(node_148.coord - node_149.coord));
+
+    node_149.connections.emplace_back(149, 121, length(node_149.coord - node_121.coord));
+    node_149.connections.emplace_back(149, 148, length(node_149.coord - node_148.coord));
+    node_149.connections.emplace_back(149, 150, length(node_149.coord - node_150.coord));
+
+    node_150.connections.emplace_back(150, 149, length(node_150.coord - node_149.coord));
+    node_150.connections.emplace_back(150, 151, length(node_150.coord - node_151.coord));
+    node_150.connections.emplace_back(150, 153, length(node_150.coord - node_153.coord));
+
+    node_151.connections.emplace_back(151, 150, length(node_151.coord - node_150.coord));
+    node_151.connections.emplace_back(151, 152, length(node_151.coord - node_152.coord));
+
+    node_152.connections.emplace_back(152, 151, length(node_152.coord - node_151.coord));
+    node_152.connections.emplace_back(152, 153, length(node_152.coord - node_153.coord));
+
+    node_153.connections.emplace_back(153, 122, length(node_153.coord - node_122.coord));
+    node_153.connections.emplace_back(153, 150, length(node_153.coord - node_150.coord));
+    node_153.connections.emplace_back(153, 152, length(node_153.coord - node_152.coord));
+
+    node_154.connections.emplace_back(154, 145, length(node_154.coord - node_145.coord));
+    node_154.connections.emplace_back(154, 155, length(node_154.coord - node_155.coord));
+    node_154.connections.emplace_back(154, 157, length(node_154.coord - node_157.coord));
+    node_154.connections.emplace_back(154, 158, length(node_154.coord - node_158.coord));
+
+    node_155.connections.emplace_back(155, 154, length(node_155.coord - node_154.coord));
+    node_155.connections.emplace_back(155, 156, length(node_155.coord - node_156.coord));
+
+    node_156.connections.emplace_back(156, 120, length(node_156.coord - node_120.coord));
+    node_156.connections.emplace_back(156, 155, length(node_156.coord - node_155.coord));
+    node_156.connections.emplace_back(156, 157, length(node_156.coord - node_157.coord));
+
+    node_157.connections.emplace_back(157, 154, length(node_157.coord - node_154.coord));
+    node_157.connections.emplace_back(157, 156, length(node_157.coord - node_156.coord));
+
+    node_158.connections.emplace_back(158, 154, length(node_158.coord - node_154.coord));
+    node_158.connections.emplace_back(158, 159, length(node_158.coord - node_159.coord));
+    node_158.connections.emplace_back(158, 160, length(node_158.coord - node_160.coord));
+
+    node_159.connections.emplace_back(159, 158, length(node_159.coord - node_158.coord));
+    node_159.connections.emplace_back(159, 161, length(node_159.coord - node_161.coord));
+
+    node_160.connections.emplace_back(160, 158, length(node_160.coord - node_158.coord));
+    node_160.connections.emplace_back(160, 161, length(node_160.coord - node_161.coord));
+
+    node_161.connections.emplace_back(161, 159, length(node_161.coord - node_159.coord));
+    node_161.connections.emplace_back(161, 160, length(node_161.coord - node_160.coord));
+    node_161.connections.emplace_back(161, 162, length(node_161.coord - node_162.coord));
+
+    node_162.connections.emplace_back(162, 102, length(node_162.coord - node_102.coord));
+    node_162.connections.emplace_back(162, 161, length(node_162.coord - node_161.coord));
+
 
 	/*//hall
 	auto& node_0  = graph.emplace_back(MapNode(0, 0));
