@@ -9,19 +9,19 @@ struct Light : IEntity {
 
     void render(const glm::mat4& m, Shader shader, bool visualShader) override;
 
-    [[nodiscard]] const std::size_t getID() const { return ID; }
+    [[nodiscard]] std::size_t getID() const { return ID; }
 
-    glm::vec3 direccion;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    glm::mat4 projection;
-    glm::mat4 m_VP;
+    glm::vec3 direccion {};
+    glm::vec3 diffuse {};
+    glm::vec3 specular {};
+    glm::mat4 projection {};
+    glm::mat4 m_VP {};
 
     float near { 1.f };
     float far  { 600 };
 
-    unsigned FBO;
-    unsigned shadow_map;
+    unsigned FBO { };
+    unsigned shadow_map { };
 
 private:
     std::size_t ID { nextID++ };

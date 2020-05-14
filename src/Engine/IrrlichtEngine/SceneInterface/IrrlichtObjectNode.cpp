@@ -45,11 +45,11 @@ void IrrlichtObjectNode::setRotation(const vec3 & rot) {
 void IrrlichtObjectNode::setScale(const vec3 & sca) {
 	p_impl->setScale(sca);
 }
-
+/*
 void IrrlichtObjectNode::setTexture(const std::string_view path) const {
 	p_impl->setTexture(path);
 }
-
+*/
 void IrrlichtObjectNode::affectedByLight(const bool affected) const {
 	p_impl->affectedByLight(affected);
 }

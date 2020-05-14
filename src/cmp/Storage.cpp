@@ -49,13 +49,32 @@ INode * Storage::createMesh(const std::string_view mesh) {
 		}
 	}
 
-	engine.scene.get();
-
 	if (!returnValue)
 		returnValue = nodes.emplace_back(engine.scene->addMeshNode(mesh));
 
 	return returnValue;
 }
+
+INode * Storage::createAnimatedMesh(const std::string_view path) {
+
+//		std::cout << "\n\n" << "Node" << "\n";
+//		printVecInfo(nodes);
+
+	INode * returnValue { nullptr };
+
+	for (auto & node : nodes) {
+		if (node == nullptr) {
+			returnValue = node = engine.scene->addAnimatedMeshNode(path);
+			break;
+		}
+	}
+
+	if (!returnValue)
+		returnValue = nodes.emplace_back(engine.scene->addAnimatedMeshNode(path));
+
+	return returnValue;
+}
+
 
 INode * Storage::createCamera() {
 

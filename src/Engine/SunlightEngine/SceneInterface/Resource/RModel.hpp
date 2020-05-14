@@ -23,7 +23,7 @@ struct RModel : IResource {
 
 	private :
 		std::vector<RMesh> modelMeshes;
-		std::vector<Texture> modelTextures;
+		inline static std::vector<Texture> modelTextures {};
 		std::string directory;
 
 		void processNode(aiNode * node, const aiScene * scene);

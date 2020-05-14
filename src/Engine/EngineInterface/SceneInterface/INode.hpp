@@ -27,9 +27,6 @@ struct INode {
 	// setters
 	virtual void setTarget(const vec3 &) = 0;
 
-    // set texture
-    virtual void setTexture(std::string_view) const = 0;
-
     // sets if light should affect a node
     virtual void affectedByLight(bool) const = 0;
 };

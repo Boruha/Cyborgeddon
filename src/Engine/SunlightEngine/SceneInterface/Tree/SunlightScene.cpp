@@ -49,3 +49,7 @@ INode * SunlightScene::addFreeLightNode(const glm::vec3& diff, const glm::vec3& 
 void SunlightScene::clearScene() {
 	sceneManager->clearScene();
 }
+
+INode * SunlightScene::addAnimatedMeshNode(const std::string_view path) {
+	return sceneManager->addAnimatedNode(path);
+}

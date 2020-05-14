@@ -1,11 +1,7 @@
 #include <sys/InputSystem.hpp>
 #include <util/TexturePaths.hpp>
-#include <Engine/EngineInterface/IEngine.hpp>
 #include <Engine/util/MathIntersection.hpp>
-#include <Engine/EngineInterface/SceneInterface/ICameraNode.hpp>
 #include <Engine/util/Mouse.hpp>
-#include <iostream>
-#include <glm/gtx/string_cast.hpp>
 
 void InputSystem::init() {
     for (auto * next = keyMap; next->key != 0; ++next) {
@@ -60,10 +56,10 @@ void InputSystem::fixedUpdate(const Context& context, float deltaTime) {
 
 		// player siempre tiene render
 		auto & render = *player.getComponent<Render>();
-
+/*
 		if (data.switchingMode)
 			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
-
+*/
 		const Mouse& mouse = context->getMouse();
 //    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
 

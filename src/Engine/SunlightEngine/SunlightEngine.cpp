@@ -120,9 +120,9 @@ void SunlightEngine::clear(const Color color, const bool depth) const {
 	glClearColor(float(color.r) / 255.f, float(color.g) / 255.f, float(color.b) / 255.f, float(color.a) / 255.f);
 
 	glClear(unsigned(GL_COLOR_BUFFER_BIT));
+
 	if (depth)
 		glClear(unsigned(GL_DEPTH_BUFFER_BIT));
-
 }
 
 void SunlightEngine::draw() const {
@@ -140,5 +140,4 @@ bool SunlightEngine::isKeyTextInput(const unsigned int code) {
 void SunlightEngine::setViewport(){
 	glfwGetWindowSize(window, (int*)&windowWidth, (int*)&windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
-
 }

@@ -1,6 +1,8 @@
 #include <Engine/SunlightEngine/SceneInterface/Tree/SceneManager.hpp>
 
 #include <Engine/SunlightEngine/SceneInterface/Tree/Model.hpp>
+#include <Engine/SunlightEngine/SceneInterface/Tree/Animation.hpp>
+
 #include <Engine/SunlightEngine/SunlightEngine.hpp>
 
 #include <Engine/util/glad/glad.h>
@@ -37,6 +39,14 @@ TreeNode * SceneManager::addMeshNode(const std::string_view mesh) {
 
 	return root->addChildren(std::move(tree_ptr));
 }
+
+TreeNode * SceneManager::addAnimatedNode(const std::string_view path) {
+	auto tree_ptr = std::make_unique<TreeNode>(*this);
+	tree_ptr->setEntity(std::make_unique<Animation>(resourceManager, path));
+
+	return root->addChildren(std::move(tree_ptr));
+}
+
 
 TreeNode * SceneManager::addCameraNode() {
 	auto tree_ptr   = std::make_unique<TreeNode>(*this);

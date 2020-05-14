@@ -31,9 +31,6 @@ struct IrrlichtCameraNode : ICameraNode {
 	void setRotation(const vec3 &) override;
 	void setScale   (const vec3 &) override;
 
-	// set texture
-	void setTexture(std::string_view) const override;
-
 	// sets if light should affect a node
 	void affectedByLight(bool) const override;
 

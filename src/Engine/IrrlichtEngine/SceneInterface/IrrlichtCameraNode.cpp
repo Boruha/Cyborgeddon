@@ -43,11 +43,11 @@ void IrrlichtCameraNode::setRotation(const vec3 & rot) {
 void IrrlichtCameraNode::setScale(const vec3 & sca) {
 	p_impl->setScale(sca);
 }
-
+/*
 void IrrlichtCameraNode::setTexture(const std::string_view path) const {
 	p_impl->setTexture(path.data());
 }
-
+*/
 void IrrlichtCameraNode::affectedByLight(const bool affected) const {
 	p_impl->affectedByLight(affected);
 }
