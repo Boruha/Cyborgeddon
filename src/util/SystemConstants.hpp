@@ -1,7 +1,7 @@
 // AI SYSTEM
 constexpr float LOD_PA_MIN_DISTANCE		= 130.f;
 constexpr float PATROL_MIN_DISTANCE		= 100.f;
-constexpr float VIEW_MIN_DISTANCE		= 5.f;
+constexpr float VIEW_MIN_DISTANCE		= 10.f;
 constexpr float PURSUE_MIN_DISTANCE		= 15.f;
 constexpr float ARRIVE_MIN_DISTANCE	    = 2.f;
 constexpr float ATTACK_MIN_DISTANCE		= 0.f;
