@@ -234,8 +234,8 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos, vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
-	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
-	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
+	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 1, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 1.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), ANGEL, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, DIST_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
@@ -261,8 +261,8 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& enemy     = createEntity(ENEMY);
 	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos, vec3(), vec3(), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
-	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 5, physics.velocity));
-	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 5.f, physics.velocity));
+	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 1, physics.velocity));
+	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 1.f, physics.velocity));
 	auto& data      = componentStorage.createComponent(CharacterData(enemy.getType(), enemy.getID(), DEMON, ENEMY_HEALTH, ENEMY_SWITCH_MODE_COOLDOWN, ENEMY_ATTACK_DAMAGE, ENEMY_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, ENEMY_DASH_SPEED, ENEMY_DASH_COOLDOWN));
 	auto& jump 		= componentStorage.createComponent(Jump(enemy.getType(), enemy.getID(), JUMP_COOLDOWN, JUMP_TIMER));
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
@@ -319,7 +319,7 @@ void EntityManager::createBullet() {
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
-	render.node->setScale(physics.scale / 2.f);
+	render.node->setScale(physics.scale);
 
 	bullet.addComponent(physics);
 	bullet.addComponent(data);
@@ -543,7 +543,7 @@ void EntityManager::createLevel() {
     //Puente 1 (Antes de abrir la puerta con las llaves)
 	std::vector<vec3> patrol_8 = { graph[8].coord};
 	std::vector<vec3> patrol_9 = { graph[9].coord};
-	std::vector<vec3> patrol_11 = { graph[11].coord, graph[10].coord};
+	std::vector<vec3> patrol_11 = { graph[11].coord, graph[10].coord };
 	std::vector<vec3> patrol_12 = { graph[12].coord };
     std::vector<vec3> patrol_13 = { graph[13].coord };
     std::vector<vec3> patrol_14 = { graph[14].coord, graph[15].coord };
@@ -569,7 +569,7 @@ void EntityManager::createLevel() {
     std::vector<vec3> patrol_37 = { graph[37].coord };
     std::vector<vec3> patrol_38 = { graph[38].coord };
     std::vector<vec3> patrol_40 = { graph[40].coord };
-    std::vector<vec3> patrol_41 = { graph[41].coord, graph[39].coord};
+    std::vector<vec3> patrol_41 = { graph[41].coord, graph[39].coord };
     std::vector<vec3> patrol_42 = { graph[42].coord };
     std::vector<vec3> patrol_43 = { graph[43].coord };
     std::vector<vec3> patrol_44 = { graph[44].coord };
@@ -738,72 +738,72 @@ void EntityManager::createLevel() {
     createDemon(patrol_70[0], vec3(1), patrol_70, ++scheduling_AI_counter);
     createEnemy(patrol_71[0], vec3(1), patrol_71, ++scheduling_AI_counter);
     //Pasillo PT2
-    createEnemy(patrol_73[0], vec3(1), patrol_73, scheduling_AI_counter);
-    createEnemy(patrol_74[0], vec3(1), patrol_74, scheduling_AI_counter);
-    createDemon(patrol_75[0], vec3(1), patrol_75, scheduling_AI_counter);
-    createDemon(patrol_76[0], vec3(1), patrol_76, scheduling_AI_counter);
+    createEnemy(patrol_73[0], vec3(1), patrol_73, ++scheduling_AI_counter);
+    createEnemy(patrol_74[0], vec3(1), patrol_74, ++scheduling_AI_counter);
+    createDemon(patrol_75[0], vec3(1), patrol_75, ++scheduling_AI_counter);
+    createDemon(patrol_76[0], vec3(1), patrol_76, ++scheduling_AI_counter);
 
     //Zona demoniaca (Pentagrama) (Primera mitad)
-    createDemon(patrol_77[0], vec3(1), patrol_77, scheduling_AI_counter);
-    createEnemy(patrol_78[0], vec3(1), patrol_78, scheduling_AI_counter);
-    createEnemy(patrol_79[0], vec3(1), patrol_79, scheduling_AI_counter);
-    createEnemy(patrol_80[0], vec3(1), patrol_80, scheduling_AI_counter);
+    createDemon(patrol_77[0], vec3(1), patrol_77, ++scheduling_AI_counter);
+    createEnemy(patrol_78[0], vec3(1), patrol_78, ++scheduling_AI_counter);
+    createEnemy(patrol_79[0], vec3(1), patrol_79, ++scheduling_AI_counter);
+    createEnemy(patrol_80[0], vec3(1), patrol_80, ++scheduling_AI_counter);
 
-    createDemon(patrol_81[0], vec3(1), patrol_81, scheduling_AI_counter);
-    createEnemy(patrol_83[0], vec3(1), patrol_83, scheduling_AI_counter);
-    createEnemy(patrol_84[0], vec3(1), patrol_84, scheduling_AI_counter);
-    createEnemy(patrol_82[0], vec3(1), patrol_82, scheduling_AI_counter);
+    createDemon(patrol_81[0], vec3(1), patrol_81, ++scheduling_AI_counter);
+    createEnemy(patrol_83[0], vec3(1), patrol_83, ++scheduling_AI_counter);
+    createEnemy(patrol_84[0], vec3(1), patrol_84, ++scheduling_AI_counter);
+    createEnemy(patrol_82[0], vec3(1), patrol_82, ++scheduling_AI_counter);
 
-    createDemon(patrol_93[0], vec3(1), patrol_93, scheduling_AI_counter);
-    createEnemy(patrol_94[0], vec3(1), patrol_94, scheduling_AI_counter);
-    createEnemy(patrol_95[0], vec3(1), patrol_95, scheduling_AI_counter);
-    createEnemy(patrol_96[0], vec3(1), patrol_96, scheduling_AI_counter);
+    createDemon(patrol_93[0], vec3(1), patrol_93, ++scheduling_AI_counter);
+    createEnemy(patrol_94[0], vec3(1), patrol_94, ++scheduling_AI_counter);
+    createEnemy(patrol_95[0], vec3(1), patrol_95, ++scheduling_AI_counter);
+    createEnemy(patrol_96[0], vec3(1), patrol_96, ++scheduling_AI_counter);
     //Demonios alrededor de estatua gigante de Lucyborg
-    createDemon(patrol_97[0], vec3(1), patrol_97, scheduling_AI_counter);
-    createDemon(patrol_101[0], vec3(1), patrol_101, scheduling_AI_counter);
-    createDemon(patrol_100[0], vec3(1), patrol_100, scheduling_AI_counter);
-    createDemon(patrol_99[0], vec3(1), patrol_99, scheduling_AI_counter);
-    createDemon(patrol_98[0], vec3(1), patrol_98, scheduling_AI_counter);
+    createDemon(patrol_97[0], vec3(1), patrol_97, ++scheduling_AI_counter);
+    createDemon(patrol_101[0], vec3(1), patrol_101, ++scheduling_AI_counter);
+    createDemon(patrol_100[0], vec3(1), patrol_100, ++scheduling_AI_counter);
+    createDemon(patrol_99[0], vec3(1), patrol_99, ++scheduling_AI_counter);
+    createDemon(patrol_98[0], vec3(1), patrol_98, ++scheduling_AI_counter);
     //Zona demoniaca (Pentagrama) (Segunda mitad)
-    createDemon(patrol_85[0], vec3(1), patrol_85, scheduling_AI_counter);
-    createEnemy(patrol_87[0], vec3(1), patrol_87, scheduling_AI_counter);
-    createEnemy(patrol_88[0], vec3(1), patrol_88, scheduling_AI_counter);
-    createEnemy(patrol_86[0], vec3(1), patrol_86, scheduling_AI_counter);
+    createDemon(patrol_85[0], vec3(1), patrol_85, ++scheduling_AI_counter);
+    createEnemy(patrol_87[0], vec3(1), patrol_87, ++scheduling_AI_counter);
+    createEnemy(patrol_88[0], vec3(1), patrol_88, ++scheduling_AI_counter);
+    createEnemy(patrol_86[0], vec3(1), patrol_86, ++scheduling_AI_counter);
 
-    createEnemy(patrol_89[0], vec3(1), patrol_89, scheduling_AI_counter);
-    createEnemy(patrol_91[0], vec3(1), patrol_91, scheduling_AI_counter);
-    createDemon(patrol_90[0], vec3(1), patrol_90, scheduling_AI_counter);
-    createEnemy(patrol_92[0], vec3(1), patrol_92, scheduling_AI_counter);
+    createEnemy(patrol_89[0], vec3(1), patrol_89, ++scheduling_AI_counter);
+    createEnemy(patrol_91[0], vec3(1), patrol_91, ++scheduling_AI_counter);
+    createDemon(patrol_90[0], vec3(1), patrol_90, ++scheduling_AI_counter);
+    createEnemy(patrol_92[0], vec3(1), patrol_92, ++scheduling_AI_counter);
 
     //ZONA 4 -> Zona del caos (Zona final)
     //Bots al entrar
-    createEnemy(patrol_158[0], vec3(1), patrol_158, scheduling_AI_counter);
-    createEnemy(patrol_162[0], vec3(1), patrol_162, scheduling_AI_counter);
-    createEnemy(patrol_103[0], vec3(1), patrol_103, scheduling_AI_counter);
-    createEnemy(patrol_106[0], vec3(1), patrol_106, scheduling_AI_counter);
-    createAngel(patrol_149[0], vec3(1), patrol_149, scheduling_AI_counter);
+    createEnemy(patrol_158[0], vec3(1), patrol_158, ++scheduling_AI_counter);
+    createEnemy(patrol_162[0], vec3(1), patrol_162, ++scheduling_AI_counter);
+    createEnemy(patrol_103[0], vec3(1), patrol_103, ++scheduling_AI_counter);
+    createEnemy(patrol_106[0], vec3(1), patrol_106, ++scheduling_AI_counter);
+    createAngel(patrol_149[0], vec3(1), patrol_149, ++scheduling_AI_counter);
     //Bots del centro
-    createEnemy(patrol_117[0], vec3(1), patrol_117, scheduling_AI_counter);
-    createEnemy(patrol_122[0], vec3(1), patrol_122, scheduling_AI_counter);
-    createEnemy(patrol_121[0], vec3(1), patrol_121, scheduling_AI_counter);
-    createEnemy(patrol_128[0], vec3(1), patrol_128, scheduling_AI_counter);
+    createEnemy(patrol_117[0], vec3(1), patrol_117, ++scheduling_AI_counter);
+    createEnemy(patrol_122[0], vec3(1), patrol_122, ++scheduling_AI_counter);
+    createEnemy(patrol_121[0], vec3(1), patrol_121, ++scheduling_AI_counter);
+    createEnemy(patrol_128[0], vec3(1), patrol_128, ++scheduling_AI_counter);
     //Demonios alrededor del centro
-    createDemon(patrol_120[0], vec3(1), patrol_120, scheduling_AI_counter);
-    createDemon(patrol_112[0], vec3(1), patrol_112, scheduling_AI_counter);
-    createDemon(patrol_143[0], vec3(1), patrol_143, scheduling_AI_counter);
+    createDemon(patrol_120[0], vec3(1), patrol_120, ++scheduling_AI_counter);
+    createDemon(patrol_112[0], vec3(1), patrol_112, ++scheduling_AI_counter);
+    createDemon(patrol_143[0], vec3(1), patrol_143, ++scheduling_AI_counter);
     //Angeles alrededor del centro
-    createAngel(patrol_127[0], vec3(1), patrol_127, scheduling_AI_counter);
-    createAngel(patrol_102[0], vec3(1), patrol_102, scheduling_AI_counter);
+    createAngel(patrol_127[0], vec3(1), patrol_127, ++scheduling_AI_counter);
+    createAngel(patrol_102[0], vec3(1), patrol_102, ++scheduling_AI_counter);
 
-    createDemon(patrol_154[0], vec3(1), patrol_154, scheduling_AI_counter);
-    createDemon(patrol_145[0], vec3(1), patrol_145, scheduling_AI_counter);
+    createDemon(patrol_154[0], vec3(1), patrol_154, ++scheduling_AI_counter);
+    createDemon(patrol_145[0], vec3(1), patrol_145, ++scheduling_AI_counter);
 
-    createAngel(patrol_108[0], vec3(1), patrol_108, scheduling_AI_counter);
-    createAngel(patrol_132[0], vec3(1), patrol_132, scheduling_AI_counter);
+    createAngel(patrol_108[0], vec3(1), patrol_108, ++scheduling_AI_counter);
+    createAngel(patrol_132[0], vec3(1), patrol_132, ++scheduling_AI_counter);
 
-    createAngel(patrol_139[0], vec3(1), patrol_139, scheduling_AI_counter);
-    createEnemy(patrol_138[0], vec3(1), patrol_138, scheduling_AI_counter);
-    createDemon(patrol_137[0], vec3(1), patrol_137, scheduling_AI_counter);
+    createAngel(patrol_139[0], vec3(1), patrol_139, ++scheduling_AI_counter);
+    createEnemy(patrol_138[0], vec3(1), patrol_138, ++scheduling_AI_counter);
+    createDemon(patrol_137[0], vec3(1), patrol_137, ++scheduling_AI_counter);
 
 
     // PAUSE
@@ -815,7 +815,7 @@ void EntityManager::createLevel() {
 
 	createTexture(PAUSE_TEXTURE, 0, 0);
 
-/*
+
 	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
 	std::cout << Physics::getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
 	std::cout << RigidStaticAABB::getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";
@@ -825,7 +825,7 @@ void EntityManager::createLevel() {
 	std::cout << Render::getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
 	std::cout << Velocity::getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
 	std::cout << CharacterData::getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
-*/
+
 }
 
 void EntityManager::createGraph()
@@ -1617,73 +1617,6 @@ void EntityManager::createGraph()
     node_162.connections.emplace_back(162, 102, length(node_162.coord - node_102.coord));
     node_162.connections.emplace_back(162, 161, length(node_162.coord - node_161.coord));
 
-
-	/*//hall
-	auto& node_0  = graph.emplace_back(MapNode(0, 0));
-	auto& node_1  = graph.emplace_back(MapNode(0, -50));
-	auto& node_2  = graph.emplace_back(MapNode(0, -100));
-	auto& node_3  = graph.emplace_back(MapNode(0, -150));
-	auto& node_4  = graph.emplace_back(MapNode(0, -200));
-	auto& node_5  = graph.emplace_back(MapNode(0, -260));
-	//right
-	auto& node_6  = graph.emplace_back(MapNode(60, -270));
-	auto& node_7  = graph.emplace_back(MapNode(130, -270));
-	//left
-	auto& node_8  = graph.emplace_back(MapNode(-80, -270));
-	auto& node_9  = graph.emplace_back(MapNode(-160, -270));
-	//square
-	auto& node_10 = graph.emplace_back(MapNode(-200, -275));
-	auto& node_11 = graph.emplace_back(MapNode(-220, -340));
-	auto& node_12 = graph.emplace_back(MapNode(-220, -250));
-	auto& node_13 = graph.emplace_back(MapNode(-310, -220));
-	auto& node_14 = graph.emplace_back(MapNode(-310, -340));
-
-	node_0.connections.emplace_back(0, 1, 5);
-
-	node_1.connections.emplace_back(1, 0, 5);
-	node_1.connections.emplace_back(1, 2, 5);
-	
-	node_2.connections.emplace_back(2, 1, 5);
-	node_2.connections.emplace_back(2, 3, 5);
-
-	node_3.connections.emplace_back(3, 2, 5);
-	node_3.connections.emplace_back(3, 4, 5);
-
-	node_4.connections.emplace_back(4, 3, 5);
-	node_4.connections.emplace_back(4, 5, 5);
-
-
-	node_5.connections.emplace_back(5, 4, 5);
-	node_5.connections.emplace_back(5, 6, 7);
-	node_5.connections.emplace_back(5, 8, 7);
-
-	node_6.connections.emplace_back(6, 5, 7);
-	node_6.connections.emplace_back(6, 7, 6);
-
-	node_7.connections.emplace_back(7, 6, 6);
-
-	node_8.connections.emplace_back(8, 5, 7);
-	node_8.connections.emplace_back(8, 9, 6);
-
-	node_9.connections.emplace_back(9, 8, 6);
-	node_9.connections.emplace_back(9, 10, 8);
-
-	node_10.connections.emplace_back(10, 9, 8);
-	node_10.connections.emplace_back(10, 11, 6);
-	node_10.connections.emplace_back(10, 12, 6);
-
-	node_11.connections.emplace_back(11, 10, 6);
-	node_11.connections.emplace_back(11, 14, 9);
-
-	node_12.connections.emplace_back(12, 10, 6);
-	node_12.connections.emplace_back(12, 13, 9);
-
-	node_13.connections.emplace_back(13, 12, 9);
-	node_13.connections.emplace_back(13, 14, 9);
-
-	node_14.connections.emplace_back(14, 11, 9);
-	node_14.connections.emplace_back(14, 13, 9);
-	*/
 }
 
 bool EntityManager::checkVictory() const {
