@@ -55,9 +55,6 @@ struct TreeNode final : INode {
 	// setters
 	void setTarget(const vec3& tar) override;
 
-	// set texture
-	void setTexture(std::string_view) const override {};
-
 	void affectedByLight(bool) const override { };
 
 	void calculateTransform() { transform = calculateMatrix(); }

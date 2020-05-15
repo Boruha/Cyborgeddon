@@ -24,6 +24,8 @@ struct IScene {
 	virtual std::unique_ptr<INode> addLightNode() = 0;
 	virtual INode * addFreeLightNode(const vec3& diff, const vec3& spe, const vec3& dir) = 0;
 
+	virtual INode * addAnimatedMeshNode(std::string_view) = 0;
+
 	virtual void clearScene() = 0;
 
 	[[nodiscard]] virtual vec3 cursorToWorld(float, float, float) = 0;

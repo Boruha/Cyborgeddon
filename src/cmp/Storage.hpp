@@ -70,6 +70,7 @@ struct Storage {
 	}
 
 	INode * createMesh(std::string_view mesh);
+	INode * createAnimatedMesh(std::string_view path);
 
 	INode * createCamera();
 	INode * createLight(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir);

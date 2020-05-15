@@ -4,7 +4,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 std::ostream& operator<<(std::ostream& os, const Render& ren) {
-	ren.print(os, ren.getName())
+	ren.print(os, Render::getName())
 			<< "\n\tINode: "    << ren.node
 			<< "\n\tPosition: " << glm::to_string(*ren.pos)
 			<< "\n\tRotation: "	<< glm::to_string(*ren.rot)

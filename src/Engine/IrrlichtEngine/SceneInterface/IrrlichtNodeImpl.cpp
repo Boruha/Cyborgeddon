@@ -47,11 +47,11 @@ void IrrlichtNodeImpl::setScale(const vec3 & s) {
 	sca = s;
 	node->setScale(irr::core::vector3df(sca.x, sca.y, sca.z));
 }
-
+/*
 void IrrlichtNodeImpl::setTexture(const std::string_view path) const {
 	node->setMaterialTexture(0, node->getSceneManager()->getVideoDriver()->getTexture(path.data()));
 }
-
+*/
 void IrrlichtNodeImpl::affectedByLight(const bool enableLight) const {
 	node->setMaterialFlag(irr::video::EMF_LIGHTING, enableLight);
 }

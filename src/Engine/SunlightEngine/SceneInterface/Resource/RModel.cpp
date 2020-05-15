@@ -156,7 +156,10 @@ bool RModel::textureAlreadyStoredInModel(std::vector<Texture> & textures, const 
 
 unsigned RModel::loadTexture(const std::string & path) const {
 	std::string filename = directory + '/' + path;
-
+/*
+	if (path.substr(0, 3) == "../")
+		filename = directory.substr(0, directory.find_last_of('/')) + path.substr(path.find_first_of('/'), path.size());
+*/
 	int width, height, formatColor;
 	unsigned char * textureData = stbi_load(filename.c_str(), &width, &height, &formatColor, 0);
 

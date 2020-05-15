@@ -28,8 +28,6 @@ struct IrrlichtNodeImpl : INode {
 	void setScale   (const vec3 &) override;
 	void setTarget	(const vec3 &) override { }
 
-	void setTexture(std::string_view) const override;
-
 	void affectedByLight(bool) const override;
 
 	private :
