@@ -120,3 +120,24 @@ void Storage::removeNode(const INode * n) {
 		}
 	}
 }
+
+void Storage::printComponentStorage() const {
+	printVecInfo<AI>();
+	printVecInfo<Transformable>();
+	printVecInfo<Velocity>();
+	printVecInfo<Physics>();
+	printVecInfo<BulletData>();
+	printVecInfo<CharacterData>();
+	printVecInfo<TriggerMovSphere>();
+	printVecInfo<TriggerStaticAABB>();
+	printVecInfo<RigidStaticAABB>();
+	printVecInfo<TriggerFastMov>();
+	printVecInfo<Graph>();
+	printVecInfo<Render>();
+	printVecInfo<Jump>();
+	printVecInfo<Video>();
+	printVecInfo<CircleBounding>();
+	printVecInfo<TriangleOBB>();
+	printVecInfo<TextureCmp>();
+	printVecInfo<MenuOption>();
+}

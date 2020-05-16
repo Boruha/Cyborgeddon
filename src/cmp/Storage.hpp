@@ -32,6 +32,8 @@ struct Storage {
 	void initData(unsigned maxComponents);
 	void cleanData();
 
+	void printComponentStorage() const;
+
 	template <typename T>
 	constexpr void initVector(const unsigned size) {
 		auto   u_ptr = std::make_unique<ComponentVector<T>>();
@@ -80,9 +82,9 @@ struct Storage {
 private:
 
 	template <typename T>
-	constexpr void printVecInfo(const vector<T>& vec) const {
-		std::cout 	<< "Capacity: " << vec.capacity() 	<< "\n"
-					<< "Size: " 	<< vec.size() 		<< "\n";
+	constexpr void printVecInfo() const {
+		const auto * cmpVector = dynamic_cast<const ComponentVector<T>*>(map.at(Component::getCmpTypeID<T>()).get());
+		std::cout << "\n" << T::getName() << "\n\tSize:\t" << cmpVector->components.size() << "\n\tCapacity:\t" << cmpVector->components.capacity() << "\n";
 	}
 
 	const IEngine& engine;

@@ -213,7 +213,6 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 
 	render.node = componentStorage.createAnimatedMesh("resources/models/Bot/Static");
 
-
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
 	render.node->setScale(physics.scale);
@@ -813,17 +812,7 @@ void EntityManager::createLevel() {
 
 	createTexture(PAUSE_TEXTURE, 0, 0);
 
-
-	std::cout << Transformable::getName()     << " " << componentStorage.getComponents<Transformable>().size() << "\n";
-	std::cout << Physics::getName()           << " " << componentStorage.getComponents<Physics>().size() << "\n";
-	std::cout << RigidStaticAABB::getName()   << " " << componentStorage.getComponents<RigidStaticAABB>().size() << "\n";
-	std::cout << TriggerMovSphere::getName()  << " " << componentStorage.getComponents<TriggerMovSphere>().size() << "\n";
-	std::cout << AI::getName()                << " " << componentStorage.getComponents<AI>().size() << "\n";
-	std::cout << TriggerStaticAABB::getName() << " " << componentStorage.getComponents<TriggerStaticAABB>().size() << "\n";
-	std::cout << Render::getName()            << " " << componentStorage.getComponents<Render>().size() << "\n";
-	std::cout << Velocity::getName()          << " " << componentStorage.getComponents<Velocity>().size() << "\n";
-	std::cout << CharacterData::getName()     << " " << componentStorage.getComponents<CharacterData>().size() << "\n";
-
+	componentStorage.printComponentStorage();
 }
 
 void EntityManager::createGraph()
@@ -1636,10 +1625,7 @@ void EntityManager::createIntro() {
 	createTexture("resources/menu/main_menu/op_menu_3.png", 0, 0);
 	createTexture("resources/menu/main_menu/op_menu_4.png", 0, 0);
 
-
-	std::cout << Video::getName()     << " " << componentStorage.getComponents<Video>().size() << "\n";
-	std::cout << TextureCmp::getName()     << " " << componentStorage.getComponents<TextureCmp>().size() << "\n";
-
+	componentStorage.printComponentStorage();
 }
 
 void EntityManager::nextVideo() {

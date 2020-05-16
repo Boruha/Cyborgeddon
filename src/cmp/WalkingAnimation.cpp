@@ -1,1 +1,0 @@
-#include <cmp/WalkingAnimation.hpp>
