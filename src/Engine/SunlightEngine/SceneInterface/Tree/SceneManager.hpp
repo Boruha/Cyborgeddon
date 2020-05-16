@@ -53,7 +53,7 @@ private :
 	//std::array<unsigned , MAX_LIGHT_SIZE> shadowSceneTextures;
 
 	std::size_t lights_index {  0  };
-    vec3        ambient      { 0.5f };
+    vec3        ambient      { 0.2f };
 
 	mat4 viewProjection      { 1 };
 	mat4 view                { 1 };

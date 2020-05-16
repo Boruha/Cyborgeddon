@@ -10,7 +10,7 @@
  */
 
 // PLAYER
-constexpr float     PLAYER_SPEED					= 5.f;
+constexpr float     PLAYER_SPEED					= 10.f;
 constexpr float     PLAYER_DASH_SPEED               = PLAYER_SPEED * 20.f;
 constexpr float     PLAYER_ACCELERATION				= PLAYER_DASH_SPEED * 10.f;
 constexpr float     PLAYER_HEALTH					= 100.f;
@@ -23,7 +23,7 @@ constexpr float     PLAYER_ROTATION_SPEED			= 270.f;
 // ENEMY
 constexpr unsigned  MAX_PATROL_POSITIONS 	        = 6u;
 
-constexpr float     ENEMY_SPEED						= 2.f;
+constexpr float     ENEMY_SPEED						= 10.f;
 constexpr float     ENEMY_DASH_SPEED                = ENEMY_SPEED * 0.f;
 constexpr float     ENEMY_ACCELERATION				= ENEMY_DASH_SPEED * 0.f;
 constexpr float     ENEMY_HEALTH					= 100.f;

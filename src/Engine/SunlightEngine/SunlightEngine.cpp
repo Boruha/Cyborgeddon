@@ -48,10 +48,10 @@ void SunlightEngine::init(const unsigned width, const unsigned height, const std
 	if (!videoMode)
 		error("No se pudo identificar el modo de video");
 	else
-		setViewport( { 1280, 720 } );
+		setViewport( { videoMode->width, videoMode->height } );
 		//setViewport( { videoMode->width, videoMode->height } );
 
-	window = glfwCreateWindow(int(windowWidth), int(windowHeight), name.data(), nullptr, nullptr);
+    window = glfwCreateWindow(int(windowWidth), int(windowHeight), name.data(), monitor, nullptr);
 
 	if (!window)
 		error("No se pudo abrir la ventana");
