@@ -13,6 +13,7 @@ void GameManager::init()
 	currentState->registerSystem<IntroInputSystem>();
 	currentState->registerSystem<HUDintroSystem>();
 	currentState->registerSystem<VideoSystem>();
+    currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
 	currentState->init();
 
@@ -22,6 +23,7 @@ void GameManager::init()
 
 	currentState->registerSystem<PauseInputSystem>();
 	currentState->registerSystem<HUDpauseSystem>();
+    currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
 	currentState->init();
 

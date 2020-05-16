@@ -60,6 +60,7 @@ struct std::equal_to<FMOD_GUID>
 };
 
 struct SoundSystem : System {
+    SoundSystem();
 	~SoundSystem() override;
 
 	void init() override;
@@ -76,14 +77,14 @@ private:
 	void createSoundEvent(SoundParameter param);
     void createInstance(const Event *, Instance *&, float) const;
 
-    FMOD::System * core 	{ nullptr };
-	EngineSystem * system 	{ nullptr };
-	Bank * master 			{ nullptr };
-	Bank * strings 			{ nullptr };
+    inline static FMOD::System * core 	{ nullptr };
+    inline static EngineSystem * system 	{ nullptr };
+    inline static Bank * master 			{ nullptr };
+    inline static Bank * strings 			{ nullptr };
 
     Music backingTrack;
 
-	std::unordered_map<FMOD_GUID, Sound> soundEvents {};
+    inline static std::unordered_map<FMOD_GUID, Sound> soundEvents {};
 
-	std::array<FMOD_GUID, NUM_MAX_PARAMETERS> eventID {};
+    inline static std::array<FMOD_GUID, NUM_MAX_PARAMETERS> eventID {};
 };
