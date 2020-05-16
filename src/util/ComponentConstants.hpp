@@ -10,7 +10,7 @@
  */
 
 // PLAYER
-constexpr float     PLAYER_SPEED					= 10.f;
+constexpr float     PLAYER_SPEED					= 5.f;
 constexpr float     PLAYER_DASH_SPEED               = PLAYER_SPEED * 20.f;
 constexpr float     PLAYER_ACCELERATION				= PLAYER_DASH_SPEED * 10.f;
 constexpr float     PLAYER_HEALTH					= 100.f;
@@ -23,7 +23,7 @@ constexpr float     PLAYER_ROTATION_SPEED			= 270.f;
 // ENEMY
 constexpr unsigned  MAX_PATROL_POSITIONS 	        = 6u;
 
-constexpr float     ENEMY_SPEED						= 10.f;
+constexpr float     ENEMY_SPEED						= 2.f;
 constexpr float     ENEMY_DASH_SPEED                = ENEMY_SPEED * 0.f;
 constexpr float     ENEMY_ACCELERATION				= ENEMY_DASH_SPEED * 0.f;
 constexpr float     ENEMY_HEALTH					= 100.f;
@@ -39,13 +39,13 @@ constexpr float     FACTOR_DIFFERENT_MODE			= 2.f;
 constexpr float     FACTOR_SAME_MODE				= 1.f / FACTOR_DIFFERENT_MODE;
 
 // ATTACK ENEMY
-constexpr float     MELEE_ATTACK_RANGE   		    = 10.f;
-constexpr float     DIST_ATTACK_RANGE   		    = 30.f;
+constexpr float     MELEE_ATTACK_RANGE   		    = 4.f;
+constexpr float     DIST_ATTACK_RANGE   		    = 20.f;
 constexpr float     DIST_ATTACK_RANGE2  		    = DIST_ATTACK_RANGE  * DIST_ATTACK_RANGE;
 constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTACK_RANGE;
 
 //DEMON JUMP
-constexpr float     JUMP_COOLDOWN                   = 3.f;
+constexpr float     JUMP_COOLDOWN                   = 8.f;
 constexpr float     JUMP_TIMER                      = 1.f;
 constexpr float     JUMP_AREA_DMG                   = 20.f;
 constexpr float     JUMP_AREA_DMG2                  = JUMP_AREA_DMG * JUMP_AREA_DMG; 
