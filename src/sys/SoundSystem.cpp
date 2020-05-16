@@ -15,13 +15,61 @@ void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int l
 	}
 }
 
+SoundSystem::SoundSystem() {
+    if (!system) {
+        ERRCHECK ( EngineSystem::create(&system) );
+
+        ERRCHECK ( system->getCoreSystem(&core) );
+        ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
+
+        ERRCHECK ( system->initialize(16, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
+
+        ERRCHECK ( system->loadBankFile(MASTER_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
+        ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
+
+        soundMessages.reserve(16);
+
+        SoundParameter parameters [NUM_MAX_PARAMETERS]
+                {
+                        ATTACK_PLAYER_DEMON,
+                        ATTACK_PLAYER_ANGEL,
+                        SWITCH_MODE_DEMON,      //El personaje pasa de angel a demonio
+                        SWITCH_MODE_ANGEL,      //El personaje pasa de demonio a angel
+                        DAMAGE_PLAYER,
+                        DASH_PLAYER,
+
+                        //ENEMY
+                        ATTACK_ENEMY_ASSEMBLY,
+                        ATTACK_ENEMY_DEMON,
+                        ATTACK_ENEMY_ANGEL,
+                        ACTION_ENEMY_HITMARKER,
+
+                        //ACTION SOUNDS
+                        ACTION_GET_KEY,
+                        ACTION_OPEN_DOOR,
+
+                        //MENU SOUNDS
+                        MENU_CHANGE_OPTION,
+
+                        //VIDEO SOUNDS
+                        VIDEO_INTRO_GAME,
+                        VIDEO_CINEMATICA_1,
+                        VIDEO_CINEMATICA_2,
+                        VIDEO_TUTORIAL
+                };
+
+        for (const auto & param : parameters)
+            createSoundEvent(param);
+    }
+}
+
 SoundSystem::~SoundSystem() {
 	if (system)
 		system->release();
 }
 
 void SoundSystem::init() {
-	ERRCHECK ( EngineSystem::create(&system) );
+	/*ERRCHECK ( EngineSystem::create(&system) );
 
 	ERRCHECK ( system->getCoreSystem(&core) );
 	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
@@ -68,6 +116,7 @@ void SoundSystem::init() {
 	createMusicEvent(BACKGROUND_MUSIC_EVENT, &backingTrack, .2f);
 
 	startBackgroundMusic();
+	 */
 }
 
 void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
@@ -93,6 +142,7 @@ void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
 	}
 
 	ERRCHECK ( system->update() );
+
 }
 
 void SoundSystem::reset() {
