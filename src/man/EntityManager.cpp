@@ -1605,7 +1605,8 @@ void EntityManager::createGraph()
 }
 
 bool EntityManager::checkVictory() const {
-	return enemiesLeft <= 0;
+	//return enemiesLeft <= 0;
+	return !(player->getComponent<Physics>()->position.z >= -596);
 }
 
 bool EntityManager::checkDefeat() const {
