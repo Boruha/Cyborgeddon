@@ -19,6 +19,7 @@ std::ostream& operator<<(std::ostream& os, const AI &ai) {
 	<< "\n\tPatrol Index: " 	<< ai.patrol_index
 	<< "\n\tMax Index: " 		<< ai.max_index
 	<< "\n\tTarget: " 			<< glm::to_string(ai.target_position)
+	<< "\n\tPatrol State: "		<< ai.frequecy_state
 	<< "\n\tPatrol positions: ";
 
 	for (unsigned int i = 0; i < ai.max_index; ++i)
