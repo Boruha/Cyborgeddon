@@ -32,4 +32,4 @@ namespace Sun {
 		return texture->getSize();
 	}
 
-};
+}

@@ -34,7 +34,16 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
-            phy.rotation.y = nearestAngle(phy.rotation.y, getRotationYfromXZ(phy.position - ai.target_position));
+            const vec3 vec_dist   = phy.position - ai.target_position;
+            const float distance2 = length2 ({ vec_dist.x, vec_dist.z });
+
+            if(greater_e(distance2, ARRIVE_MIN_DISTANCE2))
+            {
+                phy.rotation.y = nearestAngle(phy.rotation.y, getRotationYfromXZ(vec_dist));
+                phy.rotation.y = std::fmod(phy.rotation.y, 360.f);
+                if(phy.rotation.y <= 0.0)
+                    phy.rotation.y = 360.f + phy.rotation.y;
+            }
 
             return true;
         }
@@ -172,11 +181,14 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
             
-            if(greater_e(distance2, PATROL_MIN_DISTANCE2) ||
-              (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
+            
+
+            if (greater_e(distance2, PATROL_MIN_DISTANCE2)
+                || (greater_e(distance2, VIEW_MIN_DISTANCE2) && !checkFacing(phy, player_pos)) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
                 ai.frequecy_state  = PATROL_STATE;
+
                 return true;
             }
 
@@ -643,12 +655,14 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
     return false;
 }
 
-bool AI_System::checkFacing(const Physics& ai_phy, const std::unique_ptr<GameContext>& context)
+bool AI_System::checkFacing(const Physics& ai_phy, const vec3& player_pos)
 {
-    auto& pj     = context->getPlayer();
-    auto& pj_phy = *pj.getComponent<Physics>();
+    auto vecRot = std::fmod( nearestAngle(ai_phy.rotation.y, getRotationYfromXZ(ai_phy.position - player_pos)), 360.f);
 
-    auto vecRot  = getRotationYfromXZ( normalize(pj_phy.position - ai_phy.position) );
+    if(vecRot  <= 0.0)
+        vecRot  = 360.f + vecRot;
 
-    return (vecRot - ai_phy.rotation.y < 5.f && vecRot - ai_phy.rotation.y > -5.f);
+    auto diff   = vecRot - ai_phy.rotation.y;
+        
+    return  ((diff < 8.f) && (diff > -8.f));
 }
