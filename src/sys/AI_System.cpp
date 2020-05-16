@@ -45,8 +45,14 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const float distance2 = length2 ({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
+                        
+            if(!greater_e(distance2, ARRIVE_MIN_DISTANCE2))
+            {
+                phy.position = ai.target_position;
+                return false;
+            }
 
-            return greater_e(distance2, ARRIVE_MIN_DISTANCE2);
+            return true;
         }
     };
 
@@ -84,7 +90,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 jump.jumpTimer = 1.f;
                 phy.position.y = phy.scale.y / 2;
                 phy.velocity.y = 0;
-                jump.jumping = false;
+                jump.jumping   = false;
             }
             return true;
         }
@@ -152,20 +158,10 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
+            
             ai.patrol_index    = (ai.patrol_index + 1) % ai.max_index;
-            vec3 myPos = ai.target_position;
             ai.target_position = ai.patrol_position[ai.patrol_index];
             
-            if(ai.getEntityID() == 60)
-            {
-                float distance2 = length2({ myPos.x - ai.target_position.x, myPos.z - ai.target_position.z });
-                distance2 = std::sqrt(distance2);
-
-                std::cout << "LAST FRAME INTERVAL: " << ai.frameCounter - ai.lastFrameEjecuted << "\n\n";
-                ai.lastFrameEjecuted = ai.frameCounter;
-                std::cout << "DISTANCIA : " << distance2 << ",  FRAMES QUE ESPERARÉ: " << distance2 * movement_per_frame << "\n";
-            }
-
             return true;
         }
     };
@@ -180,7 +176,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
               (greater_e(distance2, VIEW_MIN_DISTANCE2)   && !checkFacing(phy, context)) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
-                ai.frequecy_state = PATROL_STATE;
+                ai.frequecy_state  = PATROL_STATE;
                 return true;
             }
 
@@ -200,7 +196,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             ai.frequecy_state = PURSUE_STATE;
             ai.target_position = player_pos;
 
-            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });            
+            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });          
             
             if(jump)
                 return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
