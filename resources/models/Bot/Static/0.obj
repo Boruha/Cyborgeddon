@@ -1,6 +1,6 @@
 # Blender v2.82 (sub 7) OBJ File: 'botStatic.blend'
 # www.blender.org
-mtllib botStatic.mtl
+mtllib botStatic_000001.mtl
 o Assembled_Plane.008
 v -0.466573 3.984328 -0.029670
 v 0.113789 4.291509 -0.118786

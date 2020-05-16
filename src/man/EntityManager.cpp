@@ -211,7 +211,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Bot/Static/0.obj");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Bot/Static");
 
 
 	render.node->setPosition(physics.position);
@@ -240,7 +240,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Angel/Static/0.obj");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Angel/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -268,7 +268,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("resources/models/Demon/Static/0.obj");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Demon/Static");
 
 
 	render.node->setPosition(physics.position);
