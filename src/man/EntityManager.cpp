@@ -664,10 +664,10 @@ void EntityManager::createLevel() {
 
     //ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
-//    createEnemy(patrol_0[0], vec3(1), patrol_0, ++scheduling_AI_counter);
+    createEnemy(patrol_0[0], vec3(1), patrol_0, ++scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
     createEnemy(patrol_1[0], vec3(1), patrol_1, ++scheduling_AI_counter);
-/*    createEnemy(patrol_2[0], vec3(1), patrol_2, ++scheduling_AI_counter);
+    createEnemy(patrol_2[0], vec3(1), patrol_2, ++scheduling_AI_counter);
     createEnemy(patrol_3[0], vec3(1), patrol_3, ++scheduling_AI_counter);
     //Tercer pasillo (girar a la derecha)
     createEnemy(patrol_4[0], vec3(1), patrol_4, ++scheduling_AI_counter);
@@ -803,7 +803,6 @@ void EntityManager::createLevel() {
     createAngel(patrol_139[0], vec3(1), patrol_139, ++scheduling_AI_counter);
     createEnemy(patrol_138[0], vec3(1), patrol_138, ++scheduling_AI_counter);
     createDemon(patrol_137[0], vec3(1), patrol_137, ++scheduling_AI_counter);
-*/
 
     // PAUSE
 	createMenuOptions(0, NUM_PAUSE_OPTIONS);

@@ -243,16 +243,13 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const std::vector<MapNode>& ref_graph = context->getGraph();
-
-            std::cout << "CREATE RUTA\n";
-
+            
             int final_path = nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
             int ini_path   = nearestNode(phy.position, ref_graph);     //index -> mapnode + cercano a enemy
             ai.path_node   = ini_path;
             ai.path_index  = 0;
             //guardamos el path generado, usamos el ID para identificarlo despues.
             context->setPath(ai.getEntityID(), calculePath(ini_path, final_path, ref_graph));
-            std::cout << "ACCEDO A: " << ai.path_node << "\n";
             ai.target_position = ref_graph[ai.path_node].coord;
             
             return true;
