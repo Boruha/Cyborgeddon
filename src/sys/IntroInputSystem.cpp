@@ -15,9 +15,8 @@ void IntroInputSystem::fixedUpdate(const Context &context, const float deltaTime
 		    soundMessages.emplace_back(MENU_CHANGE_OPTION);
 		}
 
-		if(context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO)){
+		if(context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))
 		    if(menu_options.option == 0)
 		        soundMessages.emplace_back(STOP_ALL_SOUNDS);
-		}
 	}
 }
