@@ -8,7 +8,7 @@ void VideoSystem::update(const Context &context, const float deltaTime) {
 		video.timeSinceLastFrame -= video.timePerFrame;                     // si es asi, actualizamos el contador de tiempo
 
 		if (video.frameCounter == 0)
-			soundMessages.emplace_back(VIDEO_INTRO_GAME);
+			soundMessages.emplace_back(video.sound);
 
 		video.frameCounter++;
 
