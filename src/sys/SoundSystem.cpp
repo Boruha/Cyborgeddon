@@ -51,6 +51,12 @@ SoundSystem::SoundSystem() {
                         //MENU SOUNDS
                         MENU_CHANGE_OPTION,
 
+                        //SONGS SOUNDS
+                        SONG_1,
+                        SONG_2,
+                        SONG_3,
+                        SONG_4,
+
                         //VIDEO SOUNDS
                         VIDEO_INTRO_GAME,
                         VIDEO_CINEMATICA_1,
@@ -102,6 +108,12 @@ void SoundSystem::init() {
 
 			//MENU SOUNDS
             MENU_CHANGE_OPTION,
+
+            //SONGS SOUNDS
+            SONG_1,
+            SONG_2,
+            SONG_3,
+            SONG_4,
 
 			//VIDEO SOUNDS
 			VIDEO_INTRO_GAME,

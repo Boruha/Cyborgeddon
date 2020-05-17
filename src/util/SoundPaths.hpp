@@ -12,7 +12,7 @@ constexpr std::string_view CHANGE_MODE_EVENT		= "event:/player/change_mode";
 constexpr std::string_view DASH_PLAYER_EVENT        = "event:/player/dash_player";
 
 //MUSIC
-constexpr std::string_view BACKGROUND_MUSIC_EVENT 	= "event:/music/main_music";
+constexpr std::string_view MAIN_MUSIC_EVENT 	    = "event:/music/main_music";
 
 //ENEMY
 constexpr std::string_view ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled";
@@ -25,7 +25,6 @@ constexpr std::string_view DAMAGE_EVENT             = "event:/objects/damage";
 constexpr std::string_view MENU_SOUND_EVENT         = "event:/menu/menu_sounds";
 
 //VIDEOS
-
 // parametro 0 -> Video de cuando empieza el juego (Sunlight Logo + Animacion Cyborgeddon) (Musica + Voces)
 // parametro 1 -> Video de la primera cinematica (Cuando le damos a "Play", justo antes de empezar a jugar) (Musica +
 // parametro 2 -> Video de la segunda cinemática (Cuando completamos el juego, Video Final + Creditos) (Musica + Voces)

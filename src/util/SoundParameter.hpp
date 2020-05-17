@@ -25,6 +25,11 @@ enum SoundParameter {
 	//MENU SOUNDS
     MENU_CHANGE_OPTION,
 
+    //SONGS SOUNDS
+    SONG_1,
+    SONG_2,
+    SONG_3,
+    SONG_4,
 
 	//VIDEOS
 	VIDEO_INTRO_GAME,
@@ -90,6 +95,16 @@ constexpr parameter_value getParameterValue(const SoundParameter p) {
 	    case MENU_CHANGE_OPTION :
 	        return {"mode", 0};
 
+            //SONGS SOUNDS
+	    case SONG_1 :
+	        return { "song", 0 };
+        case SONG_2 :
+            return { "song", 1 };
+        case SONG_3 :
+            return { "song", 2 };
+        case SONG_4 :
+            return { "song", 3 };
+
 			//VIDEO SOUNDS
 	    case VIDEO_INTRO_GAME :
             return { "song", 0 };
@@ -140,6 +155,7 @@ constexpr std::string_view getEvent(const SoundParameter p)
         case ACTION_ENEMY_HITMARKER :
         	return { DAMAGE_EVENT };
 
+
             //ACTION SOUNDS
         case ACTION_GET_KEY :
         	return { KEY_DOOR_EVENT };
@@ -158,6 +174,17 @@ constexpr std::string_view getEvent(const SoundParameter p)
             return { MENU_SOUND_EVENT };
 
 
+            //SONGS SOUNDS
+        case SONG_1 :
+            return { MAIN_MUSIC_EVENT };
+        case SONG_2 :
+            return { MAIN_MUSIC_EVENT };
+        case SONG_3 :
+            return { MAIN_MUSIC_EVENT };
+        case SONG_4 :
+            return { MAIN_MUSIC_EVENT };
+
+
 			//VIDEO SOUNDS
         case VIDEO_INTRO_GAME :
             return { VIDEO_SOUND_EVENT };
@@ -167,7 +194,6 @@ constexpr std::string_view getEvent(const SoundParameter p)
            return { VIDEO_SOUND_EVENT };
         case VIDEO_TUTORIAL:
             return { VIDEO_SOUND_EVENT };
-
 
 
         case NUM_MAX_PARAMETERS :
