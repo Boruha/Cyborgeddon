@@ -17,6 +17,14 @@ void GameManager::init()
 
 	currentState->init();
 
+	currentState = &states.emplace(std::make_pair(TUTORIAL, State(TUTORIAL, entityManager))).first->second;
+
+	currentState->registerSystem<HUDtutorialSystem>();
+	currentState->registerSystem<VideoSystem>();
+	currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+
+	currentState->init();
+
 	// PAUSE
 
 	currentState = & states.emplace(std::make_pair(PAUSE, State(PAUSE, entityManager))).first->second;
