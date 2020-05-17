@@ -1,6 +1,6 @@
 # Blender v2.82 (sub 7) OBJ File: 'AnimacionPuerta.blend'
 # www.blender.org
-mtllib 0.mtl
+mtllib AnimacionPuerta_000001.mtl
 o Puerta_Cube.013
 v -5.878958 2.692157 1.221342
 v -5.878959 5.399467 1.221342
