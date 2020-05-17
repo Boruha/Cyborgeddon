@@ -46,6 +46,9 @@ struct EntityManager : GameContext {
 	[[nodiscard]] const std::vector<MapNode>& getGraph() const override { return graph; }
 	[[nodiscard]] 		std::vector<MapNode>& getGraph() 	   override { return graph; }
 
+	[[nodiscard]] const std::unordered_map<EntityID, std::vector<int>>& getPaths() const override { return paths; }
+	[[nodiscard]] 		std::unordered_map<EntityID, std::vector<int>>& getPaths() 	     override { return paths; }
+
 	[[nodiscard]]       std::vector<int>& getPath(EntityID eid) 		  override { return paths.find(eid)->second; }
 				        void deletePath(EntityID eid) 			          override { paths.erase(eid);  }
 				  		void setPath(EntityID eid, std::vector<int> path) override { paths[eid] = path; }
@@ -76,8 +79,8 @@ struct EntityManager : GameContext {
 		void createFloor(std::string_view tex, const vec3& pos, const vec3& dim);
 
 		void createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
-		void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
-		void createNavigation();
+		//void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
+		//void createNavigation();
 
 		void createVideo(std::string_view, bool, SoundParameter);
 		void createTexture(std::string_view, int, int);
@@ -93,7 +96,7 @@ struct EntityManager : GameContext {
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
 		Entity * light  { nullptr };
-		Entity * nav    { nullptr };
+		//Entity * nav    { nullptr };
 
 		std::vector<MapNode> graph {};
 		std::unordered_map<EntityID, std::vector<int>> paths {};

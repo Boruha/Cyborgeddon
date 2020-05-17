@@ -38,6 +38,9 @@ struct GameContext {
 	[[nodiscard]] virtual const std::vector<MapNode>& getGraph() const = 0;
 	[[nodiscard]] virtual 		std::vector<MapNode>& getGraph()	   = 0;
 
+	[[nodiscard]] virtual const std::unordered_map<EntityID, std::vector<int>>& getPaths() const = 0;
+	[[nodiscard]] virtual       std::unordered_map<EntityID, std::vector<int>>& getPaths() 	     = 0;
+
 	[[nodiscard]] virtual       std::vector<int>& getPath(EntityID)      = 0;
 				  virtual       void deletePath(EntityID)                = 0;
 				  virtual 		void setPath(EntityID, std::vector<int>) = 0;

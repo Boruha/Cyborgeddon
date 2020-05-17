@@ -109,13 +109,16 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
-            auto & enemy    = context->getEntityByID(ai.getEntityID());
-            auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
-            
-            if(!checkObstacles(phy.position, player_pos, trSphere.radius, context))
-                return true;
+            //auto & enemy    = context->getEntityByID(ai.getEntityID());
+            //auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
 
-            return false;
+            //if(!checkObstacles(phy.position, player_pos, trSphere.radius, context))
+            //{
+               // std::cout << "NO OBSTACLES\n";
+                //return true;
+            //}
+
+            return !ai.obstacles;
         }
     };
 /*  GENERAL BEHAVIOURS  */
@@ -203,17 +206,19 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             auto & enemy    = context->getEntityByID(ai.getEntityID());
+            auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
 			auto * jump     = enemy.getComponent<Jump>();
 
-            ai.frequecy_state = PURSUE_STATE;
+            ai.frequecy_state  = PURSUE_STATE;
             ai.target_position = player_pos;
 
-            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });          
+            const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z }); 
+                     ai.obstacles = checkObstacles(phy.position, player_pos, trSphere.radius, context);         
             
             if(jump)
-                return greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping;
+                return (greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping) || ai.obstacles;
             else
-                return greater_e(distance2, PURSUE_MIN_DISTANCE2);
+                return greater_e(distance2, PURSUE_MIN_DISTANCE2) || ai.obstacles;
         }
 
     };
@@ -239,12 +244,15 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         {
             const std::vector<MapNode>& ref_graph = context->getGraph();
 
+            std::cout << "CREATE RUTA\n";
+
             int final_path = nearestNode(player_pos, ref_graph);       //index -> mapnode + cercano a player
             int ini_path   = nearestNode(phy.position, ref_graph);     //index -> mapnode + cercano a enemy
             ai.path_node   = ini_path;
             ai.path_index  = 0;
             //guardamos el path generado, usamos el ID para identificarlo despues.
             context->setPath(ai.getEntityID(), calculePath(ini_path, final_path, ref_graph));
+            std::cout << "ACCEDO A: " << ai.path_node << "\n";
             ai.target_position = ref_graph[ai.path_node].coord;
             
             return true;
@@ -256,11 +264,14 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
             const std::vector<MapNode>& ref_graph = context->getGraph();
-            std::vector<int>& ref_path = context->getPath(ai.getEntityID());
 
-            if(unsigned(++ai.path_index) < ref_path.size())
+            auto& ref_paths       = context->getPaths();
+            const auto& it_path   = ref_paths.find(ai.getEntityID());
+            auto& ref_path        = it_path->second;
+
+            if(it_path != ref_paths.end() && unsigned(++ai.path_index) < ref_path.size())
             {
-                ai.path_node  = ref_path[ai.path_index];
+                ai.path_node       = ref_path[ai.path_index];
                 ai.target_position = ref_graph[ai.path_node].coord;
                 return true;
             }
@@ -443,14 +454,15 @@ void AI_System::init()
         setGetPursue->childs.emplace_back(std::make_unique<CreateRouteBehaviour>());
 
         /* PATH BRANCH */
-        std::unique_ptr<Sequence> pathBranch  = std::make_unique<Sequence>();
-        pathBranch->childs.emplace_back(std::make_unique<PathConditionBehaviour>());
-        pathBranch->childs.emplace_back(std::move(setGetPursue));
+        //std::unique_ptr<Sequence> pathBranch  = std::make_unique<Sequence>();
+        //pathBranch->childs.emplace_back(std::make_unique<PathConditionBehaviour>());
+        //pathBranch->childs.emplace_back(std::move(setGetPursue));
 
         /* WAY SELECTOR */
         std::unique_ptr<Selector> waySelector  = std::make_unique<Selector>();
         waySelector->childs.emplace_back(std::make_unique<obstacleAvoidanceBehaviour>());
-        waySelector->childs.emplace_back(std::move(pathBranch));
+        waySelector->childs.emplace_back(std::move(setGetPursue));
+        //waySelector->childs.emplace_back(std::move(pathBranch));
 
         /* PHY UPDATE */
         phyUpdate = std::make_unique<Sequence>();
@@ -623,10 +635,11 @@ void AI_System::setInList(const std::unique_ptr<GameContext>& context)
 //Obstacle Avoidance
 bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad, const std::unique_ptr<GameContext>& context)
 {
-    auto& rAABB_vector = context->getComponents().getComponents<RigidStaticAABB>();
+    auto& tOBB_vector = context->getComponents().getComponents<TriangleOBB>();
 	vec3  ecLine       = lineEcByTwoPoints(ai_pos, pj_pos - ai_pos);
     auto  maxPoint     = vec3();
     auto  minPoint     = vec3();
+
 
     maxPoint.x = (ai_pos.x > pj_pos.x) ? ai_pos.x : pj_pos.x;
     maxPoint.z = (ai_pos.z > pj_pos.z) ? ai_pos.z : pj_pos.z;
@@ -634,22 +647,27 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
     minPoint.x = (ai_pos.x < pj_pos.x) ? ai_pos.x : pj_pos.x;
     minPoint.z = (ai_pos.z < pj_pos.z) ? ai_pos.z : pj_pos.z;
 
-    for(auto& cmp_AABB : rAABB_vector)
+    for(auto& cmp_tOBB : tOBB_vector)
     {
-        if(cmp_AABB.max.x < minPoint.x) //out -x
+        if(!cmp_tOBB) continue;
+
+        if(cmp_tOBB.max.x < minPoint.x) //out -x
             continue;
-        if(cmp_AABB.max.z < minPoint.z) //out -z
+        if(cmp_tOBB.max.z < minPoint.z) //out -z
             continue;
-        if(cmp_AABB.min.x > maxPoint.x) //out +x
+        if(cmp_tOBB.min.x > maxPoint.x) //out +x
             continue;
-        if(cmp_AABB.min.z > maxPoint.z) //out +z
+        if(cmp_tOBB.min.z > maxPoint.z) //out +z
             continue;
 
-        if( lineAABBIntersectionXZ(Line(ai_pos, pj_pos), cmp_AABB.min, cmp_AABB.max) )
+        if( lineAABBIntersectionXZ(Line(ai_pos, pj_pos), cmp_tOBB.min, cmp_tOBB.max) )
             return true;
 
-        if( SphereWillIntersectBoxAABB(rad, cmp_AABB.min, cmp_AABB.max, ecLine) )
-            return true;
+        for(auto& vertex : cmp_tOBB.vertices)
+        {
+            if( SphereWillIntersectTOBB(rad, vertex, ecLine) )
+                return true;
+        }
     }
 
     return false;

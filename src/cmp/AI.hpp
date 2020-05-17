@@ -21,7 +21,8 @@ struct AI : public Component {
 	
 	//PATH
 	int      path_index 	  { -1 };	   //vector<int> index (map).
-  	int      path_node        { -1 };	   //graph index.	   
+  	int      path_node        { -1 };	   //graph index.
+	bool     obstacles        { false }; 
 	  
 	vec3     target_position  { 0 };
 
