@@ -362,7 +362,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	key.addComponent(keyRender);
 }
 
-void EntityManager::createVideo(const std::string_view path, const bool isLoop) {
+void EntityManager::createVideo(const std::string_view path, const bool isLoop, const SoundParameter sound) {
 	auto& video = createEntity(VIDEO);
 
 	auto& cmpVideo = componentStorage.createComponent(Video(video.getType(), video.getID(), path));
@@ -376,6 +376,8 @@ void EntityManager::createVideo(const std::string_view path, const bool isLoop) 
 	cmpVideo.loop = isLoop;
 
 	cmpVideo.video->setLoop(cmpVideo.loop);
+
+	cmpVideo.sound = sound;
 
 	video.addComponent(cmpVideo);
 }

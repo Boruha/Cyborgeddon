@@ -2,6 +2,8 @@
 
 #include <util/SoundPaths.hpp>
 
+#include <tuple>
+
 enum SoundParameter {
 	NO_SOUND,
 	//PLAYER
@@ -39,7 +41,6 @@ enum SoundParameter {
 
 
     NUM_MAX_PARAMETERS
-
 };
 
 using parameter_value = std::tuple<std::string_view, int>;

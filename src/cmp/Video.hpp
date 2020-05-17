@@ -2,6 +2,7 @@
 
 #include <cmp/Component.hpp>
 #include <string>
+#include <util/SoundParameter.hpp>
 
 struct IVideo;
 
@@ -18,7 +19,7 @@ struct Video : public Component
 	IVideo * video { nullptr };
 	std::string name {};
 
-//	SoundParameter sound { NO_SOUND };
+	SoundParameter sound { NO_SOUND };
 
 	unsigned numFrames          {0};
 	unsigned frameCounter       {0};
