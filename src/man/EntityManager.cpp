@@ -267,7 +267,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("resources/models/Demon/Static");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Demon/Jump");
 
 
 	render.node->setPosition(physics.position);
