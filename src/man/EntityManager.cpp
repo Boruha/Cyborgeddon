@@ -1620,8 +1620,8 @@ void EntityManager::createIntro() {
 
 	createMenuOptions(0, 4);
 
-	createVideo("resources/videos/intro/1_F.mp4", false);
-	createVideo("resources/videos/intro/2_F_L.mp4", true);
+	createVideo("resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
+	createVideo("resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
 
 	createTexture("resources/menu/main_menu/op_menu_1.png", 0, 0);
 	createTexture("resources/menu/main_menu/op_menu_2.png", 0, 0);
