@@ -7,18 +7,20 @@ void VideoSystem::update(const Context &context, const float deltaTime) {
 	if ((video.timeSinceLastFrame += deltaTime) >= video.timePerFrame) {    // primero controlamos si debemos cambiar de frame
 		video.timeSinceLastFrame -= video.timePerFrame;                     // si es asi, actualizamos el contador de tiempo
 
-		if (!video.loop) {                                                  // solamente si el video NO se reproduce en bucle
-			if (video.numFrames <= ++video.frameCounter) {                  // controlamos si hemos llegado al final o no
-				context->nextVideo();
-			}
-		}
+		if (video.frameCounter == 0)
+			soundMessages.emplace_back(video.sound);
 
-//		video.video->render();
+		video.frameCounter++;
+
+		if (!video.loop)                                                    // solamente si el video NO se reproduce en bucle
+			if (video.numFrames <= video.frameCounter)                      // controlamos si hemos llegado al final o no
+				context->nextVideo();
+
 		video.video->nextFrame();
 	}
 }
 
-void VideoSystem::fixedUpdate(const Context &context, float deltaTime) {
+void VideoSystem::fixedUpdate(const Context & context, const float deltaTime) {
 	auto & video = context->getComponents().getComponents<Video>()[context->getVideoIndex()];
 
 	video.video->render();

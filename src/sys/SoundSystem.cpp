@@ -136,6 +136,10 @@ void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
 	while (!soundMessages.empty()) {
 		const auto parameter = soundMessages.back().parameter;
 
+		if(parameter==STOP_ALL_SOUNDS){
+            reset();
+            break;
+        }
 		const auto & [paramName, value] = getParameterValue(parameter);
 
 		FMOD_STUDIO_PLAYBACK_STATE state;   // me preparo para recibir un estado
@@ -161,14 +165,13 @@ void SoundSystem::reset() {
 	// TODO: generalizar (cmp, vector, loqueseas)
 	for (const auto& item : soundEvents)
 		for (const auto& instance : item.second.instances)
-			ERRCHECK( instance->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+			ERRCHECK( instance->stop(FMOD_STUDIO_STOP_ALLOWFADEOUT) );
 
-	ERRCHECK( backingTrack.instance->stop(FMOD_STUDIO_STOP_IMMEDIATE) );
+	//ERRCHECK( backingTrack.instance->stop(FMOD_STUDIO_STOP_ALLOWFADEOUT) );
 
 	soundMessages.clear();
 	soundMessages.reserve(16);
-
-	startBackgroundMusic();
+    ERRCHECK (system->update() );
 }
 
 void SoundSystem::startBackgroundMusic() {

@@ -2,8 +2,9 @@
 
 #include <util/SoundPaths.hpp>
 
+#include <tuple>
+
 enum SoundParameter {
-	NO_SOUND,
 	//PLAYER
 	ATTACK_PLAYER_DEMON,
 	ATTACK_PLAYER_ANGEL,
@@ -38,8 +39,9 @@ enum SoundParameter {
     VIDEO_TUTORIAL,
 
 
-    NUM_MAX_PARAMETERS
-
+    NUM_MAX_PARAMETERS,
+    NO_SOUND,
+    STOP_ALL_SOUNDS
 };
 
 using parameter_value = std::tuple<std::string_view, int>;

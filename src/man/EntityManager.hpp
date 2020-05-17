@@ -78,7 +78,7 @@ struct EntityManager : GameContext {
 		void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
 		void createNavigation();
 
-		void createVideo(std::string_view, bool);
+		void createVideo(std::string_view, bool, SoundParameter);
 		void createTexture(std::string_view, int, int);
 
 		void createMenuOptions(unsigned, unsigned);
