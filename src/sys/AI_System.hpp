@@ -18,7 +18,7 @@ struct AI_System : System
 
 protected:
     [[nodiscard]] bool checkObstacles(const vec3&, const vec3&, float, const std::unique_ptr<GameContext>&);
-    [[nodiscard]] bool checkFacing(const Physics&, const std::unique_ptr<GameContext>&);
+    [[nodiscard]] bool checkFacing(const Physics&, const vec3& player_pos);
                   void setPhase(const std::unique_ptr<GameContext>&);
                   void setInList(const std::unique_ptr<GameContext>&);
 
