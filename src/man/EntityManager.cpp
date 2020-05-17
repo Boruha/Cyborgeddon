@@ -401,7 +401,7 @@ void EntityManager::createMenuOptions(const unsigned int firstOption, const unsi
 
 	menu_options.addComponent(options);
 }
-
+/*
 void EntityManager::setNavConnections(const GraphNode & node, const std::vector<const GraphNode *> & conns) const {
 	// MAX_GRAPH_CONN especifica cuantas conexiones puede haber como maximo
 	// si se necesita añadir mas conexiones, ir a util/ComponentConstants.hpp
@@ -501,7 +501,7 @@ void EntityManager::createNavigation() {
 
 	nav->addComponent<Graph>(nav_graph);
 }
-
+*/
 const Entity& EntityManager::getEntityByID(const EntityID id) const {
 	return entities.find(id)->second;
 }
@@ -515,7 +515,7 @@ void EntityManager::createLevel() {
 
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 40, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
+	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 90, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(0.8), vec3(0.0));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
@@ -664,10 +664,10 @@ void EntityManager::createLevel() {
 
     //ZONA 1 -> AMP. CITY
     //Primer pasillo (Donde nace DEX)
-    createEnemy(patrol_0[0], vec3(1), patrol_0, ++scheduling_AI_counter);
+//    createEnemy(patrol_0[0], vec3(1), patrol_0, ++scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
     createEnemy(patrol_1[0], vec3(1), patrol_1, ++scheduling_AI_counter);
-    createEnemy(patrol_2[0], vec3(1), patrol_2, ++scheduling_AI_counter);
+/*    createEnemy(patrol_2[0], vec3(1), patrol_2, ++scheduling_AI_counter);
     createEnemy(patrol_3[0], vec3(1), patrol_3, ++scheduling_AI_counter);
     //Tercer pasillo (girar a la derecha)
     createEnemy(patrol_4[0], vec3(1), patrol_4, ++scheduling_AI_counter);
@@ -803,7 +803,7 @@ void EntityManager::createLevel() {
     createAngel(patrol_139[0], vec3(1), patrol_139, ++scheduling_AI_counter);
     createEnemy(patrol_138[0], vec3(1), patrol_138, ++scheduling_AI_counter);
     createDemon(patrol_137[0], vec3(1), patrol_137, ++scheduling_AI_counter);
-
+*/
 
     // PAUSE
 	createMenuOptions(0, NUM_PAUSE_OPTIONS);
