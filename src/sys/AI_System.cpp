@@ -369,6 +369,8 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 {
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
+                    //std::cout << "LANDING EN EL FRAME: " << ai.frameCounter << "\n";
+                    
                     if( !greater_e(distance2, JUMP_AREA_DMG2) )
                         std::cout << "TORNADITO QUE TE METO EN MOVIMIENTO\n";
                 }
@@ -385,9 +387,10 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 
                 const float distance2 = length2({ phy.position.x - ai.target_position.x, phy.position.z - ai.target_position.z });
 
-                if(!greater_e(distance2, DIST_ATTACK_RANGE2) && greater_e(distance2, MELEE_ATTACK_RANGE2) 
+                if(!greater_e(distance2, MAX_JUMP_RANGE2) && greater_e(distance2, MIN_JUMP_RANGE2) 
                 && !greater_e(jump.currentJumpCooldown, 0))
                 {
+                    //std::cout << "SALTO EN EL FRAME: " << ai.frameCounter << "\n";
                     jump.jumpTargetLocation = player_pos;
                     jump.jumping = true;
                     jump.currentJumpCooldown = jump.jumpCooldown;
@@ -527,7 +530,7 @@ void AI_System::init()
     root = std::make_unique<Selector>();
     root->childs.emplace_back(std::move(lodPatrolState));
     root->childs.emplace_back(std::move(patrolState));
-    root->childs.emplace_back(std::move(pursueState));
+    //root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));
 
     frame = 0;

@@ -659,6 +659,7 @@ void EntityManager::createLevel() {
 	//CREACION DE LAS LLAVES
     //createPairKeyDoor(vec3(0,0,-20), vec3(1), vec3(0,0,-10), vec3(1));
 
+    //createDemon(patrol_29[0], vec3(1), patrol_29, ++scheduling_AI_counter);
 
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"

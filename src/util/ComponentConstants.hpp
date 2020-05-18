@@ -49,6 +49,10 @@ constexpr float     JUMP_COOLDOWN                   = 8.f;
 constexpr float     JUMP_TIMER                      = 1.f;
 constexpr float     JUMP_AREA_DMG                   = 20.f;
 constexpr float     JUMP_AREA_DMG2                  = JUMP_AREA_DMG * JUMP_AREA_DMG; 
+constexpr float     MIN_JUMP_RANGE       		    = 12.f;
+constexpr float     MAX_JUMP_RANGE   		        = 20.f;
+constexpr float     MAX_JUMP_RANGE2  		        = MAX_JUMP_RANGE  * MAX_JUMP_RANGE;
+constexpr float     MIN_JUMP_RANGE2     		    = MIN_JUMP_RANGE * MIN_JUMP_RANGE;
 
 //NAV GRAPH
 constexpr unsigned  MAX_GRAPH_CONN                  = 3;
