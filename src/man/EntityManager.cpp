@@ -258,7 +258,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 
 void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vector<vec3>& patrol, unsigned phase) {
 	auto& enemy     = createEntity(ENEMY);
-	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos, vec3(), vec3(0.0, 2250.0, 0.0), dim));
+	auto& physics   = componentStorage.createComponent(Physics(enemy.getType(), enemy.getID(), pos + vec3(0,dim.y/2, 0), vec3(), vec3(0.0, 2250.0, 0.0), dim));
 	auto& velocity  = componentStorage.createComponent(Velocity(enemy.getType(), enemy.getID(), ENEMY_SPEED, ENEMY_ACCELERATION));
 	auto& trigger   = componentStorage.createComponent(TriggerMovSphere(enemy.getType(), enemy.getID(), physics.position, 1, physics.velocity));
 	auto& circleBounding = componentStorage.createComponent(CircleBounding(enemy.getType(), enemy.getID(), physics.position, 1.f, physics.velocity));
@@ -267,9 +267,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-
 	render.node = componentStorage.createAnimatedMesh("resources/models/Demon/Static");
-
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -659,6 +657,7 @@ void EntityManager::createLevel() {
 	//CREACION DE LAS LLAVES
     //createPairKeyDoor(vec3(0,0,-20), vec3(1), vec3(0,0,-10), vec3(1));
 
+    //createDemon(patrol_29[0], vec3(1), patrol_29, ++scheduling_AI_counter);
 
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
@@ -814,7 +813,7 @@ void EntityManager::createLevel() {
 
 	createTexture(PAUSE_TEXTURE, 0, 0);
 
-	componentStorage.printComponentStorage();
+	//componentStorage.printComponentStorage();
 }
 
 void EntityManager::createGraph()
