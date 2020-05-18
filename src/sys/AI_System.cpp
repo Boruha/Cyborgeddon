@@ -195,7 +195,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 return true;
             }
 
-            return true;
+            return false;
         }
     };
 /*  PATROL BEHAVIOURS  */
