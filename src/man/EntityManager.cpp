@@ -540,42 +540,42 @@ void EntityManager::createLevel() {
 	std::vector<vec3> patrol_3 = { graph[3].coord };
 	std::vector<vec3> patrol_4 = { graph[4].coord };
 	std::vector<vec3> patrol_5 = { graph[5].coord };
-	std::vector<vec3> patrol_6 = { graph[6].coord, graph[7].coord };
+	std::vector<vec3> patrol_6 = { graph[6].coord };
     //Puente 1 (Antes de abrir la puerta con las llaves)
 	std::vector<vec3> patrol_8 = { graph[8].coord};
 	std::vector<vec3> patrol_9 = { graph[9].coord};
-	std::vector<vec3> patrol_11 = { graph[11].coord, graph[10].coord };
+	std::vector<vec3> patrol_11 = { graph[11].coord };
 	std::vector<vec3> patrol_12 = { graph[12].coord };
     std::vector<vec3> patrol_13 = { graph[13].coord };
-    std::vector<vec3> patrol_14 = { graph[14].coord, graph[15].coord };
-    std::vector<vec3> patrol_16 = { graph[16].coord, graph[17].coord };
+    std::vector<vec3> patrol_14 = { graph[14].coord };
+    std::vector<vec3> patrol_16 = { graph[16].coord };
     std::vector<vec3> patrol_18 = { graph[18].coord };
     std::vector<vec3> patrol_19 = { graph[19].coord };
-    std::vector<vec3> patrol_21 = { graph[21].coord, graph[20].coord };
+    std::vector<vec3> patrol_21 = { graph[21].coord };
     std::vector<vec3> patrol_22 = { graph[22].coord };
     std::vector<vec3> patrol_23 = { graph[23].coord };
     std::vector<vec3> patrol_24 = { graph[24].coord };
     //Rellano entre zona Angelical y demoniaca (Justo despues del primer puente).
-    std::vector<vec3> patrol_26 = { graph[26].coord, graph[25].coord };
+    std::vector<vec3> patrol_26 = { graph[26].coord };
     std::vector<vec3> patrol_27 = { graph[27].coord };
     std::vector<vec3> patrol_28 = { graph[28].coord };
     std::vector<vec3> patrol_29 = { graph[29].coord };
     std::vector<vec3> patrol_30 = { graph[30].coord };
-    std::vector<vec3> patrol_32 = { graph[32].coord, graph[31].coord };
+    std::vector<vec3> patrol_32 = { graph[32].coord };
     //ZONA 2 -> CATEDRAL IGLESIA
     //Pasillo Principal
     std::vector<vec3> patrol_34 = { graph[34].coord };
-    std::vector<vec3> patrol_35 = { graph[35].coord, graph[33].coord };
+    std::vector<vec3> patrol_35 = { graph[35].coord };
     std::vector<vec3> patrol_36 = { graph[36].coord };
     std::vector<vec3> patrol_37 = { graph[37].coord };
     std::vector<vec3> patrol_38 = { graph[38].coord };
     std::vector<vec3> patrol_40 = { graph[40].coord };
-    std::vector<vec3> patrol_41 = { graph[41].coord, graph[39].coord };
+    std::vector<vec3> patrol_41 = { graph[41].coord };
     std::vector<vec3> patrol_42 = { graph[42].coord };
     std::vector<vec3> patrol_43 = { graph[43].coord };
     std::vector<vec3> patrol_44 = { graph[44].coord };
-    std::vector<vec3> patrol_46 = { graph[46].coord, graph[45].coord };
-    std::vector<vec3> patrol_47 = { graph[47].coord, graph[48].coord };
+    std::vector<vec3> patrol_46 = { graph[46].coord };
+    std::vector<vec3> patrol_47 = { graph[47].coord };
     //Zona Inferior (mesa con velas)
     std::vector<vec3> patrol_49 = { graph[49].coord };
     std::vector<vec3> patrol_50 = { graph[50].coord };
@@ -592,16 +592,16 @@ void EntityManager::createLevel() {
     std::vector<vec3> patrol_59 = { graph[59].coord };
     //ZONA 3 -> ZONA DE DEMONIOS (PASILLO + ZONA PENTAGRAMA)
     //Carretera de camino
-    std::vector<vec3> patrol_60 = { graph[60].coord, graph[61].coord};
+    std::vector<vec3> patrol_60 = { graph[60].coord };
     std::vector<vec3> patrol_62 = { graph[62].coord };
     std::vector<vec3> patrol_63 = { graph[63].coord };
     std::vector<vec3> patrol_64 = { graph[64].coord };
-    std::vector<vec3> patrol_65 = { graph[65].coord, graph[66].coord };
+    std::vector<vec3> patrol_65 = { graph[65].coord };
     std::vector<vec3> patrol_67 = { graph[67].coord };
     std::vector<vec3> patrol_68 = { graph[68].coord };
-    std::vector<vec3> patrol_70 = { graph[70].coord, graph[69].coord };
+    std::vector<vec3> patrol_70 = { graph[70].coord };
     std::vector<vec3> patrol_71 = { graph[71].coord };
-    std::vector<vec3> patrol_73 = { graph[73].coord, graph[72].coord};
+    std::vector<vec3> patrol_73 = { graph[73].coord };
     std::vector<vec3> patrol_74 = { graph[74].coord };
     std::vector<vec3> patrol_75 = { graph[75].coord };
     std::vector<vec3> patrol_76 = { graph[76].coord };
@@ -626,31 +626,31 @@ void EntityManager::createLevel() {
     std::vector<vec3> patrol_94 = { graph[94].coord };
     std::vector<vec3> patrol_95 = { graph[95].coord };
     std::vector<vec3> patrol_96 = { graph[96].coord };
-    std::vector<vec3> patrol_97 = { graph[97].coord, graph[98].coord };
-    std::vector<vec3> patrol_98 = { graph[98].coord, graph[99].coord };
-    std::vector<vec3> patrol_99 = { graph[99].coord, graph[100].coord };
-    std::vector<vec3> patrol_100 = { graph[100].coord, graph[101].coord };
-    std::vector<vec3> patrol_101 = { graph[101].coord, graph[97].coord };
+    std::vector<vec3> patrol_97 = { graph[97].coord };
+    std::vector<vec3> patrol_98 = { graph[98].coord };
+    std::vector<vec3> patrol_99 = { graph[99].coord };
+    std::vector<vec3> patrol_100 = { graph[100].coord };
+    std::vector<vec3> patrol_101 = { graph[101].coord };
     //ZONA 4 -> Zona del caos (Zona final)
     std::vector<vec3> patrol_102 = { graph[102].coord };
     std::vector<vec3> patrol_103 = { graph[103].coord };
     std::vector<vec3> patrol_106 = { graph[106].coord };
-    std::vector<vec3> patrol_108 = { graph[108].coord, graph[109].coord, graph[110].coord, graph[111].coord };
-    std::vector<vec3> patrol_112 = { graph[112].coord, graph[113].coord };
+    std::vector<vec3> patrol_108 = { graph[108].coord };
+    std::vector<vec3> patrol_112 = { graph[112].coord };
     std::vector<vec3> patrol_117 = { graph[117].coord };
-    std::vector<vec3> patrol_120 = { graph[120].coord, graph[119].coord };
+    std::vector<vec3> patrol_120 = { graph[120].coord };
     std::vector<vec3> patrol_121 = { graph[121].coord };
     std::vector<vec3> patrol_122 = { graph[122].coord };
-    std::vector<vec3> patrol_127 = { graph[127].coord, graph[126].coord };
+    std::vector<vec3> patrol_127 = { graph[127].coord };
     std::vector<vec3> patrol_128 = { graph[128].coord };
-    std::vector<vec3> patrol_132 = { graph[132].coord, graph[131].coord, graph[129].coord, graph[130].coord };
+    std::vector<vec3> patrol_132 = { graph[132].coord };
     std::vector<vec3> patrol_137 = { graph[137].coord };
     std::vector<vec3> patrol_138 = { graph[138].coord };
     std::vector<vec3> patrol_139 = { graph[139].coord };
     std::vector<vec3> patrol_143 = { graph[143].coord };
-    std::vector<vec3> patrol_145 = { graph[145].coord, graph[146].coord, graph[148].coord, graph[147].coord };
-    std::vector<vec3> patrol_149 = { graph[149].coord, graph[150].coord };
-    std::vector<vec3> patrol_154 = { graph[154].coord, graph[155].coord, graph[156].coord, graph[157].coord };
+    std::vector<vec3> patrol_145 = { graph[145].coord };
+    std::vector<vec3> patrol_149 = { graph[149].coord };
+    std::vector<vec3> patrol_154 = { graph[154].coord };
     std::vector<vec3> patrol_158 = { graph[158].coord };
     std::vector<vec3> patrol_162 = { graph[162].coord };
 
