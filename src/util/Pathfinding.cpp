@@ -13,8 +13,8 @@ std::vector<int> calculePath(const int start, const int end, const std::vector<M
     std::vector<NodeRecord> close;
     std::vector<Connection> currentConn;
     std::vector<int> path;
-    open.reserve(5);
-    close.reserve(5);
+    open.reserve(20);
+    close.reserve(20);
 
     //set startRecord
     startRecord.node = start;

@@ -170,7 +170,6 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
-            
             ai.patrol_index    = (ai.patrol_index + 1) % ai.max_index;
             ai.target_position = ai.patrol_position[ai.patrol_index];
             
@@ -184,8 +183,6 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
         {
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
             
-            
-
             if (greater_e(distance2, PATROL_MIN_DISTANCE2)
                 || (greater_e(distance2, VIEW_MIN_DISTANCE2) && !checkFacing(phy, player_pos)) )
             {
