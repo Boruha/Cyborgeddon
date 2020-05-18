@@ -57,7 +57,8 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                         
             if(!greater_e(distance2, ARRIVE_MIN_DISTANCE2))
             {
-                phy.position = ai.target_position;
+                phy.position   = ai.target_position;
+                phy.position.y = phy.scale.y/2;
                 return false;
             }
 
@@ -85,14 +86,19 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
-            auto & enemy    = context->getEntityByID(ai.getEntityID());
-			auto & jump     = *enemy.getComponent<Jump>();
+            auto & enemy  = context->getEntityByID(ai.getEntityID());
+			auto & jump   = *enemy.getComponent<Jump>();
 
-            vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
-            phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
-            
+            auto diff_x   = ai.target_position.x - phy.position.x;
+            auto diff_z   = ai.target_position.z - phy.position.z;
+
+            const float distance = length({ diff_x, diff_z });
+            //plano
+            vel.direction   = vec3(diff_x, 0, diff_z);
+            phy.velocity    = normalize(vel.direction) * (1 + distance) * deltaTime;
+            //altura
             jump.jumpTimer -= deltaTime * 2;
-            phy.velocity.y = jump.jumpTimer * (vel.currentSpeed * 2) * deltaTime;  
+            phy.velocity.y  = jump.jumpTimer * (vel.currentSpeed * 2) * deltaTime;
             
             if(phy.position.y < (phy.scale.y / 2))
             {
@@ -181,6 +187,12 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
+            auto & enemy    = context->getEntityByID(ai.getEntityID());
+			auto * jump     = enemy.getComponent<Jump>();
+
+            if(jump && jump->jumping)
+                return false;
+
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
             
             if (greater_e(distance2, PATROL_MIN_DISTANCE2)
@@ -206,16 +218,16 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             auto & trSphere = *enemy.getComponent<TriggerMovSphere>();
 			auto * jump     = enemy.getComponent<Jump>();
 
+            if(jump && jump->jumping)
+                return false;
+
             ai.frequecy_state  = PURSUE_STATE;
             ai.target_position = player_pos;
 
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z }); 
                      ai.obstacles = checkObstacles(phy.position, player_pos, trSphere.radius, context);         
             
-            if(jump)
-                return (greater_e(distance2, PURSUE_MIN_DISTANCE2) && !jump->jumping) || ai.obstacles;
-            else
-                return greater_e(distance2, PURSUE_MIN_DISTANCE2) || ai.obstacles;
+            return greater_e(distance2, PURSUE_MIN_DISTANCE2) || ai.obstacles;
         }
 
     };
@@ -369,8 +381,6 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 {
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
-                    //std::cout << "LANDING EN EL FRAME: " << ai.frameCounter << "\n";
-                    
                     if( !greater_e(distance2, JUMP_AREA_DMG2) )
                         std::cout << "TORNADITO QUE TE METO EN MOVIMIENTO\n";
                 }
@@ -390,7 +400,6 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 if(!greater_e(distance2, MAX_JUMP_RANGE2) && greater_e(distance2, MIN_JUMP_RANGE2) 
                 && !greater_e(jump.currentJumpCooldown, 0))
                 {
-                    //std::cout << "SALTO EN EL FRAME: " << ai.frameCounter << "\n";
                     jump.jumpTargetLocation = player_pos;
                     jump.jumping = true;
                     jump.currentJumpCooldown = jump.jumpCooldown;

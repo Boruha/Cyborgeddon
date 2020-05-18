@@ -45,14 +45,15 @@ constexpr float     DIST_ATTACK_RANGE2  		    = DIST_ATTACK_RANGE  * DIST_ATTACK
 constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTACK_RANGE;
 
 //DEMON JUMP
-constexpr float     JUMP_COOLDOWN                   = 8.f;
+constexpr float     JUMP_COOLDOWN                   = 5.f;
 constexpr float     JUMP_TIMER                      = 1.f;
 constexpr float     JUMP_AREA_DMG                   = 20.f;
 constexpr float     JUMP_AREA_DMG2                  = JUMP_AREA_DMG * JUMP_AREA_DMG; 
-constexpr float     MIN_JUMP_RANGE       		    = 12.f;
-constexpr float     MAX_JUMP_RANGE   		        = 20.f;
-constexpr float     MAX_JUMP_RANGE2  		        = MAX_JUMP_RANGE  * MAX_JUMP_RANGE;
-constexpr float     MIN_JUMP_RANGE2     		    = MIN_JUMP_RANGE * MIN_JUMP_RANGE;
+
+constexpr float     MIN_JUMP_RANGE   		        = 12.f;
+constexpr float     MAX_JUMP_RANGE   		        = 16.f;
+constexpr float     MAX_JUMP_RANGE2  		        = MAX_JUMP_RANGE * MAX_JUMP_RANGE;
+constexpr float     MIN_JUMP_RANGE2  		        = MIN_JUMP_RANGE * MIN_JUMP_RANGE;
 
 //NAV GRAPH
 constexpr unsigned  MAX_GRAPH_CONN                  = 3;
