@@ -16,6 +16,9 @@ void State::init()
 			next_state = &State::initNextState;
 			context->createIntro();
 			break;
+		case TUTORIAL :
+			next_state = &State::tutorialNextState;
+			break;
 		case INGAME :
 			next_state = &State::ingameNextState;
 //			context->createLevel();
@@ -137,9 +140,52 @@ StateEnum State::initNextState(const Context & context) {
 
 	context->getEngine().display();
 */
+	if (context->getVideoIndex() > 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
 
-	if (context->getVideoIndex() > 0 && context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
-		auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
+		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
+		auto & engine = context->getEngine();
+
+		switch (context->getComponents().getComponents<MenuOption>()[0].option) {
+
+			case 0 :
+
+				engine.clear(Color(BLACK), true);
+
+				loadScreen->render();
+
+				engine.display();
+
+				context->createLevel();
+
+				return INGAME;
+
+			case 1 :
+
+				engine.clear(Color(BLACK), true);
+
+				loadScreen->render();
+
+				engine.display();
+
+				context->createTutorial();
+
+				return TUTORIAL;
+
+			default :
+
+				break;
+		}
+
+	}
+
+	return INIT;
+}
+
+StateEnum State::tutorialNextState(const Context & context) {
+
+	if (context->getVideoIndex() > 0) {
+
+		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		engine.clear(Color(BLACK), true);
@@ -153,5 +199,5 @@ StateEnum State::initNextState(const Context & context) {
 		return INGAME;
 	}
 
-	return INIT;
+	return TUTORIAL;
 }

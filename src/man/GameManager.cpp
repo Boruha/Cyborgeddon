@@ -1,6 +1,9 @@
 #include <man/GameManager.hpp>
 #include <sys/Systems.hpp>
 
+#include <ratio>
+#include <thread>
+
 // TODO : input, sound y render, llevarselos a un "motor" y no tratarlos como sistemas, sino acceder a ellos a traves de eventos
 // TODO : manager de eventos
 
@@ -14,6 +17,14 @@ void GameManager::init()
 	currentState->registerSystem<HUDintroSystem>();
 	currentState->registerSystem<VideoSystem>();
     currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+
+	currentState->init();
+
+	currentState = &states.emplace(std::make_pair(TUTORIAL, State(TUTORIAL, entityManager))).first->second;
+
+	currentState->registerSystem<HUDtutorialSystem>();
+	currentState->registerSystem<VideoSystem>();
+	currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
 
 	currentState->init();
 
@@ -58,11 +69,22 @@ void GameManager::init()
 // TODO: bucle del juego
 void GameManager::run()
 {
+	constexpr std::chrono::duration<double, std::milli> MAX_LIMIT ( FIXED_DELTA_TIME * 1000 );
+	std::chrono::duration<double, std::milli> looptime = std::chrono::milliseconds(0);
+
 	while(engine->run()) {
 		const StateEnum nextState = currentState->update();
 
+		Timer timer { };
+
 		if (nextState != currentState->state)
 			currentState = & states.find(nextState)->second;
+
+		looptime = std::chrono::duration<double, std::milli>(timer.getElapsedAndReset() * 10000);
+
+		if(nextState == INGAME && looptime < MAX_LIMIT)
+			std::this_thread::sleep_for(MAX_LIMIT - looptime);
+		
 	}
 }
 

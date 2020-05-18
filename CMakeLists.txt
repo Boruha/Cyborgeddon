@@ -53,7 +53,7 @@ file (
 
 find_package ( OpenCV REQUIRED )
 
-add_executable(cyborgeddon ${SOURCES})
+add_executable(cyborgeddon ${SOURCES} src/sys/HUDtutorialSystem.hpp src/sys/HUDtutorialSystem.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${OpenCV_INCLUDE_DIRS})
 

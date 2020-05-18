@@ -27,3 +27,5 @@
 #include <sys/CollisionSystem.hpp>
 #include <sys/HUDingameSystem.hpp>
 
+// TUTORIAL
+#include <sys/HUDtutorialSystem.hpp>

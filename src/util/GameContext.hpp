@@ -13,9 +13,12 @@ struct IEngine;
 struct GameContext {
 	virtual ~GameContext() = default;
 
-	virtual void createIntro()  = 0;
-	virtual void createLevel()  = 0;
-	virtual void createGraph()  = 0;
+	virtual void createIntro()      = 0;
+	virtual void createTutorial()   = 0;
+	virtual void createLevel()      = 0;
+
+	virtual void createGraph() = 0;
+
 	virtual void createBullet() = 0;
 
 	virtual void nextVideo() = 0;
@@ -34,6 +37,9 @@ struct GameContext {
 
 	[[nodiscard]] virtual const std::vector<MapNode>& getGraph() const = 0;
 	[[nodiscard]] virtual 		std::vector<MapNode>& getGraph()	   = 0;
+
+	[[nodiscard]] virtual const std::unordered_map<EntityID, std::vector<int>>& getPaths() const = 0;
+	[[nodiscard]] virtual       std::unordered_map<EntityID, std::vector<int>>& getPaths() 	     = 0;
 
 	[[nodiscard]] virtual       std::vector<int>& getPath(EntityID)      = 0;
 				  virtual       void deletePath(EntityID)                = 0;

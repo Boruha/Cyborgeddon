@@ -55,12 +55,9 @@ inline bool lineIntersection(const Line& r, const Line& s)
 		   (o3 == 0 && segmentContainsPointXZ(s, r.b)) || (o4 == 0 && segmentContainsPointXZ(s, r.a));
 }
 
-inline bool SphereWillIntersectBoxAABB(const float rad, const vec3& minAABB, const vec3& maxAABB, const vec3& ecLine) //NEW
+inline bool SphereWillIntersectTOBB(const float rad, const vec3& vertex, const vec3& ecLine) //NEW
 {
-	return 		rad > segmentDistancePointXZ(minAABB, ecLine)
-			||  rad > segmentDistancePointXZ(vec3(maxAABB.x, 0, minAABB.z), ecLine)
-		   	||	rad > segmentDistancePointXZ(maxAABB, ecLine) 
-		   	||	rad > segmentDistancePointXZ(vec3(minAABB.x, 0, maxAABB.z), ecLine);
+	return rad > segmentDistancePointXZ(vertex, ecLine);
 
 }
 
