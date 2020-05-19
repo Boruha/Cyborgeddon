@@ -138,7 +138,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Dex/Walking");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Dex/Walking");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -189,7 +189,7 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -211,7 +211,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Bot/Static");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Bot/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -239,7 +239,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Angel/Static");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Angel/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -267,7 +267,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Demon/Static");
+	render.node = componentStorage.createAnimatedMesh("resources/models/Demon/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -291,7 +291,7 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, 0, 0), vec3(0, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.obj");
+	render.node = componentStorage.createMesh("resources/models/Ciudad/ciudad.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -313,7 +313,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -333,7 +333,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Objetos/Puerta/0.obj");
+	render.node = componentStorage.createMesh("resources/models/Objetos/Puerta/0.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -350,7 +350,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createMesh("../resources/models/Objetos/Llave_demoniaca/0.obj");
+	keyRender.node = componentStorage.createMesh("resources/models/Objetos/Llave_demoniaca/0.obj");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
@@ -400,107 +400,7 @@ void EntityManager::createMenuOptions(const unsigned int firstOption, const unsi
 
 	menu_options.addComponent(options);
 }
-/*
-void EntityManager::setNavConnections(const GraphNode & node, const std::vector<const GraphNode *> & conns) const {
-	// MAX_GRAPH_CONN especifica cuantas conexiones puede haber como maximo
-	// si se necesita añadir mas conexiones, ir a util/ComponentConstants.hpp
-	// y cambiar el valor
 
-	// esta linea significa "asegurate de que MAX_GRAPH_CONN es >= al size de
-	// conns, de lo contrario aborta la ejecución"
-	// assert avisara de lo que esta pasando con un mensaje de error por consola
-	assert(MAX_GRAPH_CONN >= conns.size());
-
-	// set devuelve iteradores const, asi que para modificarlos tenemos que usar
-	// const_cast (siempre que haya uno tratando GraphNode es por eso)
-	// PERO CUIDADO no modificar lo que set utilice para ordenar (position en este caso)
-	auto & n = const_cast<GraphNode &>(node);
-
-	// guardamos en cada conexion, la distancia al nodo y un puntero a dicho nodo
-	// los valores que no rellenemos quedaran a <INFINITY, nullptr>
-	for (n.numConns = 0; n.numConns < conns.size(); ++n.numConns) {
-		n.conns[n.numConns] = {
-				distance(n.position, conns[n.numConns]->position),
-				const_cast<GraphNode *>(conns[n.numConns])
-		};
-	}
-
-	// ordenamos las conexiones por distancia, que es lo que guarda el primer valor del pair
-	std::sort( n.conns, n.conns + n.numConns, ComparePairLessThan() );
-}
-
-void EntityManager::createNavigation() {
-	nav = & createEntity(NAV);
-
-	auto & nav_graph = componentStorage.createComponent(Graph(nav->getType(), nav->getID()));
-
-	// hall
-	GraphNode  gn0 ( {    0,  0 } );
-	GraphNode  gn1 ( {    0, 50 } );
-	GraphNode  gn2 ( {    0,100 } );
-	GraphNode  gn3 ( {    0,150 } );
-	GraphNode  gn4 ( {    0,200 } );
-	GraphNode  gn5 ( {    0,260 } );
-
-	// right
-	GraphNode  gn6 ( {   60,270 } );
-	GraphNode  gn7 ( {  130,270 } );
-
-	// left
-	GraphNode  gn8 ( {  -80,270 } );
-	GraphNode  gn9 ( { -160,270 } );
-
-	// square
-	GraphNode gn10 ( { -200,275 } );
-	GraphNode gn11 ( { -210,320 } );
-	GraphNode gn12 ( { -210,230 } );
-	GraphNode gn13 ( { -315,230 } );
-	GraphNode gn14 ( { -315,320 } );
-
-	nav_graph.nodes.insert( {
-		 gn0,  gn1,  gn2,  gn3,  gn4,
-		 gn5,  gn6,  gn7,  gn8,  gn9,
-		gn10, gn11, gn12, gn13, gn14
-	} );
-
-	auto &  i0 = * nav_graph.nodes.find  (gn0);
-	auto &  i1 = * nav_graph.nodes.find  (gn1);
-	auto &  i2 = * nav_graph.nodes.find  (gn2);
-	auto &  i3 = * nav_graph.nodes.find  (gn3);
-	auto &  i4 = * nav_graph.nodes.find  (gn4);
-	auto &  i5 = * nav_graph.nodes.find  (gn5);
-
-	auto &  i6 = * nav_graph.nodes.find  (gn6);
-	auto &  i7 = * nav_graph.nodes.find  (gn7);
-
-	auto &  i8 = * nav_graph.nodes.find  (gn8);
-	auto &  i9 = * nav_graph.nodes.find  (gn9);
-
-	auto & i10 = * nav_graph.nodes.find (gn10);
-	auto & i11 = * nav_graph.nodes.find (gn11);
-	auto & i12 = * nav_graph.nodes.find (gn12);
-	auto & i13 = * nav_graph.nodes.find (gn13);
-	auto & i14 = * nav_graph.nodes.find (gn14);
-
-	setNavConnections(  i0, {             &i1 } );
-	setNavConnections(  i1, {       &i0,  &i2 } );
-	setNavConnections(  i2, {       &i1,  &i3 } );
-	setNavConnections(  i3, {       &i2,  &i4 } );
-	setNavConnections(  i4, {       &i3,  &i5 } );
-	setNavConnections(  i5, { &i4,  &i6,  &i8 } );
-	setNavConnections(  i6, {       &i5,  &i7 } );
-	setNavConnections(  i7, {             &i6 } );
-	setNavConnections(  i8, {       &i5,  &i9 } );
-	setNavConnections(  i9, {       &i8, &i10 } );
-	setNavConnections( i10, { &i9, &i11, &i12 } );
-	setNavConnections( i11, {      &i10, &i14 } );
-	setNavConnections( i12, {      &i10, &i13 } );
-	setNavConnections( i13, {      &i12, &i14 } );
-	setNavConnections( i14, {      &i11, &i13 } );
-
-	nav->addComponent<Graph>(nav_graph);
-}
-*/
 const Entity& EntityManager::getEntityByID(const EntityID id) const {
 	return entities.find(id)->second;
 }
@@ -518,7 +418,7 @@ void EntityManager::createLevel() {
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(0.8), vec3(0.0));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
-	readColliderFile("../resources/models/Ciudad/colisiones.obj");
+	readColliderFile("resources/models/Ciudad/colisiones.obj");
 
 	createTexture(KEY_2, 558, 52);
 	createTexture(KEY_1, 517, 52);
@@ -657,8 +557,6 @@ void EntityManager::createLevel() {
 	//CREACION DE LAS LLAVES
     //createPairKeyDoor(vec3(0,0,-20), vec3(1), vec3(0,0,-10), vec3(1));
 
-    //createDemon(patrol_29[0], vec3(1), patrol_29, ++scheduling_AI_counter);
-
 	//DISTRIBUCION DE ENEMIGOS -> (x=derecha (+)/izquierda (-), z= abajo (+)/arriba (-))
 	//IMPORTANTE - COMENTADA LA IA, descomentar la creacion y el add del componente IA en "CreateEnemy", "CreateDemon" y "CreateAngel"
 
@@ -666,7 +564,7 @@ void EntityManager::createLevel() {
     //Primer pasillo (Donde nace DEX)
     createEnemy(patrol_0[0], vec3(1), patrol_0, ++scheduling_AI_counter);
     //Segundo pasillo (al girar a la izquierda)
-    createEnemy(patrol_1[0], vec3(1), patrol_1, ++scheduling_AI_counter);
+/*    createEnemy(patrol_1[0], vec3(1), patrol_1, ++scheduling_AI_counter);
     createEnemy(patrol_2[0], vec3(1), patrol_2, ++scheduling_AI_counter);
     createEnemy(patrol_3[0], vec3(1), patrol_3, ++scheduling_AI_counter);
     //Tercer pasillo (girar a la derecha)
@@ -803,7 +701,7 @@ void EntityManager::createLevel() {
     createAngel(patrol_139[0], vec3(1), patrol_139, ++scheduling_AI_counter);
     createEnemy(patrol_138[0], vec3(1), patrol_138, ++scheduling_AI_counter);
     createDemon(patrol_137[0], vec3(1), patrol_137, ++scheduling_AI_counter);
-
+*/
     // PAUSE
 	createMenuOptions(0, NUM_PAUSE_OPTIONS);
 
@@ -1619,13 +1517,13 @@ void EntityManager::createIntro() {
 
 	createMenuOptions(0, 4);
 
-	createVideo("../resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
-	createVideo("../resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
+	createVideo("resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
+	createVideo("resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
 
-	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_1.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_2.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_3.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_4.png", 0, 0);
 
 	componentStorage.printComponentStorage();
 }
@@ -1635,7 +1533,7 @@ void EntityManager::createTutorial() {
 
 	initData(8, 0, 8);
 
-	createVideo("../resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
+	createVideo("resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
 
 	componentStorage.printComponentStorage();
 }
