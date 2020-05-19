@@ -1,13 +1,16 @@
 #include <sys/VideoSystem.hpp>
 #include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
+#include <Engine/util/Math.hpp>
 
 void VideoSystem::update(const Context &context, const float deltaTime) {
+
 	if (context->getComponents().getComponents<Video>().size() > context->getVideoIndex()) {
 
 		auto& video = context->getComponents().getComponents<Video>()[context->getVideoIndex()];
 
-		if ((video.timeSinceLastFrame += deltaTime) >= video.timePerFrame) {    // primero controlamos si debemos cambiar de frame
-			video.timeSinceLastFrame -= video.timePerFrame;                     // si es asi, actualizamos el contador de tiempo
+		if (!less_e((std::chrono::high_resolution_clock::now() - time).count() / 1000000000.f, video.timePerFrame)) {
+
+			time = std::chrono::high_resolution_clock::now();
 
 			if (video.frameCounter == 0)
 				soundMessages.emplace_back(video.sound);
