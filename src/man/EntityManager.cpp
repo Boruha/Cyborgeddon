@@ -314,11 +314,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-<<<<<<< HEAD
 	render.node = componentStorage.createAnimatedMesh("../resources/models/Objetos/Bala/BalaDerecha");
-=======
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
->>>>>>> Tests_facing_colisions
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
