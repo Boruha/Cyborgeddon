@@ -5,6 +5,9 @@
 #include <util/SoundPaths.hpp>
 #include <util/Pathfinding.hpp>
 
+#include <glm/gtx/string_cast.hpp>
+
+
 #include <chrono>
 #include <thread>
 #include <algorithm>
@@ -194,9 +197,13 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 return false;
 
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-            
+            bool face = checkFacing(phy, player_pos);
+
+            if(face)
+                std::cout << "TE VEO ME VOY A PURSE! " << ai.frameCounter << "\n";
+
             if (greater_e(distance2, PATROL_MIN_DISTANCE2)
-                || (greater_e(distance2, VIEW_MIN_DISTANCE2) && !checkFacing(phy, player_pos)) )
+                || (greater_e(distance2, VIEW_MIN_DISTANCE2) && !face) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
                 ai.frequecy_state  = PATROL_STATE;
@@ -227,6 +234,9 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z }); 
                      ai.obstacles = checkObstacles(phy.position, player_pos, trSphere.radius, context);         
             
+            if(ai.obstacles)
+                std::cout << "HAY OBSTACULOS!! " << ai.frameCounter << "\n";
+
             return greater_e(distance2, PURSUE_MIN_DISTANCE2) || ai.obstacles;
         }
 
@@ -246,7 +256,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             return false;
         }
     };
-    //Se deberia comprobar que se genere todo(?)
+
     struct CreateRouteBehaviour : BehaviourNode
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
@@ -312,7 +322,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
 /*  PURSE BEHAVIOURS  */
 
 /*  ATTACK BEVAHOIUR  */
-    struct AttackStateBehaviour : BehaviourNode //innecesario? ad future puede tener un parametro no distancia. ai.state cambiarlo a una condition? 
+    struct AttackStateBehaviour : BehaviourNode 
     {
         bool run(AI& ai, Physics& phy, Velocity& vel, const vec3& player_pos, float deltaTime, const std::unique_ptr<GameContext>& context) override 
         {
@@ -539,7 +549,7 @@ void AI_System::init()
     root = std::make_unique<Selector>();
     root->childs.emplace_back(std::move(lodPatrolState));
     root->childs.emplace_back(std::move(patrolState));
-    //root->childs.emplace_back(std::move(pursueState));
+    root->childs.emplace_back(std::move(pursueState));
     root->childs.emplace_back(std::move(attackState));
 
     frame = 0;
@@ -646,12 +656,11 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
     auto  maxPoint     = vec3();
     auto  minPoint     = vec3();
 
+    maxPoint.x = (ai_pos.x >= pj_pos.x) ? ai_pos.x : pj_pos.x;
+    maxPoint.z = (ai_pos.z >= pj_pos.z) ? ai_pos.z : pj_pos.z;
 
-    maxPoint.x = (ai_pos.x > pj_pos.x) ? ai_pos.x : pj_pos.x;
-    maxPoint.z = (ai_pos.z > pj_pos.z) ? ai_pos.z : pj_pos.z;
-
-    minPoint.x = (ai_pos.x < pj_pos.x) ? ai_pos.x : pj_pos.x;
-    minPoint.z = (ai_pos.z < pj_pos.z) ? ai_pos.z : pj_pos.z;
+    minPoint.x = (ai_pos.x <= pj_pos.x) ? ai_pos.x : pj_pos.x;
+    minPoint.z = (ai_pos.z <= pj_pos.z) ? ai_pos.z : pj_pos.z;
 
     for(auto& cmp_tOBB : tOBB_vector)
     {
@@ -666,7 +675,15 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
         if(cmp_tOBB.min.z > maxPoint.z) //out +z
             continue;
 
-        if( lineAABBIntersectionXZ(Line(ai_pos, pj_pos), cmp_tOBB.min, cmp_tOBB.max) )
+        Line ai2pj = Line(ai_pos, pj_pos);
+
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[0], cmp_tOBB.vertices[1])) )
+            return true;
+
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[1], cmp_tOBB.vertices[2])) )
+            return true;
+
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[2], cmp_tOBB.vertices[0])) )
             return true;
 
         for(auto& vertex : cmp_tOBB.vertices)

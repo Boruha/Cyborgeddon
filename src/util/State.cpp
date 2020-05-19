@@ -153,7 +153,7 @@ StateEnum State::initNextState(const Context & context) {
 */
 	if (context->getVideoIndex() > 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
 
-		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
+		auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		switch (context->getComponents().getComponents<MenuOption>()[0].option) {
@@ -200,7 +200,7 @@ StateEnum State::tutorialNextState(const Context & context) {
 
 	if (context->getVideoIndex() > 0) {
 
-		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
+		auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		engine.clear(Color(BLACK), true);
