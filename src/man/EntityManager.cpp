@@ -66,6 +66,7 @@ void EntityManager::cleanData() {
 		if (e.second.getComponent<Render>())
 			e.second.getComponent<Render>()->node->remove();
 
+
 	entities.clear();					    // limpiamos entidades
 	toDelete.clear();						// limpiamos vector de entidades a borrar
 

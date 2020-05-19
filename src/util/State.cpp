@@ -3,6 +3,7 @@
 #include <src/Engine/EngineInterface/SceneInterface/IVideo.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/ITexture.hpp>
 
+
 void State::init()
 {
 	assert(state != NO_STATE);
@@ -62,7 +63,7 @@ StateEnum State::ingameNextState(const Context& context) {
 		return ENDING;
 	if (context->checkDefeat())
 		return ENDING;
-	if (context->isKeyPressed(KEY_P))
+	if (context->isKeyPressed(GLFW_KEY_ESCAPE))
 		return PAUSE;
 
 	return INGAME;
@@ -70,10 +71,20 @@ StateEnum State::ingameNextState(const Context& context) {
 
 StateEnum State::pauseNextState(const Context & context) {
 
-	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO)))
-		return INGAME;
+	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
+        return INGAME;
+    }
+	if (context->getComponents().getComponents<MenuOption>()[0].option == 2 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
+        auto & engine = context->getEngine();
+        engine.clear(Color(BLACK), true);
 
-	return PAUSE;
+        context->createIntro();
+
+        return INIT;
+    }
+        return PAUSE;
+	    //if(context->isKeyTextInput(KEY_SCAPE))
+	   // return INGAME;
 }
 
 StateEnum State::initNextState(const Context & context) {
@@ -163,13 +174,17 @@ StateEnum State::initNextState(const Context & context) {
 
 				engine.clear(Color(BLACK), true);
 
-				loadScreen->render();
+				//loadScreen->render();
 
-				engine.display();
+				//engine.display(); <- El video tutorial se carga en un "peo"
 
 				context->createTutorial();
 
 				return TUTORIAL;
+
+            //PONER AQUI QUE AL PULSAR EXIT TE SAQUE DEL JUEGO
+
+
 
 			default :
 
@@ -190,13 +205,15 @@ StateEnum State::tutorialNextState(const Context & context) {
 
 		engine.clear(Color(BLACK), true);
 
-		loadScreen->render();
+        context->createIntro();
 
-		engine.display();
+		//loadScreen->render();
 
-		context->createLevel();
+		//engine.display(); <-Vamos de vuelta al menu principal, la pantalla de carga no duraria na
 
-		return INGAME;
+		//context->createLevel();
+
+		return INIT;
 	}
 
 	return TUTORIAL;

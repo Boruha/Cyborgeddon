@@ -20,6 +20,7 @@ enum
 	KEY_RIGHT       = GLFW_KEY_RIGHT,
 	KEY_UP          = GLFW_KEY_UP,
 	KEY_DOWN        = GLFW_KEY_DOWN,
+	KEY_SCAPE       = GLFW_KEY_ESCAPE,
 	KEY_CODE_COUNT 	= GLFW_KEY_LAST
 };
 
