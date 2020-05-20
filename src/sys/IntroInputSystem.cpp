@@ -16,7 +16,7 @@ void IntroInputSystem::fixedUpdate(const Context &context, const float deltaTime
 		}
 
 		if (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))
-		    if (menu_options.option == 0 || menu_options.option == 1)
+		    if (menu_options.option != 2)
 		        soundMessages.emplace_back(STOP_ALL_SOUNDS);
 
 	}
