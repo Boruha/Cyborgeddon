@@ -79,7 +79,7 @@ StateEnum State::ingameNextState(const Context& context) {
 		return INGAME;
 	}
 
-	if (context->isKeyPressed(GLFW_KEY_ESCAPE))
+	if (context->isKeyPressed(KEY_SCAPE))
 		return PAUSE;
 
 	return INGAME;
@@ -159,18 +159,13 @@ StateEnum State::tutorialNextState(const Context & context) {
 
 	if (context->getVideoIndex() > 0) {
 
-		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		engine.clear(Color(BLACK), true);
 
-        context->createIntro(true);
-
-		//loadScreen->render();
-
 		engine.display();
 
-		//context->createLevel();
+        context->createIntro(true);
 
 		return INIT;
 	}
