@@ -32,4 +32,8 @@ namespace Sun {
 		return texture->getSize();
 	}
 
+	glm::vec2 Texture::getPosition() const {
+		return texture->getPosition();
+	}
+
 }

@@ -18,6 +18,7 @@ struct RTexture : IResource {
 	void render() const;
 
 	void setPosition(int, int);
+	glm::vec2 getPosition() const;
 
 	[[maybe_unused]] void setWidth(unsigned);
 	[[maybe_unused]] void setHeight(unsigned);

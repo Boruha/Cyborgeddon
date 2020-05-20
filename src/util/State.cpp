@@ -59,10 +59,16 @@ void State::reset() const {
 }
 
 StateEnum State::ingameNextState(const Context& context) {
-	if (context->checkVictory())
-		return ENDING;
-	if (context->checkDefeat())
-		return ENDING;
+	if (context->checkVictory()) {
+		context->createIntro(true);
+		return INIT;
+	}
+
+	if (context->checkDefeat()) {
+		context->createLevel();
+		return INGAME;
+	}
+
 	if (context->isKeyPressed(GLFW_KEY_ESCAPE))
 		return PAUSE;
 
@@ -113,9 +119,7 @@ StateEnum State::initNextState(const Context & context) {
 
 				engine.clear(Color(BLACK), true);
 
-				//loadScreen->render();
-
-				//engine.display(); <- El video tutorial se carga en un "peo"
+				engine.display();
 
 				context->createTutorial();
 
@@ -123,7 +127,13 @@ StateEnum State::initNextState(const Context & context) {
 
             //PONER AQUI QUE AL PULSAR EXIT TE SAQUE DEL JUEGO
 
+			case 3 :
 
+				engine.clear(Color(BLACK), true);
+
+				engine.display();
+
+				engine.close();
 
 			default :
 

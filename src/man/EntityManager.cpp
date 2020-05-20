@@ -18,7 +18,6 @@
 #include <assimp/scene.h>
 
 void EntityManager::initData(const int maxEntities, const int maxToDelete, const int maxComponents) {
-	cleanData();								// si no es la primera vez que llamamos a esta funcion, hay que limpiar vectores, reiniciar variables...
 	toDelete.reserve(maxToDelete);				// reservamos para la cantidad maxima de entidades que pueden morir en una sola iteracion del juego
 	componentStorage.initData(maxComponents);	// reservamos (de momento la misma) memoria para los vectores que tendran los componentes
 	graph.reserve(165);
@@ -62,11 +61,6 @@ void EntityManager::addToDestroy(const EntityID ID) {
 void EntityManager::cleanData() {
 	Entity::resetIDManagementValue();		// reiniciamos ID
 
-	/*for (auto & e : entities)
-		if (e.second.getComponent<Render>())
-			e.second.getComponent<Render>()->node->remove();
-    */
-
 	entities.clear();					    // limpiamos entidades
 	toDelete.clear();						// limpiamos vector de entidades a borrar
 
@@ -81,6 +75,8 @@ void EntityManager::cleanData() {
 	camera = nullptr;						// reiniciamos valor
 
 	componentStorage.cleanData();			// limpiamos el contenido de component storage
+
+	engine.scene->clearScene();
 
 	engine.unloadVideos();                  // limpiamos videos del motor si habia alguno en memoria
 	engine.unloadTextures();
@@ -117,6 +113,8 @@ void EntityManager::readColliderFile(const std::string_view path) {
 
 	if (scene)
 		processNode(scene->mRootNode, scene);
+
+	importer.FreeScene();
 }
 
 /*		CREATE ENTITIES		*/
@@ -1506,11 +1504,16 @@ void EntityManager::createGraph()
 
 bool EntityManager::checkVictory() const {
 	//return enemiesLeft <= 0;
-	return player->getComponent<Physics>()->position.z < -596;
+	auto * physics = player->getComponent<Physics>();
+
+	if (physics)
+		return physics->position.z < -596;
+	else
+		return false;
 }
 
 bool EntityManager::checkDefeat() const {
-	return !greater_e(player->getComponent<CharacterData>()->health, 0.f);
+	return player->getType() == UNDEFINED;
 }
 
 void EntityManager::createIntro( bool clean) {

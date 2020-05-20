@@ -30,7 +30,7 @@ struct SceneManager {
 
 	SunlightEngine * getEngine() { return engine; }
 
-	void clearScene() { root->removeAllChildren(); }
+	void clearScene();
 
 private :
 	void renderOffcreen();

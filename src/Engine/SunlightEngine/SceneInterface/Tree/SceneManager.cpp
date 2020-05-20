@@ -215,3 +215,18 @@ void SceneManager::renderShadow(size_t index) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+void SceneManager::clearScene() {
+	root->removeAllChildren();
+
+	cameraNode = nullptr;
+	camera = nullptr;
+
+	lights_index = 0;
+
+	ambient = vec3(0.2f);
+
+	view = mat4(1);
+	viewProjection = mat4(1);
+	lightViewProjection = mat4(1);
+}

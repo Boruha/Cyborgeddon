@@ -143,3 +143,7 @@ void RTexture::render() const {
 
 	glDisable( GL_BLEND );
 }
+
+glm::vec2 RTexture::getPosition() const {
+	return glm::vec2(x,y);
+}

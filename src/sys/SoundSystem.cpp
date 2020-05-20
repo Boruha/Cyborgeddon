@@ -75,60 +75,7 @@ SoundSystem::~SoundSystem() {
 }
 
 void SoundSystem::init() {
-	/*ERRCHECK ( EngineSystem::create(&system) );
 
-	ERRCHECK ( system->getCoreSystem(&core) );
-	ERRCHECK ( core->setSoftwareFormat(0, FMOD_SPEAKERMODE_DEFAULT, 0) );
-
-	ERRCHECK ( system->initialize(16, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr) );
-
-	ERRCHECK ( system->loadBankFile(MASTER_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &master) );
-	ERRCHECK ( system->loadBankFile(MASTER_STRINGS_BANK.data(), FMOD_STUDIO_LOAD_BANK_NORMAL, &strings) );
-
-	soundMessages.reserve(16);
-
-	SoundParameter parameters [NUM_MAX_PARAMETERS]
-	{
-			ATTACK_PLAYER_DEMON,
-			ATTACK_PLAYER_ANGEL,
-			SWITCH_MODE_DEMON,      //El personaje pasa de angel a demonio
-			SWITCH_MODE_ANGEL,      //El personaje pasa de demonio a angel
-			DAMAGE_PLAYER,
-			DASH_PLAYER,
-
-			//ENEMY
-			ATTACK_ENEMY_ASSEMBLY,
-			ATTACK_ENEMY_DEMON,
-			ATTACK_ENEMY_ANGEL,
-			ACTION_ENEMY_HITMARKER,
-
-			//ACTION SOUNDS
-			ACTION_GET_KEY,
-			ACTION_OPEN_DOOR,
-
-			//MENU SOUNDS
-            MENU_CHANGE_OPTION,
-
-            //SONGS SOUNDS
-            SONG_1,
-            SONG_2,
-            SONG_3,
-            SONG_4,
-
-			//VIDEO SOUNDS
-			VIDEO_INTRO_GAME,
-			VIDEO_CINEMATICA_1,
-			VIDEO_CINEMATICA_2,
-			VIDEO_TUTORIAL
-	};
-
-	for (const auto & param : parameters)
-		createSoundEvent(param);
-
-	createMusicEvent(BACKGROUND_MUSIC_EVENT, &backingTrack, .2f);
-
-	startBackgroundMusic();
-	 */
 }
 
 void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
@@ -136,10 +83,11 @@ void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
 	while (!soundMessages.empty()) {
 		const auto parameter = soundMessages.back().parameter;
 
-		if(parameter==STOP_ALL_SOUNDS){
+		if (parameter == STOP_ALL_SOUNDS) {
             reset();
-            break;
-        }
+			continue;
+		}
+
 		const auto & [paramName, value] = getParameterValue(parameter);
 
 		FMOD_STUDIO_PLAYBACK_STATE state;   // me preparo para recibir un estado

@@ -81,7 +81,7 @@ bool SunlightEngine::run() {
 	glfwPollEvents();
 
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+		close();
 
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -140,4 +140,8 @@ bool SunlightEngine::isKeyTextInput(const unsigned int code) {
 void SunlightEngine::setViewport(){
 	glfwGetWindowSize(window, (int*)&windowWidth, (int*)&windowHeight);
 	glViewport(0, 0, windowWidth, windowHeight);
+}
+
+void SunlightEngine::close() const {
+	glfwSetWindowShouldClose(window, true);
 }

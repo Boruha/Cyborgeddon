@@ -16,6 +16,7 @@ namespace Sun {
 		void render() const override;
 
 		void setPosition(int, int) override;
+		glm::vec2 getPosition() const override;
 
 		[[maybe_unused]] void setWidth(unsigned) override;
 
