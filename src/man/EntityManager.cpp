@@ -1538,7 +1538,7 @@ void EntityManager::createIntro( bool clean) {
 void EntityManager::createTutorial() {
 	cleanData();
 
-	initData(8, 0, 8);
+	initData(1, 0, 1);
 
 	createVideo("../resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
 
@@ -1547,4 +1547,14 @@ void EntityManager::createTutorial() {
 
 void EntityManager::nextVideo() {
 	idxVideo++;
+}
+
+void EntityManager::createEnding() {
+	cleanData();
+
+	initData(1, 0, 1);
+
+	createVideo("../resources/videos/cinematica/2_F.mp4", false, VIDEO_CINEMATICA_2);
+
+	componentStorage.printComponentStorage();
 }

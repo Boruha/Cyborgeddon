@@ -1,6 +1,7 @@
 #include <sys/VideoSystem.hpp>
 #include <Engine/EngineInterface/SceneInterface/IVideo.hpp>
 #include <Engine/util/Math.hpp>
+#include <Engine/util/Timer.hpp>
 
 void VideoSystem::update(const Context &context, const float deltaTime) {
 

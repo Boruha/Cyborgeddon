@@ -20,6 +20,14 @@ void GameManager::init()
 
 	currentState->init();
 
+	currentState = &states.emplace(std::make_pair(ENDING, State(ENDING, entityManager))).first->second;
+
+	currentState->registerSystem<HUDtutorialSystem>();                // es el mismo para ending que para tutorial
+	currentState->registerSystem<VideoSystem>();
+	currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+
+	currentState->init();
+
 	currentState = &states.emplace(std::make_pair(TUTORIAL, State(TUTORIAL, entityManager))).first->second;
 
 	currentState->registerSystem<HUDtutorialSystem>();
@@ -77,14 +85,16 @@ void GameManager::run()
 
 		Timer timer { };
 
-		if (nextState != currentState->state)
+		if (nextState != currentState->state) {
 			currentState = & states.find(nextState)->second;
+			currentState->resetClock();
+		}
 
 		looptime = std::chrono::duration<double, std::milli>(timer.getElapsedAndReset() * 10000);
 
-		if(nextState == INGAME && looptime < MAX_LIMIT)
+		if (nextState == INGAME && looptime < MAX_LIMIT)
 			std::this_thread::sleep_for(MAX_LIMIT - looptime);
-		
+
 	}
 }
 

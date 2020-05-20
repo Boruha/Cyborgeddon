@@ -22,7 +22,6 @@ void State::init()
 			break;
 		case INGAME :
 			next_state = &State::ingameNextState;
-//			context->createLevel();
 			break;
 		case PAUSE :
 			next_state = &State::pauseNextState;
@@ -60,8 +59,8 @@ void State::reset() const {
 
 StateEnum State::ingameNextState(const Context& context) {
 	if (context->checkVictory()) {
-		context->createIntro(true);
-		return INIT;
+		context->createEnding();
+		return ENDING;
 	}
 
 	if (context->checkDefeat()) {
@@ -171,6 +170,27 @@ StateEnum State::tutorialNextState(const Context & context) {
 	}
 
 	return TUTORIAL;
+}
+
+StateEnum State::endingNextState(const Context & context) {
+	if (context->getVideoIndex() > 0) {
+
+		auto & engine = context->getEngine();
+
+		engine.clear(Color(BLACK), true);
+
+		engine.display();
+
+		context->createIntro(true);
+
+		return INIT;
+	}
+
+	return ENDING;
+}
+
+void State::resetClock() {
+	clock.reset();
 }
 
 

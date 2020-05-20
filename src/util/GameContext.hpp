@@ -16,6 +16,7 @@ struct GameContext {
 	virtual void createIntro(bool clean)      = 0;
 	virtual void createTutorial()   = 0;
 	virtual void createLevel()      = 0;
+	virtual void createEnding()     = 0;
 
 	virtual void createGraph() = 0;
 

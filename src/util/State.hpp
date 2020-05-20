@@ -21,6 +21,8 @@ struct State {
 
 	void reset() const;
 
+	void resetClock();
+
 	template <typename T>
 	void registerSystem(const double fixedDelta = FIXED_DELTA_TIME) {
 		systems.emplace_back( SystemDeltaFixed { std::make_unique<T>(), fixedDelta, 0.0 } );
@@ -36,7 +38,7 @@ struct State {
 		static StateEnum tutorialNextState(const Context&);
 		static StateEnum ingameNextState(const Context&);
 		static StateEnum pauseNextState(const Context&);
-		static StateEnum endingNextState(const Context&){};
+		static StateEnum endingNextState(const Context&);
 
 		Context& context;
 		std::vector<SystemDeltaFixed> systems;
