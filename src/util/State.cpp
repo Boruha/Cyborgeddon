@@ -15,7 +15,7 @@ void State::init()
 			break;
 		case INIT :
 			next_state = &State::initNextState;
-			context->createIntro();
+			context->createIntro(false);
 			break;
 		case TUTORIAL :
 			next_state = &State::tutorialNextState;
@@ -74,86 +74,25 @@ StateEnum State::pauseNextState(const Context & context) {
 	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
         return INGAME;
     }
-	if (context->getComponents().getComponents<MenuOption>()[0].option == 2 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
+    //TODO:: ARREGLAR PARA QUE AL VOLVER AL JUEGO DESDE EL MENU PRINCIPAL NO VAYAN LAS ANIMACIONES A TODA LECHE
+	/*if (context->getComponents().getComponents<MenuOption>()[0].option == 2 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
         auto & engine = context->getEngine();
         engine.clear(Color(BLACK), true);
 
-        context->createIntro();
+        context->createIntro(true);
 
         return INIT;
-    }
+    }*/
         return PAUSE;
 	    //if(context->isKeyTextInput(KEY_SCAPE))
 	   // return INGAME;
 }
 
 StateEnum State::initNextState(const Context & context) {
-//	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-/*
-	std::unique_ptr<IVideo> videoIntro = context->getEngine().loadVideo("resources/videos/intro/1_F.mp4");
 
-	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-
-	std::unique_ptr<IVideo> videoBucle = context->getEngine().loadVideo("resources/videos/intro/2_F_L.mp4");
-
-	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-
-	std::cout << "Hola\n";
-
-	double framesIntro = videoIntro->getNumFrames();
-	unsigned frameCounter {0};
-
-	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-
-	while(frameCounter < unsigned(framesIntro)) {
-		context->getEngine().run();
-		videoIntro->render();
-		videoIntro->nextFrame();
-		context->getEngine().display();
-		frameCounter++;
-		system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-	}
-
-	videoBucle->setLoop(true);
-
-	while(!context->getEngine().isKeyPressed(KEY_SPACE)) {
-		context->getEngine().run();
-		videoBucle->render();
-		videoBucle->nextFrame();
-		context->getEngine().display();
-		system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-	}
-
-	context->getEngine().unloadVideo("resources/videos/intro/1_F.mp4");
-	context->getEngine().unloadVideo("resources/videos/intro/2_F_L.mp4");
-
-	std::cout << "Hemos descargado el video\n";
-
-	system(std::string(std::string("sudo pmap ") + std::string(std::to_string(getpid())) + std::string(" | tail -n 1")).c_str());
-*/
-/*
-//	ITexture * texture = context->getEngine().loadTexture("../resources/menu/pause/fondo.png");
-//	ITexture * texture1 = context->getEngine().loadTexture("../resources/menu/pause/pausa_continue.png");
-	ITexture * texture = context->getEngine().loadTexture("../resources/menu/main_menu/op_menu_1.png");
-	IVideo * video = context->getEngine().loadVideo("../resources/videos/intro/1_F.mp4");
-//	texture->setPosition(10,10);
-//	texture->setSize(1, 1);
-
-	context->getEngine().clear(Color(BLACK));
-
-//	texture2->render();
-//	texture1->render();
-	texture->render();
-
-	video->nextFrame();
-	video->render();
-
-
-	context->getEngine().display();
-*/
 	if (context->getVideoIndex() > 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
 
-		auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
+		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		switch (context->getComponents().getComponents<MenuOption>()[0].option) {
@@ -200,12 +139,12 @@ StateEnum State::tutorialNextState(const Context & context) {
 
 	if (context->getVideoIndex() > 0) {
 
-		auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
+		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		engine.clear(Color(BLACK), true);
 
-        context->createIntro();
+        context->createIntro(true);
 
 		//loadScreen->render();
 
@@ -218,3 +157,5 @@ StateEnum State::tutorialNextState(const Context & context) {
 
 	return TUTORIAL;
 }
+
+

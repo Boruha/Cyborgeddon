@@ -62,10 +62,10 @@ void EntityManager::addToDestroy(const EntityID ID) {
 void EntityManager::cleanData() {
 	Entity::resetIDManagementValue();		// reiniciamos ID
 
-	for (auto & e : entities)
+	/*for (auto & e : entities)
 		if (e.second.getComponent<Render>())
 			e.second.getComponent<Render>()->node->remove();
-
+    */
 
 	entities.clear();					    // limpiamos entidades
 	toDelete.clear();						// limpiamos vector de entidades a borrar
@@ -139,7 +139,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("resources/models/Dex/Walking");
+	render.node = componentStorage.createAnimatedMesh("../resources/models/Dex/Walking");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -190,7 +190,7 @@ void EntityManager::createWall(const vec3& pos, const vec3& dim) {
 	auto& rigidStaticAABB   = componentStorage.createComponent(RigidStaticAABB(wall.getType(), wall.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(wall.getType(), wall.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Cubo/cuboPrueba.fbx");
+	render.node = componentStorage.createMesh("../resources/models/Cubo/cuboPrueba.fbx");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -212,7 +212,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("resources/models/Bot/Static");
+	render.node = componentStorage.createAnimatedMesh("../resources/models/Bot/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -240,7 +240,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("resources/models/Angel/Static");
+	render.node = componentStorage.createAnimatedMesh("../resources/models/Angel/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -268,7 +268,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("resources/models/Demon/Static");
+	render.node = componentStorage.createAnimatedMesh("../resources/models/Demon/Static");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -292,7 +292,7 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, 0, 0), vec3(0, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Ciudad/ciudad.obj");
+	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -334,7 +334,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("resources/models/Objetos/Puerta/0.obj");
+	render.node = componentStorage.createMesh("../resources/models/Objetos/Puerta/0.obj");
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -351,7 +351,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createMesh("resources/models/Objetos/Llave_demoniaca/0.obj");
+	keyRender.node = componentStorage.createMesh("../resources/models/Objetos/Llave_demoniaca/0.obj");
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
@@ -419,7 +419,7 @@ void EntityManager::createLevel() {
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(1.f), vec3(0.5));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
-	readColliderFile("resources/models/Ciudad/colisiones.obj");
+	readColliderFile("../resources/models/Ciudad/colisiones.obj");
 
 	createTexture(KEY_2, 558, 52);
 	createTexture(KEY_1, 517, 52);
@@ -1513,18 +1513,21 @@ bool EntityManager::checkDefeat() const {
 	return !greater_e(player->getComponent<CharacterData>()->health, 0.f);
 }
 
-void EntityManager::createIntro() {
+void EntityManager::createIntro( bool clean) {
+    if(clean)
+        cleanData();
+
 	initData(8, 0, 8);
 
 	createMenuOptions(0, 4);
 
-	createVideo("resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
-	createVideo("resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
+	createVideo("../resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
+	createVideo("../resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
 
-	createTexture("resources/menu/main_menu/op_menu_1.png", 0, 0);
-	createTexture("resources/menu/main_menu/op_menu_2.png", 0, 0);
-	createTexture("resources/menu/main_menu/op_menu_3.png", 0, 0);
-	createTexture("resources/menu/main_menu/op_menu_4.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
 
 	componentStorage.printComponentStorage();
 }
@@ -1534,7 +1537,7 @@ void EntityManager::createTutorial() {
 
 	initData(8, 0, 8);
 
-	createVideo("resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
+	createVideo("../resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
 
 	componentStorage.printComponentStorage();
 }

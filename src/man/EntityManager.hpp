@@ -15,7 +15,7 @@ struct EntityManager : GameContext {
 
 	void nextVideo() override;
 
-	void createIntro() override;
+	void createIntro(bool clean) override;
 	void createTutorial() override;
 
 	void createLevel() override;
