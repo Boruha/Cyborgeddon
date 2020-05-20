@@ -2,7 +2,7 @@
 #include <src/Engine/util/Math.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/IVideo.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/ITexture.hpp>
-
+#include <thread>
 
 void State::init()
 {
@@ -65,6 +65,16 @@ StateEnum State::ingameNextState(const Context& context) {
 	}
 
 	if (context->checkDefeat()) {
+		context->getEngine().clear(Color(BLACK), true);
+
+		context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png")->render();
+
+		context->getEngine().display();
+
+		using namespace std::chrono_literals;
+
+		std::this_thread::sleep_for(2s);
+
 		context->createLevel();
 		return INGAME;
 	}
@@ -77,21 +87,21 @@ StateEnum State::ingameNextState(const Context& context) {
 
 StateEnum State::pauseNextState(const Context & context) {
 
-	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
+	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO)))
         return INGAME;
-    }
-    //TODO:: ARREGLAR PARA QUE AL VOLVER AL JUEGO DESDE EL MENU PRINCIPAL NO VAYAN LAS ANIMACIONES A TODA LECHE
-	/*if (context->getComponents().getComponents<MenuOption>()[0].option == 2 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
+
+	if (context->getComponents().getComponents<MenuOption>()[0].option == 2 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
         auto & engine = context->getEngine();
+
         engine.clear(Color(BLACK), true);
+        engine.display();
 
         context->createIntro(true);
 
         return INIT;
-    }*/
-        return PAUSE;
-	    //if(context->isKeyTextInput(KEY_SCAPE))
-	   // return INGAME;
+    }
+
+	return PAUSE;
 }
 
 StateEnum State::initNextState(const Context & context) {
@@ -158,7 +168,7 @@ StateEnum State::tutorialNextState(const Context & context) {
 
 		//loadScreen->render();
 
-		//engine.display(); <-Vamos de vuelta al menu principal, la pantalla de carga no duraria na
+		engine.display();
 
 		//context->createLevel();
 
