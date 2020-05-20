@@ -139,7 +139,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Dex/Walking");
+	render.node = componentStorage.createAnimatedMesh("../resources/models/Dex/");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
