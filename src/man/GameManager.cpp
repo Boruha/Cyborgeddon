@@ -9,6 +9,7 @@
 
 void GameManager::init()
 {
+    //INIT
 	engine->init(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GAME_NAME);
 
 	currentState = &states.emplace(std::make_pair(INIT, State(INIT, entityManager))).first->second;
@@ -20,6 +21,16 @@ void GameManager::init()
 
 	currentState->init();
 
+	//STARTING
+    currentState = &states.emplace(std::make_pair(STARTING, State(STARTING, entityManager))).first->second;
+
+    currentState->registerSystem<HUDtutorialSystem>();                // es el mismo para ending que para tutorial
+    currentState->registerSystem<VideoSystem>();
+    currentState->registerSystem<SoundSystem>();                      // se ejecutan los sonidos en funcion de todas las cosas anteriores
+
+    currentState->init();
+
+    //ENDING
 	currentState = &states.emplace(std::make_pair(ENDING, State(ENDING, entityManager))).first->second;
 
 	currentState->registerSystem<HUDtutorialSystem>();                // es el mismo para ending que para tutorial
@@ -28,6 +39,7 @@ void GameManager::init()
 
 	currentState->init();
 
+	//TUTORIAL
 	currentState = &states.emplace(std::make_pair(TUTORIAL, State(TUTORIAL, entityManager))).first->second;
 
 	currentState->registerSystem<HUDtutorialSystem>();

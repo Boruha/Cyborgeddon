@@ -17,6 +17,7 @@ struct EntityManager : GameContext {
 
 	void createIntro(bool clean) override;
 	void createTutorial() override;
+	void createCinematica() override;
 	void createEnding() override;
 
 	void createLevel() override;

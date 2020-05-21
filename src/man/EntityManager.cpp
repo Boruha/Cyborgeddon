@@ -1545,6 +1545,16 @@ void EntityManager::createIntro( bool clean) {
 	//componentStorage.printComponentStorage();
 }
 
+void EntityManager::createCinematica() {
+    cleanData();
+
+    initData(1, 0, 1);
+
+    createVideo("../resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
+
+    componentStorage.printComponentStorage();
+}
+
 void EntityManager::createTutorial() {
 	cleanData();
 
