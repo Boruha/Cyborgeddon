@@ -15,7 +15,7 @@ constexpr float     PLAYER_DASH_SPEED               = PLAYER_SPEED * 20.f;
 constexpr float     PLAYER_ACCELERATION				= PLAYER_DASH_SPEED * 10.f;
 constexpr float     PLAYER_HEALTH					= 100.f;
 constexpr float     PLAYER_ATTACK_DAMAGE			= 10.f;
-constexpr float     PLAYER_ATTACKING_COOLDOWN		= 1.f / 8.f;
+constexpr float     PLAYER_ATTACKING_COOLDOWN		= 1.f / 7.f;
 constexpr float     PLAYER_SWITCH_MODE_COOLDOWN		= 1.f;
 constexpr float     PLAYER_DASH_COOLDOWN            = 1.f;
 constexpr float     PLAYER_ROTATION_SPEED			= 270.f;
@@ -40,7 +40,7 @@ constexpr float     FACTOR_SAME_MODE				= 1.f / FACTOR_DIFFERENT_MODE;
 
 // ATTACK ENEMY
 constexpr float     MELEE_ATTACK_RANGE   		    = 2.5f;
-constexpr float     DIST_ATTACK_RANGE   		    = 20.f;
+constexpr float     DIST_ATTACK_RANGE   		    = 8.f;
 constexpr float     DIST_ATTACK_RANGE2  		    = DIST_ATTACK_RANGE  * DIST_ATTACK_RANGE;
 constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTACK_RANGE;
 
