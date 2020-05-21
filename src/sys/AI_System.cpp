@@ -609,6 +609,7 @@ void AI_System::reset()
 //Scheduling 
 void AI_System::setPhase(const std::unique_ptr<GameContext>& context)
 {
+    unsigned phase_LODpat_counter = 0;
     unsigned phase_patrol_counter = 0;
     unsigned phase_pursue_counter = 0;
     unsigned phase_attack_counter = 0;
@@ -619,13 +620,16 @@ void AI_System::setPhase(const std::unique_ptr<GameContext>& context)
         {
             switch (ai.frequecy_state)
             {
-                case 2: ai.scheduling_phase = ++phase_attack_counter;
+                case 2:  ai.scheduling_phase = ++phase_attack_counter;
                 break;
 
-                case 3: ai.scheduling_phase = ++phase_pursue_counter;
+                case 3:  ai.scheduling_phase = ++phase_pursue_counter;
                 break;
             
-                case 7: ai.scheduling_phase = ++phase_patrol_counter;
+                case 7:  ai.scheduling_phase = ++phase_patrol_counter;
+                break;
+                
+                case 11: ai.scheduling_phase = ++phase_LODpat_counter;
                 break;
             }
         }
