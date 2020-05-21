@@ -599,6 +599,13 @@ void AI_System::fixedUpdate(const Context &context, float deltaTime)
         std::this_thread::sleep_for(timer);
 }
 
+void AI_System::reset()
+{
+    schedule.clear();
+    frame = 0;
+}
+
+
 //Scheduling 
 void AI_System::setPhase(const std::unique_ptr<GameContext>& context)
 {

@@ -12,7 +12,7 @@ struct AI_System : System
 	void init() final;
     void fixedUpdate(const Context &context, float deltaTime) final;
 	void update(const Context &context, float deltaTime) override {};
-	void reset() final {  }
+	void reset() final;
     
     unsigned frame { 0 };
 
