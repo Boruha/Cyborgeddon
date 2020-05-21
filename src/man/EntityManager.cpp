@@ -307,12 +307,25 @@ void EntityManager::createBullet() {
 	auto * playerTrigger = player->getComponent<TriggerMovSphere>();
 	auto * playerData    = player->getComponent<CharacterData>();
 
-	auto& physics   = componentStorage.createComponent(Physics(bullet.getType(), bullet.getID(), playerPhysics->position, normalize(getXZfromRotationY(playerPhysics->rotation.y)) * BULLET_SPEED, playerPhysics->rotation, vec3(1)));
+    auto & pj_rot   = playerPhysics->rotation;
+    auto pj_vec_rot = normalize(getXZfromRotationY(pj_rot.y));
+    auto arma_pos   = vec3(0.0);
+
+    if(switchBulletPosition)
+        arma_pos         = normalize(getXZfromRotationY(pj_rot.y + 90.f)); /*Multiplicar para desplazar la bala izq. (x2, x1.3, ...)*/
+                                                                           /*90 grados para respetar la altura entre las balas*/    
+    switchBulletPosition = !switchBulletPosition;
+
+
+    auto pos_bullet = playerPhysics->position + arma_pos + pj_vec_rot; /*Multiplicar para alejar del player (x2, x1.3, ...)*/
+
+	auto& physics   = componentStorage.createComponent(Physics(bullet.getType(), bullet.getID(), pos_bullet, pj_vec_rot * BULLET_SPEED, pj_rot, vec3(1)));
 	auto& data      = componentStorage.createComponent(BulletData(bullet.getType(), bullet.getID(), length(physics.velocity), playerData->mode, playerData->attackDamage));
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
+   
+    render.node = componentStorage.createAnimatedMesh("../resources/models/Objetos/Bala/BalaCentro");
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Objetos/Bala/BalaDerecha");
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -364,11 +377,10 @@ void EntityManager::createVideo(const std::string_view path, const bool isLoop, 
 	auto& video = createEntity(VIDEO);
 
 	auto& cmpVideo = componentStorage.createComponent(Video(video.getType(), video.getID(), path));
-
 	cmpVideo.video = engine.loadVideo(path);
 
 	cmpVideo.frameCounter = 0;
-	cmpVideo.numFrames = unsigned(cmpVideo.video->getNumFrames());
+	cmpVideo.numFrames    = unsigned(cmpVideo.video->getNumFrames());
 	cmpVideo.timePerFrame = float(1.f / cmpVideo.video->getFPS());
 
 	cmpVideo.loop = isLoop;
@@ -713,8 +725,7 @@ void EntityManager::createLevel() {
 	//componentStorage.printComponentStorage();
 }
 
-void EntityManager::createGraph()
-{
+void EntityManager::createGraph() {
     //DECLARACION DE NODOS
     //ZONA 1 -> AMP. CITY
     auto& node_0  = graph.emplace_back(MapNode(5, -32));
@@ -1517,8 +1528,7 @@ bool EntityManager::checkDefeat() const {
 }
 
 void EntityManager::createIntro( bool clean) {
-    if(clean)
-        cleanData();
+    if(clean){ cleanData(); }
 
 	initData(8, 0, 8);
 
@@ -1532,7 +1542,7 @@ void EntityManager::createIntro( bool clean) {
 	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
 	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
 
-	componentStorage.printComponentStorage();
+	//componentStorage.printComponentStorage();
 }
 
 void EntityManager::createTutorial() {

@@ -98,10 +98,10 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             const float distance = length({ diff_x, diff_z });
             //plano
             vel.direction   = vec3(diff_x, 0, diff_z);
-            phy.velocity    = normalize(vel.direction) * (1 + distance) * deltaTime;
+            phy.velocity    = normalize(vel.direction) * (1 + (distance * 2)) * deltaTime;
             //altura
-            jump.jumpTimer -= deltaTime * 2;
-            phy.velocity.y  = jump.jumpTimer * (vel.currentSpeed * 2) * deltaTime;
+            jump.jumpTimer -= deltaTime * 6;
+            phy.velocity.y  = jump.jumpTimer * (vel.currentSpeed * 3) * deltaTime;
             
             if(phy.position.y < (phy.scale.y / 2))
             {
@@ -197,13 +197,9 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 return false;
 
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
-            bool face = checkFacing(phy, player_pos);
-
-            if(face)
-                std::cout << "TE VEO ME VOY A PURSE! " << ai.frameCounter << "\n";
 
             if (greater_e(distance2, PATROL_MIN_DISTANCE2)
-                || (greater_e(distance2, VIEW_MIN_DISTANCE2) && !face) )
+                || (greater_e(distance2, VIEW_MIN_DISTANCE2) && !checkFacing(phy, player_pos)) )
             {
                 ai.target_position = ai.patrol_position[ai.patrol_index];
                 ai.frequecy_state  = PATROL_STATE;
@@ -235,7 +231,11 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                      ai.obstacles = checkObstacles(phy.position, player_pos, trSphere.radius, context);         
             
             if(ai.obstacles)
-                std::cout << "HAY OBSTACULOS!! " << ai.frameCounter << "\n";
+            {
+                //std::cout << "HAY OBSTACULOS!! " << ai.frameCounter << "\n";
+                //std::cout << "AI POS: " << glm::to_string(player_pos) << "\n";
+                //std::cout << "PJ POS: " << glm::to_string(phy.position) << "\n";
+            }
 
             return greater_e(distance2, PURSUE_MIN_DISTANCE2) || ai.obstacles;
         }
@@ -392,7 +392,11 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
                     if( !greater_e(distance2, JUMP_AREA_DMG2) )
-                        std::cout << "TORNADITO QUE TE METO EN MOVIMIENTO\n";
+                    {
+                        //damageMessages.emplace_back(data.attackDamage);
+                        soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
+                        //std::cout << "TORNADITO QUE TE METO EN MOVIMIENTO\n";
+                    }
                 }
                 return true;
             }
@@ -410,7 +414,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 if(!greater_e(distance2, MAX_JUMP_RANGE2) && greater_e(distance2, MIN_JUMP_RANGE2) 
                 && !greater_e(jump.currentJumpCooldown, 0))
                 {
-                    jump.jumpTargetLocation = player_pos;
+                    jump.jumpTargetLocation = player_pos + (vel.direction * vel.currentSpeed);
                     jump.jumping = true;
                     jump.currentJumpCooldown = jump.jumpCooldown;
                     return true;
@@ -661,7 +665,7 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
 
     minPoint.x = (ai_pos.x <= pj_pos.x) ? ai_pos.x : pj_pos.x;
     minPoint.z = (ai_pos.z <= pj_pos.z) ? ai_pos.z : pj_pos.z;
-
+    
     for(auto& cmp_tOBB : tOBB_vector)
     {
         if(!cmp_tOBB) continue;
@@ -677,19 +681,34 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
 
         Line ai2pj = Line(ai_pos, pj_pos);
 
-        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[0], cmp_tOBB.vertices[1])) )
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[0], cmp_tOBB.vertices[1])) ){
+            //std::cout << "CORTO CON LADO 1\n";
+            //std::cout << cmp_tOBB << "\n";
             return true;
+        }
 
-        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[1], cmp_tOBB.vertices[2])) )
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[1], cmp_tOBB.vertices[2])) ){
+            //std::cout << "CORTO CON LADO 2\n";
+            //std::cout << cmp_tOBB << "\n";
             return true;
+        }
 
-        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[2], cmp_tOBB.vertices[0])) )
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[2], cmp_tOBB.vertices[0])) ){
+            //std::cout << "CORTO CON LADO 3\n";
+            //std::cout << cmp_tOBB << "\n";
             return true;
+        }
 
         for(auto& vertex : cmp_tOBB.vertices)
         {
-            if( SphereWillIntersectTOBB(rad, vertex, ecLine) )
+            if( SphereWillIntersectTOBB(rad, vertex, ecLine) ){
+                //std::cout << "DISTANCE CON: ";
+                //std::cout << "VERTEX: " << glm::to_string(vertex) << "\n";
+                //std::cout << "EC    : " << glm::to_string(ecLine) << "\n";
+                //std::cout << "RAD   : " << rad << "\n";
+                //std::cout << cmp_tOBB << "\n";
                 return true;
+            }
         }
     }
 

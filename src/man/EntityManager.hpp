@@ -80,8 +80,6 @@ struct EntityManager : GameContext {
 		void createFloor(std::string_view tex, const vec3& pos, const vec3& dim);
 
 		void createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
-		//void setNavConnections(const GraphNode& node, const std::vector<const GraphNode*>& conn) const;
-		//void createNavigation();
 
 		void createVideo(std::string_view, bool, SoundParameter);
 		void createTexture(std::string_view, int, int);
@@ -97,7 +95,8 @@ struct EntityManager : GameContext {
 		Entity * player { nullptr };
 		Entity * camera { nullptr };
 		Entity * light  { nullptr };
-		//Entity * nav    { nullptr };
+
+		bool switchBulletPosition { true };
 
 		std::vector<MapNode> graph {};
 		std::unordered_map<EntityID, std::vector<int>> paths {};
