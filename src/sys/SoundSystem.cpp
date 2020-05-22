@@ -79,18 +79,9 @@ void SoundSystem::init() {
 }
 
 void SoundSystem::fixedUpdate(const Context& context, const float deltaTime) {
-    for (auto & music : context->getComponents().getComponents<BackgroundMusic>()) {
-        for (auto & track : music.tracks) {
-        	if (track.duration == track.timeLeft) {
-        		soundMessages.emplace_back(track.sound);
-        		track.timeLeft -= deltaTime;
-        		break;
-        	} else if (track.timeLeft > 0) {
-		        track.timeLeft -= deltaTime;
-		        break;
-        	}
-        }
-    }
+
+	if (context->checkVictory() || context->checkDefeat())
+		soundMessages.emplace_back(STOP_ALL_SOUNDS);
 
 	while (!soundMessages.empty()) {
 		const auto parameter = soundMessages.back().parameter;
@@ -173,4 +164,19 @@ void SoundSystem::createMusicEvent(const std::string_view name, Music * music, c
 void SoundSystem::createInstance(const Event * event, Instance *& instance, const float volume) const {
     ERRCHECK ( event->createInstance(&instance) );
     ERRCHECK ( instance->setVolume(volume) );
+}
+
+void SoundSystem::update(const Context &context, const float deltaTime) {
+	for (auto & music : context->getComponents().getComponents<BackgroundMusic>()) {
+		for (auto & track : music.tracks) {
+			if (track.duration == track.timeLeft) {
+				soundMessages.emplace_back(track.sound);
+				track.timeLeft -= deltaTime;
+				break;
+			} else if (track.timeLeft > 0) {
+				track.timeLeft -= deltaTime;
+				break;
+			}
+		}
+	}
 }

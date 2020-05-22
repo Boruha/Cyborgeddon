@@ -19,5 +19,5 @@ struct BackgroundMusic : public Component {
 
     friend std::ostream& operator<<(std::ostream& os, const BackgroundMusic& music);
 
-    std::array<Track, 4> tracks{};
+    std::array<Track, 4> tracks {};
 };
