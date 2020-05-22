@@ -692,34 +692,19 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
 
         Line ai2pj = Line(ai_pos, pj_pos);
 
-        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[0], cmp_tOBB.vertices[1])) ){
-            //std::cout << "CORTO CON LADO 1\n";
-            //std::cout << cmp_tOBB << "\n";
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[0], cmp_tOBB.vertices[1])) )
             return true;
-        }
 
-        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[1], cmp_tOBB.vertices[2])) ){
-            //std::cout << "CORTO CON LADO 2\n";
-            //std::cout << cmp_tOBB << "\n";
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[1], cmp_tOBB.vertices[2])) )
             return true;
-        }
 
-        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[2], cmp_tOBB.vertices[0])) ){
-            //std::cout << "CORTO CON LADO 3\n";
-            //std::cout << cmp_tOBB << "\n";
+        if( lineIntersection( ai2pj, Line(cmp_tOBB.vertices[2], cmp_tOBB.vertices[0])) )
             return true;
-        }
 
         for(auto& vertex : cmp_tOBB.vertices)
         {
-            if( SphereWillIntersectTOBB(rad, vertex, ecLine) ){
-                //std::cout << "DISTANCE CON: ";
-                //std::cout << "VERTEX: " << glm::to_string(vertex) << "\n";
-                //std::cout << "EC    : " << glm::to_string(ecLine) << "\n";
-                //std::cout << "RAD   : " << rad << "\n";
-                //std::cout << cmp_tOBB << "\n";
+            if( SphereWillIntersectTOBB(rad, vertex, ecLine) )
                 return true;
-            }
         }
     }
 
@@ -728,7 +713,8 @@ bool AI_System::checkObstacles(const vec3& ai_pos, const vec3& pj_pos, float rad
 
 bool AI_System::checkFacing(const Physics& ai_phy, const vec3& player_pos)
 {
-    auto vecRot = std::fmod( nearestAngle(ai_phy.rotation.y, getRotationYfromXZ(ai_phy.position - player_pos)), 360.f);
+    auto vecRot = nearestAngle(ai_phy.rotation.y, getRotationYfromXZ(ai_phy.position - player_pos));
+         vecRot = std::fmod( vecRot, 360.f );
 
     if(vecRot  <= 0.0)
         vecRot  = 360.f + vecRot;

@@ -5,6 +5,7 @@
 #include <util/ComponentConstants.hpp>
 #include <util/TexturePaths.hpp>
 #include <util/HUDPaths.hpp>
+#include <util/MeshPaths.hpp>
 
 #include <Engine/util/Math.hpp>
 #include <src/Engine/EngineInterface/SceneInterface/IObjectNode.hpp>
@@ -137,7 +138,7 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& data     	= componentStorage.createComponent(CharacterData(player->getType(), player->getID(), DEMON, PLAYER_HEALTH, PLAYER_SWITCH_MODE_COOLDOWN, PLAYER_ATTACK_DAMAGE, PLAYER_ATTACKING_COOLDOWN, MELEE_ATTACK_RANGE2, PLAYER_DASH_SPEED, PLAYER_DASH_COOLDOWN));
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Dex/Walking");
+	render.node = componentStorage.createAnimatedMesh(ANIMATED_DEX_WALKING);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -210,7 +211,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Bot/Static");
+	render.node = componentStorage.createAnimatedMesh(ANIMATED_BOT_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -238,7 +239,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Angel/Static");
+	render.node = componentStorage.createAnimatedMesh(ANIMATED_ANGEL_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -266,7 +267,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	auto& ai        = componentStorage.createComponent(AI(enemy.getType(), enemy.getID(), patrol, phase));
 	auto& render	= componentStorage.createComponent(Render(enemy.getType(), enemy.getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
-	render.node = componentStorage.createAnimatedMesh("../resources/models/Demon/Static");
+	render.node = componentStorage.createAnimatedMesh(ANIMATED_DEMON_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -290,7 +291,7 @@ void EntityManager::createFloor(const std::string_view tex, const vec3& pos, con
 	auto& transformable = componentStorage.createComponent(Transformable(floor.getType(), floor.getID(), pos + vec3(0, 0, 0), vec3(0, 0, 0), vec3(1)));
 	auto& render		= componentStorage.createComponent(Render(floor.getType(), floor.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Ciudad/ciudad.obj");
+	render.node = componentStorage.createMesh(MESH_CITY);
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -324,7 +325,7 @@ void EntityManager::createBullet() {
 	auto& trigger   = componentStorage.createComponent(TriggerFastMov(bullet.getType(), bullet.getID(), physics.position, physics.velocity));
 	auto& render	= componentStorage.createComponent(Render(bullet.getType(), bullet.getID(), &physics.position, &physics.rotation, &physics.scale, true));
    
-    render.node = componentStorage.createAnimatedMesh("../resources/models/Objetos/Bala/BalaCentro");
+    render.node = componentStorage.createAnimatedMesh(ANIMATED_BALA);
 
 
 	render.node->setPosition(physics.position);
@@ -345,7 +346,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
 	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
 
-	render.node = componentStorage.createMesh("../resources/models/Objetos/Puerta/0.obj");
+	render.node = componentStorage.createMesh(MESH_DOOR_CLOSE);
 
 	render.node->setPosition(transformable.position);
 	render.node->setRotation(transformable.rotation);
@@ -362,7 +363,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
-	keyRender.node = componentStorage.createMesh("../resources/models/Objetos/Llave_demoniaca/0.obj");
+	keyRender.node = componentStorage.createMesh(MESH_KEY_DEMON);
 
 	keyRender.node->setPosition(keyTransformable.position);
 	keyRender.node->setRotation(keyTransformable.rotation);
@@ -429,7 +430,7 @@ void EntityManager::createLevel() {
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(1.f), vec3(0.5));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
-	readColliderFile("../resources/models/Ciudad/colisiones.obj");
+	readColliderFile(COLISIONS_CITY);
 
 	createTexture(KEY_2, 558, 52);
 	createTexture(KEY_1, 517, 52);

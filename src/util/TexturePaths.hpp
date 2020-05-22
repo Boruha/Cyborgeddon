@@ -1,3 +1,6 @@
+#pragma once
+
+#include <string_view>
 
 constexpr std::string_view WALL_TEXTURE  		= "../img/textures/testing/testing_wall.jpg";
 constexpr std::string_view CONTROLS_TEXTURE 	= "../img/textures/testing/testing_controls.jpg";
