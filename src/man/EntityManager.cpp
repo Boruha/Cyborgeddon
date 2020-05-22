@@ -462,10 +462,10 @@ void EntityManager::createLevel() {
 
 	const std::array<Track, 4> tracks {
 	    {
-            { SONG_1, 211, 211 },
             { SONG_2, 165, 165 },
+            { SONG_4, 225, 225 },
             { SONG_3, 262, 262 },
-            { SONG_4, 225, 225 }
+            { SONG_1, 211, 211 }
         }
     };
 
