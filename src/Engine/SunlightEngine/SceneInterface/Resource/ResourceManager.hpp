@@ -14,6 +14,7 @@ struct ResourceManager {
 	void removeTexture(std::string_view);
 	void removeModel(std::string_view);
 	void removeVideo(std::string_view);
+	void removeAllResources();
 
 	private:
 		std::unordered_map<std::string, RModel> model {};

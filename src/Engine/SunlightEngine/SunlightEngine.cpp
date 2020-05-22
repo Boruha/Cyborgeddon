@@ -145,3 +145,7 @@ void SunlightEngine::setViewport(){
 void SunlightEngine::close() const {
 	glfwSetWindowShouldClose(window, true);
 }
+
+void SunlightEngine::deleteAllResources() const {
+	resourceManager->removeAllResources();
+}

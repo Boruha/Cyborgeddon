@@ -48,3 +48,7 @@ void ResourceManager::removeVideo(const std::string_view path) {
 void ResourceManager::removeTexture(const std::string_view path) {
 	texture.erase(path.data());
 }
+
+void ResourceManager::removeAllResources(){
+	model.clear();
+}

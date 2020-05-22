@@ -25,6 +25,7 @@ struct SunlightEngine final : public virtual IEngine {
     void clear(Color color, bool) const final;
     void draw()                   const final;
     void display()                const final;
+	void deleteAllResources()     const final;
 
     void setViewport();
 
@@ -49,11 +50,9 @@ struct SunlightEngine final : public virtual IEngine {
 	};
 
 	void unloadVideo(const std::string_view path) override { video.erase(path.data()); resourceManager->removeVideo(path); };
-
 	void unloadVideos() override { for (const auto& pair : video) resourceManager->removeVideo(pair.first); video.clear(); };
 
 	void unloadTexture(const std::string_view path) override { resourceManager->removeTexture(path); };
-
 	void unloadTextures() override { for (const auto& pair : texture) resourceManager->removeTexture(pair.first); texture.clear(); };
 
 	void setTextKeyInput(const unsigned int code) { textKeyInput = code; }
@@ -64,8 +63,8 @@ struct SunlightEngine final : public virtual IEngine {
 		unsigned windowWidth, windowHeight, textKeyInput;
 
 		std::unique_ptr<ResourceManager> resourceManager;
-		std::unique_ptr<SceneManager> sceneManager;
+		std::unique_ptr<SceneManager>    sceneManager;
 
-		std::unordered_map<std::string, Video> video {};
-		std::unordered_map<std::string, Sun::Texture> texture {};
+		std::unordered_map<std::string, Video>        video      {};
+		std::unordered_map<std::string, Sun::Texture> texture    {};
 };

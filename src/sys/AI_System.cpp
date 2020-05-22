@@ -345,7 +345,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 {
                     data.attacking = true;
                     data.currentAttackingCooldown = data.attackingCooldown;
-                    damageMessages.emplace_back(data.attackDamage);
+                    //damageMessages.emplace_back(data.attackDamage);
                     soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
                     return true;
                 }

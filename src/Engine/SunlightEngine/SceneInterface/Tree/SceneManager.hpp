@@ -13,11 +13,12 @@ struct SceneManager {
 	explicit SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager);
 	void render();
 
-	[[nodiscard]] glm::mat4 getLightViewProjection() const;	
 	[[nodiscard]] glm::mat4 getViewProjection() const;
 	[[nodiscard]] glm::mat4 getView()           const;
 
 	TreeNode * addMeshNode(std::string_view);
+	void       setMesh(INode*, const std::string_view);
+	void       setAnimatedMesh(INode*, const std::string_view);
 	TreeNode * addCameraNode();
 	TreeNode * addLightNode(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir);
 	TreeNode * addAnimatedNode(std::string_view);
@@ -49,15 +50,12 @@ private :
 
 	std::array<TreeNode*, MAX_LIGHT_SIZE> lightNodes;
 	std::array<Light*   , MAX_LIGHT_SIZE> lights;
-	//std::array<unsigned , MAX_LIGHT_SIZE> shadowFBOs;
-	//std::array<unsigned , MAX_LIGHT_SIZE> shadowSceneTextures;
 
 	std::size_t lights_index {  0  };
     vec3        ambient      { 0.2f };
 
 	mat4 viewProjection      { 1 };
 	mat4 view                { 1 };
-	mat4 lightViewProjection { 1 };
 
 	SunlightEngine  * engine { nullptr };
 	ResourceManager * resourceManager { nullptr };

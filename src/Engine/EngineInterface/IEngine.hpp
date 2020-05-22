@@ -13,14 +13,15 @@ struct IEngine {
     [[nodiscard]] virtual bool run()                        = 0;
     virtual void close()                              const = 0;
     virtual void shutdown()                           const = 0;
+    virtual void deleteAllResources()                 const = 0;
 
     [[nodiscard]] virtual bool isKeyPressed(unsigned) const = 0;
 	[[nodiscard]] virtual bool isKeyTextInput(unsigned)     = 0;
 	[[nodiscard]] virtual const Mouse & getMouse()     	    = 0;
 
-    virtual void clear(Color, bool)                         const = 0;
-    virtual void draw()                               const = 0;
-    virtual void display()                            const = 0;
+    virtual void clear(Color, bool) const = 0;
+    virtual void draw()             const = 0;
+    virtual void display()          const = 0;
 
 	[[nodiscard]] virtual IVideo* loadVideo(std::string_view)   = 0;
 	virtual void unloadVideo(std::string_view)                  = 0;
