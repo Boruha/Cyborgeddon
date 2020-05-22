@@ -419,7 +419,7 @@ void EntityManager::createTexture(const std::string_view path, const int x, cons
 void EntityManager::createBackgroundMusic(const std::array<Track, 4> & tracks) {
     auto& backgroundMusic = createEntity(BACKGROUND_MUSIC);
 
-    auto& music_cmp = componentStorage.createComponent(BackgroundMusic(backgroundMusic.getType(), backgroundMusic.getID());
+    auto& music_cmp = componentStorage.createComponent(BackgroundMusic(backgroundMusic.getType(), backgroundMusic.getID()));
 
     music_cmp.tracks = tracks;
 
@@ -429,7 +429,7 @@ void EntityManager::createBackgroundMusic(const std::array<Track, 4> & tracks) {
 void EntityManager::createMenuOptions(const unsigned int firstOption, const unsigned int maxOptions) {
 	auto& menu_options = createEntity(MENU_OPTIONS);
 
-	auto& options = componentStorage.createComponent(MenuOption(menu_options.getType(), menu_options.getID(), int(firstOption), maxOptions));
+	auto& options = componentStorage.createComponent(MenuOption(menu_options.getType(), menu_options.getID(), int(firstOption), int(maxOptions)));
 
 	menu_options.addComponent(options);
 }
