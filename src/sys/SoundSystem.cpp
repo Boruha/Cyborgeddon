@@ -97,7 +97,7 @@ void SoundSystem::fixedUpdate(const Context& context, const float deltaTime) {
 
 		if (parameter == STOP_ALL_SOUNDS) {
             reset();
-			continue;
+			break;
 		}
 
 		const auto & [paramName, value] = getParameterValue(parameter);
