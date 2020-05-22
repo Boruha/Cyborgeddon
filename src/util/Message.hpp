@@ -63,3 +63,23 @@ struct DamageMessage {
 	const float damage 	{ 	 0 	  };
 	const ModeType type { NEUTRAL };
 };
+
+// Mensajes que leerá el render system y cambiara de animacion en funcion
+// del tipo de entidad, y el numero de aniamacion.
+struct AnimationMessage {
+	explicit AnimationMessage(const EntityID id, const unsigned animation)
+		: ID(id), animationMode(animation) { }
+
+	const EntityID   ID            { 0 };
+	const unsigned   animationMode { 0 };
+
+};
+
+/*
+	0 = Static
+	1 = Walking        / open         (door)
+	2 = Attack         / static - end (door)
+	3 = dead
+	4 = jump (DEMON)   / dash (DEX)
+	5 = Static attack         (DEX)
+*/

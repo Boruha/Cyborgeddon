@@ -16,7 +16,8 @@ struct Render : Component {
 
 	bool  needUpdate {  false  };
 
-	INode   * node   { nullptr };
+	INode   * node    { nullptr };
+	unsigned  aniMode { 0 };
 
 	// NO TOCAR EL ORDEN
 	vec3  	* pos  	 { nullptr };

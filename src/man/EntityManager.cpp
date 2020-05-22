@@ -139,6 +139,11 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	auto& render	= componentStorage.createComponent(Render(player->getType(), player->getID(), &physics.position, &physics.rotation, &physics.scale, true));
 
 	render.node = componentStorage.createAnimatedMesh(ANIMATED_DEX_WALKING);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_DEATH);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_STATIC_ATTACK);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_WALKING_ATTACK);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_DASHING);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -1551,7 +1556,7 @@ void EntityManager::createCinematica() {
 
     initData(1, 0, 1);
 
-    createVideo("../resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
+    createVideo("resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
 
     componentStorage.printComponentStorage();
 }

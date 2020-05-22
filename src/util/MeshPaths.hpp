@@ -3,8 +3,12 @@
 #include <string_view>
 
 /* DEX */
-constexpr std::string_view ANIMATED_DEX_WALKING  = "resources/models/Dex/Walking";
-constexpr std::string_view MESH_DEX_STATIC       = "resources/models/Dex/Static/0.obj";
+constexpr std::string_view ANIMATED_DEX_STATIC          = "resources/models/Dex/Static";
+constexpr std::string_view ANIMATED_DEX_WALKING         = "resources/models/Dex/Walking";
+constexpr std::string_view ANIMATED_DEX_STATIC_ATTACK   = "resources/models/Dex/StaticAttack";
+constexpr std::string_view ANIMATED_DEX_WALKING_ATTACK  = "resources/models/Dex/WalkingAttack";
+constexpr std::string_view ANIMATED_DEX_DASHING         = "resources/models/Dex/Dash";
+constexpr std::string_view ANIMATED_DEX_DEATH           = "resources/models/Dex/Death";
 
 /* BOT */
 constexpr std::string_view ANIMATED_BOT_STATIC   = "resources/models/Bot/Static";

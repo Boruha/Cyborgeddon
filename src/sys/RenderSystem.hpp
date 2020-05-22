@@ -10,4 +10,6 @@ struct RenderSystem : System {
 	void fixedUpdate(const Context &context, float deltaTime) override;
 	void update(const Context &context, float deltaTime) override {};
 	void reset() override {  }
+
+	void animationTrigger(const Context&);
 };
