@@ -29,6 +29,9 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             vel.direction = vec3(ai.target_position.x - phy.position.x, 0, ai.target_position.z - phy.position.z);
             phy.velocity  = normalize(vel.direction) * vel.currentSpeed * deltaTime;
 
+            if(length(phy.velocity) != 0)
+                animationMessages.emplace_back(ai.getEntityID(), 1u);
+
             return true;
         }
     };
@@ -62,6 +65,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             {
                 phy.position   = ai.target_position;
                 phy.position.y = phy.scale.y/2;
+                animationMessages.emplace_back(ai.getEntityID(), 0u);
                 return false;
             }
 
@@ -230,13 +234,6 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z }); 
                      ai.obstacles = checkObstacles(phy.position, player_pos, trSphere.radius, context);         
             
-            if(ai.obstacles)
-            {
-                //std::cout << "HAY OBSTACULOS!! " << ai.frameCounter << "\n";
-                //std::cout << "AI POS: " << glm::to_string(player_pos) << "\n";
-                //std::cout << "PJ POS: " << glm::to_string(phy.position) << "\n";
-            }
-
             return greater_e(distance2, PURSUE_MIN_DISTANCE2) || ai.obstacles;
         }
 
@@ -343,10 +340,22 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                 
                 if(!greater_e(data.currentAttackingCooldown, 0.f)) 
                 {
-                    data.attacking = true;
+                    data.attacking                = true;
                     data.currentAttackingCooldown = data.attackingCooldown;
-                    //damageMessages.emplace_back(data.attackDamage);
-                    soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
+
+                    switch (data.mode)
+                    {
+                        case NEUTRAL: soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
+                            break;
+                        case DEMON  : soundMessages.emplace_back(ATTACK_ENEMY_DEMON);
+                            break;
+                        case ANGEL  : soundMessages.emplace_back(ATTACK_ENEMY_ANGEL);
+                            break;
+                    }
+                    
+                    damageMessages.emplace_back(data.attackDamage);
+                    animationMessages.emplace_back(data.getEntityID(), 2u); /*Posible cambio a cuando cambia de modo*/
+                    
                     return true;
                 }
 
@@ -392,11 +401,10 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
                     if( !greater_e(distance2, JUMP_AREA_DMG2) )
-                    {
                         //damageMessages.emplace_back(data.attackDamage);
-                        soundMessages.emplace_back(ATTACK_ENEMY_ASSEMBLY);
-                        //std::cout << "TORNADITO QUE TE METO EN MOVIMIENTO\n";
-                    }
+
+                    soundMessages.emplace_back(ATTACK_ENEMY_DEMON);
+                    animationMessages.emplace_back(jump.getEntityID(), 0u);
                 }
                 return true;
             }
@@ -417,6 +425,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                     jump.jumpTargetLocation = player_pos + (vel.direction * vel.currentSpeed);
                     jump.jumping = true;
                     jump.currentJumpCooldown = jump.jumpCooldown;
+                    animationMessages.emplace_back(jump.getEntityID(), 4u);
                     return true;
                 }   
                 return false;
