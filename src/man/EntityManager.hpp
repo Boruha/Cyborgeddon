@@ -80,7 +80,7 @@ struct EntityManager : GameContext {
 		void createWall (const vec3& pos, const vec3& dim);
 		void createFloor(std::string_view tex, const vec3& pos, const vec3& dim);
 
-		void createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
+		void createPairKeyDoor(const vec3& keyPos1, const vec3& keyPos2, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim);
 
 		void createVideo(std::string_view, bool, SoundParameter);
 		void createTexture(std::string_view, int, int);

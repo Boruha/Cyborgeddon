@@ -19,3 +19,4 @@
 #include <cmp/TextureCmp.hpp>
 #include <cmp/MenuOption.hpp>
 #include <cmp/BackgroundMusic.hpp>
+#include <cmp/Lock.hpp>

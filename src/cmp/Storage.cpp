@@ -20,6 +20,7 @@ void Storage::initData(const unsigned maxComponents) {
 	initVector<TextureCmp>(maxComponents);
 	initVector<MenuOption>(1);
     initVector<BackgroundMusic>(1);
+	initVector<Lock>(1);
 
 	nodes.reserve(maxComponents);
 }

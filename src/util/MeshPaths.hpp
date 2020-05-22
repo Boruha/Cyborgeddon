@@ -37,10 +37,9 @@ constexpr std::string_view COLISIONS_CITY = "../resources/models/Ciudad/colision
 constexpr std::string_view ANIMATED_BALA   = "../resources/models/Objetos/Bala/BalaCentro";
 
 /* DOOR */
-constexpr std::string_view MESH_DOOR_CLOSE = "../resources/models/Objetos/Puerta/0.obj";
+constexpr std::string_view MESH_DOOR_OPEN   = "../resources/models/Objetos/Puerta/0.obj";
+constexpr std::string_view ANIMATED_DOOR    = "../resources/models/Objetos/Puerta";
 
 /* KEYS */
 constexpr std::string_view MESH_KEY_DEMON      = "../resources/models/Objetos/Llave_demoniaca/0.obj";
 constexpr std::string_view MESH_KEY_ANGEL      = "../resources/models/Objetos/Llave_angelical/0.obj";
-constexpr std::string_view ANIMATED_KEY_DEMON  = "../resources/models/Objetos/Llave_demoniaca";
-constexpr std::string_view ANIMATED_KEY_ANGEL  = "../resources/models/Objetos/Llave_angelical";
