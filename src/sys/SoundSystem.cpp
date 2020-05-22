@@ -10,7 +10,7 @@
 void ERRCHECK_fn(const FMOD_RESULT res, const std::string_view file, const int line) {
 	if (res != FMOD_OK)
 	{
-		//std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << "\n";
+		std::cerr << file << "(Linea: " << line << "): " << res << " - " << FMOD_ErrorString(res) << "\n";
 //		exit(-1);
 	}
 }
@@ -47,6 +47,8 @@ SoundSystem::SoundSystem() {
                         //ACTION SOUNDS
                         ACTION_GET_KEY,
                         ACTION_OPEN_DOOR,
+
+                        CANT_USE,
 
                         //MENU SOUNDS
                         MENU_CHANGE_OPTION,
