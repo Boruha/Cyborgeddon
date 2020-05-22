@@ -28,7 +28,6 @@ constexpr std::string_view ANIMATED_DEMON_WALKING = "resources/models/Demon/Walk
 constexpr std::string_view ANIMATED_DEMON_DEATH   = "resources/models/Demon/Death";
 constexpr std::string_view ANIMATED_DEMON_ATTACK  = "resources/models/Demon/Attack";
 constexpr std::string_view ANIMATED_DEMON_JUMP    = "resources/models/Demon/Jump";
->>>>>>> anyadir_animaciones
 
 /* CITY */
 constexpr std::string_view MESH_CITY      = "resources/models/Ciudad/ciudad.obj";
