@@ -60,6 +60,28 @@ void TriggerFastCollisionSystem::fixedUpdate(const Context &context, float delta
 				}
 			}
 
+
+
+			for (const auto & obb : context->getComponents().getComponents<TriangleOBB>()) {
+				if (obb && lineAABBIntersectionXZ(line, obb.min, obb.max)) {
+					float squareDistance = std::numeric_limits<float>::infinity();
+
+					if (lineIntersection(line, Line(obb.vertices[0], obb.vertices[1]))) {
+						squareDistance = manhattan(line.a, getIntersectionPointXZ(line, Line(obb.vertices[0], obb.vertices[1])));
+					} else if (lineIntersection(line, Line(obb.vertices[1], obb.vertices[2]))) {
+						squareDistance = manhattan(line.a, getIntersectionPointXZ(line, Line(obb.vertices[1], obb.vertices[2])));
+					} else if (lineIntersection(line, Line(obb.vertices[2], obb.vertices[0]))) {
+						squareDistance = manhattan(line.a, getIntersectionPointXZ(line, Line(obb.vertices[2], obb.vertices[0])));
+					}
+
+					if (less_e(squareDistance, sqDist)) {
+						id = obb.getEntityID();
+						type = obb.getEntityType();
+						sqDist = squareDistance;
+					}
+				}
+			}
+
 			// ahora vamos a comprobar los trigger estaticos aabb, que son presumiblemente
 			// puertas y llaves, pero esto puede cambiar
 			for (const auto &trigger : context->getComponents().getComponents<TriggerStaticAABB>()) {

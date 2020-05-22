@@ -100,3 +100,20 @@ inline bool intersectionLineSphereXZ(const Line& line, const vec3& center, const
 
 	return (b * b) - (4 * a * c) >= 0; // si el discriminante de la ecuacion es menor que 0 NO hay colision
 }
+
+inline glm::vec3 getIntersectionPointXZ(const Line& AB, const Line& CD) {
+	const float a1 = AB.b.z - AB.a.z;
+	const float b1 = AB.a.x - AB.b.x;
+	const float c1 = a1 * (AB.a.x) + b1 * (AB.a.z);
+
+	const float a2 = CD.b.z - CD.a.z;
+	const float b2 = CD.a.x - CD.b.x;
+	const float c2 = a2 * (CD.a.x)+ b2 * (CD.a.z);
+
+	const float det = a1 * b2 - a2 * b1;
+
+	const float x = (b2 * c1 - b1 * c2) / det;
+	const float z = (a1 * c2 - a2 * c1) / det;
+
+	return vec3(x, 0, z);
+}
