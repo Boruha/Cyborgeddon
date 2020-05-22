@@ -13,7 +13,10 @@ void PauseInputSystem::fixedUpdate(const Context &context, const float deltaTime
 		soundMessages.emplace_back(MENU_CHANGE_OPTION);
 	}
 
-	if (context->isKeyTextInput(KEY_INTRO) && (menu_options.option == 2))
+    if ( (context->isKeyTextInput(KEY_INTRO) || context->isKeyTextInput(KEY_SPACE) ) && menu_options.option == 1)
+        soundMessages.emplace_back(CANT_USE);
+
+	if ( (context->isKeyTextInput(KEY_INTRO) || context->isKeyTextInput(KEY_SPACE) ) && menu_options.option == 2)
         soundMessages.emplace_back(STOP_ALL_SOUNDS);
 
 }
