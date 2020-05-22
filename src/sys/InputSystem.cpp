@@ -100,7 +100,7 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 }
 // Shoot
 void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
-    if (!greater_e(data.currentSwitchingCooldown, 0)) {
+/*  if (!greater_e(data.currentSwitchingCooldown, 0)) {
         data.switchingMode = true; // TODO : poner a false switching mode cuando toque (probablemente no se necesite este bool porque solo era necesario para el sonido, y ahora mandamos mensaje)
         data.mode == DEMON ? data.mode = ANGEL : data.mode = DEMON;
         data.currentSwitchingCooldown = data.switchingCooldown;
@@ -109,7 +109,7 @@ void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
             soundMessages.emplace_back(SWITCH_MODE_DEMON);
         else
             soundMessages.emplace_back(SWITCH_MODE_ANGEL);
-    }
+    }*/
 }
 
 // Switch Mode
