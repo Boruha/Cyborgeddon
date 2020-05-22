@@ -179,7 +179,7 @@ StateEnum State::endingNextState(const Context & context) {
 
 		engine.clear(Color(BLACK), true);
 		engine.display();
-		engine.deleteAllResources();
+		//engine.deleteAllResources();
 
 		context->createIntro(true);
 
