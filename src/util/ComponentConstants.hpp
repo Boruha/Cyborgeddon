@@ -40,7 +40,7 @@ constexpr float     FACTOR_SAME_MODE				= 1.f / FACTOR_DIFFERENT_MODE;
 
 // ATTACK ENEMY
 constexpr float     MELEE_ATTACK_RANGE   		    = 2.5f;
-constexpr float     DIST_ATTACK_RANGE   		    = 8.f;
+constexpr float     DIST_ATTACK_RANGE   		    = 12.f;
 constexpr float     DIST_ATTACK_RANGE2  		    = DIST_ATTACK_RANGE  * DIST_ATTACK_RANGE;
 constexpr float     MELEE_ATTACK_RANGE2  		    = MELEE_ATTACK_RANGE * MELEE_ATTACK_RANGE;
 
