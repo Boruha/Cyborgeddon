@@ -41,34 +41,34 @@ void InputSystem::fixedUpdate(const Context& context, float deltaTime) {
 	// player siempre tiene velocity y physics
 	auto & velocity  = *player.getComponent<Velocity>();
 	auto & physics   = *player.getComponent<Physics>();
+    auto & data      = *player.getComponent<CharacterData>();
+    
+    bool animationAttackCheck = false;
 
 	if (velocity.currentSpeed == velocity.defaultSpeed)
 	{
 		velocity.direction = vec3();
-
-		auto & data     = *player.getComponent<CharacterData>();
-
-		data.dashing = false;
+		data.dashing       = false;
 
 		for (const auto * next = keyMap; next->p_func; ++next)
 			if (context->isKeyPressed(next->key))
 				(this->*(next->p_func))(velocity, data);
-
-		// player siempre tiene render
-		auto & render = *player.getComponent<Render>();
 /*
+		auto & render = *player.getComponent<Render>();
+
 		if (data.switchingMode)
 			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
 */
 		const Mouse& mouse = context->getMouse();
-
 		aim_mouse(context, physics, mouse.position);
+
+        animationAttackCheck = mouse.leftPressed;
 
 		if (mouse.leftPressed)
 		{
 			if(!data.dashing && !greater_e(data.currentAttackingCooldown, 0.f))
 			{
-				data.attacking = true;
+				data.attacking                = true;
 				data.currentAttackingCooldown = data.attackingCooldown;
 
 				if (data.mode == DEMON)
@@ -81,20 +81,40 @@ void InputSystem::fixedUpdate(const Context& context, float deltaTime) {
 	}
 
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
+
+    if(!data.dashing)
+    {
+        if(animationAttackCheck)
+        {
+            if(length(physics.velocity) != 0.0)
+                animationMessages.emplace_back(data.getEntityID(), 2u);
+            else
+                animationMessages.emplace_back(data.getEntityID(), 5u);
+        }
+        else
+        {
+            if(length(physics.velocity) != 0.0)
+                animationMessages.emplace_back(data.getEntityID(), 1u);
+            else
+                animationMessages.emplace_back(data.getEntityID(), 0u);
+        }
+    }
 }
 
 void InputSystem::w_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.z; /*std::cout << "W\n";*/ }
 void InputSystem::a_pressed(Velocity& velocity, CharacterData& data) const { -- velocity.direction.x; /*std::cout << "A\n";*/ }
 void InputSystem::s_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.z; /*std::cout << "S\n";*/ }
 void InputSystem::d_pressed(Velocity& velocity, CharacterData& data) const { ++ velocity.direction.x; /*std::cout << "D\n";*/ }
+
 // Dash
 void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
     if(!greater_e(data.currentDashingCooldown, 0.f) && length(velocity.direction) != 0)
     {
-        data.dashing = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
+        data.dashing                = true;   // TODO : poner esto a false cuando acabe el dash (probablemente es cosa de VelocitySystem)
         data.currentDashingCooldown = data.dashingCooldown;
-        velocity.currentSpeed = data.dashSpeed;
+        velocity.currentSpeed       = data.dashSpeed;
 
+        animationMessages.emplace_back(data.getEntityID(), 4u);
         soundMessages.emplace_back(DASH_PLAYER);
     }
 }
