@@ -71,7 +71,7 @@ StateEnum State::ingameNextState(const Context& context) {
 	if (context->checkDefeat()) {
 		context->getEngine().clear(Color(BLACK), true);
 
-		context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png")->render();
+		context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png")->render();
 
 		context->getEngine().hideCursor();
 
@@ -209,7 +209,7 @@ StateEnum State::endingNextState(const Context & context) {
 
 StateEnum State::startingNextState(const Context & context) {
     if (context->getVideoIndex() > 0) {
-        auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
+        auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
         auto & engine = context->getEngine();
 
         engine.clear(Color(BLACK), true);

@@ -462,7 +462,7 @@ void EntityManager::createLevel() {
 
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 90, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
+	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 40, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(1.f), vec3(0.5));
 
     createPairKeyDoor(vec3(235.f, 1.5f, -271.8f), vec3(-296.f, 1.5f, -271.8f), vec3(1), vec3(-82.f, 0.f,-299.f), vec3(21.f, 1, 8.f));
@@ -1573,13 +1573,13 @@ void EntityManager::createIntro( bool clean) {
 
 	createMenuOptions(0, 4);
 
-	createVideo("resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
-	createVideo("resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
+	createVideo("../resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
+	createVideo("../resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
 
-	createTexture("resources/menu/main_menu/op_menu_1.png", 0, 0);
-	createTexture("resources/menu/main_menu/op_menu_2.png", 0, 0);
-	createTexture("resources/menu/main_menu/op_menu_3.png", 0, 0);
-	createTexture("resources/menu/main_menu/op_menu_4.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
+	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
 
 	componentStorage.printComponentStorage();
 }
@@ -1589,7 +1589,7 @@ void EntityManager::createCinematica() {
 
     initData(1, 0, 1);
 
-    createVideo("resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
+    createVideo("../resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
 
     componentStorage.printComponentStorage();
 }
@@ -1599,7 +1599,7 @@ void EntityManager::createTutorial() {
 
 	initData(1, 0, 1);
 
-	createVideo("resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
+	createVideo("../resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
 
 	componentStorage.printComponentStorage();
 }
