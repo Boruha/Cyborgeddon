@@ -352,8 +352,8 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                         case ANGEL  : soundMessages.emplace_back(ATTACK_ENEMY_ANGEL);
                             break;
                     }
-                    
-                    damageMessages.emplace_back(data.attackDamage);
+
+                    //damageMessages.emplace_back(data.attackDamage);
                     animationMessages.emplace_back(data.getEntityID(), 2u); /*Posible cambio a cuando cambia de modo*/
                     
                     return true;

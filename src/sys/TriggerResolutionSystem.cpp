@@ -8,9 +8,34 @@ void TriggerResolutionSystem::fixedUpdate(const Context &context, float deltaTim
     for (const auto & message : triggerMessages) {
         if (message.type1 == PLAYER) {
             if (message.type2 == KEY) {
-                // TODO : abrir puerta (con mensajes? o context?)
-                auto& door = context->getEntityByID(message.ID2 - 1);
-                door.removeComponent<RigidStaticAABB>();
+				bool canDeleteDoor = true;
+				EntityID id_door  = 0u;
+
+				for(auto& locker : context->getComponents().getComponents<Lock>())
+				{
+					for(std::size_t i=0; i<locker.keys.size(); ++i)
+					{
+						if(message.ID2 == locker.keys[i])
+							locker.checks[i] = true;
+					}
+
+					for(std::size_t i=0; i<locker.checks.size(); ++i)
+					{
+						if(locker.checks[i] != true){
+							canDeleteDoor = false;
+						}
+					}
+					if(canDeleteDoor)
+					{
+						id_door = locker.getEntityID();
+					}
+				}
+
+				if(canDeleteDoor)
+				{
+					auto& door = context->getEntityByID(id_door);
+                	door.removeComponent<RigidStaticAABB>();
+				}
 
                 soundMessages.emplace_back(ACTION_GET_KEY);
                 deathMessages.emplace_back(message.ID2);

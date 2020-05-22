@@ -349,29 +349,12 @@ void EntityManager::createBullet() {
 	bullet.addComponent(render);
 }
 
-void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
-	Entity& door 		    = createEntity(DOOR);
-	//TODO: quitar la mierda de  "+ vec3 (0, y/2, 0) en transformable mas adelante"
-	auto& transformable     = componentStorage.createComponent(Transformable(door.getType(), door.getID(), doorPos + vec3(0, 0, 0), vec3(), doorDim));
-	auto& trigger           = componentStorage.createComponent(TriggerStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale, false));
-	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, transformable.scale));
-	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
+void EntityManager::createPairKeyDoor(const vec3& keyPos1, const vec3& keyPos2, const vec3& keyDim, const vec3& doorPos, const vec3& doorDim) {
+    /*LLAVE DEMON*/
+    Entity& key 		    = createEntity(KEY);
 
-	render.node = componentStorage.createMesh(MESH_DOOR_CLOSE);
-
-	render.node->setPosition(transformable.position);
-	render.node->setRotation(transformable.rotation);
-	render.node->setScale(transformable.scale);
-
-	door.addComponent(transformable);
-    door.addComponent(trigger);
-	door.addComponent(rigid);
-	door.addComponent(render);
-
-	Entity& key 		    = createEntity(KEY);
-
-	auto& keyTransformable  = componentStorage.createComponent(Transformable(key.getType(), key.getID(), keyPos + vec3(0, 0, 0), vec3(), keyDim));
-	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, keyTransformable.scale, true));
+	auto& keyTransformable  = componentStorage.createComponent(Transformable(key.getType(), key.getID(), keyPos1, vec3(0,180.f,0), keyDim));
+	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, vec3(10), true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
 	keyRender.node = componentStorage.createMesh(MESH_KEY_DEMON);
@@ -383,6 +366,48 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos, const vec3& keyDim, co
 	key.addComponent(keyTransformable);
 	key.addComponent(keyTrigger);
 	key.addComponent(keyRender);
+
+    /*LLAVE ANGEL*/
+    Entity& key2 		     = createEntity(KEY);
+
+	auto& key2Transformable  = componentStorage.createComponent(Transformable(key2.getType(), key2.getID(), keyPos2, vec3(0,90.f,0), keyDim));
+	auto& key2Trigger        = componentStorage.createComponent(TriggerStaticAABB(key2.getType(), key2.getID(), key2Transformable.position, vec3(10), true));
+	auto& key2Render		 = componentStorage.createComponent(Render(key2.getType(), key2.getID(), &key2Transformable.position, &key2Transformable.rotation, &key2Transformable.scale, false));
+
+	key2Render.node = componentStorage.createMesh(MESH_KEY_ANGEL);
+
+	key2Render.node->setPosition(key2Transformable.position);
+	key2Render.node->setRotation(key2Transformable.rotation);
+	key2Render.node->setScale(key2Transformable.scale);
+
+	key2.addComponent(key2Transformable);
+	key2.addComponent(key2Trigger);
+	key2.addComponent(key2Render);
+    
+    /* DOOR */
+    Entity& door 		    = createEntity(DOOR);
+
+	auto& transformable     = componentStorage.createComponent(Transformable(door.getType(), door.getID(), doorPos, vec3(), vec3(1)));
+	auto& trigger           = componentStorage.createComponent(TriggerStaticAABB(door.getType(), door.getID(), transformable.position, doorDim, false));
+	auto& rigid             = componentStorage.createComponent(RigidStaticAABB(door.getType(), door.getID(), transformable.position, doorDim));
+	auto& render			= componentStorage.createComponent(Render(door.getType(), door.getID(), &transformable.position, &transformable.rotation, &transformable.scale, false));
+    auto& locker            = componentStorage.createComponent(Lock(door.getType(), door.getID()));
+
+	render.node = componentStorage.createAnimatedMesh(ANIMATED_DOOR);
+                  componentStorage.setMesh(render.node, MESH_DOOR_OPEN);
+
+	render.node->setPosition(transformable.position);
+	render.node->setRotation(transformable.rotation);
+	render.node->setScale(transformable.scale);
+
+    locker.keys[0] = key.getID();
+    locker.keys[1] = key2.getID();
+
+	door.addComponent(transformable);
+    door.addComponent(trigger);
+	door.addComponent(rigid);
+	door.addComponent(render);
+	door.addComponent(locker);
 }
 
 void EntityManager::createVideo(const std::string_view path, const bool isLoop, const SoundParameter sound) {
@@ -437,8 +462,10 @@ void EntityManager::createLevel() {
 
 	initData(128, 16, 150);
 	
-	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 40, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
+	createPairPlayerCamera(vec3(), vec3(1.f), vec3(5, 90, 10)); //x= , y= , z=    <------> antes: vec3(30, 120, 70) - (10, 50, 10)
 	createLight(vec3(-40, 80, -60), vec3(-11.0, -22.0, 8.0), vec3(1.f), vec3(0.5));
+
+    createPairKeyDoor(vec3(235.f, 1.5f, -271.8f), vec3(-296.f, 1.5f, -271.8f), vec3(1), vec3(-82.f, 0.f,-299.f), vec3(21.f, 1, 8.f));
 
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile(COLISIONS_CITY);
@@ -1546,13 +1573,13 @@ void EntityManager::createIntro( bool clean) {
 
 	createMenuOptions(0, 4);
 
-	createVideo("../resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
-	createVideo("../resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
+	createVideo("resources/videos/intro/1_F.mp4", false, VIDEO_INTRO_GAME);
+	createVideo("resources/videos/intro/2_F_L.mp4", true, NO_SOUND);
 
-	createTexture("../resources/menu/main_menu/op_menu_1.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_2.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
-	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_1.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_2.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_3.png", 0, 0);
+	createTexture("resources/menu/main_menu/op_menu_4.png", 0, 0);
 
 	componentStorage.printComponentStorage();
 }
@@ -1572,7 +1599,7 @@ void EntityManager::createTutorial() {
 
 	initData(1, 0, 1);
 
-	createVideo("../resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
+	createVideo("resources/videos/tutorial/1_F.mp4", false, VIDEO_TUTORIAL);
 
 	componentStorage.printComponentStorage();
 }
