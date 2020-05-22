@@ -20,6 +20,9 @@ struct SunlightEngine final : public virtual IEngine {
 	[[nodiscard]] bool isKeyTextInput(unsigned)          final;
 	[[nodiscard]] const Mouse & getMouse()               final;
 
+	void hideCursor()                         const final;
+	void unhideCursor()                       const final;
+
 	void close()                  const final;
     void shutdown()               const final;
     void clear(Color color, bool) const final;

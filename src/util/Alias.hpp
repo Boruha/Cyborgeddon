@@ -33,6 +33,7 @@ enum StateEnum : uint8_t
 	NO_STATE,
 	INIT,
 	TUTORIAL,
+	STARTING,
 	INGAME,
 	PAUSE,
 	ENDING

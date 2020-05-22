@@ -4,12 +4,13 @@
 #include <Engine/EngineInterface/SceneInterface/ITexture.hpp>
 
 // Texturas 3 y 4 son barras de angel y demon
+// si hay tiempo cambiarlo para que no sean numeros sueltos
 
 void HUDingameSystem::fixedUpdate(const Context &context, const float deltaTime) {
 
-	auto& player = context->getPlayer();
+	const auto & player = context->getPlayer();
 
-	auto* data = player.getComponent<CharacterData>();
+	const auto * data = player.getComponent<CharacterData>();
 
 	unsigned int ignore { 0 };
 
@@ -21,12 +22,12 @@ void HUDingameSystem::fixedUpdate(const Context &context, const float deltaTime)
 
 		auto &textures = context->getComponents().getComponents<TextureCmp>();
 
-		int lifebar3X = (PLAYER_HEALTH / data->health) * textures[3].texture->getSize().x;
-		int lifebar4X = (PLAYER_HEALTH / data->health) * textures[4].texture->getSize().x;
+		const float lifebar3X = (data->health / PLAYER_HEALTH) * textures[3].texture->getSize().x;
+		const float lifebar4X = (data->health / PLAYER_HEALTH) * textures[4].texture->getSize().x;
 
-		textures[3].texture->setPosition(textures[3].texture->getSize().x - lifebar3X,
+		textures[3].texture->setPosition(std::round(lifebar3X) - textures[3].texture->getSize().x ,
 		                                 textures[3].texture->getPosition().y);
-		textures[4].texture->setPosition(textures[4].texture->getSize().x - lifebar4X,
+		textures[4].texture->setPosition(std::round(lifebar4X) - textures[4].texture->getSize().x ,
 		                                 textures[4].texture->getPosition().y);
 
 		for (unsigned int i = 0; i < NUM_INGAME_TEXTURES; ++i)

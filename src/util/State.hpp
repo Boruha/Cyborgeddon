@@ -36,6 +36,7 @@ struct State {
 
 		static StateEnum initNextState(const Context&);
 		static StateEnum tutorialNextState(const Context&);
+        static StateEnum startingNextState(const Context&);
 		static StateEnum ingameNextState(const Context&);
 		static StateEnum pauseNextState(const Context&);
 		static StateEnum endingNextState(const Context&);

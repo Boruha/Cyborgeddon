@@ -6,9 +6,9 @@
 void HUDpauseSystem::fixedUpdate(const Context &context, const float deltaTime) {
 	context->getEngine().clear(Color(BLACK), true);
 
-	auto& menu_option  = context->getComponents().getComponents<MenuOption>()[0];
+	const auto & menu_option  = context->getComponents().getComponents<MenuOption>()[0];
 
-	auto * currentTexture = & context->getComponents().getComponents<TextureCmp>()[NUM_INGAME_TEXTURES + menu_option.option];
+	const auto * currentTexture = & context->getComponents().getComponents<TextureCmp>()[NUM_INGAME_TEXTURES + menu_option.option];
 
 	currentTexture->texture->render();
 

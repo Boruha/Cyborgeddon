@@ -61,7 +61,6 @@ void InputSystem::fixedUpdate(const Context& context, float deltaTime) {
 			data.mode == DEMON ? render.node->setTexture(DEMON_TEXTURE) : render.node->setTexture(ANGEL_TEXTURE);
 */
 		const Mouse& mouse = context->getMouse();
-//    std::cout << mouse.position.x << ", " << mouse.position.y << "\n";
 
 		aim_mouse(context, physics, mouse.position);
 
@@ -77,13 +76,8 @@ void InputSystem::fixedUpdate(const Context& context, float deltaTime) {
 				else
 					soundMessages.emplace_back(ATTACK_PLAYER_ANGEL);
 			}
-//	std::cout << "Click izquierdo\n";
 		}
 
-		if (mouse.rightPressed)
-		{
-//		std::cout << "Click derecho\n";
-		}
 	}
 
 	physics.velocity = normalize(velocity.direction) * velocity.currentSpeed * deltaTime;
@@ -103,7 +97,6 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 
         soundMessages.emplace_back(DASH_PLAYER);
     }
-// std::cout << "Shift\n";
 }
 // Shoot
 void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
@@ -116,7 +109,6 @@ void InputSystem::space_pressed(Velocity& velocity, CharacterData& data) const {
             soundMessages.emplace_back(SWITCH_MODE_DEMON);
         else
             soundMessages.emplace_back(SWITCH_MODE_ANGEL);
-
     }
 }
 
@@ -148,5 +140,4 @@ inline void InputSystem::aim_mouse(const Context& context, Physics& phy, const g
 
     // obtenemos la rotacion en y, a partir de la direccion entre el raton y el personaje
     phy.rotation.y = getRotationYfromXZ(intersectPoint - phy.position);
-//    std::cout << phy.rotation.y << std::endl;
 }

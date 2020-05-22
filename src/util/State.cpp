@@ -16,10 +16,14 @@ void State::init()
 		case INIT :
 			next_state = &State::initNextState;
 			context->createIntro(false);
+			context->getEngine().hideCursor();
 			break;
 		case TUTORIAL :
 			next_state = &State::tutorialNextState;
 			break;
+        case STARTING :
+            next_state = &State::startingNextState;
+            break;
 		case INGAME :
 			next_state = &State::ingameNextState;
 			break;
@@ -60,6 +64,7 @@ void State::reset() const {
 StateEnum State::ingameNextState(const Context& context) {
 	if (context->checkVictory()) {
 		context->createEnding();
+		context->getEngine().hideCursor();
 		return ENDING;
 	}
 
@@ -68,6 +73,8 @@ StateEnum State::ingameNextState(const Context& context) {
 
 		context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png")->render();
 
+		context->getEngine().hideCursor();
+
 		context->getEngine().display();
 
 		using namespace std::chrono_literals;
@@ -75,19 +82,31 @@ StateEnum State::ingameNextState(const Context& context) {
 		std::this_thread::sleep_for(2s);
 
 		context->createLevel();
+
+		context->getEngine().unhideCursor();
+
 		return INGAME;
 	}
 
-	if (context->isKeyPressed(KEY_SCAPE))
+	if (context->isKeyTextInput(KEY_SCAPE)) {
+		context->getEngine().hideCursor();
 		return PAUSE;
+	}
 
 	return INGAME;
 }
 
 StateEnum State::pauseNextState(const Context & context) {
 
-	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO)))
+	if (context->getComponents().getComponents<MenuOption>()[0].option == 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
+		context->getEngine().unhideCursor();
         return INGAME;
+	}
+
+	if (context->isKeyTextInput(KEY_SCAPE)) {
+		context->getEngine().unhideCursor();
+		return INGAME;
+	}
 
 	if (context->getComponents().getComponents<MenuOption>()[0].option == 2 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
         auto & engine = context->getEngine();
@@ -107,7 +126,6 @@ StateEnum State::initNextState(const Context & context) {
 
 	if (context->getVideoIndex() > 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
 
-		auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		switch (context->getComponents().getComponents<MenuOption>()[0].option) {
@@ -116,13 +134,13 @@ StateEnum State::initNextState(const Context & context) {
 
 				engine.clear(Color(BLACK), true);
 
-				loadScreen->render();
+				//loadScreen->render();
 
 				engine.display();
 
-				context->createLevel();
+				context->createCinematica();
 
-				return INGAME;
+				return STARTING;
 
 			case 1 :
 
@@ -187,6 +205,27 @@ StateEnum State::endingNextState(const Context & context) {
 	}
 
 	return ENDING;
+}
+
+StateEnum State::startingNextState(const Context & context) {
+    if (context->getVideoIndex() > 0) {
+        auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
+        auto & engine = context->getEngine();
+
+        engine.clear(Color(BLACK), true);
+
+        loadScreen->render();
+
+        engine.display();
+
+        context->createLevel();
+
+        context->getEngine().unhideCursor();
+
+        return INGAME;
+    }
+
+    return STARTING;
 }
 
 void State::resetClock() {

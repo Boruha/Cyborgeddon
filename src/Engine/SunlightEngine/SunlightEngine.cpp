@@ -145,3 +145,11 @@ void SunlightEngine::setViewport(){
 void SunlightEngine::close() const {
 	glfwSetWindowShouldClose(window, true);
 }
+
+void SunlightEngine::hideCursor() const {
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void SunlightEngine::unhideCursor() const {
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
