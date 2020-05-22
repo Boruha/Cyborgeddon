@@ -78,9 +78,18 @@ void SoundSystem::init() {
 
 }
 
-void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
-    for(const auto & tracks : context->getComponents().getComponents<BackgroundMusic>()){
-        if(tracks)
+void SoundSystem::fixedUpdate(const Context& context, const float deltaTime) {
+    for (auto & music : context->getComponents().getComponents<BackgroundMusic>()) {
+        for (auto & track : music.tracks) {
+        	if (track.duration == track.timeLeft) {
+        		soundMessages.emplace_back(track.sound);
+        		track.timeLeft -= deltaTime;
+        		break;
+        	} else if (track.timeLeft > 0) {
+		        track.timeLeft -= deltaTime;
+		        break;
+        	}
+        }
     }
 
 	while (!soundMessages.empty()) {
