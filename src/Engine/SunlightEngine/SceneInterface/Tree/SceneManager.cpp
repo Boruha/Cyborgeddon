@@ -13,16 +13,9 @@
 SceneManager::SceneManager(SunlightEngine * _engine, ResourceManager * _resourceManager) : engine(_engine), resourceManager(_resourceManager) { }
 
 void SceneManager::render() {
-	//if(firstTime)
-		//firstTimeRenderConfig();
-
 	lightMatrixConfig();
 	renderOffcreen();
 	renderScene();
-}
-
-glm::mat4 SceneManager::getLightViewProjection() const {
-	return lightViewProjection;
 }
 
 glm::mat4 SceneManager::getViewProjection() const {
@@ -40,6 +33,10 @@ TreeNode * SceneManager::addMeshNode(const std::string_view mesh) {
 	return root->addChildren(std::move(tree_ptr));
 }
 
+void SceneManager::setMesh(INode* node, const std::string_view mesh){
+	static_cast<TreeNode*>(node)->setEntity(std::make_unique<Model>(resourceManager, mesh));
+}
+
 TreeNode * SceneManager::addAnimatedNode(const std::string_view path) {
 	auto tree_ptr = std::make_unique<TreeNode>(*this);
 	tree_ptr->setEntity(std::make_unique<Animation>(resourceManager, path));
@@ -47,6 +44,9 @@ TreeNode * SceneManager::addAnimatedNode(const std::string_view path) {
 	return root->addChildren(std::move(tree_ptr));
 }
 
+void SceneManager::setAnimatedMesh(INode* node, const std::string_view animation){
+	static_cast<TreeNode*>(node)->setEntity(std::make_unique<Animation>(resourceManager, animation));
+}
 
 TreeNode * SceneManager::addCameraNode() {
 	auto tree_ptr   = std::make_unique<TreeNode>(*this);
@@ -228,5 +228,4 @@ void SceneManager::clearScene() {
 
 	view = mat4(1);
 	viewProjection = mat4(1);
-	lightViewProjection = mat4(1);
 }

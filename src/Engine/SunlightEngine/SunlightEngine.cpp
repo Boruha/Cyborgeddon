@@ -153,3 +153,7 @@ void SunlightEngine::hideCursor() const {
 void SunlightEngine::unhideCursor() const {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
+
+void SunlightEngine::deleteAllResources() const {
+	resourceManager->removeAllResources();
+}

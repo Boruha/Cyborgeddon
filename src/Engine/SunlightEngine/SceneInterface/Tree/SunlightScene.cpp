@@ -38,6 +38,11 @@ INode * SunlightScene::addMeshNode(const std::string_view mesh) {
 	return sceneManager->addMeshNode(mesh);
 }
 
+void SunlightScene::setMesh(INode* node, const std::string_view mesh) {
+	sceneManager->setMesh(node, mesh);
+}
+
+
 INode * SunlightScene::addFreeCameraNode() {
 	return sceneManager->addCameraNode();
 }
@@ -52,4 +57,8 @@ void SunlightScene::clearScene() {
 
 INode * SunlightScene::addAnimatedMeshNode(const std::string_view path) {
 	return sceneManager->addAnimatedNode(path);
+}
+
+void SunlightScene::setAnimatedMesh(INode* node, const std::string_view animation) {
+	sceneManager->setAnimatedMesh(node, animation);
 }

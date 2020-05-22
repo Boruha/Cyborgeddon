@@ -55,6 +55,10 @@ INode * Storage::createMesh(const std::string_view mesh) {
 	return returnValue;
 }
 
+void Storage::setMesh(INode* node, const std::string_view mesh){
+	engine.scene->setMesh(node, mesh);
+}
+
 INode * Storage::createAnimatedMesh(const std::string_view path) {
 
 //		std::cout << "\n\n" << "Node" << "\n";
@@ -75,6 +79,9 @@ INode * Storage::createAnimatedMesh(const std::string_view path) {
 	return returnValue;
 }
 
+void Storage::setAnimatedMesh(INode* node, const std::string_view animation){
+	engine.scene->setAnimatedMesh(node, animation);
+}
 
 INode * Storage::createCamera() {
 

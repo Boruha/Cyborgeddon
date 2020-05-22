@@ -71,7 +71,7 @@ StateEnum State::ingameNextState(const Context& context) {
 	if (context->checkDefeat()) {
 		context->getEngine().clear(Color(BLACK), true);
 
-		context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png")->render();
+		context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png")->render();
 
 		context->getEngine().hideCursor();
 
@@ -126,6 +126,7 @@ StateEnum State::initNextState(const Context & context) {
 
 	if (context->getVideoIndex() > 0 && (context->isKeyTextInput(KEY_SPACE) || context->isKeyTextInput(KEY_INTRO))) {
 
+		//auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
 		auto & engine = context->getEngine();
 
 		switch (context->getComponents().getComponents<MenuOption>()[0].option) {
@@ -196,8 +197,8 @@ StateEnum State::endingNextState(const Context & context) {
 		auto & engine = context->getEngine();
 
 		engine.clear(Color(BLACK), true);
-
 		engine.display();
+		//engine.deleteAllResources();
 
 		context->createIntro(true);
 

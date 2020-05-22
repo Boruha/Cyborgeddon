@@ -13,6 +13,7 @@ struct IEngine {
     [[nodiscard]] virtual bool run()                        = 0;
     virtual void close()                              const = 0;
     virtual void shutdown()                           const = 0;
+    virtual void deleteAllResources()                 const = 0;
 
     [[nodiscard]] virtual bool isKeyPressed(unsigned) const = 0;
 	[[nodiscard]] virtual bool isKeyTextInput(unsigned)     = 0;

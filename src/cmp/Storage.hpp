@@ -71,8 +71,11 @@ struct Storage {
 		return cmpVector->components.emplace_back(cmp);
 	}
 
-	INode * createMesh(std::string_view mesh);
-	INode * createAnimatedMesh(std::string_view path);
+	INode * createMesh(const std::string_view);
+	INode * createAnimatedMesh(const std::string_view);
+
+	void    setMesh(INode*, const std::string_view);
+	void    setAnimatedMesh(INode*, const std::string_view);
 
 	INode * createCamera();
 	INode * createLight(const glm::vec3& diff, const glm::vec3& spe, const glm::vec3& dir);
