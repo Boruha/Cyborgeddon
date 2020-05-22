@@ -3,9 +3,9 @@
 #include <cmp/Component.hpp>
 
 struct CharacterData : Component {
-	explicit CharacterData(const EntityType, const EntityID, const ModeType, const float hp,
-							const float sw_cd, const float dmg, const float dmg_cd,
-							const float dmg_rg, const float dsh, const float dsh_cd);
+	explicit CharacterData(EntityType, EntityID, ModeType, float hp,
+							float sw_cd,  float dmg, float dmg_cd,
+							float dmg_rg, float dsh, float dsh_cd);
 
 	[[nodiscard]] constexpr static std::string_view getName() {
 		return "CharacterData";

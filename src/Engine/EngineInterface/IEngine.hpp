@@ -18,7 +18,10 @@ struct IEngine {
 	[[nodiscard]] virtual bool isKeyTextInput(unsigned)     = 0;
 	[[nodiscard]] virtual const Mouse & getMouse()     	    = 0;
 
-    virtual void clear(Color, bool)                         const = 0;
+	virtual void hideCursor()                         const = 0;
+	virtual void unhideCursor()                       const = 0;
+
+    virtual void clear(Color, bool)                   const = 0;
     virtual void draw()                               const = 0;
     virtual void display()                            const = 0;
 

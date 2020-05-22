@@ -1530,7 +1530,7 @@ bool EntityManager::checkDefeat() const {
 void EntityManager::createIntro( bool clean) {
     if(clean){ cleanData(); }
 
-	initData(8, 0, 8);
+	initData(7, 0, 4);
 
 	createMenuOptions(0, 4);
 
@@ -1542,7 +1542,7 @@ void EntityManager::createIntro( bool clean) {
 	createTexture("../resources/menu/main_menu/op_menu_3.png", 0, 0);
 	createTexture("../resources/menu/main_menu/op_menu_4.png", 0, 0);
 
-	//componentStorage.printComponentStorage();
+	componentStorage.printComponentStorage();
 }
 
 void EntityManager::createCinematica() {
