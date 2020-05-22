@@ -10,6 +10,7 @@ constexpr std::string_view MASTER_STRINGS_BANK 		= "../resources/sounds/banks/Ma
 constexpr std::string_view PLAYER_SHOOT_EVENT       = "event:/player/disparo_player";
 constexpr std::string_view CHANGE_MODE_EVENT		= "event:/player/change_mode";
 constexpr std::string_view DASH_PLAYER_EVENT        = "event:/player/dash_player";
+constexpr std::string_view PLAYER_CANT_USE          = "event:/player/cant_use";
 
 //MUSIC
 constexpr std::string_view MAIN_MUSIC_EVENT 	    = "event:/music/main_music";

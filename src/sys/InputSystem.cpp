@@ -116,6 +116,8 @@ void InputSystem::shift_pressed(Velocity& velocity, CharacterData& data) const {
 
         animationMessages.emplace_back(data.getEntityID(), 4u);
         soundMessages.emplace_back(DASH_PLAYER);
+    } else {
+	    soundMessages.emplace_back(CANT_USE);
     }
 }
 // Shoot
@@ -144,6 +146,8 @@ void InputSystem::q_pressed(Velocity& velocity, CharacterData& data) const {
         else
             soundMessages.emplace_back(SWITCH_MODE_ANGEL);
 
+	} else {
+		soundMessages.emplace_back(CANT_USE);
 	}
 //	std::cout << "M\n";
 }
