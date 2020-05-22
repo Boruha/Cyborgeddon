@@ -209,7 +209,7 @@ StateEnum State::endingNextState(const Context & context) {
 
 StateEnum State::startingNextState(const Context & context) {
     if (context->getVideoIndex() > 0) {
-        auto * loadScreen = context->getEngine().loadTexture("resources/menu/load_screen/pantalla_carga.png");
+        auto * loadScreen = context->getEngine().loadTexture("../resources/menu/load_screen/pantalla_carga.png");
         auto & engine = context->getEngine();
 
         engine.clear(Color(BLACK), true);

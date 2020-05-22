@@ -17,7 +17,7 @@ constexpr float     PLAYER_HEALTH					= 100.f;
 constexpr float     PLAYER_ATTACK_DAMAGE			= 10.f;
 constexpr float     PLAYER_ATTACKING_COOLDOWN		= 1.f / 7.f;
 constexpr float     PLAYER_SWITCH_MODE_COOLDOWN		= 1.f;
-constexpr float     PLAYER_DASH_COOLDOWN            = 1.f;
+constexpr float     PLAYER_DASH_COOLDOWN            = 2.f;
 constexpr float     PLAYER_ROTATION_SPEED			= 270.f;
 
 // ENEMY

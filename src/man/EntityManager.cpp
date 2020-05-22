@@ -1562,7 +1562,7 @@ void EntityManager::createCinematica() {
 
     initData(1, 0, 1);
 
-    createVideo("resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
+    createVideo("../resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
 
     componentStorage.printComponentStorage();
 }
