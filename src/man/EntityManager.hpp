@@ -85,7 +85,9 @@ struct EntityManager : GameContext {
 		void createVideo(std::string_view, bool, SoundParameter);
 		void createTexture(std::string_view, int, int);
 
+        void createBackgroundMusic(const std::array<Track, 4> &);
 		void createMenuOptions(unsigned, unsigned);
+
 
 		// lector de colliders
 		void processNode(aiNode * node, const aiScene * scene);

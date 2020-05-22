@@ -18,3 +18,4 @@
 #include <cmp/TriangleOBB.hpp>
 #include <cmp/TextureCmp.hpp>
 #include <cmp/MenuOption.hpp>
+#include <cmp/BackgroundMusic.hpp>

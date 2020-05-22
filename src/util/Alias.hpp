@@ -25,7 +25,8 @@ enum EntityType : uint16_t
 	VIDEO     = 11,
 	COLLIDER  = 12,
 	TEXTURE   = 13,
-	MENU_OPTIONS = 14
+	MENU_OPTIONS = 14,
+	BACKGROUND_MUSIC = 15
 };
 
 enum StateEnum : uint8_t

@@ -79,6 +79,9 @@ void SoundSystem::init() {
 }
 
 void SoundSystem::fixedUpdate(const Context& context, float deltaTime) {
+    for(const auto & tracks : context->getComponents().getComponents<BackgroundMusic>()){
+        if(tracks)
+    }
 
 	while (!soundMessages.empty()) {
 		const auto parameter = soundMessages.back().parameter;

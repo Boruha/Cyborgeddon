@@ -18,7 +18,8 @@ void Storage::initData(const unsigned maxComponents) {
 	initVector<CircleBounding>(maxComponents);
 	initVector<TriangleOBB>(256); // (son 239, pero soy un chulo y pongo 256 porque es potencia de 2 jaja no se que coño hago xD)
 	initVector<TextureCmp>(maxComponents);
-	initVector<MenuOption>(maxComponents);
+	initVector<MenuOption>(1);
+    initVector<BackgroundMusic>(1);
 
 	nodes.reserve(maxComponents);
 }
@@ -147,4 +148,5 @@ void Storage::printComponentStorage() const {
 	printVecInfo<TriangleOBB>();
 	printVecInfo<TextureCmp>();
 	printVecInfo<MenuOption>();
+    printVecInfo<BackgroundMusic>();
 }
