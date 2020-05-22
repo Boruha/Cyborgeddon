@@ -1548,7 +1548,10 @@ void EntityManager::createGraph() {
 
 bool EntityManager::checkVictory() const {
 	//return enemiesLeft <= 0;
-	auto * physics = player->getComponent<Physics>();
+	Physics * physics { nullptr };
+
+	if (player)
+		physics = player->getComponent<Physics>();
 
 	if (physics)
 		return physics->position.z < -596;
@@ -1557,7 +1560,10 @@ bool EntityManager::checkVictory() const {
 }
 
 bool EntityManager::checkDefeat() const {
-	return player->getType() == UNDEFINED;
+	if (player)
+		return player->getType() == UNDEFINED;
+	else
+		return false;
 }
 
 void EntityManager::createIntro( bool clean) {
