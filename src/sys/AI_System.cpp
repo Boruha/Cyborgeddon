@@ -395,7 +395,8 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
             {
                 auto & enemy    = context->getEntityByID(ai.getEntityID());
 			    auto & jump     = *enemy.getComponent<Jump>();
-                
+                auto & data     = *enemy.getComponent<CharacterData>();
+
                 if(!jump.jumping)
                 {
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
