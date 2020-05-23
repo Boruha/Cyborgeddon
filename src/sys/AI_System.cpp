@@ -353,7 +353,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                             break;
                     }
 
-                    //damageMessages.emplace_back(data.attackDamage);
+                    damageMessages.emplace_back(data.attackDamage);
                     animationMessages.emplace_back(data.getEntityID(), 2u); /*Posible cambio a cuando cambia de modo*/
                     
                     return true;
@@ -401,7 +401,7 @@ constexpr float movement_per_frame { 3.0 }; //BASE ON MOVEMENT CONST VARIBLES;
                     const float distance2 = length2({ phy.position.x - player_pos.x, phy.position.z - player_pos.z });
                     
                     if( !greater_e(distance2, JUMP_AREA_DMG2) )
-                        //damageMessages.emplace_back(data.attackDamage);
+                        damageMessages.emplace_back(data.attackDamage);
 
                     soundMessages.emplace_back(ATTACK_ENEMY_DEMON);
                     animationMessages.emplace_back(jump.getEntityID(), 0u);
