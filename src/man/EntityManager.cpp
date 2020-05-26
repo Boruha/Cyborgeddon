@@ -354,7 +354,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos1, const vec3& keyPos2, 
     Entity& key 		    = createEntity(KEY);
 
 	auto& keyTransformable  = componentStorage.createComponent(Transformable(key.getType(), key.getID(), keyPos1, vec3(0,180.f,0), keyDim));
-	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, vec3(10), true));
+	auto& keyTrigger        = componentStorage.createComponent(TriggerStaticAABB(key.getType(), key.getID(), keyTransformable.position, vec3(5), true));
 	auto& keyRender			= componentStorage.createComponent(Render(key.getType(), key.getID(), &keyTransformable.position, &keyTransformable.rotation, &keyTransformable.scale, false));
 
 	keyRender.node = componentStorage.createMesh(MESH_KEY_DEMON);
@@ -371,7 +371,7 @@ void EntityManager::createPairKeyDoor(const vec3& keyPos1, const vec3& keyPos2, 
     Entity& key2 		     = createEntity(KEY);
 
 	auto& key2Transformable  = componentStorage.createComponent(Transformable(key2.getType(), key2.getID(), keyPos2, vec3(0,90.f,0), keyDim));
-	auto& key2Trigger        = componentStorage.createComponent(TriggerStaticAABB(key2.getType(), key2.getID(), key2Transformable.position, vec3(10), true));
+	auto& key2Trigger        = componentStorage.createComponent(TriggerStaticAABB(key2.getType(), key2.getID(), key2Transformable.position, vec3(8), true));
 	auto& key2Render		 = componentStorage.createComponent(Render(key2.getType(), key2.getID(), &key2Transformable.position, &key2Transformable.rotation, &key2Transformable.scale, false));
 
 	key2Render.node = componentStorage.createMesh(MESH_KEY_ANGEL);
@@ -1612,13 +1612,14 @@ void EntityManager::createIntro( bool clean) {
 }
 
 void EntityManager::createCinematica() {
-    cleanData();
+    /*cleanData();
 
     initData(1, 0, 1);
 
     createVideo("../resources/videos/cinematica/1_F.mp4", false, VIDEO_CINEMATICA_1);
 
     componentStorage.printComponentStorage();
+     */
 }
 
 void EntityManager::createTutorial() {
