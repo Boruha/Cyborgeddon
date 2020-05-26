@@ -480,8 +480,8 @@ void EntityManager::createLevel() {
 	createFloor(CONTROLS_TEXTURE, vec3(0,0,0), vec3(0,0,0)); //Controls
 	readColliderFile(COLISIONS_CITY);
 
-	createTexture(KEY_2, 558, 52);
-	createTexture(KEY_1, 517, 52);
+	createTexture(KEY_2, 558, 52); //Llave demon
+	createTexture(KEY_1, 517, 52); //Llave angel
 	createTexture(MAIN_HUD, 0, 35);
 	createTexture(ANGEL_LIFEBAR, 0, 86);
 	createTexture(DEMON_LIFEBAR, 0, 86);

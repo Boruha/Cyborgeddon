@@ -12,13 +12,28 @@ void HUDingameSystem::fixedUpdate(const Context &context, const float deltaTime)
 
 	const auto * data = player.getComponent<CharacterData>();
 
-	unsigned int ignore { 0 };
-
+	unsigned int ignoreLifebar  { 0 }; //Cambio barra vida Angel/Demon
+	unsigned int ignoreKeyDemon { 0 }; //Llave Demon cogida o no
+    unsigned int ignoreKeyAngel { 0 }; //Llave Angel cogida o no
 	if (data) {
 		if (data->mode == DEMON)
-			ignore = 3;
+			ignoreLifebar = 3;
 		else
-			ignore = 4;
+			ignoreLifebar = 4;
+
+		//Comprobamos si tenemos la llave o no
+		auto& llaves = context->getComponents().getComponents<Lock>();
+
+		if(!llaves.at(0).checks[0]) //Llave demon
+            ignoreKeyDemon = 0;
+		else
+            ignoreKeyDemon = 10;
+
+
+        if(!llaves.at(0).checks[1]) //Llave angel
+            ignoreKeyAngel = 1;
+        else
+            ignoreKeyAngel = 10;
 
 		auto &textures = context->getComponents().getComponents<TextureCmp>();
 
@@ -31,7 +46,7 @@ void HUDingameSystem::fixedUpdate(const Context &context, const float deltaTime)
 		                                 textures[4].texture->getPosition().y);
 
 		for (unsigned int i = 0; i < NUM_INGAME_TEXTURES; ++i)
-			if (i != ignore)
+			if (i != ignoreLifebar && i != ignoreKeyDemon && i != ignoreKeyAngel)
 				textures[i].texture->render();
 	}
 
