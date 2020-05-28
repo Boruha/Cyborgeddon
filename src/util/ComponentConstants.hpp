@@ -29,6 +29,7 @@ constexpr float     ENEMY_ACCELERATION				= ENEMY_DASH_SPEED * 0.f;
 constexpr float     ENEMY_HEALTH					= 100.f;
 constexpr float     ENEMY_ATTACK_DAMAGE				= 5.f;
 constexpr float     ENEMY_ATTACKING_COOLDOWN		= 1.f / 2.f;
+constexpr float     ENEMY_ANGEL_ATTACKING_COOLDOWN	= 1.f / 1.32f;
 constexpr float     ENEMY_SWITCH_MODE_COOLDOWN		= 0.f;
 constexpr float     ENEMY_DASH_COOLDOWN             = 5.f;
 constexpr float     ENEMY_ROTATION_SPEED			= 270.f;

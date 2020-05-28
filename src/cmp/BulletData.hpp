@@ -15,5 +15,5 @@ struct BulletData : Component {
 	ModeType  	damageType;
 	float 		speed 			{ 100.f };
 	float 		damage 			{  0.f  };
-	float 		distance_left 	{ 45.f };
+	float 		distance_left 	{  25.f };
 };
