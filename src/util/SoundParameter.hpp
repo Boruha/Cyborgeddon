@@ -79,6 +79,10 @@ constexpr parameter_value getParameterValue(const SoundParameter p) {
 			//ENEMY--> Segun codigo ahora mismo: Demon=0, Angel=1, Assembled=2
 		case ATTACK_ENEMY_ASSEMBLY :
 			return { "mode", 1 };
+        case ATTACK_ENEMY_DEMON :
+            return { "mode", 0 };
+        case ATTACK_ENEMY_ANGEL :
+            return { "mode", 0 };
 		case ACTION_ENEMY_HITMARKER :
 			return { "mode", 0 };
 
@@ -87,12 +91,6 @@ constexpr parameter_value getParameterValue(const SoundParameter p) {
 			return { "mode", 0 };
 		case ACTION_OPEN_DOOR :
 			return { "mode", 1 };
-
-
-		case ATTACK_ENEMY_DEMON :
-			return { "", -1 };
-		case ATTACK_ENEMY_ANGEL :
-			return { "", -1 };
 
 		case CANT_USE :
 			return { "mode", 0 };
@@ -171,9 +169,9 @@ constexpr std::string_view getEvent(const SoundParameter p)
 
 
         case ATTACK_ENEMY_DEMON :
-            return "";
+            return { DEMON_ATTACK_EVENT };
         case ATTACK_ENEMY_ANGEL :
-			return "";
+            return { ANGEL_ATTACK_EVENT };
 
     	case CANT_USE :
             return { PLAYER_CANT_USE };

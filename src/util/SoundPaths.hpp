@@ -17,6 +17,9 @@ constexpr std::string_view MAIN_MUSIC_EVENT 	    = "event:/music/main_music";
 
 //ENEMY
 constexpr std::string_view ASSEMBLED_ATTACK_EVENT   = "event:/enemies/assembled";
+constexpr std::string_view DEMON_ATTACK_EVENT       = "event:/enemies/demon";
+constexpr std::string_view ANGEL_ATTACK_EVENT       = "event:/enemies/angel";
+
 
 //OBJECTS
 constexpr std::string_view KEY_DOOR_EVENT           = "event:/objects/action_key_door";
