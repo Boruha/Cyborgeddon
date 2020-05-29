@@ -8,6 +8,7 @@ void TriggerResolutionSystem::fixedUpdate(const Context &context, float deltaTim
     for (const auto & message : triggerMessages) {
         if (message.type1 == PLAYER) {
             if (message.type2 == KEY) {
+
 				bool canDeleteDoor = true;
 				EntityID id_door  = 0u;
 
@@ -34,16 +35,21 @@ void TriggerResolutionSystem::fixedUpdate(const Context &context, float deltaTim
 				if(canDeleteDoor)
 				{
 					auto& door = context->getEntityByID(id_door);
-                	door.removeComponent<RigidStaticAABB>();
+                	//door.removeComponent<RigidStaticAABB>();
+                	door.removeComponent<TriangleOBB>();
 				}
 
                 soundMessages.emplace_back(ACTION_GET_KEY);
                 deathMessages.emplace_back(message.ID2);
+
             } else if (message.type2 == DOOR) {
+
                 soundMessages.emplace_back(ACTION_OPEN_DOOR);
                 deathMessages.emplace_back(message.ID2);
+
             }
         } else if (message.type1 == BULLET) {
+
         	if (message.type2 == ENEMY) {
         		auto& bullet = context->getEntityByID(message.ID1);
         		auto& character = context->getEntityByID(message.ID2);

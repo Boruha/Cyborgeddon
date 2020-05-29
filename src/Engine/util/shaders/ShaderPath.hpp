@@ -10,12 +10,12 @@ constexpr unsigned SHADOW_VP_HEIGHT = 4096;
 //Phong basic
 constexpr std::string_view PHONG_BASIC_VERTEX 
 {
-		"../src/Engine/util/shaders/Phong_Basic/vertex.glsl"
+		"src/Engine/util/shaders/Phong_Basic/vertex.glsl"
 };
 
 constexpr std::string_view PHONG_BASIC_FRAGMENT 
 {
-		"../src/Engine/util/shaders/Phong_Basic/fragment.glsl"
+		"src/Engine/util/shaders/Phong_Basic/fragment.glsl"
 };
 
 constexpr std::string_view PHONG_BASIC_SHADER [SHADER_TYPES] 
@@ -26,11 +26,11 @@ constexpr std::string_view PHONG_BASIC_SHADER [SHADER_TYPES]
 };
 
 constexpr std::string_view TEXTURE_VERTEX {
-		"../src/Engine/util/shaders/Texture/vertex.glsl"
+		"src/Engine/util/shaders/Texture/vertex.glsl"
 };
 
 constexpr std::string_view TEXTURE_FRAGMENT {
-		"../src/Engine/util/shaders/Texture/fragment.glsl"
+		"src/Engine/util/shaders/Texture/fragment.glsl"
 };
 
 constexpr std::string_view TEXTURE_SHADERS [SHADER_TYPES] {
@@ -42,17 +42,17 @@ constexpr std::string_view TEXTURE_SHADERS [SHADER_TYPES] {
 //Shadows basic
 constexpr std::string_view SHADOWS_BASIC_VERTEX 
 {
-		"../src/Engine/util/shaders/Shadows_Basic/vertex.glsl"
+		"src/Engine/util/shaders/Shadows_Basic/vertex.glsl"
 };
 
 constexpr std::string_view SHADOWS_BASIC_FRAGMENT 
 {
-		"../src/Engine/util/shaders/Shadows_Basic/fragment.glsl"
+		"src/Engine/util/shaders/Shadows_Basic/fragment.glsl"
 };
 
 constexpr std::string_view SHADOWS_BASIC_GEOMETRY
 {
-		"../src/Engine/util/shaders/Shadows_Basic/geometry.glsl"
+		"src/Engine/util/shaders/Shadows_Basic/geometry.glsl"
 };
 
 constexpr std::string_view SHADOWS_BASIC_SHADER [SHADER_TYPES] 
