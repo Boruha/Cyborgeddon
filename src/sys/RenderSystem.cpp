@@ -72,10 +72,7 @@ void RenderSystem::animationTrigger(const Context& context) {
 							}
 						
 							break;
-						}
-
-			case DOOR 	: /* do smth */
-					  		break;	
+						}	
 
 			default   :		break;
 		}
@@ -87,7 +84,7 @@ void RenderSystem::animationTrigger(const Context& context) {
 void RenderSystem::pjAnimationSwitch(Storage& storage, INode * node_ptr, const unsigned aniMode){
 	switch (aniMode)
 	{
-		case 0: storage.setMesh(node_ptr, MESH_DEX_STATIC);
+		case 0: storage.setAnimatedMesh(node_ptr, ANIMATED_DEX_STATIC);
 		break;
 
 		case 1: storage.setAnimatedMesh(node_ptr, ANIMATED_DEX_WALKING);
@@ -96,7 +93,7 @@ void RenderSystem::pjAnimationSwitch(Storage& storage, INode * node_ptr, const u
 		case 2: storage.setAnimatedMesh(node_ptr, ANIMATED_DEX_WALKING_ATTACK);
 		break;
 
-		case 4: storage.setMesh(node_ptr, MESH_DEX_DASHING);
+		case 4: storage.setAnimatedMesh(node_ptr, ANIMATED_DEX_DASHING);
 		break;
 
 		case 5: storage.setAnimatedMesh(node_ptr, ANIMATED_DEX_STATIC_ATTACK);
@@ -107,7 +104,7 @@ void RenderSystem::pjAnimationSwitch(Storage& storage, INode * node_ptr, const u
 void RenderSystem::botAnimationSwitch(Storage& storage, INode* node_ptr, const unsigned aniMode){
 	switch (aniMode)
 	{
-		case 0: storage.setMesh(node_ptr, MESH_BOT_STATIC);
+		case 0: storage.setAnimatedMesh(node_ptr, ANIMATED_BOT_STATIC);
 		break;
 
 		case 1: storage.setAnimatedMesh(node_ptr, ANIMATED_BOT_WALKING);
@@ -121,7 +118,7 @@ void RenderSystem::botAnimationSwitch(Storage& storage, INode* node_ptr, const u
 void RenderSystem::demonAnimationSwitch(Storage& storage, INode* node_ptr, const unsigned aniMode){ 
 	switch (aniMode)
 	{
-		case 0: storage.setMesh(node_ptr, MESH_DEMON_STATIC);
+		case 0: storage.setAnimatedMesh(node_ptr, ANIMATED_DEMON_STATIC);
 		break;
 
 		case 1: storage.setAnimatedMesh(node_ptr, ANIMATED_DEMON_WALKING);
@@ -138,7 +135,7 @@ void RenderSystem::demonAnimationSwitch(Storage& storage, INode* node_ptr, const
 void RenderSystem::angelAnimationSwitch(Storage& storage, INode* node_ptr, const unsigned aniMode){ 
 	switch (aniMode)
 	{
-		case 0: storage.setMesh(node_ptr, MESH_ANGEL_STATIC);
+		case 0: storage.setAnimatedMesh(node_ptr, ANIMATED_ANGEL_STATIC);
 		break;
 
 		case 1: storage.setAnimatedMesh(node_ptr, ANIMATED_ANGEL_WALKING);

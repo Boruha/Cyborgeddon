@@ -143,8 +143,8 @@ void EntityManager::createPairPlayerCamera(const vec3& pos, const vec3& dim, con
 	render.node = componentStorage.createAnimatedMesh(ANIMATED_DEX_STATIC_ATTACK);
                   componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_WALKING_ATTACK);
                   componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_WALKING);
-                  componentStorage.setMesh(render.node, MESH_DEX_DASHING);
-                  componentStorage.setMesh(render.node, MESH_DEX_STATIC);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_DASHING);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEX_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -219,7 +219,7 @@ void EntityManager::createEnemy(const vec3& pos, const vec3& dim, const std::vec
 
 	render.node = componentStorage.createAnimatedMesh(ANIMATED_BOT_WALKING);
                   componentStorage.setAnimatedMesh(render.node, ANIMATED_BOT_ATTACK);
-                  componentStorage.setMesh(render.node, MESH_BOT_STATIC);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_BOT_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -249,7 +249,7 @@ void EntityManager::createAngel(const vec3& pos, const vec3& dim, const std::vec
 
 	render.node = componentStorage.createAnimatedMesh(ANIMATED_ANGEL_WALKING);
                   componentStorage.setAnimatedMesh(render.node, ANIMATED_ANGEL_ATTACK);
-                  componentStorage.setMesh(render.node, MESH_ANGEL_STATIC);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_ANGEL_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
@@ -280,7 +280,7 @@ void EntityManager::createDemon(const vec3& pos, const vec3& dim, const std::vec
 	render.node = componentStorage.createAnimatedMesh(ANIMATED_DEMON_WALKING);
                   componentStorage.setAnimatedMesh(render.node, ANIMATED_DEMON_ATTACK);
                   componentStorage.setAnimatedMesh(render.node, ANIMATED_DEMON_JUMP);
-                  componentStorage.setMesh(render.node, MESH_DEMON_STATIC);
+                  componentStorage.setAnimatedMesh(render.node, ANIMATED_DEMON_STATIC);
 
 	render.node->setPosition(physics.position);
 	render.node->setRotation(physics.rotation);
