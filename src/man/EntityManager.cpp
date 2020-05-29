@@ -441,7 +441,17 @@ void EntityManager::createTexture(const std::string_view path, const int x, cons
 	texture.addComponent(cmpTexture);
 }
 
-void EntityManager::createBackgroundMusic(const std::array<Track, 4> & tracks) {
+void EntityManager::createBackgroundMusic() {
+
+    const std::array<Track, 4> tracks {
+            {
+                    { SONG_2, 165, 165 },
+                    { SONG_4, 225, 225 },
+                    { SONG_3, 262, 262 },
+                    { SONG_1, 211, 211 }
+            }
+    };
+
     auto& backgroundMusic = createEntity(BACKGROUND_MUSIC);
 
     auto& music_cmp = componentStorage.createComponent(BackgroundMusic(backgroundMusic.getType(), backgroundMusic.getID()));
@@ -486,17 +496,6 @@ void EntityManager::createLevel() {
 	createTexture(ANGEL_LIFEBAR, 0, 86);
 	createTexture(DEMON_LIFEBAR, 0, 86);
 	createTexture(BACKGROUND_LIFEBAR, 0, 78);
-
-	const std::array<Track, 4> tracks {
-	    {
-            { SONG_2, 165, 165 },
-            { SONG_4, 225, 225 },
-            { SONG_3, 262, 262 },
-            { SONG_1, 211, 211 }
-        }
-    };
-
-    createBackgroundMusic(tracks); //Musica de fondo In-Game
 
 	createGraph();
 	//puntero a vec3? Mejor?

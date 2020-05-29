@@ -15,6 +15,8 @@ struct EntityManager : GameContext {
 
 	void nextVideo() override;
 
+    void createBackgroundMusic() override;
+
 	void createIntro(bool clean) override;
 	void createTutorial() override;
 	void createCinematica() override;
@@ -85,7 +87,6 @@ struct EntityManager : GameContext {
 		void createVideo(std::string_view, bool, SoundParameter);
 		void createTexture(std::string_view, int, int);
 
-        void createBackgroundMusic(const std::array<Track, 4> &);
 		void createMenuOptions(unsigned, unsigned);
 
 

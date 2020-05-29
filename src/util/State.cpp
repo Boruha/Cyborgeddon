@@ -138,6 +138,8 @@ StateEnum State::initNextState(const Context & context) {
 
 				engine.display();
 
+				context->createBackgroundMusic(); //Musica de fondo In-Game
+
 				context->createCinematica();
 
 				return STARTING;

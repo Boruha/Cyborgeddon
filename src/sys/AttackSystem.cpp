@@ -12,7 +12,7 @@ void AttackSystem::fixedUpdate(const Context& context, float deltaTime) {
 	auto & playerData = *context->getPlayer().getComponent<CharacterData>();
 
 	if (enemyDamage != 0) {
-		//playerData.health -= enemyDamage;
+		playerData.health -= enemyDamage;
 
 		soundMessages.emplace_back(DAMAGE_PLAYER); // Creo el SoundMessage de Player herido
 
