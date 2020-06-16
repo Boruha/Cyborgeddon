@@ -63,7 +63,7 @@ OBJ 		:= obj
 OBJDIR		:= $(APPDIR)$(OBJ)
 SUBDIRS 	:= $(shell find $(SRC) -type d)
 OBJSUBDIRS 	:= $(patsubst $(SRC)%,$(OBJDIR)%,$(SUBDIRS))
-LIBDIR      := lib
+LIBDIR      := ./lib
 
 # FILES
 APP 		:= cyborgeddon
@@ -72,8 +72,8 @@ ALLCPP    	:= $(shell find $(SRC)/ -type f -iname *.cpp)
 ALLOBJ      := $(foreach F,$(ALLCPP) $(ALLC),$(call C2O,$(F)))
 
 # HEADERS AND LIBRARIES
-INCLUDE 	:= -I/usr/include/irrlicht/ -I./$(SRC)/ -I. -I/usr/include/opencv/usr/include
-LIBS 		:= -lIrrlicht -lfmod -lfmodstudio -lglfw -lGL -lpthread -ldl -lassimp -lopencv_highgui -lopencv_core -Wl,-rpath,$(LIBDIR)
+INCLUDE 	:= -I./$(SRC)/ -I.
+LIBS 		:= -L$(LIBDIR) -lfmod -lfmodstudio -lglfw -lGL -lpthread -ldl -lassimp -lopencv_highgui -lopencv_core -Wl,-rpath,$(LIBDIR)
 GOLD_OPTION	:= -fuse-ld=gold
 
 # CLEAN

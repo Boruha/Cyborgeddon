@@ -1,6 +1,5 @@
 #include <man/EngineManager.hpp>
 
-#include <Engine/IrrlichtEngine/IrrlichtEngine.hpp>
 #include <Engine/SunlightEngine/SunlightEngine.hpp>
 
 #include <iostream>
@@ -11,7 +10,7 @@ std::unique_ptr<IEngine> EngineManager::getEngine() const {
     switch (type) {
 //        case IRRLICHT : return std::make_unique<IrrlichtEngine>();
         case SUNLIGHT : return std::make_unique<SunlightEngine>();
-        default       : std::cerr << "\n\nMotor distinto de irrlicht y sunlight?!?\n\n";
+        default       : std::cerr << "\n\nMotor distinto de sunlight?!?\n\n";
                         exit(-1);
     }
 }
